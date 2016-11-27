@@ -1,0 +1,27 @@
+:host {
+
+}
+
+.main-content {
+    position: relative;
+    padding: 0 10px;
+    left: 0;
+    right: 0;
+    height: 100%;
+}
+
+.panel-heading {
+    border-bottom: 1px solid #F0F0F0;
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    top: 0;
+}
+.panel-heading .panel-title {
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.panel-body {
+    padding: 10px;
+}
