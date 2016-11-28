@@ -1,10 +1,10 @@
-import { Angular2gridsterPage } from './app.po';
+import { Angular2gridster2Page } from './app.po';
 
-describe('angular2gridster App', function() {
-  let page: Angular2gridsterPage;
+describe('angular2gridster2 App', function() {
+  let page: Angular2gridster2Page;
 
   beforeEach(() => {
-    page = new Angular2gridsterPage();
+    page = new Angular2gridster2Page();
   });
 
   it('should display message saying app works', () => {
