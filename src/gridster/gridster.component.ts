@@ -11,7 +11,7 @@ import { GridsterService, IGridsterOptions } from './gridster.service';
   ]
 })
 export class GridsterComponent implements OnInit {
-  @Input('options') options: Object;
+  @Input('options') options: IGridsterOptions;
 
   @ViewChild('positionHighlight') $positionHighlight;
 

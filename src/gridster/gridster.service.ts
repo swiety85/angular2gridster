@@ -12,7 +12,8 @@ export interface IGridsterOptions {
     widthHeightRatio?:number;
     heightToFontSizeRatio?:number;
     onChange?:Function;
-    dragAndDrop?:boolean
+    dragAndDrop?:boolean;
+    itemSelector?: string;
 }
 
 export class GridsterService {
@@ -25,12 +26,12 @@ export class GridsterService {
 
     options:IGridsterOptions;
     draggableOptions:IGridsterDraggableOptions;
-    draggableDefaults:Object = {
+    draggableDefaults:IGridsterDraggableOptions = {
         zIndex: 2,
         scroll: false,
         containment: "parent"
     };
-    defaults:Object = {
+    defaults:IGridsterOptions = {
         lanes: 5,
         direction: "horizontal",
         itemSelector: 'li[data-w]',
@@ -62,7 +63,7 @@ export class GridsterService {
         this.items.push(item);
     }
 
-    init (options:Object = {}, draggableOptions:Object = {}) {
+    init (options:IGridsterOptions = {}, draggableOptions:IGridsterDraggableOptions = {}) {
 
         this.options = (<any>Object).assign({}, this.defaults, options);
         this.draggableOptions = (<any>Object).assign(
