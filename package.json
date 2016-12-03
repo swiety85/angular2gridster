@@ -12,27 +12,22 @@
     "start": "npm run server"
   },
   "private": true,
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "@angular/common": "2.2.4",
     "@angular/compiler": "2.2.4",
+    "@angular/compiler-cli": "2.2.4",
     "@angular/core": "2.2.4",
-    "@angular/forms": "2.2.4",
-    "@angular/http": "2.2.4",
     "@angular/platform-browser": "2.2.4",
     "@angular/platform-browser-dynamic": "2.2.4",
-    "@angular/router": "3.2.4",
-    "core-js": "^2.4.1",
-    "rxjs": "5.0.0-beta.12",
-    "ts-helpers": "^1.1.1",
-    "zone.js": "^0.6.23"
-  },
-  "devDependencies": {
-    "@angular/compiler-cli": "2.2.4",
+    "@types/core-js": "^0.9.34",
     "@types/jasmine": "2.5.38",
     "@types/node": "^6.0.42",
-    "@types/core-js": "^0.9.34",
-    "angular-cli": "1.0.0-beta.21",
+    "angular2-template-loader": "^0.6.0",
+    "awesome-typescript-loader": "^2.2.4",
     "codelyzer": "~1.0.0-beta.3",
+    "core-js": "^2.4.1",
+    "css-loader": "^0.25.0",
     "jasmine-core": "2.5.2",
     "jasmine-spec-reporter": "2.5.0",
     "karma": "1.2.0",
@@ -41,16 +36,16 @@
     "karma-jasmine": "^1.0.2",
     "karma-remap-istanbul": "^0.2.1",
     "protractor": "4.0.9",
+    "raw-loader": "^0.5.1",
+    "rxjs": "5.0.0-beta.12",
+    "to-string-loader": "^1.1.4",
+    "ts-helpers": "^1.1.1",
     "ts-node": "1.2.1",
     "tslint": "3.13.0",
     "typescript": "~2.0.3",
-    "angular2-template-loader": "^0.6.0",
-    "awesome-typescript-loader": "^2.2.4",
-    "css-loader": "^0.25.0",
-    "raw-loader": "^0.5.1",
-    "to-string-loader": "^1.1.4",
     "webpack": "2.1.0-beta.27",
     "webpack-dev-server": "2.1.0-beta.11",
-    "webpack-merge": "^0.15.0"
+    "webpack-merge": "^0.15.0",
+    "zone.js": "^0.6.23"
   }
 }
