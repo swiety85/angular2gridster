@@ -5,13 +5,13 @@ import { GridsterService, IGridsterOptions } from './gridster.service';
 @Component({
   selector: 'gridster',
   templateUrl: './gridster.component.html',
-  styleUrls: ['./gridster.component.scss'],
+  styleUrls: ['./gridster.component.css'],
   providers: [
     GridsterService
   ]
 })
 export class GridsterComponent implements OnInit {
-  @Input('options') options: Object;
+  @Input('options') options: IGridsterOptions;
 
   @ViewChild('positionHighlight') $positionHighlight;
 
