@@ -5,7 +5,7 @@ import { GridsterService, IGridsterOptions } from './gridster.service';
 @Component({
   selector: 'gridster',
   templateUrl: './gridster.component.html',
-  styleUrls: ['./gridster.component.scss'],
+  styleUrls: ['./gridster.component.css'],
   providers: [
     GridsterService
   ]

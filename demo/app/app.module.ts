@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { GridsterModule } from './../gridster/gridster.module';
+import { GridsterModule } from '../../src';
 
 @NgModule({
   declarations: [
@@ -14,7 +14,6 @@ import { GridsterModule } from './../gridster/gridster.module';
     BrowserModule,
     FormsModule,
     HttpModule,
-
     GridsterModule
   ],
   providers: [],
