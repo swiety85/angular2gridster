@@ -3,6 +3,8 @@
 # compiled output
 /dist
 /tmp
+/aot
+/lib
 
 # dependencies
 /node_modules
@@ -33,3 +35,6 @@ testem.log
 #System Files
 .DS_Store
 Thumbs.db
+
+#webpack
+/.awcache
