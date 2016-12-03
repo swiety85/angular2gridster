@@ -8,7 +8,7 @@ import { GridsterService } from '../gridster.service';
 @Component({
     selector: 'gridster-item',
     templateUrl: './gridster-item.component.html',
-    styleUrls: ['./gridster-item.component.scss']
+    styleUrls: ['./gridster-item.component.css']
 })
 export class GridsterItemComponent implements OnInit {
     @Input('x') x: number;
