@@ -61,6 +61,9 @@ export class GridsterService {
      */
     registerItem(item:IGridListItem) {
         this.items.push(item);
+
+        return item;
+
     }
 
     init (options:IGridsterOptions = {}, draggableOptions:IGridsterDraggableOptions = {}) {
@@ -97,6 +100,58 @@ export class GridsterService {
     reflow () {
         this.calculateCellSize();
         this.render();
+    }
+
+    onStart (itemCtrl) {
+        this.draggedElement = itemCtrl.el;
+        itemCtrl.el.classList.add('is-dragging');
+        // Create a deep copy of the items; we use them to revert the item
+        // positions after each drag change, making an entire drag operation less
+        // distructable
+        this.createGridSnapshot();
+
+        // Since dragging actually alters the grid, we need to establish the number
+        // of cols (+1 extra) before the drag starts
+
+        this._maxGridCols = this.gridList.grid.length;
+
+        this.highlightPositionForItem(this.getItemByElement(itemCtrl.el));
+    }
+
+    onDrag (itemCtrl) {
+        var item = this.getItemByElement(itemCtrl.el),
+            newPosition = this.snapItemPositionToGrid(item);
+
+        if (this.dragPositionChanged(newPosition)) {
+            this.previousDragPosition = newPosition;
+
+            // Regenerate the grid with the positions from when the drag started
+            GridList.cloneItems(this._items, this.items);
+            this.gridList.generateGrid();
+
+            // Since the items list is a deep copy, we need to fetch the item
+            // corresponding to this drag action again
+            item = this.getItemByElement(itemCtrl.el);
+            this.gridList.moveItemToPosition(item, newPosition);
+
+            // Visually update item positions and highlight shape
+            this.applyPositionToItems();
+            this.highlightPositionForItem(item);
+        }
+    }
+
+    onStop (itemCtrl) {
+        this.draggedElement = undefined;
+        this.updateGridSnapshot();
+        this.previousDragPosition = null;
+
+        // HACK: jQuery.draggable removes this class after the dragstop callback,
+        // and we need it removed before the drop, to re-enable CSS transitions
+
+        itemCtrl.el.classList.remove('is-dragging');
+
+        this.applyPositionToItems();
+        this.removePositionHighlight();
     }
 
     private initGridList () {
@@ -170,59 +225,7 @@ export class GridsterService {
         return element === this.draggedElement;
     }
 
-    onStart (itemCtrl) {
-        this.draggedElement = itemCtrl.el;
-        itemCtrl.el.classList.add('is-dragging');
-        // Create a deep copy of the items; we use them to revert the item
-        // positions after each drag change, making an entire drag operation less
-        // distructable
-        this.createGridSnapshot();
-
-        // Since dragging actually alters the grid, we need to establish the number
-        // of cols (+1 extra) before the drag starts
-
-        this._maxGridCols = this.gridList.grid.length;
-
-        this.highlightPositionForItem(this.getItemByElement(itemCtrl.el));
-    }
-
-    onDrag (itemCtrl) {
-        var item = this.getItemByElement(itemCtrl.el),
-            newPosition = this.snapItemPositionToGrid(item);
-
-        if (this.dragPositionChanged(newPosition)) {
-            this.previousDragPosition = newPosition;
-
-            // Regenerate the grid with the positions from when the drag started
-            GridList.cloneItems(this._items, this.items);
-            this.gridList.generateGrid();
-
-            // Since the items list is a deep copy, we need to fetch the item
-            // corresponding to this drag action again
-            item = this.getItemByElement(itemCtrl.el);
-            this.gridList.moveItemToPosition(item, newPosition);
-
-            // Visually update item positions and highlight shape
-            this.applyPositionToItems();
-            this.highlightPositionForItem(item);
-        }
-    }
-
-    onStop (itemCtrl) {
-        this.draggedElement = undefined;
-        this.updateGridSnapshot();
-        this.previousDragPosition = null;
-
-        // HACK: jQuery.draggable removes this class after the dragstop callback,
-        // and we need it removed before the drop, to re-enable CSS transitions
-
-        itemCtrl.el.classList.remove('is-dragging');
-
-        this.applyPositionToItems();
-        this.removePositionHighlight();
-    }
-
-    private createGridSnapshot () {
+    public createGridSnapshot () {
         this._items = GridList.cloneItems(this.items);
     }
 
@@ -283,7 +286,7 @@ export class GridsterService {
         }
     }
 
-    private updateGridSnapshot () {
+    public updateGridSnapshot () {
         // Notify the user with the items that changed since the previous snapshot
         this.triggerOnChange();
         GridList.cloneItems(this.items, this._items);

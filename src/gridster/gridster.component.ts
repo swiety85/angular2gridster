@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, Inject, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ElementRef, Inject, ViewChild, Input, SimpleChanges } from '@angular/core';
 
 import { GridsterService, IGridsterOptions } from './gridster.service';
 
@@ -35,4 +35,27 @@ export class GridsterComponent implements OnInit {
     this.gridster.$positionHighlight = this.$positionHighlight.nativeElement;
   }
 
+  /**
+   * Change gridster config option and rebuild
+   * @param {string} name
+   * @param {any} value
+   * @return {GridsterComponent}
+   */
+  setOption(name:string, value:any) {
+    if(name === 'lanes') {
+      this.gridster.options.lanes = value;
+    }
+    if(name === 'direction') {
+      this.gridster.options.direction = value;
+    }
+    this.gridster.gridList.setOption(name, value);
+
+    return this;
+  }
+
+  reload () {
+    this.gridster.reflow();
+
+    return this;
+  }
 }

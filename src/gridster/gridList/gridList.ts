@@ -128,6 +128,11 @@ export class GridList {
         output += '\n';
         return output;
     }
+
+    setOption(name:string, value:any) {
+        this.options[name] = value;
+    }
+
     /**
      * Build the grid structure from scratch, with the current item positions
      */

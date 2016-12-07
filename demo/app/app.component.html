@@ -1,15 +1,37 @@
 <h1>
   {{title}}
 </h1>
+<div class="toolbar">
+  Lanes:
+  <button (click)="removeLine(gridster)">-</button>
+  {{ gridsterOptions.lanes }}
+  <button (click)="addLine(gridster)">+</button>
+
+  <br>
+  Direction
+  <label>
+    <input type="radio" [(ngModel)]="gridsterOptions.direction" value="horizontal"
+           (change)="gridster.setOption('direction', 'horizontal')">Horizontal
+  </label>
+  <label>
+    <input type="radio" [(ngModel)]="gridsterOptions.direction" value="vertical"
+           (change)="gridster.setOption('direction', 'vertical')">Vertical
+  </label>
+</div>
 <div class="main-content">
 
-  <gridster [options]="{ lanes: 5, direction: 'vertical', dragAndDrop: true }">
+  <gridster [options]="gridsterOptions" #gridster>
 
     <gridster-item *ngFor="let widget of widgets" [x]="widget.x" [y]="widget.y" [w]="widget.w" [h]="widget.h">
 
       <div class="panel-heading">
         <h5 class="panel-title">{{ widget.title }}</h5>
+        <button (click)="setWidth(widget, widget.w+1, $event)">width +</button>
+        <button (click)="setWidth(widget, widget.w-1, $event)">width -</button>
+        <button (click)="setHeight(widget, widget.h+1, $event)">height +</button>
+        <button (click)="setHeight(widget, widget.h-1, $event)">height -</button>
       </div>
+
       <div class="panel-body">
         <p>{{ widget.content }}</p>
       </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, Inject, Host, Input } from '@angular/core';
+import { Component, OnInit, ElementRef, Inject, Host, Input, SimpleChange, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 import { ISubscription, Subscription } from 'rxjs/Subscription';
@@ -10,7 +10,7 @@ import { GridsterService } from '../gridster.service';
     templateUrl: './gridster-item.component.html',
     styleUrls: ['./gridster-item.component.css']
 })
-export class GridsterItemComponent implements OnInit {
+export class GridsterItemComponent implements OnInit, OnChanges {
     @Input('x') x: number;
     @Input('y') y: number;
     @Input('w') w: number;
@@ -30,14 +30,17 @@ export class GridsterItemComponent implements OnInit {
      */
     dragSubscription:ISubscription;
 
+    item:any;
+
     constructor(@Inject(ElementRef) elementRef:ElementRef, @Host() gridster:GridsterService) {
         this.gridster = gridster;
 
         this.el = elementRef.nativeElement;
     }
 
+
     ngOnInit() {
-        this.gridster.registerItem({
+        this.item = this.gridster.registerItem({
             $element: this.el,
             x: this.x,
             y: this.y,
@@ -55,6 +58,24 @@ export class GridsterItemComponent implements OnInit {
                 this.el.style.left = (pos.left - this.gridster.$element.offsetLeft) + 'px';
             });
         }
+    }
+
+    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
+        if(!this.item) {
+            return ;
+        }
+        if(changes['w']) {
+            this.item.w = changes['w'].currentValue;
+        }
+        if(changes['h']) {
+            this.item.h = changes['h'].currentValue;
+        }
+
+        this.gridster.createGridSnapshot();
+        this.gridster.gridList.resizeItem(this.item, {w: this.item.w, h: this.item.h});
+        this.gridster.updateGridSnapshot();
+
+        this.gridster.render();
     }
 
     /**

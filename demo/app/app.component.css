@@ -1,13 +1,31 @@
 :host {
+    position: relative;
+    display: block;
+    height: 100%;
+    width: 100%;
+}
 
+h1 {
+    font-size: 22px;
+    padding: 0 20px;
+    height: 50px;
+    margin: 0;
+}
+
+.toolbar {
+    position: relative;
+    width: 100%;
+    padding: 0 20px;
+    height: 100px;
 }
 
 .main-content {
-    position: relative;
+    position: absolute;
     padding: 0 10px;
+    top: 150px;
     left: 0;
     right: 0;
-    height: 100%;
+    bottom: 0;
 }
 
 .panel-heading {
@@ -19,7 +37,7 @@
 }
 .panel-heading .panel-title {
     padding: 10px;
-    margin: 10px 0;
+    margin: 0;
 }
 
 .panel-body {

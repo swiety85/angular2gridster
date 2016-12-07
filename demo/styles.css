@@ -2,6 +2,10 @@
 @include box-sizing(border-box);
 }
 
+html, body {
+    height: 100%;
+}
+
 body {
     font-family: Roboto,Helvetica Neue,Helvetica,Arial,sans-serif;
     font-size: 13px;
