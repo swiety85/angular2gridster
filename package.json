@@ -1,11 +1,11 @@
 {
   "name": "angular2gridster",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "license": "MIT",
   "main": "./index.js",
   "typings": "./index.d.ts",
   "scripts": {
-    "prepublish": "npm run build && npm run build:aot",
+    "prepublish": "npm run build && npm run build:aot && npm run webpack:umd",
     "webpack": "webpack",
     "webpack:umd": "webpack",
     "webpack:umd:min": "webpack",
