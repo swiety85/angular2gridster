@@ -30,7 +30,6 @@ testem.log
 
 # e2e
 /e2e/*.js
-/e2e/*.map
 
 #System Files
 .DS_Store
@@ -38,3 +37,8 @@ Thumbs.db
 
 #webpack
 /.awcache
+/index.js
+/src/**/*.js
+*.map
+*.metadata.json
+*.d.ts

@@ -1,6 +1,12 @@
 var webpack = require('webpack');
 var path = require('path');
 var webpackMerge = require('webpack-merge');
+var UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+
+var ENV = process.env.npm_lifecycle_event;
+
+var isBundled = ENV === 'webpack:umd' || ENV === 'webpack:umd:min';
+var isMin = ENV === 'webpack:umd:min';
 
 // Webpack Config
 var webpackConfig = {
@@ -10,7 +16,7 @@ var webpackConfig = {
 
   output: {
     publicPath: '',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist')
   },
 
   plugins: [
@@ -45,6 +51,26 @@ var webpackConfig = {
   }
 
 };
+
+if(isBundled){
+    webpackConfig.entry.main = './index.ts';
+    webpackConfig.output = {
+      publicPath: '',
+      path: path.resolve(__dirname, 'dist'),
+      libraryTarget: 'umd',
+      filename: 'angular2gridster.umd.js',
+      library: 'angular2gridster'
+    };
+    webpackConfig.externals =  [/^\@angular\//, /^rxjs\//];
+    if(isMin){
+        webpackConfig.output.filename = 'angular2gridster.umd.min.js';
+        webpackConfig.plugins.push(
+          new UglifyJsPlugin({
+                beautify: false,
+                comments: false
+        }));
+    }
+}
 
 
 // Our Webpack Defaults

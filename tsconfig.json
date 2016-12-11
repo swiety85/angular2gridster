@@ -9,7 +9,6 @@
     "experimentalDecorators": true,
     "removeComments": false,
     "noImplicitAny": false,
-    "outDir": "lib",
     "declaration": true,
     "typeRoots": [
       "node_modules/@types"
@@ -17,14 +16,10 @@
     "types": [
       "node"
     ],
-    "lib": ["es6", "dom"],
-    "baseUrl": "./node_modules",
-    "paths": {
-      "angular2gridster": ["../src/index"]
-    }
+    "lib": ["es6", "dom"]
   },
-  "include": [
-    "src/**/*"
+  "files": [
+    "./index.ts"
   ],
   "exclude": [
     "node_modules",
