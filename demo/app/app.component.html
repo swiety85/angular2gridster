@@ -11,11 +11,11 @@
   Direction
   <label>
     <input type="radio" [(ngModel)]="gridsterOptions.direction" value="horizontal"
-           (change)="gridster.setOption('direction', 'horizontal')">Horizontal
+           (change)="gridster.setOption('direction', 'horizontal').reload()">Horizontal
   </label>
   <label>
     <input type="radio" [(ngModel)]="gridsterOptions.direction" value="vertical"
-           (change)="gridster.setOption('direction', 'vertical')">Vertical
+           (change)="gridster.setOption('direction', 'vertical').reload()">Vertical
   </label>
 </div>
 <div class="main-content">
