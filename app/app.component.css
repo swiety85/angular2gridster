@@ -1,0 +1,45 @@
+:host {
+    position: relative;
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+h1 {
+    font-size: 22px;
+    padding: 0 20px;
+    height: 50px;
+    margin: 0;
+}
+
+.toolbar {
+    position: relative;
+    width: 100%;
+    padding: 0 20px;
+    height: 100px;
+}
+
+.main-content {
+    position: absolute;
+    padding: 0 10px;
+    top: 150px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.panel-heading {
+    border-bottom: 1px solid #F0F0F0;
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    top: 0;
+}
+.panel-heading .panel-title {
+    padding: 10px;
+    margin: 0;
+}
+
+.panel-body {
+    padding: 10px;
+}
