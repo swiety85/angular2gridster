@@ -61,18 +61,19 @@ export class GridsterItemComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if(!this.item) {
+        let item = this.gridster.getItemByElement(this.el);
+        if(!item) {
             return ;
         }
         if(changes['w']) {
-            this.item.w = changes['w'].currentValue;
+            item.w = changes['w'].currentValue;
         }
         if(changes['h']) {
-            this.item.h = changes['h'].currentValue;
+            item.h = changes['h'].currentValue;
         }
 
         this.gridster.createGridSnapshot();
-        this.gridster.gridList.resizeItem(this.item, {w: this.item.w, h: this.item.h});
+        this.gridster.gridList.resizeItem(item, {w: item.w, h: item.h});
         this.gridster.updateGridSnapshot();
 
         this.gridster.render();

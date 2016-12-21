@@ -229,7 +229,7 @@ export class GridsterService {
         this._items = GridList.cloneItems(this.items);
     }
 
-    private getItemByElement (element) {
+    public getItemByElement (element) {
         // XXX: this could be optimized by storing the item reference inside the
         // meta data of the DOM element
         for (var i = 0; i < this.items.length; i++) {

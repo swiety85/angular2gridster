@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { IGridsterOptions } from '../../';
 
 @Component({
     selector: 'app',
@@ -6,7 +7,7 @@ import { Component } from '@angular/core';
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    gridsterOptions:any = {
+    gridsterOptions:IGridsterOptions = {
         lanes: 5,
 
         direction: 'vertical',
