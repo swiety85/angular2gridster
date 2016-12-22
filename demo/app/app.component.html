@@ -18,13 +18,13 @@
            (change)="gridster.setOption('direction', 'vertical').reload()">Vertical
   </label>
   <br>
-  <button (click)="swap()">Swap 1<->4 </button>
+  <button (click)="swap()">Swap 1<->4 </button> <button (click)="addWidget(gridster)">Add widget (5 position) </button>
 </div>
 <div class="main-content">
 
   <gridster [options]="gridsterOptions" [draggableOptions]="gridsterDraggableOptions" (gridsterPositionChange)="logChanges($event)" #gridster>
 
-    <gridster-item *ngFor="let widget of widgets" [(x)]="widget.x" [(y)]="widget.y" [w]="widget.w" [h]="widget.h">
+    <gridster-item *ngFor="let widget of widgets; let indx = index" [(x)]="widget.x" [(y)]="widget.y" [w]="widget.w" [h]="widget.h" [pin]="widget.pin">
 
       <div class="panel-heading">
         <h5 class="panel-title">{{ widget.title }}</h5>
@@ -36,6 +36,10 @@
           <button (click)="setWidth(widget, widget.w-1, $event)">width -</button>
           <button (click)="setHeight(widget, widget.h+1, $event)">height +</button>
           <button (click)="setHeight(widget, widget.h-1, $event)">height -</button>
+        </p>
+        <p>
+          <button (click)="remove(indx,gridster)">remove</button>
+          <button (click)="widget.pin = !widget.pin"><template [ngIf]="widget.pin">unpin</template><template [ngIf]="!widget.pin">pin</template></button>
         </p>
         <p>
           Position (x,y): ({{widget.x}},{{widget.y}})

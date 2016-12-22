@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, Inject, ViewChild, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ElementRef, Inject, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 
 import { GridsterService, IGridsterOptions, IGridsterDraggableOptions } from './gridster.service';
 
@@ -11,9 +11,9 @@ import { GridsterService, IGridsterOptions, IGridsterDraggableOptions } from './
   ]
 })
 export class GridsterComponent implements OnInit {
-  @Input('options') options: IGridsterOptions;
+  @Input() options: IGridsterOptions;
   @Output() gridsterPositionChange = new EventEmitter<any>();
-  @Input('draggableOptions') draggableOptions: IGridsterDraggableOptions;
+  @Input() draggableOptions: IGridsterDraggableOptions;
   @ViewChild('positionHighlight') $positionHighlight;
 
   gridster: GridsterService;
@@ -34,6 +34,7 @@ export class GridsterComponent implements OnInit {
     this.gridster.$positionHighlight = this.$positionHighlight.nativeElement;
   }
 
+
   /**
    * Change gridster config option and rebuild
    * @param {string} name
@@ -50,10 +51,6 @@ export class GridsterComponent implements OnInit {
     this.gridster.gridList.setOption(name, value);
 
     return this;
-  }
-
-  getStringRepresentation(): string{
-    return this.gridster.gridList.toString().replace(/(?:\r\n|\r|\n)/g, '<br />');
   }
 
   reload () {

@@ -76,9 +76,9 @@ export class GridsterService {
 
 
         this.maxItemWidth = Math.max.apply(
-            null, this.items.map(function(item) { return item.w; }));
+            null, this.items.map((item) => { return item.w; }));
         this.maxItemHeight = Math.max.apply(
-            null, this.items.map(function(item) { return item.h; }));
+            null, this.items.map((item) => { return item.h; }));
     }
 
     start (gridsterEl:HTMLElement) {
