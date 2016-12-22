@@ -16,9 +16,7 @@ export class AppComponent {
     };
     gridsterDraggableOptions: IGridsterDraggableOptions = {
         handlerClass: 'panel-heading'
-
     }
-
     title:string = 'Angular2Gridster';
     widgets:any = [
         {
@@ -71,6 +69,15 @@ export class AppComponent {
         widget.h = size;
 
         return false;
+    }
+
+    logChanges(items: any){
+        console.log('===>> Changed items: ',items);
+    }
+
+    swap(){
+        this.widgets[0].x = 3;
+        this.widgets[3].x = 0;
     }
 
 }

@@ -1,3 +1,5 @@
+import { EventEmitter } from '@angular/core';
+
 var GridCol = function(lanes) {
     for (var i = 0; i < lanes; i++) {
         this.push(null);
@@ -8,7 +10,9 @@ GridCol.prototype = [];
 
 export interface IGridListItem {
     x?:number;
+    xChange?: EventEmitter<number>;
     y?:number;
+    yChange?: EventEmitter<number>;
     w?:number;
     h?:number;
     autoSize?:Boolean;
@@ -667,5 +671,6 @@ export class GridList {
             item.x = position[1];
             item.y = position[0];
         }
+        
     }
 }

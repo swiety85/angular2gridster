@@ -1,4 +1,5 @@
 import { GridList, IGridListItem } from './gridList/gridList';
+import { EventEmitter } from '@angular/core';
 
 export interface IGridsterDraggableOptions {
     handlerClass?:string;
@@ -38,6 +39,7 @@ export class GridsterService {
         widthHeightRatio: 1,
         dragAndDrop: true
     };
+    public gridsterChange: EventEmitter<any>;
 
     private maxItemWidth:number; // old _widestItem
     private maxItemHeight:number; // old _tallestItem
@@ -152,6 +154,9 @@ export class GridsterService {
 
         this.applyPositionToItems();
         this.removePositionHighlight();
+        let item = this.getItemByElement(itemCtrl.el);
+        itemCtrl.xChange.emit(item.x);
+        itemCtrl.yChange.emit(item.y);
     }
 
     private initGridList () {
@@ -293,12 +298,16 @@ export class GridsterService {
     }
 
     private triggerOnChange () {
-        if (typeof(this.options.onChange) != 'function') {
-            return;
+        let itmsChanged = this.gridList.getChangedItems(this._items, '$element');
+        if(itmsChanged.length > 0){
+            this.gridsterChange.emit(itmsChanged);
+            if (typeof (this.options.onChange) != 'function') {
+                return;
+            }
+            this.options.onChange.call(
+                this, itmsChanged
+            );
         }
-        this.options.onChange.call(
-            this, this.gridList.getChangedItems(this._items, '$element')
-        );
     }
 
     private removePositionHighlight () {

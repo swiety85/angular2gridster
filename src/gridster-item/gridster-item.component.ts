@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, Inject, Host, Input, SimpleChange, OnChanges } from '@angular/core';
+import { Component, OnInit, ElementRef, Inject, Host, Input, Output, EventEmitter, SimpleChange, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 import { ISubscription, Subscription } from 'rxjs/Subscription';
@@ -11,10 +11,12 @@ import { GridsterService } from '../gridster.service';
     styleUrls: ['./gridster-item.component.css']
 })
 export class GridsterItemComponent implements OnInit, OnChanges {
-    @Input('x') x: number;
-    @Input('y') y: number;
-    @Input('w') w: number;
-    @Input('h') h: number;
+    @Input() x: number;
+    @Output() xChange = new EventEmitter<number>();
+    @Input() y: number;
+    @Output() yChange = new EventEmitter<number>();
+    @Input() w: number;
+    @Input() h: number;
 
     el:HTMLElement;
     /**
@@ -43,7 +45,9 @@ export class GridsterItemComponent implements OnInit, OnChanges {
         this.item = this.gridster.registerItem({
             $element: this.el,
             x: this.x,
+            xChange: this.xChange,
             y: this.y,
+            yChange: this.yChange,
             w: this.w,
             h: this.h
         });
@@ -70,6 +74,12 @@ export class GridsterItemComponent implements OnInit, OnChanges {
         }
         if(changes['h']) {
             item.h = changes['h'].currentValue;
+        }
+        if(changes['x']) {
+            item.x = changes['x'].currentValue;
+        }
+        if(changes['y']) {
+            item.y = changes['y'].currentValue;
         }
 
         this.gridster.createGridSnapshot();
