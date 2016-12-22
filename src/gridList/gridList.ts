@@ -15,7 +15,8 @@ export interface IGridListItem {
     yChange?: EventEmitter<number>;
     w?:number;
     h?:number;
-    autoSize?:Boolean;
+    pin?:boolean;
+    autoSize?:boolean;
     $element?:HTMLElement;
 }
 
@@ -230,9 +231,25 @@ export class GridList {
             w: item.w,
             h: item.h
         });
-
-        this.updateItemPosition(item, [position.x, position.y]);
-        this.resolveCollisions(item);
+        let newItm: IGridListItem = { w: item.w, h: item.h};
+        this.setItemPosition(newItm, newPosition);
+        var collidingItems = this.getItemsCollidingWithItem(newItm);
+        if (collidingItems.length > 0) {
+            var isCollisionPinned = false;
+             for (var i = 0; i < collidingItems.length; i++) {
+                if(this.items[collidingItems[i]] && this.items[collidingItems[i]].pin){
+                    isCollisionPinned = true;
+                    break;
+                }
+             }
+             if(!isCollisionPinned){
+                this.updateItemPosition(item, [position.x, position.y]);         
+                this.resolveCollisions(item);
+             }
+        }else{
+            this.updateItemPosition(item, [position.x, position.y]); 
+            this.resolveCollisions(item);
+        }      
     }
     /**
      * Resize an item and resolve collisions.
@@ -357,7 +374,6 @@ export class GridList {
         // item.
         for (x = newPosition[0]; x < newPosition[0] + position.w; x++) {
             var col = this.grid[x];
-
             // Surely a column that hasn't even been created yet is available
             if (!col) {
                 continue;
@@ -467,7 +483,7 @@ export class GridList {
     private itemsAreColliding (item1, item2) {
         var position1 = this.getItemPosition(item1),
             position2 = this.getItemPosition(item2);
-
+            
         return !(position2.x >= position1.x + position1.w ||
         position2.x + position2.w <= position1.x ||
         position2.y >= position1.y + position1.h ||
