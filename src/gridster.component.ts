@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, Inject, ViewChild, Input, SimpleChanges } from '@angular/core';
 
-import { GridsterService, IGridsterOptions } from './gridster.service';
+import { GridsterService, IGridsterOptions, IGridsterDraggableOptions } from './gridster.service';
 
 @Component({
   selector: 'gridster',
@@ -12,7 +12,7 @@ import { GridsterService, IGridsterOptions } from './gridster.service';
 })
 export class GridsterComponent implements OnInit {
   @Input('options') options: IGridsterOptions;
-
+  @Input('draggableOptions') draggableOptions: IGridsterDraggableOptions;
   @ViewChild('positionHighlight') $positionHighlight;
 
   gridster: GridsterService;
@@ -25,9 +25,7 @@ export class GridsterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.gridster.init(this.options, {
-        // handlerClass: 'panel-heading'
-    });
+    this.gridster.init(this.options,this.draggableOptions);
   }
 
   ngAfterViewInit() {

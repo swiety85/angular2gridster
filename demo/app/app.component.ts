@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IGridsterOptions } from '../../';
+import { IGridsterOptions, IGridsterDraggableOptions } from '../../';
 
 @Component({
     selector: 'app',
@@ -14,6 +14,11 @@ export class AppComponent {
 
         dragAndDrop: true
     };
+    gridsterDraggableOptions: IGridsterDraggableOptions = {
+        handlerClass: 'panel-heading'
+
+    }
+
     title:string = 'Angular2Gridster';
     widgets:any = [
         {
