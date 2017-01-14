@@ -2,13 +2,12 @@
 	position: relative;
 	display: block;
 	left: 0;
-	right: 0;
-	height: 100%;
+	width: 100%;
 }
 
 .gridster-container {
 	position: relative;
-	height: 100%;
+	width: 100%;
 	list-style: none;
   /* Will be modified by the grid jquery lib, depending on the items */
 	-webkit-transition: width 0.2s,

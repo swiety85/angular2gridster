@@ -155,7 +155,6 @@ export class GridsterItemComponent implements OnInit, OnChanges {
             drag = mousemove.map((mm:MouseEvent) => {
                 mm.preventDefault();
 
-                console.log('containerCoordincates.top', containerCoordincates.top);
                 this.gridster.onDrag(this);
 
                 return {
