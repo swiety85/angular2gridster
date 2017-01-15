@@ -36,20 +36,9 @@ export class GridsterComponent implements OnInit {
   ngAfterViewInit() {
     this.gridster.start(this.$el);
     this.gridster.$positionHighlight = this.$positionHighlight.nativeElement;
+    // detectChanges is required because gridster.start changes values uses in template
     this.cdr.detectChanges();
   }
-
-  getMaxHeight () {
-    var x = this.gridster.getMaxHeight();
-    console.log('height', x);
-    return x;
-  }
-
-  getMaxWidth () {
-    console.log('width', this.gridster.getMaxWidth());
-    return this.gridster.getMaxWidth();
-  }
-
 
   /**
    * Change gridster config option and rebuild

@@ -1,4 +1,5 @@
 import { EventEmitter } from '@angular/core';
+import {GridsterItemComponent} from "../gridster-item/gridster-item.component";
 
 var GridCol = function(lanes) {
     for (var i = 0; i < lanes; i++) {
@@ -7,18 +8,6 @@ var GridCol = function(lanes) {
 };
 // Extend the Array prototype
 GridCol.prototype = [];
-
-export interface IGridListItem {
-    x?:number;
-    xChange?: EventEmitter<number>;
-    y?:number;
-    yChange?: EventEmitter<number>;
-    w?:number;
-    h?:number;
-    pin?:boolean;
-    autoSize?:boolean;
-    $element?:HTMLElement;
-}
 
 /**
  * A GridList manages the two-dimensional positions from a list of items,
@@ -52,10 +41,10 @@ export class GridList {
         direction: 'horizontal'
     };
 
-    items:Array<IGridListItem>;
-    grid:Array<Array<IGridListItem>>;
+    items:Array<GridsterItemComponent>;
+    grid:Array<Array<GridsterItemComponent>>;
 
-    constructor(items:Array<IGridListItem>, options:{direction:string, lanes:number}) {
+    constructor(items:Array<GridsterItemComponent>, options:{direction:string, lanes:number}) {
         this.options = options;
         for (var k in this.defaults) {
             if (!this.options.hasOwnProperty(k)) {
@@ -73,7 +62,7 @@ export class GridList {
      * Clone items with a deep level of one. Items are not referenced but their
      * properties are
      */
-    static cloneItems (items:Array<IGridListItem>, _items?:Array<IGridListItem>) {
+    static cloneItems (items:Array<GridsterItemComponent>, _items?:Array<any>) {
         var i,
             k,
             item;
@@ -86,9 +75,10 @@ export class GridList {
             if (!_items[i]) {
                 _items[i] = {};
             }
-            for (k in items[i]) {
-                if(items[i].hasOwnProperty(k)) {
-                    _items[i][k] = items[i][k];
+            item = items[i].serialize();
+            for (k in item) {
+                if(item.hasOwnProperty(k)) {
+                    _items[i][k] = item[k];
                 }
             }
         }
@@ -189,7 +179,7 @@ export class GridList {
      *
      * @returns {Array} x and y.
      */
-    findPositionForItem (item:IGridListItem, start:{x:number,y:number}, fixedRow?:number) {
+    findPositionForItem (item:GridsterItemComponent, start:{x:number,y:number}, fixedRow?:number) {
         var x, y, position;
 
         // Start searching for a position from the horizontal position of the
@@ -224,14 +214,14 @@ export class GridList {
         return [newCol, newRow];
     }
 
-    moveItemToPosition (item:IGridListItem, newPosition:Array<number>) {
+    moveItemToPosition (item:GridsterItemComponent, newPosition:Array<number>) {
         var position = this.getItemPosition({
             x: newPosition[0],
             y: newPosition[1],
             w: item.w,
             h: item.h
         });
-        let newItm: IGridListItem = { w: item.w, h: item.h};
+        let newItm: any = { w: item.w, h: item.h};
         this.setItemPosition(newItm, newPosition);
         var collidingItems = this.getItemsCollidingWithItem(newItm);
         if (collidingItems.length > 0) {
@@ -259,7 +249,7 @@ export class GridList {
      * @param {number} [size.w=item.w] The new width.
      * @param {number} [size.h=item.h] The new height.
      */
-    resizeItem (item:IGridListItem, size:{w:number,h:number}) {
+    resizeItem (item:GridsterItemComponent, size:{w:number,h:number}) {
         var width = size.w || item.w,
             height = size.h || item.h;
 
@@ -277,7 +267,7 @@ export class GridList {
      * Since both their position and size can change, the items need an
      * additional identifier attribute to match them with their previous state
      */
-    getChangedItems (initialItems:Array<IGridListItem>, idAttribute:string) {
+    getChangedItems (initialItems:Array<GridsterItemComponent>, idAttribute:string) {
         var changedItems = [];
 
         for (var i:number = 0; i < initialItems.length; i++) {
@@ -490,7 +480,7 @@ export class GridList {
         position2.y + position2.h <= position1.y);
     }
 
-    private resolveCollisions (item) {
+    public resolveCollisions (item) {
         if (!this.tryToResolveCollisionsLocally(item)) {
             this.pullItemsToLeft(item);
         }
@@ -555,7 +545,18 @@ export class GridList {
         // from one single iteration, just by moving the colliding items around. So
         // we accept this scenario and marge the brached-out grid instance into the
         // original one
-        GridList.cloneItems(_gridList.items, this.items);
+        //GridList.cloneItems(_gridList.items, this.items);
+        this.items.forEach((item:GridsterItemComponent, idx:number) => {
+            let cachedItem = _gridList.items.filter(cachedItem => {
+                return cachedItem.$element === item.$element;
+            })[0];
+
+            item.x = cachedItem.x;
+            item.y = cachedItem.y;
+            item.w = cachedItem.w;
+            item.h = cachedItem.h;
+            item.autoSize = cachedItem.autoSize;
+        });
         this.generateGrid();
         return true;
     }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, Inject, Host, Input, Output, EventEmitter, SimpleChange, OnChanges } from '@angular/core';
+import { Component, OnInit, ElementRef, Inject, Host, Input, Output, EventEmitter, SimpleChange, OnChanges, HostBinding } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 import { ISubscription, Subscription } from 'rxjs/Subscription';
@@ -19,7 +19,9 @@ export class GridsterItemComponent implements OnInit, OnChanges {
     @Input() h: number;
     @Input() pin: boolean = false;
 
-    el:HTMLElement;
+    @HostBinding('class.is-dragging') isDragging: boolean = false;
+
+    $element:HTMLElement;
     /**
      * Mouse drag observable
      */
@@ -33,71 +35,39 @@ export class GridsterItemComponent implements OnInit, OnChanges {
      */
     dragSubscription:ISubscription;
 
-    item:any;
+    autoSize: boolean;
 
     constructor(@Inject(ElementRef) elementRef:ElementRef, @Host() gridster:GridsterService) {
         this.gridster = gridster;
 
-        this.el = elementRef.nativeElement;
+        this.$element = elementRef.nativeElement;
     }
 
 
     ngOnInit() {
-        this.gridster.registerItem({
-            $element: this.el,
-            x: this.x,
-            xChange: this.xChange,
-            y: this.y,
-            yChange: this.yChange,
-            w: this.w,
-            h: this.h,
-            pin: this.pin
-        });
+        this.gridster.registerItem(this);
 
         if(this.gridster.options.dragAndDrop) {
-            this.createMouseDrag(this.el);
-            this.createTouchDrag(this.el);
+            this.createMouseDrag(this.$element);
+            this.createTouchDrag(this.$element);
 
             // Update position
             this.dragSubscription = this.dragging.subscribe((pos) => {
                 if(!this.pin){
-                    this.el.style.top = (pos.top - this.gridster.$element.offsetTop) + 'px';
-                    this.el.style.left = (pos.left - this.gridster.$element.offsetLeft) + 'px';
+                    this.$element.style.top = (pos.top - this.gridster.$element.offsetTop) + 'px';
+                    this.$element.style.left = (pos.left - this.gridster.$element.offsetLeft) + 'px';
                 }           
             });
         }
     }
 
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        let item = this.getItem();
-        if(!item) {
+    ngOnChanges() {
+        if(!this.gridster.gridList) {
             return ;
         }
-        if(changes['w']) {
-            item.w = changes['w'].currentValue;
-        }
-        if(changes['h']) {
-            item.h = changes['h'].currentValue;
-        }
-        if(changes['x']) {
-            item.x = changes['x'].currentValue;
-        }
-        if(changes['y']) {
-            item.y = changes['y'].currentValue;
-        }
-        if(changes['pin']) {
-            item.pin = changes['pin'].currentValue;
-        }
 
-        this.gridster.createGridSnapshot();
-        this.gridster.gridList.resizeItem(item, {w: item.w, h: item.h});
-        this.gridster.updateGridSnapshot();
-
+        this.gridster.gridList.resolveCollisions(this);
         this.gridster.render();
-    }
-
-    public getItem() {
-        return this.gridster.getItemByElement(this.el);
     }
 
     /**
@@ -143,7 +113,7 @@ export class GridsterItemComponent implements OnInit, OnChanges {
             }
 
             this.gridster.onStart(this);
-            this.el.classList.add('is-dragging');
+            this.isDragging = true;
 
             // update container position on window scroll
             winScroll
@@ -165,7 +135,7 @@ export class GridsterItemComponent implements OnInit, OnChanges {
 
             drag.subscribe(null, null, () => {
                 this.gridster.onStop(this);
-                this.el.classList.remove('is-dragging');
+                this.isDragging = false;
             });
 
             return drag;
@@ -210,7 +180,7 @@ export class GridsterItemComponent implements OnInit, OnChanges {
             }
 
             this.gridster.onStart(this);
-            this.el.classList.add('is-dragging');
+            this.isDragging = true;
 
             // Calculate delta with mousemove until mouseup
             drag = touchmove.map((tm:TouchEvent) => {
@@ -227,7 +197,7 @@ export class GridsterItemComponent implements OnInit, OnChanges {
 
             drag.subscribe(null, null, () => {
                 this.gridster.onStop(this);
-                this.el.classList.remove('is-dragging');
+                this.isDragging = false;
             });
 
             return drag;
@@ -262,8 +232,21 @@ export class GridsterItemComponent implements OnInit, OnChanges {
         };
     }
 
+    /**
+     * Serialize GridsterItemComponent to object literal with key properties
+     * @returns {{$element: HTMLElement, x: number, y: number, w: number, h: number, autoSize: boolean}}
+     */
+    public serialize () {
+        return {
+            $element: this.$element,
+            x: this.x, y: this.y,
+            w: this.w, h: this.h,
+            autoSize: this.autoSize
+        };
+    }
+
     ngOnDestroy() {
-        let index = this.gridster.items.findIndex((z) => z == this.getItem());
+        let index = this.gridster.items.findIndex((z) => z == this);
         if(index){
             this.gridster.items.splice(index,1);
         }
