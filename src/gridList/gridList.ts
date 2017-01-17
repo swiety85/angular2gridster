@@ -41,7 +41,7 @@ export class GridList {
         direction: 'horizontal'
     };
 
-    items:Array<GridsterItemComponent>;
+    items:Array<any>;
     grid:Array<Array<GridsterItemComponent>>;
 
     constructor(items:Array<GridsterItemComponent>, options:{direction:string, lanes:number}) {
@@ -57,32 +57,6 @@ export class GridList {
         this.adjustSizeOfItems();
 
         this.generateGrid();
-    }
-    /**
-     * Clone items with a deep level of one. Items are not referenced but their
-     * properties are
-     */
-    static cloneItems (items:Array<GridsterItemComponent>, _items?:Array<any>) {
-        var i,
-            k,
-            item;
-        if (_items === undefined) {
-            _items = [];
-        }
-        for (i = 0; i < items.length; i++) {
-            // XXX: this is good because we don't want to lose item reference, but
-            // maybe we should clear their properties since some might be optional
-            if (!_items[i]) {
-                _items[i] = {};
-            }
-            item = items[i].serialize();
-            for (k in item) {
-                if(item.hasOwnProperty(k)) {
-                    _items[i][k] = item[k];
-                }
-            }
-        }
-        return _items;
     }
     /**
      * Illustates grid as text-based table, using a number identifier for each
@@ -505,7 +479,9 @@ export class GridList {
             aboveOfItem,
             belowOfItem;
 
-        GridList.cloneItems(this.items, _gridList.items);
+        _gridList.items = this.items.map(item => {
+            return item.serialize();
+        });
         _gridList.generateGrid();
 
         for (var i = 0; i < collidingItems.length; i++) {
@@ -545,7 +521,7 @@ export class GridList {
         // from one single iteration, just by moving the colliding items around. So
         // we accept this scenario and marge the brached-out grid instance into the
         // original one
-        //GridList.cloneItems(_gridList.items, this.items);
+
         this.items.forEach((item:GridsterItemComponent, idx:number) => {
             let cachedItem = _gridList.items.filter(cachedItem => {
                 return cachedItem.$element === item.$element;

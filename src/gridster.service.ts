@@ -92,8 +92,6 @@ export class GridsterService {
 
         this.$element = gridsterEl;
         // Used to highlight a position an element will land on upon drop
-        //this.$positionHighlight = this.$element.querySelector('.position-highlight') ?
-        //    this.$element.querySelector('.position-highlight')[0]: null;
         if(this.$positionHighlight) {
             this.$positionHighlight.style.display = 'none';
         }
@@ -120,7 +118,7 @@ export class GridsterService {
         // Create a deep copy of the items; we use them to revert the item
         // positions after each drag change, making an entire drag operation less
         // distructable
-        this.cacheItems();
+        this._items = this.serializeItems();
 
         // Since dragging actually alters the grid, we need to establish the number
         // of cols (+1 extra) before the drag starts
@@ -259,8 +257,10 @@ export class GridsterService {
         return element === this.draggedElement;
     }
 
-    public cacheItems () {
-        this._items = GridList.cloneItems(this.items);
+    serializeItems () {
+        return this.items.map((item:GridsterItemComponent) => {
+            return item.serialize();
+        });
     }
 
     public getItemByElement (element) {
@@ -323,7 +323,7 @@ export class GridsterService {
     public updateCachedItems () {
         // Notify the user with the items that changed since the previous snapshot
         this.triggerOnChange();
-        GridList.cloneItems(this.items, this._items);
+        this._items = this.serializeItems();
     }
 
     private triggerOnChange () {

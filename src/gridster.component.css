@@ -21,11 +21,3 @@
 	position: absolute;
 	z-index: 1;
 }
-
-.position-highlight .inner {
-	position: absolute;
-	top: 0;
-	bottom: 10px;
-	left: 10px;
-	right: 0;
-}
