@@ -101,7 +101,6 @@ export class GridList {
     setOption(name:string, value:any) {
         this.options[name] = value;
     }
-
     /**
      * Build the grid structure from scratch, with the current item positions
      */
@@ -257,6 +256,13 @@ export class GridList {
         }
 
         return changedItems;
+    }
+
+    resolveCollisions (item) {
+        if (!this.tryToResolveCollisionsLocally(item)) {
+            this.pullItemsToLeft(item);
+        }
+        this.pullItemsToLeft();
     }
 
     private sortItemsByPosition () {
@@ -454,12 +460,6 @@ export class GridList {
         position2.y + position2.h <= position1.y);
     }
 
-    public resolveCollisions (item) {
-        if (!this.tryToResolveCollisionsLocally(item)) {
-            this.pullItemsToLeft(item);
-        }
-        this.pullItemsToLeft();
-    }
     /**
      * Attempt to resolve the collisions after moving a an item over one or more
      * other items within the grid, by shifting the position of the colliding

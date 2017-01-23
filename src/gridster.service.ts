@@ -76,16 +76,6 @@ export class GridsterService {
             {}, this.draggableDefaults, draggableOptions);
     }
 
-    /**
-     * Update maxItemWidth and maxItemHeight vales according to current state of items
-     */
-    private updateMaxItemSize () {
-        this.maxItemWidth = Math.max.apply(
-            null, this.items.map((item) => { return item.w; }));
-        this.maxItemHeight = Math.max.apply(
-            null, this.items.map((item) => { return item.h; }));
-    }
-
     start (gridsterEl:HTMLElement) {
 
         this.updateMaxItemSize();
@@ -112,6 +102,12 @@ export class GridsterService {
         this.render();
     }
 
+    serializeItems () {
+        return this.items.map((item:GridsterItemComponent) => {
+            return item.serialize();
+        });
+    }
+
     onStart (itemCtrl:GridsterItemComponent) {
         this.draggedElement = itemCtrl.$element;
         itemCtrl.isDragging = true;
@@ -128,7 +124,7 @@ export class GridsterService {
         this.highlightPositionForItem(itemCtrl);
     }
 
-    onDrag (itemCtrl) {
+    onDrag (itemCtrl:GridsterItemComponent) {
         var newPosition = this.snapItemPositionToGrid(itemCtrl);
 
         if (this.dragPositionChanged(newPosition)) {
@@ -148,7 +144,7 @@ export class GridsterService {
         }
     }
 
-    onStop (itemCtrl) {
+    onStop (itemCtrl:GridsterItemComponent) {
         this.draggedElement = undefined;
         this.updateCachedItems();
         this.previousDragPosition = null;
@@ -164,6 +160,16 @@ export class GridsterService {
 
         itemCtrl.xChange.emit(itemCtrl.x);
         itemCtrl.yChange.emit(itemCtrl.y);
+    }
+
+    /**
+     * Update maxItemWidth and maxItemHeight vales according to current state of items
+     */
+    private updateMaxItemSize () {
+        this.maxItemWidth = Math.max.apply(
+            null, this.items.map((item) => { return item.w; }));
+        this.maxItemHeight = Math.max.apply(
+            null, this.items.map((item) => { return item.h; }));
     }
 
     /**
@@ -255,12 +261,6 @@ export class GridsterService {
             return false;
         }
         return element === this.draggedElement;
-    }
-
-    serializeItems () {
-        return this.items.map((item:GridsterItemComponent) => {
-            return item.serialize();
-        });
     }
 
     public getItemByElement (element) {

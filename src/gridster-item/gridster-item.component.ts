@@ -43,7 +43,6 @@ export class GridsterItemComponent implements OnInit, OnChanges {
         this.$element = elementRef.nativeElement;
     }
 
-
     ngOnInit() {
         this.gridster.registerItem(this);
 
@@ -68,6 +67,14 @@ export class GridsterItemComponent implements OnInit, OnChanges {
 
         this.gridster.gridList.resolveCollisions(this);
         this.gridster.render();
+    }
+
+    ngOnDestroy() {
+        let index = this.gridster.items.findIndex((z) => z == this);
+        if(index){
+            this.gridster.items.splice(index,1);
+        }
+        this.dragSubscription.unsubscribe();
     }
 
     /**
@@ -142,6 +149,7 @@ export class GridsterItemComponent implements OnInit, OnChanges {
         });
     }
 
+    // TODO: provide differnt behaviour for touch
     private createTouchDrag(dragTarget:HTMLElement) {
         // Get the three major events
         var touchstart = Observable.fromEvent(dragTarget, 'touchstart'),
@@ -245,13 +253,6 @@ export class GridsterItemComponent implements OnInit, OnChanges {
         };
     }
 
-    ngOnDestroy() {
-        let index = this.gridster.items.findIndex((z) => z == this);
-        if(index){
-            this.gridster.items.splice(index,1);
-        }
-        this.dragSubscription.unsubscribe();
-    }
 }
 
 
