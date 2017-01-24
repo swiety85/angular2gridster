@@ -263,7 +263,7 @@ export class GridsterService {
         return element === this.draggedElement;
     }
 
-    public getItemByElement (element) {
+    public getItemByElement (element):GridsterItemComponent {
         // XXX: this could be optimized by storing the item reference inside the
         // meta data of the DOM element
         for (var i = 0; i < this.items.length; i++) {
