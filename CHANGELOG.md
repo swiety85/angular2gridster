@@ -1,5 +1,5 @@
 <a name="0.3.0"></a>
-# 0.3.0 (2017-01-24)
+# [0.3.0]((https://github.com/swiety85/angular2gridster/compare/0.2.3...0.3.0)) (2017-01-24)
 
 
 ### Bug Fixes
@@ -24,7 +24,7 @@
 
 
 <a name="0.2.3"></a>
-# 0.2.3 (2016-12-21)
+# [0.2.3]((https://github.com/swiety85/angular2gridster/compare/0.2.2...0.2.3)) (2016-12-21)
 
 
 ### Bug Fixes
@@ -36,7 +36,7 @@
 
 
 <a name="0.2.2"></a>
-# 0.2.2 (2016-12-11)
+# [0.2.2](https://github.com/swiety85/angular2gridster/compare/0.2.0...0.2.2) (2016-12-11)
 
 
 ### Bug Fixes
