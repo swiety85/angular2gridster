@@ -1,6 +1,6 @@
-import { Component, OnInit, ElementRef, Inject, ViewChild, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ElementRef, Inject, ViewChild, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 
-import { GridsterService, IGridsterOptions } from './gridster.service';
+import { GridsterService, IGridsterOptions, IGridsterDraggableOptions } from './gridster.service';
 
 @Component({
   selector: 'gridster',
@@ -11,28 +11,33 @@ import { GridsterService, IGridsterOptions } from './gridster.service';
   ]
 })
 export class GridsterComponent implements OnInit {
-  @Input('options') options: IGridsterOptions;
-
+  @Input() options: IGridsterOptions;
+  @Output() gridsterPositionChange = new EventEmitter<any>();
+  @Input() draggableOptions: IGridsterDraggableOptions;
   @ViewChild('positionHighlight') $positionHighlight;
 
   gridster: GridsterService;
   $el: HTMLElement;
 
-  constructor(@Inject(ElementRef) elementRef: ElementRef, gridster: GridsterService) {
-    this.gridster = gridster;
+  private cdr:ChangeDetectorRef;
 
+  constructor(@Inject(ElementRef) elementRef: ElementRef, gridster: GridsterService, cdr: ChangeDetectorRef) {
+    this.cdr = cdr;
+
+    this.gridster = gridster;
+    this.gridster.gridsterChange = this.gridsterPositionChange;
     this.$el = elementRef.nativeElement;
   }
 
   ngOnInit() {
-    this.gridster.init(this.options, {
-        // handlerClass: 'panel-heading'
-    });
+    this.gridster.init(this.options,this.draggableOptions);
   }
 
   ngAfterViewInit() {
     this.gridster.start(this.$el);
     this.gridster.$positionHighlight = this.$positionHighlight.nativeElement;
+    // detectChanges is required because gridster.start changes values uses in template
+    this.cdr.detectChanges();
   }
 
   /**

@@ -36,3 +36,19 @@ gridsterConfig:IGridsterOptions = {
     dragAndDrop: true
 };
 ```
+
+## Demo
+
+Clone or download this repository. Next run:
+
+```shell
+    npm install
+    npm run server
+```
+
+Go to: http://localhost:3000/
+
+## Issues
+
+If the current behavior is a bug or you can illustrate your feature request better with an example, 
+please provide the steps to reproduce and if possible a minimal demo of the problem via plnkr (http://plnkr.co/edit/4pGyURZVVrL6MONXc8A0?p=preview)

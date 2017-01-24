@@ -1,3 +1,6 @@
+import { EventEmitter } from '@angular/core';
+import {GridsterItemComponent} from "../gridster-item/gridster-item.component";
+
 var GridCol = function(lanes) {
     for (var i = 0; i < lanes; i++) {
         this.push(null);
@@ -5,15 +8,6 @@ var GridCol = function(lanes) {
 };
 // Extend the Array prototype
 GridCol.prototype = [];
-
-export interface IGridListItem {
-    x?:number;
-    y?:number;
-    w?:number;
-    h?:number;
-    autoSize?:Boolean;
-    $element?:HTMLElement;
-}
 
 /**
  * A GridList manages the two-dimensional positions from a list of items,
@@ -47,10 +41,10 @@ export class GridList {
         direction: 'horizontal'
     };
 
-    items:Array<IGridListItem>;
-    grid:Array<Array<IGridListItem>>;
+    items:Array<any>;
+    grid:Array<Array<GridsterItemComponent>>;
 
-    constructor(items:Array<IGridListItem>, options:{direction:string, lanes:number}) {
+    constructor(items:Array<GridsterItemComponent>, options:{direction:string, lanes:number}) {
         this.options = options;
         for (var k in this.defaults) {
             if (!this.options.hasOwnProperty(k)) {
@@ -63,31 +57,6 @@ export class GridList {
         this.adjustSizeOfItems();
 
         this.generateGrid();
-    }
-    /**
-     * Clone items with a deep level of one. Items are not referenced but their
-     * properties are
-     */
-    static cloneItems (items:Array<IGridListItem>, _items?:Array<IGridListItem>) {
-        var i,
-            k,
-            item;
-        if (_items === undefined) {
-            _items = [];
-        }
-        for (i = 0; i < items.length; i++) {
-            // XXX: this is good because we don't want to lose item reference, but
-            // maybe we should clear their properties since some might be optional
-            if (!_items[i]) {
-                _items[i] = {};
-            }
-            for (k in items[i]) {
-                if(items[i].hasOwnProperty(k)) {
-                    _items[i][k] = items[i][k];
-                }
-            }
-        }
-        return _items;
     }
     /**
      * Illustates grid as text-based table, using a number identifier for each
@@ -132,7 +101,6 @@ export class GridList {
     setOption(name:string, value:any) {
         this.options[name] = value;
     }
-
     /**
      * Build the grid structure from scratch, with the current item positions
      */
@@ -184,7 +152,7 @@ export class GridList {
      *
      * @returns {Array} x and y.
      */
-    findPositionForItem (item:IGridListItem, start:{x:number,y:number}, fixedRow?:number) {
+    findPositionForItem (item:GridsterItemComponent, start:{x:number,y:number}, fixedRow?:number) {
         var x, y, position;
 
         // Start searching for a position from the horizontal position of the
@@ -219,16 +187,32 @@ export class GridList {
         return [newCol, newRow];
     }
 
-    moveItemToPosition (item:IGridListItem, newPosition:Array<number>) {
+    moveItemToPosition (item:GridsterItemComponent, newPosition:Array<number>) {
         var position = this.getItemPosition({
             x: newPosition[0],
             y: newPosition[1],
             w: item.w,
             h: item.h
         });
-
-        this.updateItemPosition(item, [position.x, position.y]);
-        this.resolveCollisions(item);
+        let newItm: any = { w: item.w, h: item.h};
+        this.setItemPosition(newItm, newPosition);
+        var collidingItems = this.getItemsCollidingWithItem(newItm);
+        if (collidingItems.length > 0) {
+            var isCollisionPinned = false;
+             for (var i = 0; i < collidingItems.length; i++) {
+                if(this.items[collidingItems[i]] && this.items[collidingItems[i]].pin){
+                    isCollisionPinned = true;
+                    break;
+                }
+             }
+             if(!isCollisionPinned){
+                this.updateItemPosition(item, [position.x, position.y]);         
+                this.resolveCollisions(item);
+             }
+        }else{
+            this.updateItemPosition(item, [position.x, position.y]); 
+            this.resolveCollisions(item);
+        }      
     }
     /**
      * Resize an item and resolve collisions.
@@ -238,7 +222,7 @@ export class GridList {
      * @param {number} [size.w=item.w] The new width.
      * @param {number} [size.h=item.h] The new height.
      */
-    resizeItem (item:IGridListItem, size:{w:number,h:number}) {
+    resizeItem (item:GridsterItemComponent, size:{w:number,h:number}) {
         var width = size.w || item.w,
             height = size.h || item.h;
 
@@ -256,7 +240,7 @@ export class GridList {
      * Since both their position and size can change, the items need an
      * additional identifier attribute to match them with their previous state
      */
-    getChangedItems (initialItems:Array<IGridListItem>, idAttribute:string) {
+    getChangedItems (initialItems:Array<GridsterItemComponent>, idAttribute:string) {
         var changedItems = [];
 
         for (var i:number = 0; i < initialItems.length; i++) {
@@ -272,6 +256,13 @@ export class GridList {
         }
 
         return changedItems;
+    }
+
+    resolveCollisions (item) {
+        if (!this.tryToResolveCollisionsLocally(item)) {
+            this.pullItemsToLeft(item);
+        }
+        this.pullItemsToLeft();
     }
 
     private sortItemsByPosition () {
@@ -353,7 +344,6 @@ export class GridList {
         // item.
         for (x = newPosition[0]; x < newPosition[0] + position.w; x++) {
             var col = this.grid[x];
-
             // Surely a column that hasn't even been created yet is available
             if (!col) {
                 continue;
@@ -463,19 +453,13 @@ export class GridList {
     private itemsAreColliding (item1, item2) {
         var position1 = this.getItemPosition(item1),
             position2 = this.getItemPosition(item2);
-
+            
         return !(position2.x >= position1.x + position1.w ||
         position2.x + position2.w <= position1.x ||
         position2.y >= position1.y + position1.h ||
         position2.y + position2.h <= position1.y);
     }
 
-    private resolveCollisions (item) {
-        if (!this.tryToResolveCollisionsLocally(item)) {
-            this.pullItemsToLeft(item);
-        }
-        this.pullItemsToLeft();
-    }
     /**
      * Attempt to resolve the collisions after moving a an item over one or more
      * other items within the grid, by shifting the position of the colliding
@@ -495,7 +479,9 @@ export class GridList {
             aboveOfItem,
             belowOfItem;
 
-        GridList.cloneItems(this.items, _gridList.items);
+        _gridList.items = this.items.map(item => {
+            return item.serialize();
+        });
         _gridList.generateGrid();
 
         for (var i = 0; i < collidingItems.length; i++) {
@@ -535,7 +521,18 @@ export class GridList {
         // from one single iteration, just by moving the colliding items around. So
         // we accept this scenario and marge the brached-out grid instance into the
         // original one
-        GridList.cloneItems(_gridList.items, this.items);
+
+        this.items.forEach((item:GridsterItemComponent, idx:number) => {
+            let cachedItem = _gridList.items.filter(cachedItem => {
+                return cachedItem.$element === item.$element;
+            })[0];
+
+            item.x = cachedItem.x;
+            item.y = cachedItem.y;
+            item.w = cachedItem.w;
+            item.h = cachedItem.h;
+            item.autoSize = cachedItem.autoSize;
+        });
         this.generateGrid();
         return true;
     }
@@ -667,5 +664,6 @@ export class GridList {
             item.x = position[1];
             item.y = position[0];
         }
+        
     }
 }
