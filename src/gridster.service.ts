@@ -73,8 +73,12 @@ export class GridsterService {
         this.options = (<any>Object).assign({}, this.defaults, options);
         this.draggableOptions = (<any>Object).assign(
             {}, this.draggableDefaults, draggableOptions);
+    }
 
-
+    /**
+     * Update maxItemWidth and maxItemHeight vales according to current state of items
+     */
+    private updateMaxItemSize () {
         this.maxItemWidth = Math.max.apply(
             null, this.items.map((item) => { return item.w; }));
         this.maxItemHeight = Math.max.apply(
@@ -82,6 +86,9 @@ export class GridsterService {
     }
 
     start (gridsterEl:HTMLElement) {
+
+        this.updateMaxItemSize();
+
         this.$element = gridsterEl;
         // Used to highlight a position an element will land on upon drop
         //this.$positionHighlight = this.$element.querySelector('.position-highlight') ?
@@ -95,6 +102,8 @@ export class GridsterService {
     }
 
     render () {
+        this.updateMaxItemSize();
+        this.gridList.generateGrid();
         this.applySizeToItems();
         this.applyPositionToItems();
     }
@@ -152,6 +161,7 @@ export class GridsterService {
 
         itemCtrl.el.classList.remove('is-dragging');
 
+        this.updateMaxItemSize();
         this.applyPositionToItems();
         this.removePositionHighlight();
         let item = this.getItemByElement(itemCtrl.el);
@@ -202,6 +212,20 @@ export class GridsterService {
         return item.h * this._cellHeight;
     }
 
+    public getMaxHeight () {
+        if(!this.gridList) {
+            return null;
+        }
+        return this.gridList.grid.length * this._cellHeight;
+    }
+
+    public getMaxWidth () {
+        if(!this.gridList || !this.gridList.grid[0]) {
+            return null;
+        }
+        return this.gridList.grid[0].length * this._cellWidth;
+    }
+
     private applyPositionToItems () {
         // TODO: Implement group separators
         for (var i = 0; i < this.items.length; i++) {
@@ -217,9 +241,12 @@ export class GridsterService {
         // Update the width of the entire grid container with enough room on the
         // right to allow dragging items to the end of the grid.
         if (this.options.direction === "horizontal") {
+            child.style.height = (this.options.lanes * this._cellHeight)+'px';
             child.style.width = ((this.gridList.grid.length + this.maxItemWidth) * this._cellWidth)+'px';
+
         } else {
             child.style.height = ((this.gridList.grid.length + this.maxItemHeight) * this._cellHeight)+'px';
+            child.style.width = (this.options.lanes * this._cellWidth)+'px';
         }
     }
 
@@ -234,7 +261,7 @@ export class GridsterService {
         this._items = GridList.cloneItems(this.items);
     }
 
-    public getItemByElement (element) {
+    public getItemByElement (element):IGridListItem {
         // XXX: this could be optimized by storing the item reference inside the
         // meta data of the DOM element
         for (var i = 0; i < this.items.length; i++) {

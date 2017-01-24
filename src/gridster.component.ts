@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, Inject, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ElementRef, Inject, ViewChild, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 
 import { GridsterService, IGridsterOptions, IGridsterDraggableOptions } from './gridster.service';
 
@@ -19,7 +19,11 @@ export class GridsterComponent implements OnInit {
   gridster: GridsterService;
   $el: HTMLElement;
 
-  constructor(@Inject(ElementRef) elementRef: ElementRef, gridster: GridsterService) {
+  private cdr:ChangeDetectorRef;
+
+  constructor(@Inject(ElementRef) elementRef: ElementRef, gridster: GridsterService, cdr: ChangeDetectorRef) {
+    this.cdr = cdr;
+
     this.gridster = gridster;
     this.gridster.gridsterChange = this.gridsterPositionChange;
     this.$el = elementRef.nativeElement;
@@ -32,6 +36,18 @@ export class GridsterComponent implements OnInit {
   ngAfterViewInit() {
     this.gridster.start(this.$el);
     this.gridster.$positionHighlight = this.$positionHighlight.nativeElement;
+    this.cdr.detectChanges();
+  }
+
+  getMaxHeight () {
+    var x = this.gridster.getMaxHeight();
+    console.log('height', x);
+    return x;
+  }
+
+  getMaxWidth () {
+    console.log('width', this.gridster.getMaxWidth());
+    return this.gridster.getMaxWidth();
   }
 
 
