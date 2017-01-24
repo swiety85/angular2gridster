@@ -20,6 +20,12 @@ a {
 }
 
 .position-highlight .inner {
+    position: absolute;
+    top: 5px;
+    bottom: 5px;
+    left: 5px;
+    right: 5px;
+
     background-color: #768294;
     border: 1px solid transparent;
     -webkit-transition: background 3s;
@@ -32,8 +38,8 @@ a {
     position: absolute;
     background: #fff;
     border: 1px solid transparent;
-    top: 0;
-    bottom: 10px;
+    top: 5px;
+    bottom: 5px;
     left: 5px;
     right: 5px;
     -webkit-transition: background 3s;

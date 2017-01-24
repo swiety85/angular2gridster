@@ -24,7 +24,7 @@
 
   <gridster [options]="gridsterOptions" [draggableOptions]="gridsterDraggableOptions" (gridsterPositionChange)="logChanges($event)" #gridster>
 
-    <gridster-item *ngFor="let widget of widgets; let indx = index" [(x)]="widget.x" [(y)]="widget.y" [w]="widget.w" [h]="widget.h" [pin]="widget.pin">
+    <gridster-item *ngFor="let widget of widgets; let indx = index" [(x)]="widget.x" [(y)]="widget.y" [w]="widget.w" [h]="widget.h">
 
       <div class="panel-heading">
         <h5 class="panel-title">{{ widget.title }}</h5>
@@ -39,7 +39,6 @@
         </p>
         <p>
           <button (click)="remove(indx,gridster)">remove</button>
-          <button (click)="widget.pin = !widget.pin"><template [ngIf]="widget.pin">unpin</template><template [ngIf]="!widget.pin">pin</template></button>
         </p>
         <p>
           Position (x,y): ({{widget.x}},{{widget.y}})
