@@ -1,9 +1,9 @@
 {
   "name": "angular2gridster",
   "description": "angular2 gridster component",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "license": "MIT",
-  "author": "Damian Wajdlich",
+  "author": "Damian Wajdlich, Michał Stępień",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/swiety85/angular2gridster.git"
