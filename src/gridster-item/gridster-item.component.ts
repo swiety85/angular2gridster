@@ -4,6 +4,7 @@ import 'rxjs/Rx';
 import { ISubscription, Subscription } from 'rxjs/Subscription';
 
 import { GridsterService } from '../gridster.service';
+import { IGridListItem } from './../gridList/gridList';
 
 @Component({
     selector: 'gridster-item',
@@ -96,7 +97,7 @@ export class GridsterItemComponent implements OnInit, OnChanges {
         this.gridster.render();
     }
 
-    public getItem() {
+    public getItem():IGridListItem {
         return this.gridster.getItemByElement(this.el);
     }
 
