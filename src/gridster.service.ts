@@ -1,22 +1,9 @@
 import { GridList } from './gridList/gridList';
 import { EventEmitter } from '@angular/core';
 import {GridsterItemComponent} from "./gridster-item/gridster-item.component";
+import {IGridsterOptions} from "./IGridsterOptions";
+import {IGridsterDraggableOptions} from "./IGridsterDraggableOptions";
 
-export interface IGridsterDraggableOptions {
-    handlerClass?:string;
-    zIndex?:number;
-    scroll?:boolean;
-    containment?:string;
-}
-export interface IGridsterOptions {
-    direction?:string;
-    lanes?:number;
-    widthHeightRatio?:number;
-    heightToFontSizeRatio?:number;
-    onChange?:Function;
-    dragAndDrop?:boolean;
-    itemSelector?: string;
-}
 
 export class GridsterService {
     $element:HTMLElement;

@@ -1,6 +1,8 @@
 import { Component, OnInit, ElementRef, Inject, ViewChild, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 
-import { GridsterService, IGridsterOptions, IGridsterDraggableOptions } from './gridster.service';
+import { GridsterService } from './gridster.service';
+import {IGridsterOptions} from "./IGridsterOptions";
+import {IGridsterDraggableOptions} from "./IGridsterDraggableOptions";
 
 @Component({
   selector: 'gridster',

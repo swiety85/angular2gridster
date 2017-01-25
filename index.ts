@@ -1,4 +1,4 @@
 export {GridsterModule} from './src/gridster.module';
 export {GridsterComponent} from './src/gridster.component';
-export {IGridsterOptions} from './src/gridster.service';
-export {IGridsterDraggableOptions} from './src/gridster.service';
+export {IGridsterOptions} from './src/IGridsterOptions';
+export {IGridsterDraggableOptions} from './src/IGridsterDraggableOptions';
