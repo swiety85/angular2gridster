@@ -1,3 +1,12 @@
+<a name="0.3.1"></a>
+# [0.3.1]((https://github.com/swiety85/angular2gridster/compare/0.3.0...0.3.1)) (2017-01-24)
+
+
+### Bug Fixes
+
+* **api** move IGridsterOptions and IGridsterDraggableOptions to separate files, closes [#9](https://github.com/swiety85/angular2gridster/issues/9)
+
+
 <a name="0.3.0"></a>
 # [0.3.0]((https://github.com/swiety85/angular2gridster/compare/0.2.3...0.3.0)) (2017-01-24)
 
