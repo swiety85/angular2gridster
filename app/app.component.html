@@ -2,13 +2,13 @@
   {{title}}
 </h1>
 <div class="toolbar">
-  Lanes:
+  Lanes :
   <button (click)="removeLine(gridster)">-</button>
   {{ gridsterOptions.lanes }}
   <button (click)="addLine(gridster)">+</button>
 
   <br>
-  Direction
+  Direction :
   <label>
     <input type="radio" [(ngModel)]="gridsterOptions.direction" value="horizontal"
            (change)="gridster.setOption('direction', 'horizontal').reload()">Horizontal

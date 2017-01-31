@@ -90,7 +90,7 @@ export class AppComponent {
         setTimeout(() => {
             gridster.reload();
         }, 100);
-
+        
     }
 
     remove(index: number, gridster: GridsterComponent){
