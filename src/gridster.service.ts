@@ -1,8 +1,14 @@
-import { GridList } from './gridList/gridList';
 import { EventEmitter } from '@angular/core';
-import {GridsterItemComponent} from "./gridster-item/gridster-item.component";
-import {IGridsterOptions} from "./IGridsterOptions";
-import {IGridsterDraggableOptions} from "./IGridsterDraggableOptions";
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/filter';
+
+
+import { GridList } from './gridList/gridList';
+import { GridsterItemComponent } from "./gridster-item/gridster-item.component";
+import { IGridsterOptions } from "./IGridsterOptions";
+import { IGridsterDraggableOptions } from "./IGridsterDraggableOptions";
+import { GridsterPrototypeService } from "./gridster-prototype/gridster-prototype.service";
+import {GridsterItemPrototypeDirective} from "./gridster-prototype/gridster-item-prototype.directive";
 
 
 export class GridsterService {
@@ -43,7 +49,11 @@ export class GridsterService {
     private _cellHeight:number;
     private _fontSize:number;
 
-    constructor() {}
+    public dragOver: Observable<any>;
+
+    constructor() {
+
+    }
 
     /**
      * Must be called before init
@@ -109,6 +119,13 @@ export class GridsterService {
         this._maxGridCols = this.gridList.grid.length;
 
         this.highlightPositionForItem(itemCtrl);
+    }
+
+    onPrototypeStart (itemCtrl: GridsterItemPrototypeDirective) {
+        this.draggedElement = itemCtrl.$element;
+        itemCtrl.isDragging = true;
+
+        this.items.push(<GridsterItemComponent>itemCtrl);
     }
 
     onDrag (itemCtrl:GridsterItemComponent) {

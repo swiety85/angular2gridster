@@ -17,7 +17,7 @@ export class GridsterItemComponent implements OnInit, OnChanges {
     @Output() yChange = new EventEmitter<number>();
     @Input() w: number;
     @Input() h: number;
-    @Input() pin: boolean = false;
+    //@Input() pin: boolean = false;
 
     @HostBinding('class.is-dragging') isDragging: boolean = false;
 
@@ -52,10 +52,10 @@ export class GridsterItemComponent implements OnInit, OnChanges {
 
             // Update position
             this.dragSubscription = this.dragging.subscribe((pos) => {
-                if(!this.pin){
-                    this.$element.style.top = (pos.top - this.gridster.$element.offsetTop) + 'px';
-                    this.$element.style.left = (pos.left - this.gridster.$element.offsetLeft) + 'px';
-                }           
+                //if(!this.pin){
+                this.$element.style.top = (pos.top - this.gridster.$element.offsetTop) + 'px';
+                this.$element.style.left = (pos.left - this.gridster.$element.offsetLeft) + 'px';
+                //}
             });
         }
     }
@@ -115,7 +115,7 @@ export class GridsterItemComponent implements OnInit, OnChanges {
                 ),
                 containerCoordincates = this.gridster.$element.getBoundingClientRect();
 
-            if((this.gridster.draggableOptions.handlerClass && !hasHandler) || this.pin) {
+            if((this.gridster.draggableOptions.handlerClass && !hasHandler)/*) || this.pin*/) {
                 return Observable.of(false);
             }
 
@@ -183,7 +183,7 @@ export class GridsterItemComponent implements OnInit, OnChanges {
                 ),
                 containerCoordincates = this.gridster.$element.getBoundingClientRect();
 
-            if((this.gridster.draggableOptions.handlerClass && !hasHandler) || this.pin ) {
+            if((this.gridster.draggableOptions.handlerClass && !hasHandler)/* || this.pin */) {
                 return Observable.of(false);
             }
 
