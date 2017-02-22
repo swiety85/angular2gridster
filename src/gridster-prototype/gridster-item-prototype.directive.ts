@@ -9,6 +9,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/takeUntil';
 
 import { GridsterPrototypeService } from './gridster-prototype.service';
+import {GridListItem} from '../gridList/GridListItem';
 
 @Directive({
     selector: '[gridsterItemPrototype]'
@@ -20,11 +21,11 @@ export class GridsterItemPrototypeDirective {
     @Input() data: any;
 
     public x: number = 0;
-    @Output() xChange = new EventEmitter<number>();
     public y: number = 0;
-    @Output() yChange = new EventEmitter<number>();
     @Input() w: number;
     @Input() h: number;
+
+    autoSize: boolean;
 
     $element: HTMLElement;
 
@@ -40,8 +41,12 @@ export class GridsterItemPrototypeDirective {
 
     isDragging: boolean = false;
 
+    item: GridListItem;
+
     constructor(elementRef:ElementRef, private gridsterPrototype: GridsterPrototypeService) {
         this.$element = elementRef.nativeElement;
+
+        this.item = (new GridListItem()).setFromGridsterItemPrototype(this);
     }
 
     ngOnInit() {

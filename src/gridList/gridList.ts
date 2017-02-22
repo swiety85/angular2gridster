@@ -1,5 +1,5 @@
 import { EventEmitter } from '@angular/core';
-import {GridsterItemComponent} from "../gridster-item/gridster-item.component";
+import {GridListItem} from "./GridListItem";
 
 var GridCol = function(lanes) {
     for (var i = 0; i < lanes; i++) {
@@ -41,10 +41,10 @@ export class GridList {
         direction: 'horizontal'
     };
 
-    items:Array<any>;
-    grid:Array<Array<GridsterItemComponent>>;
+    items: Array<GridListItem>;
+    grid: Array<GridListItem>;
 
-    constructor(items:Array<GridsterItemComponent>, options:{direction:string, lanes:number}) {
+    constructor(items:Array<GridListItem>, options:{direction:string, lanes:number}) {
         this.options = options;
         for (var k in this.defaults) {
             if (!this.options.hasOwnProperty(k)) {
@@ -152,7 +152,7 @@ export class GridList {
      *
      * @returns {Array} x and y.
      */
-    findPositionForItem (item:GridsterItemComponent, start:{x:number,y:number}, fixedRow?:number) {
+    findPositionForItem (item: GridListItem, start:{x:number,y:number}, fixedRow?:number) {
         var x, y, position;
 
         // Start searching for a position from the horizontal position of the
@@ -187,32 +187,36 @@ export class GridList {
         return [newCol, newRow];
     }
 
-    moveItemToPosition (item:GridsterItemComponent, newPosition:Array<number>) {
+    moveItemToPosition (item: GridListItem, newPosition:Array<number>) {
         var position = this.getItemPosition({
             x: newPosition[0],
             y: newPosition[1],
             w: item.w,
             h: item.h
         });
-        let newItm: any = { w: item.w, h: item.h};
-        this.setItemPosition(newItm, newPosition);
-        var collidingItems = this.getItemsCollidingWithItem(newItm);
-        if (collidingItems.length > 0) {
-            var isCollisionPinned = false;
-             for (var i = 0; i < collidingItems.length; i++) {
-                if(this.items[collidingItems[i]] && this.items[collidingItems[i]].pin){
-                    isCollisionPinned = true;
-                    break;
-                }
-             }
-             if(!isCollisionPinned){
-                this.updateItemPosition(item, [position.x, position.y]);         
-                this.resolveCollisions(item);
-             }
-        }else{
-            this.updateItemPosition(item, [position.x, position.y]); 
-            this.resolveCollisions(item);
-        }      
+
+
+        this.updateItemPosition(item, [position.x, position.y]);
+        this.resolveCollisions(item);
+        //let newItm: any = { w: item.w, h: item.h};
+        //this.setItemPosition(newItm, newPosition);
+        //var collidingItems = this.getItemsCollidingWithItem(newItm);
+        //if (collidingItems.length > 0) {
+        //    var isCollisionPinned = false;
+        //     for (var i = 0; i < collidingItems.length; i++) {
+        //        if(this.items[collidingItems[i]] && this.items[collidingItems[i]].pin){
+        //            isCollisionPinned = true;
+        //            break;
+        //        }
+        //     }
+        //     if(!isCollisionPinned){
+        //        this.updateItemPosition(item, [position.x, position.y]);
+        //        this.resolveCollisions(item);
+        //     }
+        //}else{
+        //    this.updateItemPosition(item, [position.x, position.y]);
+        //    this.resolveCollisions(item);
+        //}
     }
     /**
      * Resize an item and resolve collisions.
@@ -222,7 +226,7 @@ export class GridList {
      * @param {number} [size.w=item.w] The new width.
      * @param {number} [size.h=item.h] The new height.
      */
-    resizeItem (item:GridsterItemComponent, size:{w:number,h:number}) {
+    resizeItem (item: GridListItem, size:{w:number,h:number}) {
         var width = size.w || item.w,
             height = size.h || item.h;
 
@@ -240,7 +244,7 @@ export class GridList {
      * Since both their position and size can change, the items need an
      * additional identifier attribute to match them with their previous state
      */
-    getChangedItems (initialItems:Array<GridsterItemComponent>, idAttribute:string) {
+    getChangedItems (initialItems: Array<GridListItem>, idAttribute:string) {
         var changedItems = [];
 
         for (var i:number = 0; i < initialItems.length; i++) {
@@ -258,7 +262,7 @@ export class GridList {
         return changedItems;
     }
 
-    resolveCollisions (item) {
+    resolveCollisions (item: GridListItem) {
         if (!this.tryToResolveCollisionsLocally(item)) {
             this.pullItemsToLeft(item);
         }
@@ -325,7 +329,7 @@ export class GridList {
      * Check that an item wouldn't overlap with another one if placed at a
      * certain position within the grid
      */
-    private itemFitsAtPosition (item, newPosition) {
+    private itemFitsAtPosition (item: GridListItem, newPosition) {
 
         var position = this.getItemPosition(item),
             x, y;
@@ -361,7 +365,7 @@ export class GridList {
         return true;
     }
 
-    private updateItemPosition (item, position) {
+    private updateItemPosition (item: GridListItem, position: Array<any>) {
         if (item.x !== null && item.y !== null) {
             this.deleteItemPositionFromGrid(item);
         }
@@ -375,7 +379,7 @@ export class GridList {
      * @param {number} width The new width.
      * @param {number} height The new height.
      */
-    private updateItemSize (item, width, height) {
+    private updateItemSize (item: GridListItem, width, height) {
         if (item.x !== null && item.y !== null) {
             this.deleteItemPositionFromGrid(item);
         }
@@ -389,7 +393,7 @@ export class GridList {
      * Mark the grid cells that are occupied by an item. This prevents items
      * from overlapping in the grid
      */
-    private markItemPositionToGrid (item) {
+    private markItemPositionToGrid (item: GridListItem) {
 
         var position = this.getItemPosition(item),
             x, y;
@@ -404,7 +408,7 @@ export class GridList {
         }
     }
 
-    private deleteItemPositionFromGrid (item) {
+    private deleteItemPositionFromGrid (item: GridListItem) {
         var position = this.getItemPosition(item),
             x, y;
 
@@ -439,7 +443,7 @@ export class GridList {
         }
     }
 
-    private getItemsCollidingWithItem (item) {
+    private getItemsCollidingWithItem (item: GridListItem) {
         var collidingItems = [];
         for (var i = 0; i < this.items.length; i++) {
             if (item != this.items[i] &&
@@ -450,10 +454,10 @@ export class GridList {
         return collidingItems;
     }
 
-    private itemsAreColliding (item1, item2) {
+    private itemsAreColliding (item1: GridListItem, item2: GridListItem) {
         var position1 = this.getItemPosition(item1),
             position2 = this.getItemPosition(item2);
-            
+
         return !(position2.x >= position1.x + position1.w ||
         position2.x + position2.w <= position1.x ||
         position2.y >= position1.y + position1.h ||
@@ -468,7 +472,7 @@ export class GridList {
      * revert to the initial item positions, we create a virtual grid in the
      * process
      */
-    private tryToResolveCollisionsLocally (item) {
+    private tryToResolveCollisionsLocally (item: GridListItem) {
         var collidingItems = this.getItemsCollidingWithItem(item);
         if (!collidingItems.length) {
             return true;
@@ -480,7 +484,7 @@ export class GridList {
             belowOfItem;
 
         _gridList.items = this.items.map(item => {
-            return item.serialize();
+            return item.copy();
         });
         _gridList.generateGrid();
 
@@ -522,7 +526,7 @@ export class GridList {
         // we accept this scenario and marge the brached-out grid instance into the
         // original one
 
-        this.items.forEach((item:GridsterItemComponent, idx:number) => {
+        this.items.forEach((item:GridListItem, idx:number) => {
             let cachedItem = _gridList.items.filter(cachedItem => {
                 return cachedItem.$element === item.$element;
             })[0];
@@ -544,7 +548,7 @@ export class GridList {
      * If a "fixed item" is provided, its position will be kept intact and the
      * rest of the items will be layed around it.
      */
-    private pullItemsToLeft (fixedItem?) {
+    public pullItemsToLeft (fixedItem?) {
 
         // Start a fresh grid with the fixed item already placed inside
         this.sortItemsByPosition();
@@ -637,7 +641,7 @@ export class GridList {
      * This restores the direction of the actions and greatly simplifies the
      * transformations.
      */
-    private getItemPosition (item) {
+    private getItemPosition (item: any) {
 
         if (this.options.direction === 'horizontal') {
             return item;
@@ -664,6 +668,6 @@ export class GridList {
             item.x = position[1];
             item.y = position[0];
         }
-        
+
     }
 }

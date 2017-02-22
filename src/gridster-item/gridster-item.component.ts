@@ -4,6 +4,7 @@ import 'rxjs/Rx';
 import { ISubscription, Subscription } from 'rxjs/Subscription';
 
 import { GridsterService } from '../gridster.service';
+import {GridListItem} from '../gridList/GridListItem';
 
 @Component({
     selector: 'gridster-item',
@@ -18,6 +19,7 @@ export class GridsterItemComponent implements OnInit, OnChanges {
     @Input() w: number;
     @Input() h: number;
     //@Input() pin: boolean = false;
+    autoSize: boolean;
 
     @HostBinding('class.is-dragging') isDragging: boolean = false;
 
@@ -35,16 +37,18 @@ export class GridsterItemComponent implements OnInit, OnChanges {
      */
     dragSubscription:ISubscription;
 
-    autoSize: boolean;
+    item: GridListItem;
 
     constructor(@Inject(ElementRef) elementRef:ElementRef, @Host() gridster:GridsterService) {
         this.gridster = gridster;
 
         this.$element = elementRef.nativeElement;
+
+        this.item = (new GridListItem()).setFromGridsterItem(this);
     }
 
     ngOnInit() {
-        this.gridster.registerItem(this);
+        this.gridster.registerItem(this.item);
 
         if(this.gridster.options.dragAndDrop) {
             this.createMouseDrag(this.$element);
@@ -65,13 +69,13 @@ export class GridsterItemComponent implements OnInit, OnChanges {
             return ;
         }
 
-        this.gridster.gridList.resolveCollisions(this);
+        this.gridster.gridList.resolveCollisions(this.item);
         this.gridster.render();
     }
 
     ngOnDestroy() {
-        let index = this.gridster.items.findIndex((z) => z == this);
-        if(index){
+        let index = this.gridster.items.indexOf(this.item);
+        if(index >= 0){
             this.gridster.items.splice(index,1);
         }
         this.dragSubscription.unsubscribe();
@@ -119,7 +123,7 @@ export class GridsterItemComponent implements OnInit, OnChanges {
                 return Observable.of(false);
             }
 
-            this.gridster.onStart(this);
+            this.gridster.onStart(this.item);
             this.isDragging = true;
 
             // update container position on window scroll
@@ -132,7 +136,7 @@ export class GridsterItemComponent implements OnInit, OnChanges {
             drag = mousemove.map((mm:MouseEvent) => {
                 mm.preventDefault();
 
-                this.gridster.onDrag(this);
+                this.gridster.onDrag(this.item);
 
                 return {
                     left: mm.clientX - containerCoordincates.left - coordinates.x,
@@ -141,7 +145,7 @@ export class GridsterItemComponent implements OnInit, OnChanges {
             }).takeUntil(mouseup);
 
             drag.subscribe(null, null, () => {
-                this.gridster.onStop(this);
+                this.gridster.onStop(this.item);
                 this.isDragging = false;
             });
 
@@ -187,7 +191,7 @@ export class GridsterItemComponent implements OnInit, OnChanges {
                 return Observable.of(false);
             }
 
-            this.gridster.onStart(this);
+            this.gridster.onStart(this.item);
             this.isDragging = true;
 
             // Calculate delta with mousemove until mouseup
@@ -195,7 +199,7 @@ export class GridsterItemComponent implements OnInit, OnChanges {
                 let touchMoveData = tm.touches[0];
                 tm.preventDefault();
 
-                this.gridster.onDrag(this);
+                this.gridster.onDrag(this.item);
 
                 return {
                     left: touchMoveData.clientX - containerCoordincates.left - startX,
@@ -204,8 +208,10 @@ export class GridsterItemComponent implements OnInit, OnChanges {
             }).takeUntil(touchend);
 
             drag.subscribe(null, null, () => {
-                this.gridster.onStop(this);
+                this.gridster.onStop(this.item);
                 this.isDragging = false;
+                this.xChange.emit(this.x);
+                this.yChange.emit(this.y);
             });
 
             return drag;
@@ -244,14 +250,14 @@ export class GridsterItemComponent implements OnInit, OnChanges {
      * Serialize GridsterItemComponent to object literal with key properties
      * @returns {{$element: HTMLElement, x: number, y: number, w: number, h: number, autoSize: boolean}}
      */
-    public serialize () {
-        return {
-            $element: this.$element,
-            x: this.x, y: this.y,
-            w: this.w, h: this.h,
-            autoSize: this.autoSize
-        };
-    }
+    //public serialize () {
+    //    return {
+    //        $element: this.$element,
+    //        x: this.x, y: this.y,
+    //        w: this.w, h: this.h,
+    //        autoSize: this.autoSize
+    //    };
+    //}
 
 }
 

@@ -4,6 +4,9 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/takeUntil';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/scan';
+import 'rxjs/add/operator/filter';
 
 import { GridsterService } from '../gridster.service';
 import {GridsterItemPrototypeDirective} from "./gridster-item-prototype.directive";
@@ -24,13 +27,32 @@ export class GridsterPrototypeService {
 
     constructor() {}
 
-    observeDragOver(gridster: GridsterService): Observable<GridsterItemPrototypeDirective> {
-        const dragOver = this.dragObservable
-            .filter((item: GridsterItemPrototypeDirective) => {
-                return this.isInsideContainer(item.$element, gridster.$element);
+    observeDragOver(gridster: GridsterService): {
+        dragOver: Observable<GridsterItemPrototypeDirective>,
+        dragEnter: Observable<GridsterItemPrototypeDirective>,
+        dragOut: Observable<GridsterItemPrototypeDirective>
+    } {
+        const dragIsOver = this.dragObservable
+            .map((item: GridsterItemPrototypeDirective) => {
+                return {
+                    item,
+                    isOver: this.isInsideContainer(item.$element, gridster.$element)
+                };
+            })
+            .scan((prev: any, next: any) => {
+                return {
+                    item: next.item,
+                    isOver: next.isOver,
+                    isEnter: prev.isOver === false && next.isOver === true,
+                    isOut: prev.isOver === true && next.isOver === false
+                };
             });
 
-        return dragOver;
+        return {
+            dragOver: this.createDragOverObservable(dragIsOver),
+            dragEnter: this.createDragEnterObservable(dragIsOver),
+            dragOut: this.createDragOutObservable(dragIsOver)
+        };
     }
 
     dragItemStart(item: GridsterItemPrototypeDirective) {
@@ -47,6 +69,56 @@ export class GridsterPrototypeService {
         this.dragSubject.next(item);
     }
 
+    /**
+     * Creates observable that is fired on dragging over gridster container.
+     * @param dragIsOver Observable that returns information true/false whether prototype item is over gridster container
+     * @returns {Observable}
+     */
+    private createDragOverObservable (dragIsOver: Observable<{item: GridsterItemPrototypeDirective, isOver: boolean}>) {
+        return dragIsOver
+            .filter((data: any) => {
+                return data.isOver && !data.isEnter && !data.isOut;
+            })
+            .map((data: any) => {
+                return data.item;
+            });
+    }
+    /**
+     * Creates observable that is fired on drag enter gridster container.
+     * @param dragIsOver Observable that returns information true/false whether prototype item is over gridster container
+     * @returns {Observable}
+     */
+    private createDragEnterObservable (dragIsOver: Observable<{item: GridsterItemPrototypeDirective, isOver: boolean}>) {
+        return dragIsOver
+            .filter((data: any) => {
+                return data.isEnter;
+            })
+            .map((data: any) => {
+                return data.item;
+            });
+    }
+    /**
+     * Creates observable that is fired on drag out gridster container.
+     * @param dragIsOver Observable that returns information true/false whether prototype item is over gridster container
+     * @returns {Observable}
+     */
+    private createDragOutObservable (dragIsOver: Observable<{item: GridsterItemPrototypeDirective, isOver: boolean}>) {
+        return dragIsOver
+            .filter((data: any) => {
+                return data.isOut;
+            })
+            .map((data: any) => {
+                return data.item;
+            });
+    }
+
+    /**
+     * Checks wheter "element" position fits inside "containerEl" position.
+     * It checks if "element" is totally covered by "containerEl" area.
+     * @param element Dragged element
+     * @param containerEl Element above which "element" is dragged
+     * @returns {boolean}
+     */
     private isInsideContainer(element, containerEl) {
         const containerRect = containerEl.getBoundingClientRect();
         const elRect = element.getBoundingClientRect();
@@ -56,24 +128,4 @@ export class GridsterPrototypeService {
             elRect.top > containerRect.top &&
             elRect.bottom < containerRect.bottom;
     }
-
-
-
-
-    //getDragOverObservable2 (gridster: GridsterService): Observable<GridsterItemPrototypeDirective> {
-    //    const mouseEnter = Observable.fromEvent(gridster.$element, 'mouseenter');
-    //    const mouseLeave = Observable.fromEvent(gridster.$element, 'mouseleave');
-    //    const dragOver = this.dragStartObservable.mergeMap(() => {
-    //        return mouseEnter.mergeMap(() => {
-    //            return this.dragObservable
-    //                .takeUntil(mouseLeave);
-    //        }).takeUntil(this.dragStopObservable);
-    //    });
-    //
-    //    //dragOver.subscribe(() => {
-    //    //    console.log('drag over');
-    //    //});
-    //
-    //    return dragOver;
-    //}
 }

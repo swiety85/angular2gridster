@@ -9,6 +9,7 @@ import { IGridsterOptions } from "./IGridsterOptions";
 import { IGridsterDraggableOptions } from "./IGridsterDraggableOptions";
 import { GridsterPrototypeService } from "./gridster-prototype/gridster-prototype.service";
 import {GridsterItemPrototypeDirective} from "./gridster-prototype/gridster-item-prototype.directive";
+import {GridListItem} from './gridList/GridListItem';
 
 
 export class GridsterService {
@@ -16,8 +17,8 @@ export class GridsterService {
 
     gridList:GridList;
 
-    items:Array<GridsterItemComponent> = [];
-    _items:Array<any>;
+    items:Array<GridListItem> = [];
+    _items:Array<GridListItem>;
 
     options:IGridsterOptions;
     draggableOptions:IGridsterDraggableOptions;
@@ -59,7 +60,7 @@ export class GridsterService {
      * Must be called before init
      * @param item
      */
-    registerItem(item:GridsterItemComponent) {
+    registerItem(item: GridListItem) {
         this.items.push(item);
 
         return item;
@@ -99,37 +100,37 @@ export class GridsterService {
         this.render();
     }
 
-    serializeItems () {
-        return this.items.map((item:GridsterItemComponent) => {
-            return item.serialize();
+    private copyItems (): Array<GridListItem> {
+        return this.items.map((item: GridListItem) => {
+            return item.copy();
         });
     }
 
-    onStart (itemCtrl:GridsterItemComponent) {
-        this.draggedElement = itemCtrl.$element;
-        itemCtrl.isDragging = true;
+    onStart (item: GridListItem) {
+        this.draggedElement = item.$element;
+        //itemCtrl.isDragging = true;
         // Create a deep copy of the items; we use them to revert the item
         // positions after each drag change, making an entire drag operation less
         // distructable
-        this._items = this.serializeItems();
+        this._items = this.copyItems();
 
         // Since dragging actually alters the grid, we need to establish the number
         // of cols (+1 extra) before the drag starts
 
         this._maxGridCols = this.gridList.grid.length;
 
-        this.highlightPositionForItem(itemCtrl);
+        this.highlightPositionForItem(item);
     }
 
-    onPrototypeStart (itemCtrl: GridsterItemPrototypeDirective) {
-        this.draggedElement = itemCtrl.$element;
-        itemCtrl.isDragging = true;
+    onPrototypeStart (item: GridListItem) {
+        this.draggedElement = item.$element;
+        //itemCtrl.isDragging = true;
 
-        this.items.push(<GridsterItemComponent>itemCtrl);
+        //this.items.push(<GridsterItemComponent>itemCtrl);
     }
 
-    onDrag (itemCtrl:GridsterItemComponent) {
-        var newPosition = this.snapItemPositionToGrid(itemCtrl);
+    onDrag (item: GridListItem) {
+        var newPosition = this.snapItemPositionToGrid(item);
 
         if (this.dragPositionChanged(newPosition)) {
             this.previousDragPosition = newPosition;
@@ -140,15 +141,15 @@ export class GridsterService {
 
             // Since the items list is a deep copy, we need to fetch the item
             // corresponding to this drag action again
-            this.gridList.moveItemToPosition(itemCtrl, newPosition);
+            this.gridList.moveItemToPosition(item, newPosition);
 
             // Visually update item positions and highlight shape
             this.applyPositionToItems();
-            this.highlightPositionForItem(itemCtrl);
+            this.highlightPositionForItem(item);
         }
     }
 
-    onStop (itemCtrl:GridsterItemComponent) {
+    onStop (item: GridListItem) {
         this.draggedElement = undefined;
         this.updateCachedItems();
         this.previousDragPosition = null;
@@ -156,14 +157,11 @@ export class GridsterService {
         // HACK: jQuery.draggable removes this class after the dragstop callback,
         // and we need it removed before the drop, to re-enable CSS transitions
 
-        itemCtrl.isDragging = false;
+        //itemCtrl.isDragging = false;
 
         this.updateMaxItemSize();
         this.applyPositionToItems();
         this.removePositionHighlight();
-
-        itemCtrl.xChange.emit(itemCtrl.x);
-        itemCtrl.yChange.emit(itemCtrl.y);
     }
 
     /**
@@ -180,7 +178,7 @@ export class GridsterService {
      * Update items properties of previously cached items
      */
     private restoreCachedItems() {
-        this.items.forEach((item:GridsterItemComponent, idx:number) => {
+        this.items.forEach((item: GridListItem) => {
             let cachedItem = this._items.filter(cachedItem => {
                 return cachedItem.$element === item.$element;
             })[0];
@@ -267,23 +265,34 @@ export class GridsterService {
         return element === this.draggedElement;
     }
 
-    public getItemByElement (element):GridsterItemComponent {
-        // XXX: this could be optimized by storing the item reference inside the
-        // meta data of the DOM element
-        for (var i = 0; i < this.items.length; i++) {
-            if (this.items[i].$element === element) {
-                return this.items[i];
-            }
+    //public getItemByElement (element):GridsterItemComponent {
+    //    // XXX: this could be optimized by storing the item reference inside the
+    //    // meta data of the DOM element
+    //    for (var i = 0; i < this.items.length; i++) {
+    //        if (this.items[i].$element === element) {
+    //            return this.items[i];
+    //        }
+    //    }
+    //}
+
+    private offset (el: HTMLElement, relativeEl: HTMLElement): {left: number, top: number} {
+        const elRect = el.getBoundingClientRect();
+        const relativeElRect = relativeEl.getBoundingClientRect();
+
+        return {
+            left: elRect.left - relativeElRect.left,
+            top: elRect.top - relativeElRect.top
         }
     }
 
-    private snapItemPositionToGrid (item) {
-        var position = {
-            left: item.$element.offsetLeft,
-            top: item.$element.offsetTop
-        };
+    private snapItemPositionToGrid (item: GridListItem) {
+        //var position = {
+        //    left: item.$element.offsetLeft,
+        //    top: item.$element.offsetTop
+        //};
+        let position = this.offset(item.$element, this.$element);
 
-        position[0] -= this.$element.offsetLeft;
+        //position[0] -= this.$element.offsetLeft;
 
         var col = Math.round(position.left / this._cellWidth),
             row = Math.round(position.top / this._cellHeight);
@@ -312,7 +321,7 @@ export class GridsterService {
         newPosition[1] != this.previousDragPosition[1]);
     }
 
-    private highlightPositionForItem (item) {
+    private highlightPositionForItem (item: GridListItem) {
         this.$positionHighlight.style.width = this.getItemWidth(item)+'px';
         this.$positionHighlight.style.height = this.getItemHeight(item)+'px';
         this.$positionHighlight.style.left = item.x * this._cellWidth+'px';
@@ -327,7 +336,7 @@ export class GridsterService {
     public updateCachedItems () {
         // Notify the user with the items that changed since the previous snapshot
         this.triggerOnChange();
-        this._items = this.serializeItems();
+        this._items = this.copyItems();
     }
 
     private triggerOnChange () {

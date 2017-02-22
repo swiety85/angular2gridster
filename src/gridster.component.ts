@@ -15,6 +15,7 @@ import { GridsterService } from './gridster.service';
 import {IGridsterOptions} from "./IGridsterOptions";
 import {IGridsterDraggableOptions} from "./IGridsterDraggableOptions";
 import {GridsterPrototypeService} from "./gridster-prototype/gridster-prototype.service";
+import {GridsterItemPrototypeDirective} from './gridster-prototype/gridster-item-prototype.directive';
 
 @Component({
     selector: 'gridster',
@@ -59,9 +60,26 @@ export class GridsterComponent implements OnInit {
     ngAfterViewInit() {
         this.gridster.start(this.$el);
 
-        this.gridsterPrototype.observeDragOver(this.gridster)
-            .subscribe((item) => {
-                console.log('drag over');
+        this.gridsterPrototype.observeDragOver(this.gridster).dragOver
+            .subscribe((prototype: GridsterItemPrototypeDirective) => {
+                this.gridster.onDrag(prototype.item);
+            });
+
+        this.gridsterPrototype.observeDragOver(this.gridster).dragEnter
+            .subscribe((prototype: GridsterItemPrototypeDirective) => {
+                console.log('enter');
+                this.gridster.items.push(prototype.item);
+                this.gridster.onStart(prototype.item);
+            });
+
+        this.gridsterPrototype.observeDragOver(this.gridster).dragOut
+            .subscribe((prototype: GridsterItemPrototypeDirective) => {
+                console.log('out');
+                this.gridster.onStop(prototype.item);
+                const idx = this.gridster.items.indexOf(prototype.item);
+                this.gridster.items.splice(idx, 1);
+
+                // TODO: Fix gridster items positions
             });
 
         this.gridster.$positionHighlight = this.$positionHighlight.nativeElement;
