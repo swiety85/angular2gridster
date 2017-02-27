@@ -10,6 +10,7 @@ import 'rxjs/add/operator/filter';
 
 import { GridsterService } from '../gridster.service';
 import {GridsterItemPrototypeDirective} from "./gridster-item-prototype.directive";
+import {GridListItem} from '../gridList/GridListItem';
 
 @Injectable()
 export class GridsterPrototypeService {
@@ -17,22 +18,30 @@ export class GridsterPrototypeService {
     private isDragging: boolean = false;
 
     private dragSubject = new Subject<GridsterItemPrototypeDirective>();
-    public dragObservable: Observable<GridsterItemPrototypeDirective> = this.dragSubject.asObservable();
 
     private dragStartSubject = new Subject<GridsterItemPrototypeDirective>();
-    public dragStartObservable: Observable<GridsterItemPrototypeDirective> = this.dragStartSubject.asObservable();
 
     private dragStopSubject = new Subject<GridsterItemPrototypeDirective>();
-    public dragStopObservable: Observable<GridsterItemPrototypeDirective> = this.dragStopSubject.asObservable();
 
     constructor() {}
+
+    observeDropOver (gridster: GridsterService) {
+        return this.dragStopSubject.asObservable()
+            .filter((item: GridsterItemPrototypeDirective) => {
+                return this.isInsideContainer(item.$element, gridster.$element);
+            })
+            .do((prototype: GridsterItemPrototypeDirective) => {
+                // TODO: what we should provide as a param?
+                prototype.drop.emit({item: prototype.item});
+            });
+    }
 
     observeDragOver(gridster: GridsterService): {
         dragOver: Observable<GridsterItemPrototypeDirective>,
         dragEnter: Observable<GridsterItemPrototypeDirective>,
         dragOut: Observable<GridsterItemPrototypeDirective>
     } {
-        const dragIsOver = this.dragObservable
+        const dragIsOver = this.dragSubject.asObservable()
             .map((item: GridsterItemPrototypeDirective) => {
                 return {
                     item,

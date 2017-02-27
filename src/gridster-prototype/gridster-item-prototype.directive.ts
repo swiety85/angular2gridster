@@ -18,6 +18,8 @@ export class GridsterItemPrototypeDirective {
 
     @HostBinding('style.pointer-events') pointerEvents = 'auto';
 
+    @Output() drop = new EventEmitter();
+
     @Input() data: any;
 
     public x: number = 0;

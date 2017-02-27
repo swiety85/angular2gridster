@@ -42,15 +42,6 @@ export class GridsterComponent implements OnInit {
         this.gridster = gridster;
         this.gridster.gridsterChange = this.gridsterPositionChange;
         this.$el = elementRef.nativeElement;
-
-        //this.gridster.dragOver = gridsterPrototype.dragObservable
-        //    .filter((data) => {
-        //      return this.isInsideRectangle(data.element);
-        //    }).take(1);
-        //
-        //this.gridster.dragOver.subscribe((data: any) => {
-        //  console.log('dragOver', data);
-        //})
     }
 
     ngOnInit() {
@@ -60,31 +51,48 @@ export class GridsterComponent implements OnInit {
     ngAfterViewInit() {
         this.gridster.start(this.$el);
 
+        this.connectGridsterPrototype();
+
+        this.gridster.$positionHighlight = this.$positionHighlight.nativeElement;
+        // detectChanges is required because gridster.start changes values uses in template
+        this.cdr.detectChanges();
+    }
+
+    /**
+     * Connect gridster prototype item to gridster dragging hooks (onStart, onDrag, onStop).
+     */
+    private connectGridsterPrototype () {
+
         this.gridsterPrototype.observeDragOver(this.gridster).dragOver
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
+
                 this.gridster.onDrag(prototype.item);
             });
 
         this.gridsterPrototype.observeDragOver(this.gridster).dragEnter
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
-                console.log('enter');
+
                 this.gridster.items.push(prototype.item);
                 this.gridster.onStart(prototype.item);
             });
 
         this.gridsterPrototype.observeDragOver(this.gridster).dragOut
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
-                console.log('out');
-                this.gridster.onStop(prototype.item);
-                const idx = this.gridster.items.indexOf(prototype.item);
-                this.gridster.items.splice(idx, 1);
 
-                // TODO: Fix gridster items positions
+                this.gridster.onDragOut(prototype.item);
             });
 
-        this.gridster.$positionHighlight = this.$positionHighlight.nativeElement;
-        // detectChanges is required because gridster.start changes values uses in template
-        this.cdr.detectChanges();
+        this.gridsterPrototype.observeDropOver(this.gridster)
+            .subscribe((prototype: GridsterItemPrototypeDirective) => {
+                console.log('drop');
+                this.gridster.onStop(prototype.item);
+
+                setTimeout(() => {
+
+                    const idx = this.gridster.items.indexOf(prototype.item);
+                    this.gridster.items.splice(idx, 1);
+                });
+            });
     }
 
     /**

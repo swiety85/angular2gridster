@@ -42,7 +42,7 @@ export class GridList {
     };
 
     items: Array<GridListItem>;
-    grid: Array<GridListItem>;
+    grid: Array<Array<GridListItem>>;
 
     constructor(items:Array<GridListItem>, options:{direction:string, lanes:number}) {
         this.options = options;

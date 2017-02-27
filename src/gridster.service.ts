@@ -50,11 +50,7 @@ export class GridsterService {
     private _cellHeight:number;
     private _fontSize:number;
 
-    public dragOver: Observable<any>;
-
-    constructor() {
-
-    }
+    constructor() {}
 
     /**
      * Must be called before init
@@ -62,9 +58,7 @@ export class GridsterService {
      */
     registerItem(item: GridListItem) {
         this.items.push(item);
-
         return item;
-
     }
 
     init (options:IGridsterOptions = {}, draggableOptions:IGridsterDraggableOptions = {}) {
@@ -122,13 +116,6 @@ export class GridsterService {
         this.highlightPositionForItem(item);
     }
 
-    onPrototypeStart (item: GridListItem) {
-        this.draggedElement = item.$element;
-        //itemCtrl.isDragging = true;
-
-        //this.items.push(<GridsterItemComponent>itemCtrl);
-    }
-
     onDrag (item: GridListItem) {
         var newPosition = this.snapItemPositionToGrid(item);
 
@@ -149,19 +136,32 @@ export class GridsterService {
         }
     }
 
+    onDragOut (item: GridListItem) {
+
+        this.previousDragPosition = null;
+        this.updateMaxItemSize();
+        this.applyPositionToItems();
+        this.removePositionHighlight();
+        this.draggedElement = undefined;
+
+        const idx = this.items.indexOf(item);
+        this.items.splice(idx, 1);
+
+        this.gridList.pullItemsToLeft();
+        this.render();
+    }
+
     onStop (item: GridListItem) {
         this.draggedElement = undefined;
         this.updateCachedItems();
         this.previousDragPosition = null;
 
-        // HACK: jQuery.draggable removes this class after the dragstop callback,
-        // and we need it removed before the drop, to re-enable CSS transitions
-
         //itemCtrl.isDragging = false;
 
-        this.updateMaxItemSize();
-        this.applyPositionToItems();
         this.removePositionHighlight();
+
+        this.gridList.pullItemsToLeft();
+        this.render();
     }
 
     /**

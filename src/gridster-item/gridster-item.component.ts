@@ -49,6 +49,10 @@ export class GridsterItemComponent implements OnInit, OnChanges {
 
     ngOnInit() {
         this.gridster.registerItem(this.item);
+        // only if new item is registered after bootstrap
+        if(this.gridster.$element) {
+            this.gridster.render();
+        }
 
         if(this.gridster.options.dragAndDrop) {
             this.createMouseDrag(this.$element);
