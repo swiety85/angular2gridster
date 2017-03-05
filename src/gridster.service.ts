@@ -57,7 +57,9 @@ export class GridsterService {
      * @param item
      */
     registerItem(item: GridListItem) {
+
         this.items.push(item);
+        console.log('add', 'register item', item);
         return item;
     }
 
@@ -146,6 +148,7 @@ export class GridsterService {
 
         const idx = this.items.indexOf(item);
         this.items.splice(idx, 1);
+        console.log('remove', 'drag out', idx);
 
         this.gridList.pullItemsToLeft();
         this.render();
@@ -162,6 +165,14 @@ export class GridsterService {
 
         this.gridList.pullItemsToLeft();
         this.render();
+    }
+
+    public getItemWidth (item) {
+        return item.w * this._cellWidth;
+    }
+
+    public getItemHeight (item) {
+        return item.h * this._cellHeight;
     }
 
     /**
@@ -224,14 +235,6 @@ export class GridsterService {
                 this.items[i].$element.style['font-size'] = this._fontSize;
             }
         }
-    }
-
-    private getItemWidth (item) {
-        return item.w * this._cellWidth;
-    }
-
-    private getItemHeight (item) {
-        return item.h * this._cellHeight;
     }
 
     private applyPositionToItems () {

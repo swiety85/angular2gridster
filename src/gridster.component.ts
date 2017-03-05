@@ -10,6 +10,7 @@ import {
     HostListener
 } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/takeUntil';
 
 import { GridsterService } from './gridster.service';
 import {IGridsterOptions} from "./IGridsterOptions";
@@ -63,6 +64,12 @@ export class GridsterComponent implements OnInit {
      */
     private connectGridsterPrototype () {
 
+        this.gridsterPrototype.observeDropOut(this.gridster)
+            .subscribe();
+
+        const dropOverObservable = this.gridsterPrototype.observeDropOver(this.gridster)
+            .publish();
+
         this.gridsterPrototype.observeDragOver(this.gridster).dragOver
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
 
@@ -73,26 +80,28 @@ export class GridsterComponent implements OnInit {
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
 
                 this.gridster.items.push(prototype.item);
+                console.log('item push', prototype.item);
                 this.gridster.onStart(prototype.item);
             });
 
         this.gridsterPrototype.observeDragOver(this.gridster).dragOut
+            //.takeUntil(dropOverObservable)
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
-
                 this.gridster.onDragOut(prototype.item);
             });
 
-        this.gridsterPrototype.observeDropOver(this.gridster)
+        dropOverObservable
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
-                console.log('drop');
+
+
                 this.gridster.onStop(prototype.item);
 
-                setTimeout(() => {
-
-                    const idx = this.gridster.items.indexOf(prototype.item);
-                    this.gridster.items.splice(idx, 1);
-                });
+                const idx = this.gridster.items.indexOf(prototype.item);
+                this.gridster.items.splice(idx, 1);
+                console.log('remove', 'drop', idx);
             });
+
+        dropOverObservable.connect();
     }
 
     /**

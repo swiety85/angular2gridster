@@ -72,7 +72,7 @@ export class AppComponent {
     }
 
     logChanges(items: any){
-        console.log('===>> Changed items: ',items);
+        //console.log('===>> Changed items: ',items);
     }
 
     swap(){
@@ -88,7 +88,19 @@ export class AppComponent {
             content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
         });
 
-        event.item.$element.parentNode.removeChild(event.item.$element);
+        //event.item.$element.parentNode.removeChild(event.item.$element);
+    }
+
+    over (event) {
+        event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.width = event.gridster.getItemWidth(event.item)+'px';
+        event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.height = event.gridster.getItemHeight(event.item)+'px';
+        event.item.itemPrototype.$element.classList.add('is-over');
+        //console.log('over', event);
+    }
+    out (event) {
+        event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.width = '';
+        event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.height = '';
+        event.item.itemPrototype.$element.classList.remove('is-over');
     }
 
     addWidget(gridster: GridsterComponent){
@@ -97,6 +109,7 @@ export class AppComponent {
             title: 'Basic form inputs 5',
             content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
         });
+        console.log('widget push', this.widgets[this.widgets.length-1]);
         //hack
         //setTimeout(() => {
         //    gridster.reload();
@@ -107,6 +120,7 @@ export class AppComponent {
 
     remove(index: number, gridster: GridsterComponent){
         this.widgets.splice(index,1);
+        console.log('widget remove', index);
         //setTimeout(() => {
         //    gridster.reload();
         //}, 100);

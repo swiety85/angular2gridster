@@ -32,7 +32,19 @@ export class GridsterPrototypeService {
             })
             .do((prototype: GridsterItemPrototypeDirective) => {
                 // TODO: what we should provide as a param?
-                prototype.drop.emit({item: prototype.item});
+                //prototype.drop.emit({item: prototype.item});
+                prototype.onDrop(gridster);
+            });
+    }
+
+    observeDropOut (gridster: GridsterService) {
+        return this.dragStopSubject.asObservable()
+            .filter((item: GridsterItemPrototypeDirective) => {
+                return !this.isInsideContainer(item.$element, gridster.$element);
+            })
+            .do((prototype: GridsterItemPrototypeDirective) => {
+                // TODO: what we should provide as a param?
+                prototype.onCancel();
             });
     }
 
@@ -58,9 +70,15 @@ export class GridsterPrototypeService {
             });
 
         return {
-            dragOver: this.createDragOverObservable(dragIsOver),
-            dragEnter: this.createDragEnterObservable(dragIsOver),
-            dragOut: this.createDragOutObservable(dragIsOver)
+            dragOver: this.createDragOverObservable(dragIsOver, gridster),
+            dragEnter: this.createDragEnterObservable(dragIsOver, gridster)
+            .do(() => {
+                console.log('drag enter');
+            }),
+            dragOut: this.createDragOutObservable(dragIsOver, gridster)
+                .do(() => {
+                    console.log('drag out');
+                })
         };
     }
 
@@ -83,13 +101,16 @@ export class GridsterPrototypeService {
      * @param dragIsOver Observable that returns information true/false whether prototype item is over gridster container
      * @returns {Observable}
      */
-    private createDragOverObservable (dragIsOver: Observable<{item: GridsterItemPrototypeDirective, isOver: boolean}>) {
+    private createDragOverObservable (dragIsOver: Observable<{item: GridsterItemPrototypeDirective, isOver: boolean}>, gridster: GridsterService) {
         return dragIsOver
             .filter((data: any) => {
                 return data.isOver && !data.isEnter && !data.isOut;
             })
-            .map((data: any) => {
+            .map((data: any): GridsterItemPrototypeDirective => {
                 return data.item;
+            })
+            .do((item) => {
+                item.onOver(gridster);
             });
     }
     /**
@@ -97,13 +118,16 @@ export class GridsterPrototypeService {
      * @param dragIsOver Observable that returns information true/false whether prototype item is over gridster container
      * @returns {Observable}
      */
-    private createDragEnterObservable (dragIsOver: Observable<{item: GridsterItemPrototypeDirective, isOver: boolean}>) {
+    private createDragEnterObservable (dragIsOver: Observable<{item: GridsterItemPrototypeDirective, isOver: boolean}>, gridster: GridsterService) {
         return dragIsOver
             .filter((data: any) => {
                 return data.isEnter;
             })
-            .map((data: any) => {
+            .map((data: any): GridsterItemPrototypeDirective => {
                 return data.item;
+            })
+            .do((item) => {
+                item.onEnter(gridster);
             });
     }
     /**
@@ -111,13 +135,16 @@ export class GridsterPrototypeService {
      * @param dragIsOver Observable that returns information true/false whether prototype item is over gridster container
      * @returns {Observable}
      */
-    private createDragOutObservable (dragIsOver: Observable<{item: GridsterItemPrototypeDirective, isOver: boolean}>) {
+    private createDragOutObservable (dragIsOver: Observable<{item: GridsterItemPrototypeDirective, isOver: boolean}>, gridster: GridsterService) {
         return dragIsOver
             .filter((data: any) => {
                 return data.isOut;
             })
-            .map((data: any) => {
+            .map((data: any): GridsterItemPrototypeDirective => {
                 return data.item;
+            })
+            .do((item) => {
+                item.onOut(gridster);
             });
     }
 

@@ -10,17 +10,20 @@ import 'rxjs/add/operator/takeUntil';
 
 import { GridsterPrototypeService } from './gridster-prototype.service';
 import {GridListItem} from '../gridList/GridListItem';
+import {GridsterService} from '../gridster.service';
 
 @Directive({
     selector: '[gridsterItemPrototype]'
 })
 export class GridsterItemPrototypeDirective {
-
-    @HostBinding('style.pointer-events') pointerEvents = 'auto';
-
     @Output() drop = new EventEmitter();
+    @Output() start = new EventEmitter();
+    @Output() cancel = new EventEmitter();
+    @Output() enter = new EventEmitter();
+    @Output() out = new EventEmitter();
 
     @Input() data: any;
+    @Input('gridsterItemPrototype') config: any = {};
 
     public x: number = 0;
     public y: number = 0;
@@ -45,50 +48,44 @@ export class GridsterItemPrototypeDirective {
 
     item: GridListItem;
 
-    constructor(elementRef:ElementRef, private gridsterPrototype: GridsterPrototypeService) {
-        this.$element = elementRef.nativeElement;
-
+    constructor(private elementRef:ElementRef, private gridsterPrototype: GridsterPrototypeService) {
         this.item = (new GridListItem()).setFromGridsterItemPrototype(this);
     }
 
     ngOnInit() {
-        this.createMouseDrag(this.$element);
-
-        // Update position
-        this.dragSubscription = this.drag.subscribe((pos) => {
-            this.$element.style.top = pos.top + 'px';
-            this.$element.style.left = pos.left + 'px';
-
-            this.gridsterPrototype.updatePrototypePosition(this);
-        });
+        this.drag = this.createMouseDrag();
+        this.drag.subscribe();
     }
 
     /**
      * Create and subscribe to drag event.
-     * @param {HTMLElement} dragTarget
      */
-    private createMouseDrag(dragTarget:HTMLElement) {
+    private createMouseDrag() {
         // Get the three major events
+        const winScroll = Observable.fromEvent(document, 'scroll');
         const mouseup = Observable.fromEvent(document, 'mouseup');
         const mousemove = Observable.fromEvent(document, 'mousemove');
-        const mousedown = Observable.fromEvent(dragTarget, 'mousedown');
+        const mousedown = Observable.fromEvent(this.elementRef.nativeElement, 'mousedown');
 
-        this.drag = mousedown.mergeMap((md:MouseEvent) => {
-            const coordinates = this.getRelativeCoordinates({pageX: md.pageX, pageY: md.pageY}, dragTarget);
-            const containerCoordincates = { left: 0, top: 0 };
+        return mousedown.mergeMap((md:MouseEvent) => {
+            this.$element = this.provideDragElement();
+
+            const coordinates = this.getRelativeCoordinates({pageX: md.pageX, pageY: md.pageY}, this.$element);
+            let containerCoordincates = this.$element.parentElement.getBoundingClientRect();
+
+            this.onStart();
 
             md.preventDefault();
 
-            this.isDragging = true;
-            this.pointerEvents = 'none';
-            //this.gridster.onStart(this);
-            this.gridsterPrototype.dragItemStart(this);
+            // update container position on window scroll
+            winScroll
+                .takeUntil(mouseup)
+                .subscribe(() => {
+                    containerCoordincates = this.$element.parentElement.getBoundingClientRect();
+                });
 
             // Calculate delta with mousemove until mouseup
-            let drag = mousemove.map((mm:MouseEvent) => {
-                //mm.preventDefault();
-
-                //this.gridster.onDrag(this);
+            const drag = mousemove.map((mm:MouseEvent) => {
 
                 return {
                     left: mm.clientX - containerCoordincates.left - coordinates.x,
@@ -96,17 +93,127 @@ export class GridsterItemPrototypeDirective {
                 };
             }).takeUntil(mouseup);
 
-            drag.subscribe(null, (err) => {
-                console.error('Drag failed:', err);
-            }, () => {
-                //this.gridster.onStop(this);
-                this.pointerEvents = 'auto';
-                this.gridsterPrototype.dragItemStop(this);
-                this.isDragging = false;
-            });
+            drag.subscribe(
+                (pos) => this.onDrag(pos),
+                (err) => console.error('Drag failed:', err),
+                () => {
+                    this.onStop();
+                    this.$element = null;
+                }
+            );
 
             return drag;
         });
+    }
+
+    public onDrop (gridster: GridsterService): void {
+        if(!this.config.helper) {
+            this.$element.parentNode.removeChild(this.$element);
+        }
+
+        this.drop.emit({
+            item: this.item,
+            gridster: gridster
+        });
+    }
+
+    public onCancel (): void {
+        this.cancel.emit({item: this.item});
+    }
+
+    public onEnter (gridster: GridsterService): void {
+        this.enter.emit({
+            item: this.item,
+            gridster: gridster
+        });
+    }
+
+    public onOver (gridster: GridsterService): void {}
+
+    public onOut (gridster: GridsterService): void {
+        this.out.emit({
+            item: this.item,
+            gridster: gridster
+        });
+    }
+
+    private onStart (): void {
+        this.isDragging = true;
+
+        this.$element.style.pointerEvents = 'none';
+        this.$element.style.position = 'absolute';
+
+        this.gridsterPrototype.dragItemStart(this);
+
+        this.start.emit({item: this.item});
+    }
+
+    private onDrag (position: {top: number, left: number}): void {
+        this.$element.style.top = position.top + 'px';
+        this.$element.style.left = position.left + 'px';
+
+        this.gridsterPrototype.updatePrototypePosition(this);
+    }
+    
+    private onStop (): void {
+        this.gridsterPrototype.dragItemStop(this);
+
+        this.isDragging = false;
+        this.$element.style.pointerEvents = 'auto';
+        this.$element.style.position = '';
+        this.$element.style.top = '';
+        this.$element.style.left = '';
+
+        if(this.config.helper) {
+            this.$element.parentNode.removeChild(this.$element);
+        }
+    }
+
+    private provideDragElement (): HTMLElement {
+        let dragElement = this.elementRef.nativeElement;
+
+        if(this.config.helper) {
+            dragElement = <any>(dragElement).cloneNode(true);
+
+            document.body.appendChild(this.fixStylesForBodyHelper(dragElement));
+        }
+        else {
+            this.fixStylesForRelativeElement(dragElement);
+        }
+
+        return dragElement;
+    }
+
+    private fixStylesForRelativeElement(el: HTMLElement) {
+        if(window.getComputedStyle(el).position === 'absolute') {
+            return el;
+        }
+
+        const containerRect = el.parentElement.getBoundingClientRect();
+        const rect = this.elementRef.nativeElement.getBoundingClientRect();
+
+        el.style.position = 'absolute';
+        el.style.left = (rect.left - containerRect.left)+'px';
+        el.style.top = (rect.top - containerRect.top)+'px';
+
+        return el;
+    }
+
+    /**
+     * When element is cloned and append to body it should have position absolute and coords set by original
+     * relative prototype element position.
+     * @param el
+     * @returns {HTMLElement}
+     */
+    private fixStylesForBodyHelper (el: HTMLElement) {
+        const bodyRect = document.body.getBoundingClientRect();
+        const rect = this.elementRef.nativeElement.getBoundingClientRect();
+
+        el.style.position = 'absolute';
+        el.style.left = (rect.left - bodyRect.left)+'px';
+        el.style.top = (rect.top - bodyRect.top)+'px';
+
+        return el;
     }
 
     /**

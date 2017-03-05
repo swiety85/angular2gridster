@@ -45,13 +45,21 @@ export class GridsterItemComponent implements OnInit, OnChanges {
         this.$element = elementRef.nativeElement;
 
         this.item = (new GridListItem()).setFromGridsterItem(this);
+
+
+        //if gridster is initialized do not show animation on new grid-item construct
+        if(this.gridster.$element) {
+            this.preventAnimation();
+        }
     }
 
     ngOnInit() {
         this.gridster.registerItem(this.item);
         // only if new item is registered after bootstrap
         if(this.gridster.$element) {
-            this.gridster.render();
+
+            this.gridster.gridList.resolveCollisions(this.item);
+            this.gridster.reflow();
         }
 
         if(this.gridster.options.dragAndDrop) {
@@ -60,29 +68,41 @@ export class GridsterItemComponent implements OnInit, OnChanges {
 
             // Update position
             this.dragSubscription = this.dragging.subscribe((pos) => {
-                //if(!this.pin){
                 this.$element.style.top = (pos.top - this.gridster.$element.offsetTop) + 'px';
                 this.$element.style.left = (pos.left - this.gridster.$element.offsetLeft) + 'px';
-                //}
             });
         }
     }
 
     ngOnChanges() {
-        if(!this.gridster.gridList) {
+  /*      if(!this.gridster.gridList) {
             return ;
         }
 
         this.gridster.gridList.resolveCollisions(this.item);
-        this.gridster.render();
+        this.gridster.render();*/
     }
 
     ngOnDestroy() {
         let index = this.gridster.items.indexOf(this.item);
         if(index >= 0){
             this.gridster.items.splice(index,1);
+            console.log('remove', 'item destroy',index);
         }
         this.dragSubscription.unsubscribe();
+    }
+
+    /**
+     * Assign class for short while to prevent animation of grid item component
+     * @returns {GridsterItemComponent}
+     */
+    private preventAnimation (): GridsterItemComponent {
+        this.$element.classList.add('no-transition');
+        setTimeout(() => {
+            this.$element.classList.remove('no-transition');
+        }, 500);
+
+        return this;
     }
 
     /**
@@ -249,22 +269,4 @@ export class GridsterItemComponent implements OnInit, OnChanges {
             y: e.pageY - offset.top,
         };
     }
-
-    /**
-     * Serialize GridsterItemComponent to object literal with key properties
-     * @returns {{$element: HTMLElement, x: number, y: number, w: number, h: number, autoSize: boolean}}
-     */
-    //public serialize () {
-    //    return {
-    //        $element: this.$element,
-    //        x: this.x, y: this.y,
-    //        w: this.w, h: this.h,
-    //        autoSize: this.autoSize
-    //    };
-    //}
-
 }
-
-
-
-

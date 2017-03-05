@@ -1,8 +1,3 @@
-<div gridsterItemPrototype [w]="1" [h]="1" (drop)="addWidget2(gridster, $event)"
-        style="display: block;padding: 10px;background-color: #768294; position: absolute;z-index: 99;">
-  Gridster item prototype
-</div>
-
 <h1>
   {{title}}
 </h1>
@@ -24,6 +19,33 @@
   </label>
   <br>
   <button (click)="swap()">Swap 1<->4 </button> <button (click)="addWidget(gridster)">Add widget (5 position) </button>
+</div>
+<div class="widgetbar">
+  <div [gridsterItemPrototype]="{helper: true}" [w]="1" [h]="1"
+       (drop)="addWidget2(gridster, $event)"
+       (enter)="over($event)"
+       (out)="out($event)"
+       class="gridster-item-prototype">
+    Widget <br>
+    1x1
+    <div _ngcontent-uoe-1="" class="gridster-item-inner" style="width: 0;height: 0;">
+      <div _ngcontent-uoe-2="" class="panel-heading">
+        <h5 _ngcontent-uoe-2="" class="panel-title">New widget</h5>
+      </div>
+    </div>
+  </div>
+
+  <div [gridsterItemPrototype]="{helper: true}" [w]="1" [h]="2" (drop)="addWidget2(gridster, $event)"
+       class="gridster-item-prototype">
+    Widget <br>
+    1x2
+  </div>
+
+  <div [gridsterItemPrototype]="{helper: false}" [w]="2" [h]="1" (drop)="addWidget2(gridster, $event)"
+       class="gridster-item-prototype">
+    Widget <br>
+    2x1
+  </div>
 </div>
 <div class="main-content">
 
