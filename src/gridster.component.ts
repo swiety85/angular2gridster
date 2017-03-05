@@ -80,7 +80,6 @@ export class GridsterComponent implements OnInit {
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
 
                 this.gridster.items.push(prototype.item);
-                console.log('item push', prototype.item);
                 this.gridster.onStart(prototype.item);
             });
 
@@ -98,7 +97,6 @@ export class GridsterComponent implements OnInit {
 
                 const idx = this.gridster.items.indexOf(prototype.item);
                 this.gridster.items.splice(idx, 1);
-                console.log('remove', 'drop', idx);
             });
 
         dropOverObservable.connect();

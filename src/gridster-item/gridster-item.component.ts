@@ -75,20 +75,22 @@ export class GridsterItemComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges() {
-  /*      if(!this.gridster.gridList) {
+        if(!this.gridster.gridList) {
             return ;
         }
 
         this.gridster.gridList.resolveCollisions(this.item);
-        this.gridster.render();*/
+        this.gridster.render();
     }
 
     ngOnDestroy() {
         let index = this.gridster.items.indexOf(this.item);
         if(index >= 0){
             this.gridster.items.splice(index,1);
-            console.log('remove', 'item destroy',index);
         }
+
+        this.gridster.gridList.pullItemsToLeft();
+        this.gridster.render();
         this.dragSubscription.unsubscribe();
     }
 

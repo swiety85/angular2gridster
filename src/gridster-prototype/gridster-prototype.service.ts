@@ -53,32 +53,42 @@ export class GridsterPrototypeService {
         dragEnter: Observable<GridsterItemPrototypeDirective>,
         dragOut: Observable<GridsterItemPrototypeDirective>
     } {
-        const dragIsOver = this.dragSubject.asObservable()
+        const over = this.dragSubject.asObservable()
             .map((item: GridsterItemPrototypeDirective) => {
                 return {
                     item,
-                    isOver: this.isInsideContainer(item.$element, gridster.$element)
+                    isOver: this.isInsideContainer(item.$element, gridster.$element),
+                    isDrop: false
                 };
-            })
+            });
+
+        const drop = this.dragStopSubject.asObservable()
+            .map((item: GridsterItemPrototypeDirective) => {
+                return {
+                    item,
+                    isOver: this.isInsideContainer(item.$element, gridster.$element),
+                    isDrop: true
+                };
+            });
+
+        const dragExt = Observable.merge(over, drop)
             .scan((prev: any, next: any) => {
                 return {
                     item: next.item,
                     isOver: next.isOver,
                     isEnter: prev.isOver === false && next.isOver === true,
-                    isOut: prev.isOver === true && next.isOver === false
+                    isOut: prev.isOver === true && next.isOver === false && !prev.isDrop,
+                    isDrop: next.isDrop
                 };
+            })
+            .filter((data: any) => {
+                return !data.isDrop;
             });
 
         return {
-            dragOver: this.createDragOverObservable(dragIsOver, gridster),
-            dragEnter: this.createDragEnterObservable(dragIsOver, gridster)
-            .do(() => {
-                console.log('drag enter');
-            }),
-            dragOut: this.createDragOutObservable(dragIsOver, gridster)
-                .do(() => {
-                    console.log('drag out');
-                })
+            dragOver: this.createDragOverObservable(dragExt, gridster),
+            dragEnter: this.createDragEnterObservable(dragExt, gridster),
+            dragOut: this.createDragOutObservable(dragExt, gridster)
         };
     }
 

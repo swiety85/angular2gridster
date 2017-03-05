@@ -59,7 +59,6 @@ export class GridsterService {
     registerItem(item: GridListItem) {
 
         this.items.push(item);
-        console.log('add', 'register item', item);
         return item;
     }
 
@@ -148,7 +147,6 @@ export class GridsterService {
 
         const idx = this.items.indexOf(item);
         this.items.splice(idx, 1);
-        console.log('remove', 'drag out', idx);
 
         this.gridList.pullItemsToLeft();
         this.render();
