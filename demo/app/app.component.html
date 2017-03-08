@@ -81,7 +81,7 @@
           <button (click)="setHeight(widget, widget.h-1, $event)">height -</button>
         </p>
         <p>
-          <button (click)="remove(indx,gridster)">remove</button>
+          <button (click)="remove($event, indx,gridster)">remove</button>
         </p>
         <p>
           Position (x,y): ({{widget.x}},{{widget.y}})

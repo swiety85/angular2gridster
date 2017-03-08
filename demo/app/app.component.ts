@@ -118,7 +118,8 @@ export class AppComponent {
         
     }
 
-    remove(index: number, gridster: GridsterComponent){
+    remove($event, index: number, gridster: GridsterComponent){
+        $event.preventDefault();
         this.widgets.splice(index,1);
         console.log('widget remove', index);
         //setTimeout(() => {

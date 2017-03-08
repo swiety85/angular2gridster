@@ -7,9 +7,11 @@ import {
     Output,
     EventEmitter,
     ChangeDetectorRef,
-    HostListener
+    HostListener,
+    HostBinding
 } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/takeUntil';
 
 import { GridsterService } from './gridster.service';
@@ -32,13 +34,14 @@ export class GridsterComponent implements OnInit {
     @Input() draggableOptions:IGridsterDraggableOptions;
     @ViewChild('positionHighlight') $positionHighlight;
 
+    @HostBinding('class.gridster--dragging') isDragging: boolean = false;
+
     gridster:GridsterService;
     $el:HTMLElement;
 
-    private cdr:ChangeDetectorRef;
+    private subscribtions: Array<Subscription> = [];
 
-    constructor(elementRef:ElementRef, gridster:GridsterService, cdr:ChangeDetectorRef, private gridsterPrototype:GridsterPrototypeService) {
-        this.cdr = cdr;
+    constructor(elementRef:ElementRef, gridster:GridsterService, private cdr: ChangeDetectorRef, private gridsterPrototype:GridsterPrototypeService) {
 
         this.gridster = gridster;
         this.gridster.gridsterChange = this.gridsterPositionChange;
@@ -46,17 +49,39 @@ export class GridsterComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.gridster.init(this.options, this.draggableOptions);
+        this.gridster.init(this.options, this.draggableOptions, this);
+
+        const scrollSub = Observable.fromEvent(document, 'scroll')
+            .subscribe(() => this.updateGridsterElementData());
+
+        this.subscribtions.push(scrollSub);
     }
 
     ngAfterViewInit() {
         this.gridster.start(this.$el);
 
+        this.updateGridsterElementData();
+
         this.connectGridsterPrototype();
 
         this.gridster.$positionHighlight = this.$positionHighlight.nativeElement;
         // detectChanges is required because gridster.start changes values uses in template
-        this.cdr.detectChanges();
+        //this.cdr.detectChanges();
+        this.cdr.detach();
+    }
+
+    ngOnDestroy() {
+        this.subscribtions.forEach((sub: Subscription) => {
+            sub.unsubscribe();
+        });
+    }
+
+    private updateGridsterElementData() {
+        this.gridster.gridsterRect = this.$el.getBoundingClientRect();
+        this.gridster.gridsterOffset = {
+            left: this.$el.offsetLeft,
+            top: this.$el.offsetTop
+        };
     }
 
     /**

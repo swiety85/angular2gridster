@@ -10,6 +10,7 @@ import { IGridsterDraggableOptions } from "./IGridsterDraggableOptions";
 import { GridsterPrototypeService } from "./gridster-prototype/gridster-prototype.service";
 import {GridsterItemPrototypeDirective} from "./gridster-prototype/gridster-item-prototype.directive";
 import {GridListItem} from './gridList/GridListItem';
+import {GridsterComponent} from './gridster.component';
 
 
 export class GridsterService {
@@ -34,6 +35,10 @@ export class GridsterService {
         widthHeightRatio: 1,
         dragAndDrop: true
     };
+
+    gridsterRect: ClientRect;
+    gridsterOffset: {left: number, top: number};
+
     public gridsterChange: EventEmitter<any>;
 
     private maxItemWidth:number; // old _widestItem
@@ -50,6 +55,8 @@ export class GridsterService {
     private _cellHeight:number;
     private _fontSize:number;
 
+    private gridsterComponent: GridsterComponent;
+
     constructor() {}
 
     /**
@@ -62,14 +69,15 @@ export class GridsterService {
         return item;
     }
 
-    init (options:IGridsterOptions = {}, draggableOptions:IGridsterDraggableOptions = {}) {
+    init (options:IGridsterOptions = {}, draggableOptions:IGridsterDraggableOptions = {}, gridsterComponent: GridsterComponent) {
 
+        this.gridsterComponent = gridsterComponent;
         this.options = (<any>Object).assign({}, this.defaults, options);
         this.draggableOptions = (<any>Object).assign(
             {}, this.draggableDefaults, draggableOptions);
     }
 
-    start (gridsterEl:HTMLElement) {
+    start (gridsterEl: HTMLElement) {
 
         this.updateMaxItemSize();
 
@@ -115,6 +123,8 @@ export class GridsterService {
         this._maxGridCols = this.gridList.grid.length;
 
         this.highlightPositionForItem(item);
+
+        this.gridsterComponent.isDragging = true;
     }
 
     onDrag (item: GridListItem) {
@@ -163,6 +173,8 @@ export class GridsterService {
 
         this.gridList.pullItemsToLeft();
         this.render();
+
+        this.gridsterComponent.isDragging = false;
     }
 
     public getItemWidth (item) {
