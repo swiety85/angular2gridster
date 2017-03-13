@@ -114,18 +114,24 @@ export class GridsterComponent implements OnInit {
 
         this.gridsterPrototype.observeDragOver(this.gridster).dragOut
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
-                isEntered = false;
+                if(!isEntered) {
+                    return ;
+                }
                 this.gridster.onDragOut(prototype.item);
+                isEntered = false;
             });
 
         dropOverObservable
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
-
-                isEntered = false;
+                if(!isEntered) {
+                    return ;
+                }
                 this.gridster.onStop(prototype.item);
 
                 const idx = this.gridster.items.indexOf(prototype.item);
                 this.gridster.items.splice(idx, 1);
+
+                isEntered = false;
             });
 
         dropOverObservable.connect();
