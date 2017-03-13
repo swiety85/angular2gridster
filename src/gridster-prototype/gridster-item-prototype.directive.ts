@@ -207,9 +207,6 @@ export class GridsterItemPrototypeDirective {
     }
 
     private onDrag (position: {top: number, left: number}): void {
-        //this.$element.style.top = position.top + 'px';
-        //this.$element.style.left = position.left + 'px';
-
         this.gridsterPrototype.updatePrototypePosition(this);
     }
     

@@ -85,11 +85,14 @@ export class GridsterPrototypeService {
                 return !data.isDrop;
             });
 
-        return {
-            dragOver: this.createDragOverObservable(dragExt, gridster),
-            dragEnter: this.createDragEnterObservable(dragExt, gridster),
-            dragOut: this.createDragOutObservable(dragExt, gridster)
-        };
+        const dragEnter = this.createDragEnterObservable(dragExt, gridster);
+        const dragOut = this.createDragOutObservable(dragExt, gridster);
+        const dragOver = dragEnter.switchMap(() => {
+            return this.dragSubject.asObservable()
+                .takeUntil(dragOut);
+        })
+
+        return { dragEnter, dragOut, dragOver };
     }
 
     dragItemStart(item: GridsterItemPrototypeDirective) {

@@ -88,6 +88,7 @@ export class GridsterComponent implements OnInit {
      * Connect gridster prototype item to gridster dragging hooks (onStart, onDrag, onStop).
      */
     private connectGridsterPrototype () {
+        let isEntered = false;
 
         this.gridsterPrototype.observeDropOut(this.gridster)
             .subscribe();
@@ -97,27 +98,30 @@ export class GridsterComponent implements OnInit {
 
         this.gridsterPrototype.observeDragOver(this.gridster).dragOver
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
-
+                if(!isEntered) {
+                    return ;
+                }
                 this.gridster.onDrag(prototype.item);
             });
 
         this.gridsterPrototype.observeDragOver(this.gridster).dragEnter
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
+                isEntered = true;
 
                 this.gridster.items.push(prototype.item);
                 this.gridster.onStart(prototype.item);
             });
 
         this.gridsterPrototype.observeDragOver(this.gridster).dragOut
-            //.takeUntil(dropOverObservable)
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
+                isEntered = false;
                 this.gridster.onDragOut(prototype.item);
             });
 
         dropOverObservable
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
 
-
+                isEntered = false;
                 this.gridster.onStop(prototype.item);
 
                 const idx = this.gridster.items.indexOf(prototype.item);
