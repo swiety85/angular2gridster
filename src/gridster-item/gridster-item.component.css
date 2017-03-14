@@ -24,3 +24,8 @@
 	transition: none;
 	z-index: 9999;
 }
+
+:host.no-transition {
+	-webkit-transition: none;
+	transition: none;
+}
