@@ -1,44 +1,68 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
-
-# compiled output
 /dist
-/tmp
-/aot
-/lib
+node_modules
+/examples
+/index.html
+/demos/**/dist
+old-RC4/demos/tmp
+old-RC4/demos/**/dist
+old-RC4/**/typings
+/typings
+/out/chrome
+aot
+/demos/basic_2.4
+/demos/basic-latest
+**/.vscode
+.idea
+.awcache
+
+
+
+
+
+
+
+
+
+
+
+#demo
+# compiled output
+demo/dist
+demo/tmp
+demo/out-tsc
 
 # dependencies
-/node_modules
-/bower_components
+demo/node_modules
 
 # IDEs and editors
-/.idea
-/.vscode
-.project
-.classpath
-.c9/
-*.launch
-.settings/
+demo/.idea
+demo/.project
+demo/.classpath
+demo/.c9/
+demo/*.launch
+demo/.settings/
+demo/*.sublime-workspace
+
+# IDE - VSCode
+demo/.vscode/*
+!demo/.vscode/settings.json
+!demo/.vscode/tasks.json
+!demo/.vscode/launch.json
+!demo/.vscode/extensions.json
 
 # misc
-/.sass-cache
-/connect.lock
-/coverage/*
-/libpeerconnection.log
-npm-debug.log
-testem.log
-/typings
+demo/.sass-cache
+demo/connect.lock
+demo/coverage/*
+demo/libpeerconnection.log
+demo/npm-debug.log
+demo/testem.log
+demo/typings
 
 # e2e
-/e2e/*.js
+demo/e2e/*.js
+demo/e2e/*.map
 
-#System Files
-.DS_Store
-Thumbs.db
-
-#webpack
-/.awcache
-/index.js
-/src/**/*.js
-*.map
-*.metadata.json
-*.d.ts
+# System Files
+demo/.DS_Store
+demo/Thumbs.db

@@ -22,7 +22,7 @@ Once installed you need to import our module:
 ## Example usage
 
 ```html
-    <gridster [options]="gridsterConfig">
+    <gridster [options]="gridsterConfig"  [draggableOptions]="{ handlerClass: 'panel-heading' }">
         <gridster-item *ngFor="let widget of widgets" [x]="widget.x" [y]="widget.y" [w]="widget.w" [h]="widget.h">
             ...
         </gridster-item>
@@ -37,16 +37,44 @@ gridsterConfig:IGridsterOptions = {
 };
 ```
 
-## Demo
+## Adding widgets
+Use directive "gridsterItemPrototype" that allows to add new widget to dashboard by dragging from outside.
+Directive expect following attributes:
+ *    gridsterItemPrototype - (required) directive definition and configuration object as a value.
+ Possible options:
+     helper - {boolean} if true, dragging element will be a clone of original appended to body
+ *   w - (required) {number} widget width
+ *   h - (required) {number} widget height
+ *   drop - (optional) {EventEmitter} called on drop to gridster
+ *   start - (optional) {EventEmitter} called on start dragging
+ *   cancel - (optional) {EventEmitter} called on drop outside of gridster area
+ *   enter - (optional) {EventEmitter} called on drag enter over gridster area
+ *   out - (optional) {EventEmitter} called on drag out of gridster area
 
-Clone or download this repository. Next run:
-
-```shell
-    npm install
-    npm run server
+### Example
+```html
+    <div [gridsterItemPrototype]="{helper: true}" [w]="1" [h]="2"
+         (drop)="addWidget(gridster, $event)"
+         (enter)="over($event)"
+         (out)="out($event)"> ... </div>
 ```
 
-Go to: http://localhost:3000/
+## Demo
+
+Clone or download this repository. Demo folder is dedicated nester project build on Angular CLI. To run:
+
+```shell
+    cd demo
+    npm install
+    ng serve
+```
+
+Go to: http://localhost:4200/
+
+## Compilation problems
+If somebody will have compilation problems please add an issue (if not yet created). I will try to fix it as soon as possible.
+Angular compiler has still some issues opened that can be a problem to you this module in your project. If so please,
+as a temporary solution copy files from /src folder to dedicated folder in your project.
 
 ## Issues
 
