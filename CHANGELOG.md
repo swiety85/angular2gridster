@@ -1,3 +1,25 @@
+<a name="0.4.0"></a>
+# [0.4.0]((https://github.com/swiety85/angular2gridster/compare/0.3.1...0.4.0)) (2017-03-20)
+
+
+### Bug Fixes
+
+* **css:** fix problem with drag and scroll on touch devieces
+* **build:** recreate build env from scratch
+
+
+### Features
+
+* **drag-drop** provide directive that allows to add new widget to dashboard by dragging from outside
+* **demo:** create Angular CLI demo 
+* **demo:** extend demo to show drag widgets from outside
+* **drag-drop:** reimplement drag n drop engine
+* **api:** refactor API of gridster.service
+* **api:** refactor API of gridster.component
+* **api:** refactor API of gridser.item.component
+
+
+
 <a name="0.3.1"></a>
 # [0.3.1]((https://github.com/swiety85/angular2gridster/compare/0.3.0...0.3.1)) (2017-01-24)
 
