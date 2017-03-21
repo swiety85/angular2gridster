@@ -513,11 +513,11 @@ export class GridList {
         if (!collidingItems.length) {
             return true;
         }
-        const _gridList = new GridList([], this.options),
-            leftOfItem,
-            rightOfItem,
-            aboveOfItem,
-            belowOfItem;
+        const _gridList = new GridList([], this.options);
+        let leftOfItem;
+        let rightOfItem;
+        let aboveOfItem;
+        let belowOfItem;
 
         _gridList.items = this.items.map(itm => {
             return itm.copy();
