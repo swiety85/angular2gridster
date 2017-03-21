@@ -1,0 +1,65 @@
+/dist
+node_modules
+/examples
+/index.html
+/demos/**/dist
+old-RC4/demos/tmp
+old-RC4/demos/**/dist
+old-RC4/**/typings
+/typings
+/out/chrome
+aot
+/demos/basic_2.4
+/demos/basic-latest
+**/.vscode
+
+
+
+
+
+
+
+
+
+
+#demo
+# compiled output
+demo/dist
+demo/tmp
+demo/out-tsc
+
+# dependencies
+demo/node_modules
+
+# IDEs and editors
+demo/.idea
+demo/.project
+demo/.classpath
+demo/.c9/
+demo/*.launch
+demo/.settings/
+demo/*.sublime-workspace
+
+# IDE - VSCode
+demo/.vscode/*
+!demo/.vscode/settings.json
+!demo/.vscode/tasks.json
+!demo/.vscode/launch.json
+!demo/.vscode/extensions.json
+
+# misc
+demo/.sass-cache
+demo/connect.lock
+demo/coverage/*
+demo/libpeerconnection.log
+demo/npm-debug.log
+demo/testem.log
+demo/typings
+
+# e2e
+demo/e2e/*.js
+demo/e2e/*.map
+
+# System Files
+demo/.DS_Store
+demo/Thumbs.db
