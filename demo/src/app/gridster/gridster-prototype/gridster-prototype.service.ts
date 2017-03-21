@@ -15,7 +15,7 @@ import {GridListItem} from '../gridList/GridListItem';
 @Injectable()
 export class GridsterPrototypeService {
 
-    private isDragging: boolean = false;
+    private isDragging = false;
 
     private dragSubject = new Subject<GridsterItemPrototypeDirective>();
 
@@ -32,7 +32,7 @@ export class GridsterPrototypeService {
             })
             .do((prototype: GridsterItemPrototypeDirective) => {
                 // TODO: what we should provide as a param?
-                //prototype.drop.emit({item: prototype.item});
+                // prototype.drop.emit({item: prototype.item});
                 prototype.onDrop(gridster);
             });
     }

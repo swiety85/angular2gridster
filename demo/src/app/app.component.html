@@ -21,7 +21,7 @@
     <!--<button (click)="swap()">Swap 1<->4 </button> <button (click)="addWidget(gridster)">Add widget (5 position) </button>-->
 </div>
 <div class="widgetbar">
-    <div [gridsterItemPrototype]="{helper: true}" [w]="1" [h]="1"
+    <div gridsterItemPrototype [config]="{helper: true}" [w]="1" [h]="1"
          (drop)="addWidgetFromDrag(gridster, $event)"
          (enter)="over($event)"
          (out)="out($event)"
@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    <div [gridsterItemPrototype]="{helper: true}" [w]="1" [h]="2"
+    <div gridsterItemPrototype [config]="{helper: true}" [w]="1" [h]="2"
          (drop)="addWidgetFromDrag(gridster, $event)"
          (enter)="over($event)"
          (out)="out($event)"
@@ -49,7 +49,7 @@
         </div>
     </div>
 
-    <div [gridsterItemPrototype]="{helper: false}" [w]="2" [h]="1"
+    <div gridsterItemPrototype [config]="{helper: false}" [w]="2" [h]="1"
          (drop)="addWidgetFromDrag(gridster, $event)"
          (enter)="over($event)"
          (out)="out($event)"

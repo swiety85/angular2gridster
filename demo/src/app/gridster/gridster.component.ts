@@ -1,5 +1,5 @@
 import {
-    Component, OnInit, ElementRef, ViewChild,
+    Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild,
     Input, Output, EventEmitter, ChangeDetectorRef, HostListener, HostBinding
 } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
@@ -7,9 +7,9 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/takeUntil';
 
 import { GridsterService } from './gridster.service';
-import {IGridsterOptions} from "./IGridsterOptions";
-import {IGridsterDraggableOptions} from "./IGridsterDraggableOptions";
-import {GridsterPrototypeService} from "./gridster-prototype/gridster-prototype.service";
+import {IGridsterOptions} from './IGridsterOptions';
+import {IGridsterDraggableOptions} from './IGridsterDraggableOptions';
+import {GridsterPrototypeService} from './gridster-prototype/gridster-prototype.service';
 import {GridsterItemPrototypeDirective} from './gridster-prototype/gridster-item-prototype.directive';
 
 
@@ -53,20 +53,23 @@ import {GridsterItemPrototypeDirective} from './gridster-prototype/gridster-item
     `],
     providers: [ GridsterService ]
 })
-export class GridsterComponent implements OnInit {
-    @Input() options:IGridsterOptions;
+export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
+    @Input() options: IGridsterOptions;
     @Output() gridsterPositionChange = new EventEmitter<any>();
-    @Input() draggableOptions:IGridsterDraggableOptions;
+    @Input() draggableOptions: IGridsterDraggableOptions;
     @ViewChild('positionHighlight') $positionHighlight;
 
-    @HostBinding('class.gridster--dragging') isDragging: boolean = false;
+    @HostBinding('class.gridster--dragging') isDragging = false;
 
-    gridster:GridsterService;
-    $el:HTMLElement;
+    gridster: GridsterService;
+    $el: HTMLElement;
 
     private subscribtions: Array<Subscription> = [];
 
-    constructor(elementRef:ElementRef, gridster:GridsterService, private cdr: ChangeDetectorRef, private gridsterPrototype:GridsterPrototypeService) {
+    constructor(
+        elementRef: ElementRef, gridster: GridsterService,
+        private cdr: ChangeDetectorRef,
+        private gridsterPrototype: GridsterPrototypeService) {
 
         this.gridster = gridster;
         this.gridster.gridsterChange = this.gridsterPositionChange;
@@ -91,7 +94,7 @@ export class GridsterComponent implements OnInit {
 
         this.gridster.$positionHighlight = this.$positionHighlight.nativeElement;
         // detectChanges is required because gridster.start changes values uses in template
-        //this.cdr.detectChanges();
+        // this.cdr.detectChanges();
         this.cdr.detach();
     }
 
@@ -168,7 +171,7 @@ export class GridsterComponent implements OnInit {
      * @param {any} value
      * @return {GridsterComponent}
      */
-    setOption(name:string, value:any) {
+    setOption(name: string, value: any) {
         if (name === 'lanes') {
             this.gridster.options.lanes = value;
         }

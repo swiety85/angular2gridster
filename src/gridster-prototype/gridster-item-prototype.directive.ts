@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, Output, HostBinding, EventEmitter } from '@angular/core';
+import { Directive, ElementRef, Input, Output, HostBinding, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ISubscription, Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/of';
@@ -16,7 +16,7 @@ import { dragdrop } from '../utils/dragdrop';
 @Directive({
     selector: '[gridsterItemPrototype]'
 })
-export class GridsterItemPrototypeDirective {
+export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
     @Output() drop = new EventEmitter();
     @Output() start = new EventEmitter();
     @Output() cancel = new EventEmitter();
@@ -24,14 +24,14 @@ export class GridsterItemPrototypeDirective {
     @Output() out = new EventEmitter();
 
     @Input() data: any;
-    @Input('gridsterItemPrototype') config: any = {};
+    @Input() config: any = {};
 
-    public x: number = 0;
-    public y: number = 0;
+    public x = 0;
+    public y = 0;
     @Input() w: number;
     @Input() h: number;
 
-    autoSize: boolean;
+    autoSize = false;
 
     $element: HTMLElement;
 
@@ -45,7 +45,7 @@ export class GridsterItemPrototypeDirective {
      */
     dragSubscription: ISubscription;
 
-    isDragging: boolean = false;
+    isDragging = false;
 
     item: GridListItem;
 

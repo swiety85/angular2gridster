@@ -53,7 +53,7 @@ Directive expect following attributes:
 
 ### Example
 ```html
-    <div [gridsterItemPrototype]="{helper: true}" [w]="1" [h]="2"
+    <div gridsterItemPrototype [config]="{helper: true}" [w]="1" [h]="2"
          (drop)="addWidget(gridster, $event)"
          (enter)="over($event)"
          (out)="out($event)"> ... </div>

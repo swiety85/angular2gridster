@@ -9,17 +9,15 @@ import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  gridsterOptions:IGridsterOptions = {
+  gridsterOptions: IGridsterOptions = {
     lanes: 5,
-
     direction: 'vertical',
-
     dragAndDrop: true
   };
   gridsterDraggableOptions: IGridsterDraggableOptions = {
     handlerClass: 'panel-heading'
-  }
-  title: string = 'Angular2Gridster';
+  };
+  title = 'Angular2Gridster';
   widgets: Array<any> = [
     {
       x: 0, y: 0, w: 1, h: 2,
@@ -59,18 +57,18 @@ export class AppComponent {
     }
   ];
 
-  removeLine(gridster: GridsterComponent) {
+  removeLine (gridster: GridsterComponent) {
     gridster.setOption('lanes', --this.gridsterOptions.lanes)
         .reload();
   }
-  addLine(gridster: GridsterComponent) {
+  addLine (gridster: GridsterComponent) {
     gridster.setOption('lanes', ++this.gridsterOptions.lanes)
         .reload();
   }
-  setWidth(widget:any, size:number, e:MouseEvent) {
+  setWidth (widget: any, size: number, e: MouseEvent) {
     e.stopPropagation();
     e.preventDefault();
-    if(size<1) {
+    if (size < 1) {
       size = 1;
     }
     widget.w = size;
@@ -78,10 +76,10 @@ export class AppComponent {
     return false;
   }
 
-  setHeight(widget:any, size:number, e:MouseEvent) {
+  setHeight (widget: any, size: number, e: MouseEvent) {
     e.stopPropagation();
     e.preventDefault();
-    if(size<1) {
+    if (size < 1) {
       size = 1;
     }
     widget.h = size;
@@ -89,16 +87,16 @@ export class AppComponent {
     return false;
   }
 
-  logChanges(items: any){
-    console.log('===>> Changed items: ',items);
+  logChanges (items: any) {
+    console.log('===>> Changed items: ', items);
   }
 
-  swap(){
+  swap () {
     this.widgets[0].x = 3;
     this.widgets[3].x = 0;
   }
 
-  addWidgetFromDrag(gridster: GridsterComponent, event: any){
+  addWidgetFromDrag (gridster: GridsterComponent, event: any) {
     const item = event.item;
     this.widgets.push({
       x: item.x, y: item.y, w: item.w, h: item.h,
@@ -115,9 +113,9 @@ export class AppComponent {
 
   over (event) {
     event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.width =
-        event.gridster.getItemWidth(event.item)+'px';
+        event.gridster.getItemWidth(event.item) + 'px';
     event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.height =
-        event.gridster.getItemHeight(event.item)+'px';
+        event.gridster.getItemHeight(event.item) + 'px';
     event.item.itemPrototype.$element.classList.add('is-over');
   }
   out (event) {
@@ -126,7 +124,7 @@ export class AppComponent {
     event.item.itemPrototype.$element.classList.remove('is-over');
   }
 
-  addWidget(gridster: GridsterComponent){
+  addWidget (gridster: GridsterComponent) {
     this.widgets.push({
       x: 4, y: 0, w: 1, h: 1,
       title: 'Basic form inputs 5',
@@ -136,12 +134,12 @@ export class AppComponent {
       'pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est ' +
       'laborum.'
     });
-    console.log('widget push', this.widgets[this.widgets.length-1]);
+    console.log('widget push', this.widgets[this.widgets.length - 1]);
   }
 
-  remove($event, index: number, gridster: GridsterComponent){
+  remove ($event, index: number, gridster: GridsterComponent) {
     $event.preventDefault();
-    this.widgets.splice(index,1);
+    this.widgets.splice(index, 1);
     console.log('widget remove', index);
   }
 

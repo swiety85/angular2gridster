@@ -4,33 +4,33 @@ import 'rxjs/add/operator/filter';
 
 
 import { GridList } from './gridList/gridList';
-import { GridsterItemComponent } from "./gridster-item/gridster-item.component";
-import { IGridsterOptions } from "./IGridsterOptions";
-import { IGridsterDraggableOptions } from "./IGridsterDraggableOptions";
-import { GridsterPrototypeService } from "./gridster-prototype/gridster-prototype.service";
-import { GridsterItemPrototypeDirective } from "./gridster-prototype/gridster-item-prototype.directive";
+import { GridsterItemComponent } from './gridster-item/gridster-item.component';
+import { IGridsterOptions } from './IGridsterOptions';
+import { IGridsterDraggableOptions } from './IGridsterDraggableOptions';
+import { GridsterPrototypeService } from './gridster-prototype/gridster-prototype.service';
+import { GridsterItemPrototypeDirective } from './gridster-prototype/gridster-item-prototype.directive';
 import { GridListItem } from './gridList/GridListItem';
 import { GridsterComponent } from './gridster.component';
 
 
 export class GridsterService {
-    $element:HTMLElement;
+    $element: HTMLElement;
 
-    gridList:GridList;
+    gridList: GridList;
 
-    items:Array<GridListItem> = [];
-    _items:Array<GridListItem>;
+    items: Array<GridListItem> = [];
+    _items: Array<GridListItem>;
 
-    options:IGridsterOptions;
-    draggableOptions:IGridsterDraggableOptions;
-    draggableDefaults:IGridsterDraggableOptions = {
+    options: IGridsterOptions;
+    draggableOptions: IGridsterDraggableOptions;
+    draggableDefaults: IGridsterDraggableOptions = {
         zIndex: 2,
         scroll: false,
-        containment: "parent"
+        containment: 'parent'
     };
-    defaults:IGridsterOptions = {
+    defaults: IGridsterOptions = {
         lanes: 5,
-        direction: "horizontal",
+        direction: 'horizontal',
         itemSelector: 'li[data-w]',
         widthHeightRatio: 1,
         dragAndDrop: true
@@ -41,19 +41,20 @@ export class GridsterService {
 
     public gridsterChange: EventEmitter<any>;
 
-    private maxItemWidth:number; // old _widestItem
-    private maxItemHeight:number; // old _tallestItem
-    public $positionHighlight:HTMLElement;
+    public $positionHighlight: HTMLElement;
 
-    private previousDragPosition:Array<number>;
+    private maxItemWidth: number; // old _widestItem
+    private maxItemHeight: number; // old _tallestItem
 
-    private draggedElement:HTMLElement;
+    private previousDragPosition: Array<number>;
 
-    private _maxGridCols:number;
+    private draggedElement: HTMLElement;
 
-    private _cellWidth:number;
-    private _cellHeight:number;
-    private _fontSize:number;
+    private _maxGridCols: number;
+
+    private _cellWidth: number;
+    private _cellHeight: number;
+    private _fontSize: number;
 
     private gridsterComponent: GridsterComponent;
 
@@ -69,7 +70,7 @@ export class GridsterService {
         return item;
     }
 
-    init (options:IGridsterOptions = {}, draggableOptions:IGridsterDraggableOptions = {}, gridsterComponent: GridsterComponent) {
+    init (options: IGridsterOptions = {}, draggableOptions: IGridsterDraggableOptions = {}, gridsterComponent: GridsterComponent) {
 
         this.gridsterComponent = gridsterComponent;
         this.options = (<any>Object).assign({}, this.defaults, options);
@@ -111,7 +112,7 @@ export class GridsterService {
 
     onStart (item: GridListItem) {
         this.draggedElement = item.$element;
-        //itemCtrl.isDragging = true;
+        // itemCtrl.isDragging = true;
         // Create a deep copy of the items; we use them to revert the item
         // positions after each drag change, making an entire drag operation less
         // distructable
@@ -128,7 +129,7 @@ export class GridsterService {
     }
 
     onDrag (item: GridListItem) {
-        var newPosition = this.snapItemPositionToGrid(item);
+        const newPosition = this.snapItemPositionToGrid(item);
 
         if (this.dragPositionChanged(newPosition)) {
             this.previousDragPosition = newPosition;
@@ -167,7 +168,7 @@ export class GridsterService {
         this.updateCachedItems();
         this.previousDragPosition = null;
 
-        //itemCtrl.isDragging = false;
+        // itemCtrl.isDragging = false;
 
         this.removePositionHighlight();
 
@@ -200,8 +201,8 @@ export class GridsterService {
      */
     private restoreCachedItems() {
         this.items.forEach((item: GridListItem) => {
-            let cachedItem = this._items.filter(cachedItem => {
-                return cachedItem.$element === item.$element;
+            const cachedItem = this._items.filter(cachedItm => {
+                return cachedItm.$element === item.$element;
             })[0];
 
             item.x = cachedItem.x;
@@ -222,7 +223,7 @@ export class GridsterService {
     }
 
     private calculateCellSize () {
-        if (this.options.direction === "horizontal") {
+        if (this.options.direction === 'horizontal') {
             // TODO: get rid of window.getComputedStyle
             this._cellHeight = Math.floor(parseFloat(window.getComputedStyle(this.$element).height) / this.options.lanes);
             this._cellWidth = this._cellHeight * this.options.widthHeightRatio;
@@ -237,7 +238,7 @@ export class GridsterService {
     }
 
     private applySizeToItems () {
-        for (var i = 0; i < this.items.length; i++) {
+        for (let i = 0; i < this.items.length; i++) {
             this.items[i].$element.style.width = this.getItemWidth(this.items[i]) + 'px';
             this.items[i].$element.style.height = this.getItemHeight(this.items[i]) + 'px';
 
@@ -249,25 +250,25 @@ export class GridsterService {
 
     private applyPositionToItems () {
         // TODO: Implement group separators
-        for (var i = 0; i < this.items.length; i++) {
+        for (let i = 0; i < this.items.length; i++) {
             // Don't interfere with the positions of the dragged items
             if (this.isDragging(this.items[i].$element)) {
                 continue;
             }
-            this.items[i].$element.style.left = (this.items[i].x * this._cellWidth)+'px';
-            this.items[i].$element.style.top = (this.items[i].y * this._cellHeight)+'px';
+            this.items[i].$element.style.left = (this.items[i].x * this._cellWidth) + 'px';
+            this.items[i].$element.style.top = (this.items[i].y * this._cellHeight) + 'px';
         }
 
-        let child = <HTMLElement>this.$element.firstChild;
+        const child = <HTMLElement>this.$element.firstChild;
         // Update the width of the entire grid container with enough room on the
         // right to allow dragging items to the end of the grid.
-        if (this.options.direction === "horizontal") {
-            child.style.height = (this.options.lanes * this._cellHeight)+'px';
-            child.style.width = ((this.gridList.grid.length + this.maxItemWidth) * this._cellWidth)+'px';
+        if (this.options.direction === 'horizontal') {
+            child.style.height = (this.options.lanes * this._cellHeight) + 'px';
+            child.style.width = ((this.gridList.grid.length + this.maxItemWidth) * this._cellWidth) + 'px';
 
         } else {
-            child.style.height = ((this.gridList.grid.length + this.maxItemHeight) * this._cellHeight)+'px';
-            child.style.width = (this.options.lanes * this._cellWidth)+'px';
+            child.style.height = ((this.gridList.grid.length + this.maxItemHeight) * this._cellHeight) + 'px';
+            child.style.width = (this.options.lanes * this._cellWidth) + 'px';
         }
     }
 
@@ -285,13 +286,13 @@ export class GridsterService {
         return {
             left: elRect.left - relativeElRect.left,
             top: elRect.top - relativeElRect.top
-        }
+        };
     }
 
     private snapItemPositionToGrid (item: GridListItem) {
-        let position = this.offset(item.$element, this.$element);
+        const position = this.offset(item.$element, this.$element);
 
-        var col = Math.round(position.left / this._cellWidth),
+        let col = Math.round(position.left / this._cellWidth),
             row = Math.round(position.top / this._cellHeight);
 
         // Keep item position within the grid and don't let the item create more
@@ -299,7 +300,7 @@ export class GridsterService {
         col = Math.max(col, 0);
         row = Math.max(row, 0);
 
-        if (this.options.direction === "horizontal") {
+        if (this.options.direction === 'horizontal') {
             col = Math.min(col, this._maxGridCols);
             row = Math.min(row, this.options.lanes - item.h);
         } else {
@@ -314,15 +315,15 @@ export class GridsterService {
         if (!this.previousDragPosition) {
             return true;
         }
-        return (newPosition[0] != this.previousDragPosition[0] ||
-        newPosition[1] != this.previousDragPosition[1]);
+        return (newPosition[0] !== this.previousDragPosition[0] ||
+        newPosition[1] !== this.previousDragPosition[1]);
     }
 
     private highlightPositionForItem (item: GridListItem) {
-        this.$positionHighlight.style.width = this.getItemWidth(item)+'px';
-        this.$positionHighlight.style.height = this.getItemHeight(item)+'px';
-        this.$positionHighlight.style.left = item.x * this._cellWidth+'px';
-        this.$positionHighlight.style.top = item.y * this._cellHeight+'px';
+        this.$positionHighlight.style.width = this.getItemWidth(item) + 'px';
+        this.$positionHighlight.style.height = this.getItemHeight(item) + 'px';
+        this.$positionHighlight.style.left = item.x * this._cellWidth + 'px';
+        this.$positionHighlight.style.top = item.y * this._cellHeight + 'px';
         this.$positionHighlight.style.display = '';
 
         if (this.options.heightToFontSizeRatio) {
@@ -337,15 +338,13 @@ export class GridsterService {
     }
 
     private triggerOnChange () {
-        let itmsChanged = this.gridList.getChangedItems(this._items, '$element');
-        if (itmsChanged.length > 0){
+        const itmsChanged = this.gridList.getChangedItems(this._items, '$element');
+        if (itmsChanged.length > 0) {
             this.gridsterChange.emit(itmsChanged);
-            if (typeof (this.options.onChange) != 'function') {
+            if (typeof (this.options.onChange) !== 'function') {
                 return;
             }
-            this.options.onChange.call(
-                this, itmsChanged
-            );
+            this.options.onChange.call(this, itmsChanged);
         }
     }
 
