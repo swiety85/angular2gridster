@@ -3,7 +3,6 @@ export interface IGridsterOptions {
     lanes?: number;
     widthHeightRatio?: number;
     heightToFontSizeRatio?: number;
-    onChange?: Function;
     dragAndDrop?: boolean;
     itemSelector?: string;
 }

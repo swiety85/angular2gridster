@@ -1,4 +1,4 @@
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/filter';
 
@@ -12,7 +12,7 @@ import { GridsterItemPrototypeDirective } from './gridster-prototype/gridster-it
 import { GridListItem } from './gridList/GridListItem';
 import { GridsterComponent } from './gridster.component';
 
-
+@Injectable()
 export class GridsterService {
     $element: HTMLElement;
 
@@ -341,10 +341,6 @@ export class GridsterService {
         const itmsChanged = this.gridList.getChangedItems(this._items, '$element');
         if (itmsChanged.length > 0) {
             this.gridsterChange.emit(itmsChanged);
-            if (typeof (this.options.onChange) !== 'function') {
-                return;
-            }
-            this.options.onChange.call(this, itmsChanged);
         }
     }
 
