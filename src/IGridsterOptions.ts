@@ -5,4 +5,5 @@ export interface IGridsterOptions {
     heightToFontSizeRatio?: number;
     dragAndDrop?: boolean;
     itemSelector?: string;
+    resizable?: boolean;
 }

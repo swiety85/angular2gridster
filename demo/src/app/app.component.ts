@@ -12,7 +12,8 @@ export class AppComponent {
   gridsterOptions: IGridsterOptions = {
     lanes: 5,
     direction: 'vertical',
-    dragAndDrop: true
+    dragAndDrop: true,
+    resizable: true
   };
   gridsterDraggableOptions: IGridsterDraggableOptions = {
     handlerClass: 'panel-heading'

@@ -11,7 +11,8 @@ import 'rxjs/add/operator/takeUntil';
 import { GridsterPrototypeService } from './gridster-prototype.service';
 import {GridListItem} from '../gridList/GridListItem';
 import {GridsterService} from '../gridster.service';
-import { dragdrop } from '../utils/dragdrop';
+import {DraggableEvent} from '../utils/DraggableEvent';
+import {Draggable} from '../utils/draggable';
 
 @Directive({
     selector: '[gridsterItemPrototype]'
@@ -100,26 +101,27 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
     }
 
     private enableDragDrop() {
-        const dragAPI = dragdrop(this.elementRef.nativeElement);
+        let cursorToElementPosition;
+        const draggable = new Draggable(this.elementRef.nativeElement);
 
-        const dragStartSub = dragAPI.observeDragStart()
-            .subscribe(() => {
+        const dragStartSub = draggable.dragStart
+            .subscribe((event: DraggableEvent) => {
                 this.$element = this.provideDragElement();
                 this.updateParentElementData();
                 this.onStart();
+
+                cursorToElementPosition = event.getRelativeCoordinates(this.$element);
             });
 
-        const dragSub = dragAPI.observeDrag(() => {
-                return this.$element;
-            })
-            .subscribe((position) => {
-                this.$element.style.top = (position.top  - this.parentRect.top) + 'px';
-                this.$element.style.left = (position.left  - this.parentRect.left) + 'px';
+        const dragSub = draggable.dragMove
+            .subscribe((event: DraggableEvent) => {
+                this.$element.style.top = (event.clientY - cursorToElementPosition.y  - this.parentRect.top) + 'px';
+                this.$element.style.left = (event.clientX - cursorToElementPosition.x  - this.parentRect.left) + 'px';
 
-                this.onDrag(position);
+                this.onDrag();
             });
 
-        const dragStopSub = dragAPI.observeDrop()
+        const dragStopSub = draggable.dragStop
             .subscribe(() => {
                 this.onStop();
                 this.$element = null;
@@ -154,7 +156,7 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
         this.start.emit({item: this.item});
     }
 
-    private onDrag (position: {top: number, left: number}): void {
+    private onDrag (): void {
         this.gridsterPrototype.updatePrototypePosition(this);
     }
 

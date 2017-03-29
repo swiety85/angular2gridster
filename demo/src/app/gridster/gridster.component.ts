@@ -61,6 +61,7 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('positionHighlight') $positionHighlight;
 
     @HostBinding('class.gridster--dragging') isDragging = false;
+    @HostBinding('class.gridster--resizing') isResizing = false;
 
     gridster: GridsterService;
     $el: HTMLElement;

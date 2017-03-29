@@ -188,6 +188,23 @@ export class GridList {
         return [newCol, newRow];
     }
 
+    moveAndResize(item: GridListItem, newPosition: Array<number>, size: {w: number, h: number}) {
+        const position = this.getItemPosition({
+            x: newPosition[0],
+            y: newPosition[1],
+            w: item.w,
+            h: item.h
+        });
+        const width = size.w || item.w,
+            height = size.h || item.h;
+
+
+        this.updateItemPosition(item, [position.x, position.y]);
+        this.updateItemSize(item, width, height);
+
+        this.resolveCollisions(item);
+    }
+
     moveItemToPosition (item: GridListItem, newPosition: Array<number>) {
         const position = this.getItemPosition({
             x: newPosition[0],
