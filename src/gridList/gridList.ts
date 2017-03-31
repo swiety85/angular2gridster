@@ -262,7 +262,7 @@ export class GridList {
      * Since both their position and size can change, the items need an
      * additional identifier attribute to match them with their previous state
      */
-    getChangedItems (initialItems: Array<GridListItem>, idAttribute: string) {
+    getChangedItems (initialItems: Array<GridListItem>, idAttribute: string): Array<GridListItem> {
         const changedItems = [];
 
         for (let i = 0; i < initialItems.length; i++) {
@@ -273,6 +273,33 @@ export class GridList {
                 item.w !== initialItems[i].w ||
                 item.h !== initialItems[i].h) {
                 changedItems.push(item);
+            }
+        }
+
+        return changedItems;
+    }
+
+    getChangedItemsMap(initialItems: Array<GridListItem>) {
+        const changedItems = {
+            x: [],
+            y: [],
+            w: [],
+            h: []
+        };
+
+        for (let i = 0; i < initialItems.length; i++) {
+            const item = this.getItemByAttribute('$element', initialItems[i].$element);
+            if(item.x !== initialItems[i].x) {
+                changedItems.x.push(item);
+            }
+            if(item.y !== initialItems[i].y) {
+                changedItems.y.push(item);
+            }
+            if(item.w !== initialItems[i].w) {
+                changedItems.w.push(item);
+            }
+            if(item.h !== initialItems[i].h) {
+                changedItems.h.push(item);
             }
         }
 

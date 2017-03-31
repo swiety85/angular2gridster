@@ -113,6 +113,8 @@ export class GridsterService {
     }
 
     onResizeStart(item: GridListItem) {
+
+
         this.currentElement = item.$element;
 
         this._items = this.copyItems();
@@ -158,7 +160,7 @@ export class GridsterService {
         }
     }
 
-    onResizeStop() {
+    onResizeStop(item: GridListItem) {
         this.currentElement = undefined;
         this.updateCachedItems();
         this.previousDragSize = null;
@@ -169,6 +171,8 @@ export class GridsterService {
         this.render();
 
         this.gridsterComponent.isResizing = false;
+
+        this.gridsterComponent.resize.emit(item);
     }
 
     onStart (item: GridListItem) {
@@ -425,9 +429,40 @@ export class GridsterService {
     }
 
     private triggerOnChange () {
-        const itmsChanged = this.gridList.getChangedItems(this._items, '$element');
-        if (itmsChanged.length > 0) {
-            this.gridsterChange.emit(itmsChanged);
+        const itemsChanged = this.gridList.getChangedItems(this._items, '$element');
+        const changeMap = this.gridList.getChangedItemsMap(this._items);
+
+        changeMap.x
+            .filter(item => {
+                return item.itemComponent;
+            })
+            .forEach(item => {
+                item.itemComponent.xChange.emit(item.x);
+            });
+        changeMap.y
+            .filter(item => {
+                return item.itemComponent;
+            })
+            .forEach(item => {
+                item.itemComponent.yChange.emit(item.y);
+            });
+        changeMap.w
+            .filter(item => {
+                return item.itemComponent;
+            })
+            .forEach(item => {
+                item.itemComponent.wChange.emit(item.w);
+            });
+        changeMap.h
+            .filter(item => {
+                return item.itemComponent;
+            })
+            .forEach(item => {
+                item.itemComponent.hChange.emit(item.h);
+            });
+
+        if (itemsChanged.length > 0) {
+            this.gridsterChange.emit(itemsChanged);
         }
     }
 
