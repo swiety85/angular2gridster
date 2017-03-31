@@ -57,6 +57,7 @@ export class Draggable {
                 return this.mousemove
                     .map(mm => new DraggableEvent(mm))
                     .filter((moveEvent: DraggableEvent) => this.inRange(startEvent, moveEvent, 5))
+                    .map(() => startEvent)
                     .takeUntil(this.mouseup)
                     .take(1);
             });
