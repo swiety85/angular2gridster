@@ -57,6 +57,7 @@ import {GridsterItemPrototypeDirective} from './gridster-prototype/gridster-item
 export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() options: IGridsterOptions;
     @Output() gridsterPositionChange = new EventEmitter<any>();
+    @Output() resize = new EventEmitter<any>()
     @Input() draggableOptions: IGridsterDraggableOptions;
     @ViewChild('positionHighlight') $positionHighlight;
 
