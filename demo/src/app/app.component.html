@@ -66,10 +66,10 @@
 <div class="main-content">
 
     <gridster [options]="gridsterOptions" [draggableOptions]="gridsterDraggableOptions"
-              (gridsterPositionChange)="logChanges($event)" #gridster>
+              (gridsterPositionChange)="logChanges($event)" (resize)="resize($event)" #gridster>
 
-        <gridster-item *ngFor="let widget of widgets; let indx = index" [(x)]="widget.x" [(y)]="widget.y" [w]="widget.w"
-                       [h]="widget.h">
+        <gridster-item *ngFor="let widget of widgets; let indx = index" [(x)]="widget.x" [(y)]="widget.y" [(w)]="widget.w"
+                       [(h)]="widget.h">
 
             <div class="panel-heading">
                 <h5 class="panel-title">{{ widget.title }}</h5>

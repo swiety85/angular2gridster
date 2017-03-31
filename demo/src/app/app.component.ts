@@ -144,4 +144,7 @@ export class AppComponent {
     console.log('widget remove', index);
   }
 
+  resize(item) {
+    console.log('resize', item);
+  }
 }
