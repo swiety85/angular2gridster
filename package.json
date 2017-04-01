@@ -1,6 +1,6 @@
 {
   "name": "angular2gridster",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "license": "MIT",
   "main": "./dist/index.js",
   "scripts": {
@@ -26,22 +26,19 @@
   "homepage": "https://github.com/swiety85/angular2gridster#readme",
   "typings": "./dist/index.d.ts",
   "dependencies": {
-    "@angular/common": "^2.4.8",
-    "@angular/core": "^2.4.8",
-    "@angular/forms": "^2.4.8",
+    "@angular/common": "^2.4.8 || ^4.0.0",
+    "@angular/core": "^2.4.8 || ^4.0.0",
     "rxjs": "^5.2.0",
     "webpack": "^2.2.1",
-    "zone.js": "^0.8.4"
+    "zone.js": "~0.7.2 || ~0.8.5"
   },
   "peerDependencies": {
-    "@angular/common": "^2.0.0",
-    "@angular/core": "^2.0.0",
-    "@angular/forms": "^2.0.0"
+    "@angular/common": "^2.0.0 || ^4.0.0",
+    "@angular/core": "^2.0.0 || ^4.0.0"
   },
   "devDependencies": {
-    "@angular/compiler": "^2.4.8",
-    "@angular/compiler-cli": "^2.4.8",
-    "@angular/platform-server": "^2.4.8",
+    "@angular/compiler": "^2.4.8 || ^4.0.0",
+    "@angular/compiler-cli": "^2.4.8 || ^4.0.0",
     "@types/jasmine": "^2.5.43",
     "jasmine-core": "~2.5.2",
     "karma": "^1.5.0",
