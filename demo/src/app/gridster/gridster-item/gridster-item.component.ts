@@ -27,7 +27,6 @@ import {Draggable} from '../utils/draggable';
     :host {
         display: block;
         position: absolute;
-        opacity: 0.7;
         top: 0;
         left: 0;
         z-index: 1;
@@ -352,14 +351,11 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
     private resizeToNorth(config: any): void {
         const height = config.startData.height + config.startEvent.clientY - config.moveEvent.clientY - config.scrollDiffY;
-        const maxHeight = (this.item.y + this.item.h) * this.gridster.cellHeight;
 
-        if (this.gridster.cellHeight > height) { // lest than min
-            this.$element.style.height = this.gridster.cellHeight + 'px';
-            this.$element.style.top = ((this.item.y + this.item.h - 1) * this.gridster.cellHeight) + 'px';
-        } else if (maxHeight < height) { // more than max
-            this.$element.style.height = maxHeight + 'px';
-            this.$element.style.top = 0 + 'px';
+        if (this.isLessThanMinHeight(height)) { // lest than min
+            this.setMinHeight('n');
+        } else if (this.isMoreThanMaxHeight(height, 'n')) { // more than max
+            this.setMaxHeight('n');
         } else {
             this.$element.style.top = config.position.y + 'px';
             this.$element.style.height = height + 'px';
@@ -368,14 +364,11 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
     private resizeToWest(config: any): void {
         const width = config.startData.width + config.startEvent.clientX - config.moveEvent.clientX - config.scrollDiffX;
-        const maxWidth = (this.item.x + this.item.w) * this.gridster.cellWidth;
 
-        if (this.gridster.cellWidth > width) { // lest than min
-            this.$element.style.width = this.gridster.cellWidth + 'px';
-            this.$element.style.left = ((this.item.x + this.item.w - 1) * this.gridster.cellWidth) + 'px';
-        } else if (maxWidth < width) { // more than max
-            this.$element.style.width = maxWidth + 'px';
-            this.$element.style.left = 0 + 'px';
+        if (this.isLessThanMinWidth(width)) { // lest than min
+            this.setMinWidth('w');
+        } else if (this.isMoreThanMaxWidth(width, 'w')) { // more than max
+            this.setMaxWidth('w');
         } else {
             this.$element.style.left = config.position.x + 'px';
             this.$element.style.width = width + 'px';
@@ -384,12 +377,11 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
     private resizeToEast(config: any): void {
         const width = config.startData.width + config.moveEvent.clientX - config.startEvent.clientX + config.scrollDiffX;
-        const maxWidth = (this.gridster.options.lanes - this.item.x) * this.gridster.cellWidth;
 
-        if (this.gridster.options.direction !== 'horizontal' && maxWidth < width) {
-            this.$element.style.width = maxWidth + 'px';
-        } else if (this.gridster.cellWidth > width) {
-            this.$element.style.width = this.gridster.cellWidth + 'px';
+        if (this.isMoreThanMaxWidth(width, 'e')) {
+            this.setMaxWidth('e');
+        } else if (this.isLessThanMinWidth(width)) {
+            this.setMinWidth('e');
         } else {
             this.$element.style.width = width + 'px';
         }
@@ -397,14 +389,129 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
     private resizeToSouth(config: any): void {
         const height = config.startData.height + config.moveEvent.clientY - config.startEvent.clientY + config.scrollDiffY;
-        const maxHeight = (this.gridster.options.lanes - this.item.y) * this.gridster.cellHeight;
 
-        if (this.gridster.options.direction === 'horizontal' && maxHeight < height) {
-            this.$element.style.height = maxHeight + 'px';
-        } else if (this.gridster.cellHeight > height) {
-            this.$element.style.height = this.gridster.cellHeight + 'px';
+        if (this.isMoreThanMaxHeight(height, 's')) {
+            this.setMaxHeight('s');
+        } else if (this.isLessThanMinHeight(height)) {
+            this.setMinHeight('s');
         } else {
             this.$element.style.height = height + 'px';
+        }
+    }
+
+    private isLessThanMinHeight(height: number): boolean {
+        return (this.gridster.cellHeight * this.gridster.options.minHeight) > height;
+    }
+
+    private setMinHeight(direction: string): void {
+        if(direction === 'n') {
+            this.$element.style.height = (this.gridster.options.minHeight * this.gridster.cellHeight) + 'px';
+            this.$element.style.top =
+                ((this.item.y + this.item.h - this.gridster.options.minHeight) * this.gridster.cellHeight) + 'px';
+        }
+        else {
+            this.$element.style.height = (this.gridster.options.minHeight * this.gridster.cellHeight) + 'px';
+        }
+    }
+
+    private isLessThanMinWidth(width: number): boolean {
+        return (this.gridster.cellWidth * this.gridster.options.minWidth) > width;
+    }
+
+    private setMinWidth(direction: string): void {
+        if(direction === 'w') {
+            this.$element.style.width = (this.gridster.options.minWidth * this.gridster.cellWidth) + 'px';
+            this.$element.style.left =
+                ((this.item.x + this.item.w - this.gridster.options.minWidth) * this.gridster.cellWidth) + 'px';
+        }
+        else {
+            this.$element.style.width = (this.gridster.options.minWidth * this.gridster.cellWidth) + 'px';
+        }
+    }
+
+    private isMoreThanMaxHeight(height: number, direction: string): boolean {
+        let maxHeight;
+
+        if(direction === 'n') {
+            maxHeight = Math.min(
+                    (this.item.y + this.item.h),
+                    this.gridster.options.maxHeight || (this.item.y + this.item.h)
+                ) * this.gridster.cellHeight;
+
+            return maxHeight < height;
+        }
+        else {
+            maxHeight = Math.min(
+                    (this.gridster.options.lanes - this.item.y),
+                    this.gridster.options.maxHeight || (this.gridster.options.lanes - this.item.y)
+                ) * this.gridster.cellHeight;
+
+            return maxHeight < height;
+        }
+    }
+
+    private setMaxHeight(direction: string): void {
+        let maxHeight;
+
+        if(direction === 'n') {
+            maxHeight = Math.min(
+                    (this.item.y + this.item.h),
+                    this.gridster.options.maxHeight || (this.item.y + this.item.h)
+                ) * this.gridster.cellHeight;
+
+            this.$element.style.height = maxHeight + 'px';
+            this.$element.style.top = 0 + 'px';
+        }
+        else {
+            maxHeight = Math.min(
+                    (this.gridster.options.lanes - this.item.y),
+                    this.gridster.options.maxHeight || (this.gridster.options.lanes - this.item.y)
+                ) * this.gridster.cellHeight;
+
+            this.$element.style.height = maxHeight + 'px';
+        }
+     }
+
+    private isMoreThanMaxWidth(width: number, direction: string): boolean {
+        let maxWidth;
+
+        if(direction === 'w') {
+            maxWidth = Math.min(
+                    (this.item.x + this.item.w),
+                    this.gridster.options.maxWidth || (this.item.x + this.item.w)
+                ) * this.gridster.cellWidth;
+
+            return maxWidth < width;
+        }
+        else {
+            maxWidth = Math.min(
+                    (this.gridster.options.lanes - this.item.x),
+                    this.gridster.options.maxWidth || (this.gridster.options.lanes - this.item.x)
+                ) * this.gridster.cellWidth;
+
+            return maxWidth < width;
+        }
+    }
+
+    private setMaxWidth(direction: string): void {
+        let maxWidth;
+
+        if(direction === 'w') {
+            maxWidth = Math.min(
+                    (this.item.x + this.item.w),
+                    this.gridster.options.maxWidth || (this.item.x + this.item.w)
+                ) * this.gridster.cellWidth;
+
+            this.$element.style.width = maxWidth + 'px';
+            this.$element.style.left = 0 + 'px';
+        }
+        else {
+            maxWidth = Math.min(
+                    (this.gridster.options.lanes - this.item.x),
+                    this.gridster.options.maxWidth || (this.gridster.options.lanes - this.item.x)
+                ) * this.gridster.cellWidth;
+
+            this.$element.style.width = maxWidth + 'px';
         }
     }
 }
