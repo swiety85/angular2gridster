@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { GridsterComponent } from './gridster/gridster.component';
 import { IGridsterOptions } from './gridster/IGridsterOptions';
 import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions';
@@ -9,6 +9,11 @@ import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  @ViewChild(GridsterComponent) gridster: GridsterComponent;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.gridster.reload();
+  }
   gridsterOptions: IGridsterOptions = {
     lanes: 5,
     direction: 'vertical',
