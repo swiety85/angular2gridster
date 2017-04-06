@@ -34,7 +34,9 @@ export class GridsterService {
         itemSelector: 'li[data-w]',
         widthHeightRatio: 1,
         dragAndDrop: true,
-        resizable: false
+        resizable: false,
+        minWidth: 1,
+        minHeight: 1
     };
 
     gridsterRect: ClientRect;
@@ -113,8 +115,6 @@ export class GridsterService {
     }
 
     onResizeStart(item: GridListItem) {
-
-
         this.currentElement = item.$element;
 
         this._items = this.copyItems();

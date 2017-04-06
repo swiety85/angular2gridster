@@ -6,4 +6,8 @@ export interface IGridsterOptions {
     dragAndDrop?: boolean;
     itemSelector?: string;
     resizable?: boolean;
+    minWidth?: number;
+    minHeight?: number;
+    maxWidth?: number;
+    maxHeight?: number;
 }
