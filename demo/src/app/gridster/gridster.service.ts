@@ -115,8 +115,6 @@ export class GridsterService {
     }
 
     onResizeStart(item: GridListItem) {
-
-
         this.currentElement = item.$element;
 
         this._items = this.copyItems();

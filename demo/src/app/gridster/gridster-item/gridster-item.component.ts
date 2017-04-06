@@ -457,7 +457,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                 ) * this.gridster.cellHeight;
 
             this.$element.style.height = maxHeight + 'px';
-            this.$element.style.top = 0 + 'px';
+            this.$element.style.top = (this.item.y * this.gridster.cellHeight) + 'px';
         }
         else {
             maxHeight = Math.min(
@@ -500,7 +500,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                 ) * this.gridster.cellWidth;
 
             this.$element.style.width = maxWidth + 'px';
-            this.$element.style.left = 0 + 'px';
+            this.$element.style.left = (this.item.x * this.gridster.cellWidth) + 'px';
         }
         else {
             maxWidth = Math.min(
