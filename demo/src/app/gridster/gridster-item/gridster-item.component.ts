@@ -266,9 +266,6 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                 .subscribe(() => {
                     this.isResizing = false;
 
-                    this.wChange.emit(this.item.w);
-                    this.hChange.emit(this.item.h);
-
                     this.gridster.onResizeStop(this.item);
                 });
 
