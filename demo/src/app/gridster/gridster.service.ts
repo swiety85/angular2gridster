@@ -136,24 +136,12 @@ export class GridsterService {
             // Regenerate the grid with the positions from when the drag started
             this.restoreCachedItems();
             this.gridList.generateGrid();
-        }
 
-        if (positionChanged && !sizeChanged) {
-            this.previousDragPosition = newPosition;
-
-            this.gridList.moveItemToPosition(item, newPosition);
-        } else if (sizeChanged && !positionChanged) {
-            this.previousDragSize = newSize;
-
-            this.gridList.resizeItem(item, {w: newSize[0], h: newSize[1]});
-        } else if (sizeChanged && positionChanged) {
             this.previousDragPosition = newPosition;
             this.previousDragSize = newSize;
 
             this.gridList.moveAndResize(item, newPosition, {w: newSize[0], h: newSize[1]});
-        }
 
-        if (sizeChanged || positionChanged) {
             // Visually update item positions and highlight shape
             this.applyPositionToItems();
             this.highlightPositionForItem(item);

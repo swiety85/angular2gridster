@@ -202,7 +202,8 @@ export class GridList {
         this.updateItemPosition(item, [position.x, position.y]);
         this.updateItemSize(item, width, height);
 
-        this.resolveCollisions(item);
+        //this.resolveCollisions(item);
+        this.pullItemsToLeft(item);
     }
 
     moveItemToPosition (item: GridListItem, newPosition: Array<number>) {
@@ -250,9 +251,9 @@ export class GridList {
 
         this.updateItemSize(item, width, height);
 
-        this.resolveCollisions(item);
+        //this.resolveCollisions(item);
 
-        this.pullItemsToLeft();
+        this.pullItemsToLeft(item);
     }
     /**
      * Compare the current items against a previous snapshot and return only
