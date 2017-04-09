@@ -17,8 +17,8 @@
         <input type="radio" [(ngModel)]="gridsterOptions.direction" value="vertical"
                (change)="gridster.setOption('direction', 'vertical').reload()">Vertical
     </label>
-    <!--<br>-->
-    <!--<button (click)="swap()">Swap 1<->4 </button> <button (click)="addWidget(gridster)">Add widget (5 position) </button>-->
+    <br>
+    Max size: {{gridsterOptions.maxWidth}} x {{gridsterOptions.maxHeight}}
 </div>
 <div class="widgetbar">
     <div gridsterItemPrototype [config]="{helper: true}" [w]="1" [h]="1"
@@ -66,10 +66,11 @@
 <div class="main-content">
 
     <gridster [options]="gridsterOptions" [draggableOptions]="gridsterDraggableOptions"
-              (gridsterPositionChange)="logChanges($event)" #gridster>
+              (gridsterPositionChange)="logChanges($event)" (resize)="resize($event)" #gridster>
 
-        <gridster-item *ngFor="let widget of widgets; let indx = index" [(x)]="widget.x" [(y)]="widget.y" [w]="widget.w"
-                       [h]="widget.h">
+        <gridster-item *ngFor="let widget of widgets; let indx = index"
+                       [(x)]="widget.x" [(y)]="widget.y"
+                       [(w)]="widget.w" [(h)]="widget.h">
 
             <div class="panel-heading">
                 <h5 class="panel-title">{{ widget.title }}</h5>
@@ -86,7 +87,8 @@
                     <button (click)="remove($event, indx,gridster)">remove</button>
                 </p>
                 <p>
-                    Position (x,y): ({{widget.x}},{{widget.y}})
+                    Position: {{widget.x}} x {{widget.y}}<br>
+                    Size: {{widget.w}} x {{widget.h}}
                 </p>
                 <p>{{ widget.content }}</p>
             </div>

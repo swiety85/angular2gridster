@@ -80,3 +80,7 @@ as a temporary solution copy files from /src folder to dedicated folder in your 
 
 If the current behavior is a bug or you can illustrate your feature request better with an example, 
 please provide the steps to reproduce and if possible a minimal demo of the problem via plnkr (http://plnkr.co/edit/4pGyURZVVrL6MONXc8A0?p=preview)
+
+## Origin
+
+This project was created on idea of [GridList](https://github.com/hootsuite/grid). Great alternative for Gridster.

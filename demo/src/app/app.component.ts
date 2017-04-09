@@ -17,7 +17,10 @@ export class AppComponent {
   gridsterOptions: IGridsterOptions = {
     lanes: 5,
     direction: 'vertical',
-    dragAndDrop: true
+    dragAndDrop: true,
+    resizable: true,
+    maxWidth: 3,
+    maxHeight: 3
   };
   gridsterDraggableOptions: IGridsterDraggableOptions = {
     handlerClass: 'panel-heading'
@@ -148,4 +151,7 @@ export class AppComponent {
     console.log('widget remove', index);
   }
 
+  resize(item) {
+    console.log('resize', item);
+  }
 }
