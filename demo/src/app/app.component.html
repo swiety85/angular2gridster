@@ -8,6 +8,10 @@
     <button (click)="addLine(gridster)">+</button>
 
     <br>
+        <button (click)="addWidgetWithoutData()">
+            Add widget without data
+        </button>
+    <br>
     Direction
     <label>
         <input type="radio" [(ngModel)]="gridsterOptions.direction" value="horizontal"
@@ -66,7 +70,7 @@
 <div class="main-content">
 
     <gridster [options]="gridsterOptions" [draggableOptions]="gridsterDraggableOptions"
-              (gridsterPositionChange)="logChanges($event)" (resize)="resize($event)" #gridster>
+              (gridsterPositionChange)="logChanges($event)" (resize)="resize($event)" #gridster style="min-height: 500px;">
 
         <gridster-item *ngFor="let widget of widgets; let indx = index"
                        [(x)]="widget.x" [(y)]="widget.y"

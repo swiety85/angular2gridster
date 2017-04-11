@@ -15,8 +15,8 @@ export class AppComponent {
     this.gridster.reload();
   }
   gridsterOptions: IGridsterOptions = {
-    lanes: 5,
-    direction: 'vertical',
+    lanes: 3,
+    direction: 'horizontal',
     dragAndDrop: true,
     resizable: true,
     maxWidth: 3,
@@ -28,7 +28,8 @@ export class AppComponent {
   title = 'Angular2Gridster';
   widgets: Array<any> = [
     {
-      x: 0, y: 0, w: 1, h: 2,
+      // x: 1, y: 0,
+      w: 1, h: 1,
       title: 'Basic form inputs 1',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
       'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
@@ -37,7 +38,7 @@ export class AppComponent {
       'laborum.'
     },
     {
-      x: 1, y: 0, w: 2, h: 1,
+      x: 0, y: 0, w: 2, h: 1,
       title: 'Basic form inputs 2',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
       'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
@@ -46,7 +47,7 @@ export class AppComponent {
       'laborum.'
     },
     {
-      x: 1, y: 1, w: 2, h: 1,
+      x: 0, y: 1, w: 3, h: 2,
       title: 'Basic form inputs 3',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
       'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
@@ -130,6 +131,17 @@ export class AppComponent {
     event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.width = '';
     event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.height = '';
     event.item.itemPrototype.$element.classList.remove('is-over');
+  }
+
+  addWidgetWithoutData() {
+    this.widgets.push({
+      title: 'Basic form inputs X',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
+      'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
+      'commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla ' +
+      'pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est ' +
+      'laborum.'
+    });
   }
 
   addWidget (gridster: GridsterComponent) {

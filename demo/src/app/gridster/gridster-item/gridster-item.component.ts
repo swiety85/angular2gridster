@@ -153,7 +153,6 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                 @Host() gridster: GridsterService) {
 
         this.gridster = gridster;
-
         this.$element = elementRef.nativeElement;
 
         this.item = (new GridListItem()).setFromGridsterItem(this);
@@ -173,16 +172,21 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     }
 
     ngOnInit() {
-        this.gridster.registerItem(this.item);
-        //  only if new item is registered after bootstrap
-        if (this.gridster.$element) {
+        this.w = this.w || this.gridster.options.defaultItemWidth;
+        this.h = this.h || this.gridster.options.defaultItemHeight;
 
-            this.gridster.gridList.resolveCollisions(this.item);
-            this.gridster.reflow();
+        if (this.gridster.$element) {
+            const position = this.gridster.findDefaultPosition(this.item.w, this.item.h);
+
+            this.item.x = position[0];
+            this.item.y = position[1];
         }
 
-        if (this.gridster.options.dragAndDrop) {
-            this.enableDragDrop();
+        if ((this.x || this.x === 0) && (this.y || this.y === 0)) {
+            this.enableItem();
+        }
+        else {
+            this.gridster.disabledItems.push(this.item);
         }
     }
 
@@ -209,6 +213,20 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         });
     }
 
+    public enableItem() {
+        this.gridster.registerItem(this.item);
+        //  only if new item is registered after bootstrap
+        if (this.gridster.$element) {
+
+            this.gridster.gridList.resolveCollisions(this.item);
+            this.gridster.reflow();
+        }
+
+        if (this.gridster.options.dragAndDrop) {
+            this.enableDragDrop();
+        }
+    }
+
     private enableResizable() {
         [].forEach.call(this.$element.querySelectorAll('.gridster-item-resizable-handler'), (handler) => {
             const draggable = new Draggable(handler);
@@ -221,8 +239,6 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             const dragStartSub = draggable.dragStart
                 .subscribe((event: DraggableEvent) => {
                     this.isResizing = true;
-                    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
                     startEvent = event;
                     direction = this.getResizeDirection(handler);
