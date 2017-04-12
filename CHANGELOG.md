@@ -1,3 +1,25 @@
+<a name="0.5.0"></a>
+# [0.5.0]((https://github.com/swiety85/angular2gridster/compare/0.4.1...0.5.0)) (2017-04-12)
+
+
+### Bug Fixes
+
+* **api:** fix two way binding and change event for "x" and "y"
+
+
+### Features
+
+* **resize** provide way to resize widgets by drag by every edge or corner
+* **api** generate most suitable widget positions (x, y) if not given
+* **api** provide two way binding and change event for "w" and "h"
+* **config:** enable/disable drag n drop
+* **config:** enable/disable resize
+* **demo:** update demo to show resize
+* **demo:** update demo to disable/enable dragging and resizing
+* **demo:** update demo to push new widget without defined position
+
+
+
 <a name="0.4.1"></a>
 # [0.4.1]((https://github.com/swiety85/angular2gridster/compare/0.4.0...0.4.1)) (2017-04-01)
 

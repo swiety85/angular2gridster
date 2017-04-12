@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { GridsterComponent } from './gridster/gridster.component';
 import { IGridsterOptions } from './gridster/IGridsterOptions';
 import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions';
@@ -9,10 +9,14 @@ import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  @ViewChild(GridsterComponent) gridster: GridsterComponent;
   gridsterOptions: IGridsterOptions = {
     lanes: 5,
     direction: 'vertical',
-    dragAndDrop: true
+    dragAndDrop: true,
+    resizable: true,
+    maxWidth: 3,
+    maxHeight: 3
   };
   gridsterDraggableOptions: IGridsterDraggableOptions = {
     handlerClass: 'panel-heading'
@@ -20,7 +24,8 @@ export class AppComponent {
   title = 'Angular2Gridster';
   widgets: Array<any> = [
     {
-      x: 0, y: 0, w: 1, h: 2,
+      x: 0, y: 0,
+      w: 1, h: 2,
       title: 'Basic form inputs 1',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
       'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
@@ -56,7 +61,10 @@ export class AppComponent {
       'laborum.'
     }
   ];
-
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.gridster.reload();
+  }
   removeLine (gridster: GridsterComponent) {
     gridster.setOption('lanes', --this.gridsterOptions.lanes)
         .reload();
@@ -124,6 +132,17 @@ export class AppComponent {
     event.item.itemPrototype.$element.classList.remove('is-over');
   }
 
+  addWidgetWithoutData() {
+    this.widgets.push({
+      title: 'Basic form inputs X',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
+      'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
+      'commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla ' +
+      'pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est ' +
+      'laborum.'
+    });
+  }
+
   addWidget (gridster: GridsterComponent) {
     this.widgets.push({
       x: 4, y: 0, w: 1, h: 1,
@@ -143,4 +162,7 @@ export class AppComponent {
     console.log('widget remove', index);
   }
 
+  resize(item) {
+    console.log('resize', item);
+  }
 }

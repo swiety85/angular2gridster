@@ -188,6 +188,23 @@ export class GridList {
         return [newCol, newRow];
     }
 
+    moveAndResize(item: GridListItem, newPosition: Array<number>, size: {w: number, h: number}) {
+        const position = this.getItemPosition({
+            x: newPosition[0],
+            y: newPosition[1],
+            w: item.w,
+            h: item.h
+        });
+        const width = size.w || item.w,
+            height = size.h || item.h;
+
+
+        this.updateItemPosition(item, [position.x, position.y]);
+        this.updateItemSize(item, width, height);
+
+        this.pullItemsToLeft(item);
+    }
+
     moveItemToPosition (item: GridListItem, newPosition: Array<number>) {
         const position = this.getItemPosition({
             x: newPosition[0],
@@ -199,25 +216,6 @@ export class GridList {
 
         this.updateItemPosition(item, [position.x, position.y]);
         this.resolveCollisions(item);
-        // let newItm: any = { w: item.w, h: item.h};
-        // this.setItemPosition(newItm, newPosition);
-        // let collidingItems = this.getItemsCollidingWithItem(newItm);
-        // if (collidingItems.length > 0) {
-        //     let isCollisionPinned = false;
-        //      for (let i = 0; i < collidingItems.length; i++) {
-        //         if (this.items[collidingItems[i]] && this.items[collidingItems[i]].pin){
-        //             isCollisionPinned = true;
-        //             break;
-        //         }
-        //      }
-        //      if (!isCollisionPinned){
-        //         this.updateItemPosition(item, [position.x, position.y]);
-        //         this.resolveCollisions(item);
-        //      }
-        // }else{
-        //     this.updateItemPosition(item, [position.x, position.y]);
-        //     this.resolveCollisions(item);
-        // }
     }
     /**
      * Resize an item and resolve collisions.
@@ -233,9 +231,7 @@ export class GridList {
 
         this.updateItemSize(item, width, height);
 
-        this.resolveCollisions(item);
-
-        this.pullItemsToLeft();
+        this.pullItemsToLeft(item);
     }
     /**
      * Compare the current items against a previous snapshot and return only
@@ -245,7 +241,7 @@ export class GridList {
      * Since both their position and size can change, the items need an
      * additional identifier attribute to match them with their previous state
      */
-    getChangedItems (initialItems: Array<GridListItem>, idAttribute: string) {
+    getChangedItems (initialItems: Array<GridListItem>, idAttribute: string): Array<GridListItem> {
         const changedItems = [];
 
         for (let i = 0; i < initialItems.length; i++) {
@@ -256,6 +252,33 @@ export class GridList {
                 item.w !== initialItems[i].w ||
                 item.h !== initialItems[i].h) {
                 changedItems.push(item);
+            }
+        }
+
+        return changedItems;
+    }
+
+    getChangedItemsMap(initialItems: Array<GridListItem>) {
+        const changedItems = {
+            x: [],
+            y: [],
+            w: [],
+            h: []
+        };
+
+        for (let i = 0; i < initialItems.length; i++) {
+            const item = this.getItemByAttribute('$element', initialItems[i].$element);
+            if (item.x !== initialItems[i].x) {
+                changedItems.x.push(item);
+            }
+            if (item.y !== initialItems[i].y) {
+                changedItems.y.push(item);
+            }
+            if (item.w !== initialItems[i].w) {
+                changedItems.w.push(item);
+            }
+            if (item.h !== initialItems[i].h) {
+                changedItems.h.push(item);
             }
         }
 

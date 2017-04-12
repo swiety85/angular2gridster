@@ -2,9 +2,9 @@ import {GridsterItemComponent} from '../gridster-item/gridster-item.component';
 import {GridsterItemPrototypeDirective} from '../gridster-prototype/gridster-item-prototype.directive';
 
 export class GridListItem {
-    private itemComponent: GridsterItemComponent;
-    private itemPrototype: GridsterItemPrototypeDirective;
-    private itemObject: Object;
+    itemComponent: GridsterItemComponent;
+    itemPrototype: GridsterItemPrototypeDirective;
+    itemObject: Object;
 
     get $element () {
         return this.getItem().$element;
