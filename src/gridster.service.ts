@@ -20,6 +20,7 @@ export class GridsterService {
 
     items: Array<GridListItem> = [];
     _items: Array<GridListItem>;
+    disabledItems: Array<GridListItem> = [];
 
     options: IGridsterOptions;
     draggableOptions: IGridsterDraggableOptions;
@@ -36,7 +37,9 @@ export class GridsterService {
         dragAndDrop: true,
         resizable: false,
         minWidth: 1,
-        minHeight: 1
+        minHeight: 1,
+        defaultItemWidth: 1,
+        defaultItemHeight: 1
     };
 
     gridsterRect: ClientRect;
@@ -94,6 +97,8 @@ export class GridsterService {
 
         this.initGridList();
         this.reflow();
+
+        this.enableDisabledItems();
     }
 
     render () {
@@ -106,6 +111,17 @@ export class GridsterService {
     reflow () {
         this.calculateCellSize();
         this.render();
+    }
+
+    enableDisabledItems() {
+        while(this.disabledItems.length) {
+            const item = this.disabledItems.shift();
+            const position = this.findDefaultPosition(item.w, item.h);
+
+            item.x = position[0];
+            item.y = position[1];
+            item.itemComponent.enableItem();
+        }
     }
 
     private copyItems (): Array<GridListItem> {
@@ -136,24 +152,12 @@ export class GridsterService {
             // Regenerate the grid with the positions from when the drag started
             this.restoreCachedItems();
             this.gridList.generateGrid();
-        }
 
-        if (positionChanged && !sizeChanged) {
-            this.previousDragPosition = newPosition;
-
-            this.gridList.moveItemToPosition(item, newPosition);
-        } else if (sizeChanged && !positionChanged) {
-            this.previousDragSize = newSize;
-
-            this.gridList.resizeItem(item, {w: newSize[0], h: newSize[1]});
-        } else if (sizeChanged && positionChanged) {
             this.previousDragPosition = newPosition;
             this.previousDragSize = newSize;
 
             this.gridList.moveAndResize(item, newPosition, {w: newSize[0], h: newSize[1]});
-        }
 
-        if (sizeChanged || positionChanged) {
             // Visually update item positions and highlight shape
             this.applyPositionToItems();
             this.highlightPositionForItem(item);
@@ -261,6 +265,54 @@ export class GridsterService {
             right: relativeElRect.right - elRect.right,
             bottom: relativeElRect.bottom - elRect.bottom
         };
+    }
+
+    public findDefaultPosition(width: number, height: number) {
+
+        if (this.options.direction === 'horizontal') {
+            return this.findDefaultPositionHorizontal(width, height);
+        }
+        return this.findDefaultPositionVertical(width, height);
+    }
+
+    private findDefaultPositionHorizontal(width: number, height: number) {
+        for (const col of this.gridList.grid) {
+            const colIdx = this.gridList.grid.indexOf(col);
+            let rowIdx = 0;
+            while (rowIdx < (col.length - height + 1)) {
+                if(!this.checkItemsInArea(colIdx, colIdx + width - 1, rowIdx, rowIdx + height - 1)) {
+                    return [colIdx, rowIdx];
+                }
+                rowIdx++;
+            }
+        }
+        return [ this.gridList.grid.length, 0 ];
+    }
+
+    private findDefaultPositionVertical(width: number, height: number) {
+
+        for (const row of this.gridList.grid) {
+            const rowIdx = this.gridList.grid.indexOf(row);
+            let colIdx = 0;
+            while (colIdx < (row.length - width + 1)) {
+                if(!this.checkItemsInArea(rowIdx, rowIdx + height - 1, colIdx, colIdx + width - 1)) {
+                    return [colIdx, rowIdx];
+                }
+                colIdx++;
+            }
+        }
+        return [ 0 , this.gridList.grid.length];
+    }
+
+    private checkItemsInArea(rowStart: number, rowEnd: number, colStart: number, colEnd: number) {
+        for (let i = rowStart; i <= rowEnd; i++) {
+            for (let j = colStart; j <= colEnd; j++) {
+                if (this.gridList.grid[i] && this.gridList.grid[i][j]) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

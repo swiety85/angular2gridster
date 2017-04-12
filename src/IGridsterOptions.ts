@@ -10,4 +10,6 @@ export interface IGridsterOptions {
     minHeight?: number;
     maxWidth?: number;
     maxHeight?: number;
+    defaultItemWidth?: number;
+    defaultItemHeight?: number;
 }

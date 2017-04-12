@@ -153,7 +153,6 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                 @Host() gridster: GridsterService) {
 
         this.gridster = gridster;
-
         this.$element = elementRef.nativeElement;
 
         this.item = (new GridListItem()).setFromGridsterItem(this);
@@ -173,16 +172,21 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     }
 
     ngOnInit() {
-        this.gridster.registerItem(this.item);
-        //  only if new item is registered after bootstrap
-        if (this.gridster.$element) {
+        this.w = this.w || this.gridster.options.defaultItemWidth;
+        this.h = this.h || this.gridster.options.defaultItemHeight;
 
-            this.gridster.gridList.resolveCollisions(this.item);
-            this.gridster.reflow();
+        if (this.gridster.$element) {
+            const position = this.gridster.findDefaultPosition(this.item.w, this.item.h);
+
+            this.item.x = position[0];
+            this.item.y = position[1];
         }
 
-        if (this.gridster.options.dragAndDrop) {
-            this.enableDragDrop();
+        if ((this.x || this.x === 0) && (this.y || this.y === 0)) {
+            this.enableItem();
+        }
+        else {
+            this.gridster.disabledItems.push(this.item);
         }
     }
 
@@ -209,6 +213,20 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         });
     }
 
+    public enableItem() {
+        this.gridster.registerItem(this.item);
+        //  only if new item is registered after bootstrap
+        if (this.gridster.$element) {
+
+            this.gridster.gridList.resolveCollisions(this.item);
+            this.gridster.reflow();
+        }
+
+        if (this.gridster.options.dragAndDrop) {
+            this.enableDragDrop();
+        }
+    }
+
     private enableResizable() {
         [].forEach.call(this.$element.querySelectorAll('.gridster-item-resizable-handler'), (handler) => {
             const draggable = new Draggable(handler);
@@ -221,20 +239,11 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             const dragStartSub = draggable.dragStart
                 .subscribe((event: DraggableEvent) => {
                     this.isResizing = true;
-                    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
                     startEvent = event;
-                    startData = {
-                        top: parseInt(this.$element.style.top, 10),
-                        left: parseInt(this.$element.style.left, 10),
-                        height: parseInt(this.$element.style.height, 10),
-                        width: parseInt(this.$element.style.width, 10),
-                        scrollLeft,
-                        scrollTop
-                    };
-                    cursorToElementPosition = event.getRelativeCoordinates(this.$element);
                     direction = this.getResizeDirection(handler);
+                    startData = this.createResizeStartObject(direction);
+                    cursorToElementPosition = event.getRelativeCoordinates(this.$element);
 
                     this.gridster.onResizeStart(this.item);
                 });
@@ -249,9 +258,9 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                         startData,
                         position: {
                             x: event.clientX - cursorToElementPosition.x -
-                                this.gridster.gridsterOffset.left - this.gridster.gridsterRect.left,
+                            this.gridster.gridsterOffset.left - this.gridster.gridsterRect.left,
                             y: event.clientY - cursorToElementPosition.y -
-                                this.gridster.gridsterOffset.top - this.gridster.gridsterRect.top
+                            this.gridster.gridsterOffset.top - this.gridster.gridsterRect.top
                         },
                         startEvent,
                         moveEvent: event,
@@ -276,8 +285,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     private enableDragDrop() {
         let cursorToElementPosition;
         const draggable = new Draggable(this.$element, {
-                handlerClass: this.gridster.draggableOptions.handlerClass
-            });
+            handlerClass: this.gridster.draggableOptions.handlerClass
+        });
 
         const dragStartSub = draggable.dragStart
             .subscribe((event: DraggableEvent) => {
@@ -290,9 +299,9 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         const dragSub = draggable.dragMove
             .subscribe((event: DraggableEvent) => {
                 this.$element.style.top = (event.clientY - cursorToElementPosition.y -
-                        this.gridster.gridsterOffset.top - this.gridster.gridsterRect.top) + 'px';
+                    this.gridster.gridsterOffset.top - this.gridster.gridsterRect.top) + 'px';
                 this.$element.style.left = (event.clientX - cursorToElementPosition.x -
-                        this.gridster.gridsterOffset.left - this.gridster.gridsterRect.left) + 'px';
+                    this.gridster.gridsterOffset.left - this.gridster.gridsterRect.left) + 'px';
 
                 this.gridster.onDrag(this.item);
             });
@@ -304,6 +313,40 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             });
 
         this.subscriptions = this.subscriptions.concat([dragStartSub, dragSub, dragStopSub]);
+    }
+
+    private createResizeStartObject(direction: string) {
+        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        return {
+            top: parseInt(this.$element.style.top, 10),
+            left: parseInt(this.$element.style.left, 10),
+            height: parseInt(this.$element.style.height, 10),
+            width: parseInt(this.$element.style.width, 10),
+            minX: Math.max(this.item.x + this.item.w - this.gridster.options.maxWidth, 0),
+            maxX: this.item.x + this.item.w - this.gridster.options.minWidth,
+            minY: Math.max(this.item.y + this.item.h - this.gridster.options.maxHeight, 0),
+            maxY: this.item.y + this.item.h - this.gridster.options.minHeight,
+            minW: this.gridster.options.minWidth,
+            maxW: Math.min(
+                this.gridster.options.maxWidth,
+                (this.gridster.options.direction === 'vertical' && direction.indexOf('w') < 0) ?
+                this.gridster.options.lanes - this.item.x : this.gridster.options.maxWidth,
+                direction.indexOf('w') >= 0 ?
+                this.item.x + this.item.w : this.gridster.options.maxWidth
+            ),
+            minH: this.gridster.options.minHeight,
+            maxH: Math.min(
+                this.gridster.options.maxHeight,
+                (this.gridster.options.direction === 'horizontal' && direction.indexOf('n') < 0) ?
+                this.gridster.options.lanes - this.item.y : this.gridster.options.maxHeight,
+                direction.indexOf('n') >= 0 ?
+                this.item.y + this.item.h : this.gridster.options.maxHeight
+            ),
+            scrollLeft,
+            scrollTop
+        };
     }
 
     /**
@@ -349,10 +392,12 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     private resizeToNorth(config: any): void {
         const height = config.startData.height + config.startEvent.clientY - config.moveEvent.clientY - config.scrollDiffY;
 
-        if (this.isLessThanMinHeight(height)) { // lest than min
-            this.setMinHeight('n');
-        } else if (this.isMoreThanMaxHeight(height, 'n')) { // more than max
-            this.setMaxHeight('n');
+        // if (this.isLessThanMinHeight(height)) { // lest than min
+        if (height < (config.startData.minH * this.gridster.cellHeight)) {
+            this.setMinHeight('n', config);
+            // } else if (this.isMoreThanMaxHeight(height, 'n')) { // more than max
+        } else if (height > (config.startData.maxH * this.gridster.cellHeight)) {
+            this.setMaxHeight('n', config);
         } else {
             this.$element.style.top = config.position.y + 'px';
             this.$element.style.height = height + 'px';
@@ -362,10 +407,12 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     private resizeToWest(config: any): void {
         const width = config.startData.width + config.startEvent.clientX - config.moveEvent.clientX - config.scrollDiffX;
 
-        if (this.isLessThanMinWidth(width)) { // lest than min
-            this.setMinWidth('w');
-        } else if (this.isMoreThanMaxWidth(width, 'w')) { // more than max
-            this.setMaxWidth('w');
+        // if (this.isLessThanMinWidth(width)) { // lest than min
+        if (width < (config.startData.minW * this.gridster.cellWidth)) {
+            this.setMinWidth('w', config);
+            // } else if (this.isMoreThanMaxWidth(width, 'w')) { // more than max
+        } else if (width > (config.startData.maxW * this.gridster.cellWidth)) {
+            this.setMaxWidth('w', config);
         } else {
             this.$element.style.left = config.position.x + 'px';
             this.$element.style.width = width + 'px';
@@ -375,10 +422,12 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     private resizeToEast(config: any): void {
         const width = config.startData.width + config.moveEvent.clientX - config.startEvent.clientX + config.scrollDiffX;
 
-        if (this.isMoreThanMaxWidth(width, 'e')) {
-            this.setMaxWidth('e');
-        } else if (this.isLessThanMinWidth(width)) {
-            this.setMinWidth('e');
+        // if (this.isMoreThanMaxWidth(width, 'e')) {
+        if (width > (config.startData.maxW * this.gridster.cellWidth)) {
+            this.setMaxWidth('e', config);
+            // } else if (this.isLessThanMinWidth(width)) {
+        } else if (width < (config.startData.minW * this.gridster.cellWidth)) {
+            this.setMinWidth('e', config);
         } else {
             this.$element.style.width = width + 'px';
         }
@@ -387,128 +436,52 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     private resizeToSouth(config: any): void {
         const height = config.startData.height + config.moveEvent.clientY - config.startEvent.clientY + config.scrollDiffY;
 
-        if (this.isMoreThanMaxHeight(height, 's')) {
-            this.setMaxHeight('s');
-        } else if (this.isLessThanMinHeight(height)) {
-            this.setMinHeight('s');
+        // if (this.isMoreThanMaxHeight(height, 's')) {
+        if (height > config.startData.maxH * this.gridster.cellHeight) {
+            this.setMaxHeight('s', config);
+            // } else if (this.isLessThanMinHeight(height)) {
+        } else if (height < config.startData.minH * this.gridster.cellHeight) {
+            this.setMinHeight('s', config);
         } else {
             this.$element.style.height = height + 'px';
         }
     }
 
-    private isLessThanMinHeight(height: number): boolean {
-        return (this.gridster.cellHeight * this.gridster.options.minHeight) > height;
-    }
-
-    private setMinHeight(direction: string): void {
-        if(direction === 'n') {
-            this.$element.style.height = (this.gridster.options.minHeight * this.gridster.cellHeight) + 'px';
-            this.$element.style.top =
-                ((this.item.y + this.item.h - this.gridster.options.minHeight) * this.gridster.cellHeight) + 'px';
-        }
-        else {
-            this.$element.style.height = (this.gridster.options.minHeight * this.gridster.cellHeight) + 'px';
+    private setMinHeight(direction: string, config: any): void {
+        if (direction === 'n') {
+            this.$element.style.height = (config.startData.minH * this.gridster.cellHeight) + 'px';
+            this.$element.style.top = (config.startData.maxY * this.gridster.cellHeight) + 'px';
+        } else {
+            this.$element.style.height = (config.startData.minH * this.gridster.cellHeight) + 'px';
         }
     }
 
-    private isLessThanMinWidth(width: number): boolean {
-        return (this.gridster.cellWidth * this.gridster.options.minWidth) > width;
-    }
-
-    private setMinWidth(direction: string): void {
-        if(direction === 'w') {
-            this.$element.style.width = (this.gridster.options.minWidth * this.gridster.cellWidth) + 'px';
-            this.$element.style.left =
-                ((this.item.x + this.item.w - this.gridster.options.minWidth) * this.gridster.cellWidth) + 'px';
-        }
-        else {
-            this.$element.style.width = (this.gridster.options.minWidth * this.gridster.cellWidth) + 'px';
+    private setMinWidth(direction: string, config: any): void {
+        if (direction === 'w') {
+            this.$element.style.width = (config.startData.minW * this.gridster.cellWidth) + 'px';
+            this.$element.style.left = (config.startData.maxX * this.gridster.cellWidth) + 'px';
+        } else {
+            this.$element.style.width = (config.startData.minW * this.gridster.cellWidth) + 'px';
         }
     }
 
-    private isMoreThanMaxHeight(height: number, direction: string): boolean {
-        let maxHeight;
+    private setMaxHeight(direction: string, config: any): void {
 
-        if(direction === 'n') {
-            maxHeight = Math.min(
-                    (this.item.y + this.item.h),
-                    this.gridster.options.maxHeight || (this.item.y + this.item.h)
-                ) * this.gridster.cellHeight;
-
-            return maxHeight < height;
-        }
-        else {
-            maxHeight = Math.min(
-                    (this.gridster.options.lanes - this.item.y),
-                    this.gridster.options.maxHeight || (this.gridster.options.lanes - this.item.y)
-                ) * this.gridster.cellHeight;
-
-            return maxHeight < height;
+        if (direction === 'n') {
+            this.$element.style.height = (config.startData.maxH * this.gridster.cellHeight) + 'px';
+            this.$element.style.top = (config.startData.minY * this.gridster.cellHeight) + 'px';
+        } else {
+            this.$element.style.height = (config.startData.maxH * this.gridster.cellHeight) + 'px';
         }
     }
 
-    private setMaxHeight(direction: string): void {
-        let maxHeight;
+    private setMaxWidth(direction: string, config: any): void {
 
-        if(direction === 'n') {
-            maxHeight = Math.min(
-                    (this.item.y + this.item.h),
-                    this.gridster.options.maxHeight || (this.item.y + this.item.h)
-                ) * this.gridster.cellHeight;
-
-            this.$element.style.height = maxHeight + 'px';
-            this.$element.style.top = (this.item.y * this.gridster.cellHeight) + 'px';
-        }
-        else {
-            maxHeight = Math.min(
-                    (this.gridster.options.lanes - this.item.y),
-                    this.gridster.options.maxHeight || (this.gridster.options.lanes - this.item.y)
-                ) * this.gridster.cellHeight;
-
-            this.$element.style.height = maxHeight + 'px';
-        }
-     }
-
-    private isMoreThanMaxWidth(width: number, direction: string): boolean {
-        let maxWidth;
-
-        if(direction === 'w') {
-            maxWidth = Math.min(
-                    (this.item.x + this.item.w),
-                    this.gridster.options.maxWidth || (this.item.x + this.item.w)
-                ) * this.gridster.cellWidth;
-
-            return maxWidth < width;
-        }
-        else {
-            maxWidth = Math.min(
-                    (this.gridster.options.lanes - this.item.x),
-                    this.gridster.options.maxWidth || (this.gridster.options.lanes - this.item.x)
-                ) * this.gridster.cellWidth;
-
-            return maxWidth < width;
-        }
-    }
-
-    private setMaxWidth(direction: string): void {
-        let maxWidth;
-
-        if(direction === 'w') {
-            maxWidth = Math.min(
-                    (this.item.x + this.item.w),
-                    this.gridster.options.maxWidth || (this.item.x + this.item.w)
-                ) * this.gridster.cellWidth;
-
-            this.$element.style.width = maxWidth + 'px';
-            this.$element.style.left = (this.item.x * this.gridster.cellWidth) + 'px';
-        }
-        else {
-            maxWidth = Math.min(
-                    (this.gridster.options.lanes - this.item.x),
-                    this.gridster.options.maxWidth || (this.gridster.options.lanes - this.item.x)
-                ) * this.gridster.cellWidth;
-
-            this.$element.style.width = maxWidth + 'px';
+        if (direction === 'w') {
+            this.$element.style.width = (config.startData.maxW * this.gridster.cellWidth) + 'px';
+            this.$element.style.left = (config.startData.minX * this.gridster.cellWidth) + 'px';
+        } else {
+            this.$element.style.width = (config.startData.maxW * this.gridster.cellWidth) + 'px';
         }
     }
 }
