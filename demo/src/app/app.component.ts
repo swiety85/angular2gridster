@@ -11,8 +11,8 @@ import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions'
 export class AppComponent {
   @ViewChild(GridsterComponent) gridster: GridsterComponent;
   gridsterOptions: IGridsterOptions = {
-    lanes: 4,
-    direction: 'horizontal',
+    lanes: 5,
+    direction: 'vertical',
     dragAndDrop: true,
     resizable: true,
     maxWidth: 3,

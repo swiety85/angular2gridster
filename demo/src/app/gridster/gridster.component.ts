@@ -12,6 +12,7 @@ import {IGridsterOptions} from './IGridsterOptions';
 import {IGridsterDraggableOptions} from './IGridsterDraggableOptions';
 import {GridsterPrototypeService} from './gridster-prototype/gridster-prototype.service';
 import {GridsterItemPrototypeDirective} from './gridster-prototype/gridster-item-prototype.directive';
+import {GridListItem} from "./gridList/GridListItem";
 
 
 @Component({
@@ -98,7 +99,7 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
         this.gridster.$positionHighlight = this.$positionHighlight.nativeElement;
         // detectChanges is required because gridster.start changes values uses in template
         // this.cdr.detectChanges();
-        this.cdr.detach();
+        //this.cdr.detach();
     }
 
     ngOnDestroy() {
@@ -175,6 +176,22 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
      * @return {GridsterComponent}
      */
     setOption(name: string, value: any) {
+        if (name === 'dragAndDrop') {
+            if (value) {
+                this.enableDraggable();
+            }
+            else {
+                this.disableDraggable();
+            }
+        }
+        if (name === 'resizable') {
+            if (value) {
+                this.enableResizable();
+            }
+            else {
+                this.disableResizable();
+            }
+        }
         if (name === 'lanes') {
             this.gridster.options.lanes = value;
         }
@@ -190,5 +207,33 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
         this.gridster.reflow();
 
         return this;
+    }
+
+    private enableDraggable() {
+        this.gridster.options.dragAndDrop = true;
+        this.gridster.items.forEach((item: GridListItem) => {
+            item.itemComponent.enableDragDrop();
+        });
+    }
+
+    private disableDraggable() {
+        this.gridster.options.dragAndDrop = false;
+        this.gridster.items.forEach((item: GridListItem) => {
+            item.itemComponent.disableDraggable();
+        });
+    }
+
+    private enableResizable() {
+        this.gridster.options.resizable = true;
+        this.gridster.items.forEach((item: GridListItem) => {
+            item.itemComponent.enableResizable();
+        });
+    }
+
+    private disableResizable() {
+        this.gridster.options.resizable = false;
+        this.gridster.items.forEach((item: GridListItem) => {
+            item.itemComponent.disableResizable();
+        });
     }
 }

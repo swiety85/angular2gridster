@@ -10,6 +10,12 @@
     <button (click)="addWidgetWithoutData()">
         Add widget without data
     </button>
+
+    <input type="checkbox" [(ngModel)]="gridsterOptions.dragAndDrop" value="true"
+                     (change)="gridster.setOption('dragAndDrop', gridsterOptions.dragAndDrop)"> Draggable
+
+    <input type="checkbox" [(ngModel)]="gridsterOptions.resizable" value="true"
+                     (change)="gridster.setOption('resizable', gridsterOptions.resizable)"> Resizable
     <br>
     Direction
     <label>
@@ -21,7 +27,7 @@
                (change)="gridster.setOption('direction', 'vertical').reload()">Vertical
     </label>
     <br>
-    Max size: {{gridsterOptions.maxWidth}} x {{gridsterOptions.maxHeight}}
+    HorizontalMax size: {{gridsterOptions.maxWidth}} x {{gridsterOptions.maxHeight}}
 </div>
 <div class="widgetbar">
     <div gridsterItemPrototype [config]="{helper: true}" [w]="1" [h]="1"
