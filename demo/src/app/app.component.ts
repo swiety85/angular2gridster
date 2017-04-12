@@ -10,12 +10,8 @@ import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions'
 })
 export class AppComponent {
   @ViewChild(GridsterComponent) gridster: GridsterComponent;
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.gridster.reload();
-  }
   gridsterOptions: IGridsterOptions = {
-    lanes: 3,
+    lanes: 4,
     direction: 'horizontal',
     dragAndDrop: true,
     resizable: true,
@@ -28,8 +24,8 @@ export class AppComponent {
   title = 'Angular2Gridster';
   widgets: Array<any> = [
     {
-      // x: 1, y: 0,
-      w: 1, h: 1,
+      x: 0, y: 0,
+      w: 1, h: 2,
       title: 'Basic form inputs 1',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
       'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
@@ -38,7 +34,7 @@ export class AppComponent {
       'laborum.'
     },
     {
-      x: 0, y: 0, w: 2, h: 1,
+      x: 1, y: 0, w: 2, h: 1,
       title: 'Basic form inputs 2',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
       'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
@@ -47,7 +43,7 @@ export class AppComponent {
       'laborum.'
     },
     {
-      x: 0, y: 1, w: 3, h: 2,
+      x: 1, y: 1, w: 2, h: 1,
       title: 'Basic form inputs 3',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
       'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
@@ -65,7 +61,10 @@ export class AppComponent {
       'laborum.'
     }
   ];
-
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.gridster.reload();
+  }
   removeLine (gridster: GridsterComponent) {
     gridster.setOption('lanes', --this.gridsterOptions.lanes)
         .reload();
