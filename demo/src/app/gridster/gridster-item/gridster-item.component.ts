@@ -184,8 +184,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
         if ((this.x || this.x === 0) && (this.y || this.y === 0)) {
             this.enableItem();
-        }
-        else {
+        } else {
             this.gridster.disabledItems.push(this.item);
         }
     }
@@ -390,7 +389,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     }
 
     private resizeToNorth(config: any): void {
-        const height = config.startData.height + config.startEvent.clientY - config.moveEvent.clientY - config.scrollDiffY;
+        const height = config.startData.height + config.startEvent.clientY -
+            config.moveEvent.clientY - config.scrollDiffY;
 
         // if (this.isLessThanMinHeight(height)) { // lest than min
         if (height < (config.startData.minH * this.gridster.cellHeight)) {
@@ -405,7 +405,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     }
 
     private resizeToWest(config: any): void {
-        const width = config.startData.width + config.startEvent.clientX - config.moveEvent.clientX - config.scrollDiffX;
+        const width = config.startData.width + config.startEvent.clientX -
+            config.moveEvent.clientX - config.scrollDiffX;
 
         // if (this.isLessThanMinWidth(width)) { // lest than min
         if (width < (config.startData.minW * this.gridster.cellWidth)) {
@@ -420,7 +421,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     }
 
     private resizeToEast(config: any): void {
-        const width = config.startData.width + config.moveEvent.clientX - config.startEvent.clientX + config.scrollDiffX;
+        const width = config.startData.width + config.moveEvent.clientX -
+            config.startEvent.clientX + config.scrollDiffX;
 
         // if (this.isMoreThanMaxWidth(width, 'e')) {
         if (width > (config.startData.maxW * this.gridster.cellWidth)) {
@@ -434,7 +436,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     }
 
     private resizeToSouth(config: any): void {
-        const height = config.startData.height + config.moveEvent.clientY - config.startEvent.clientY + config.scrollDiffY;
+        const height = config.startData.height + config.moveEvent.clientY -
+            config.startEvent.clientY + config.scrollDiffY;
 
         // if (this.isMoreThanMaxHeight(height, 's')) {
         if (height > config.startData.maxH * this.gridster.cellHeight) {

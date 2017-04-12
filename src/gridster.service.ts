@@ -114,7 +114,7 @@ export class GridsterService {
     }
 
     enableDisabledItems() {
-        while(this.disabledItems.length) {
+        while (this.disabledItems.length) {
             const item = this.disabledItems.shift();
             const position = this.findDefaultPosition(item.w, item.h);
 
@@ -280,7 +280,7 @@ export class GridsterService {
             const colIdx = this.gridList.grid.indexOf(col);
             let rowIdx = 0;
             while (rowIdx < (col.length - height + 1)) {
-                if(!this.checkItemsInArea(colIdx, colIdx + width - 1, rowIdx, rowIdx + height - 1)) {
+                if (!this.checkItemsInArea(colIdx, colIdx + width - 1, rowIdx, rowIdx + height - 1)) {
                     return [colIdx, rowIdx];
                 }
                 rowIdx++;
@@ -295,7 +295,7 @@ export class GridsterService {
             const rowIdx = this.gridList.grid.indexOf(row);
             let colIdx = 0;
             while (colIdx < (row.length - width + 1)) {
-                if(!this.checkItemsInArea(rowIdx, rowIdx + height - 1, colIdx, colIdx + width - 1)) {
+                if (!this.checkItemsInArea(rowIdx, rowIdx + height - 1, colIdx, colIdx + width - 1)) {
                     return [colIdx, rowIdx];
                 }
                 colIdx++;

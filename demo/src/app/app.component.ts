@@ -10,10 +10,6 @@ import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions'
 })
 export class AppComponent {
   @ViewChild(GridsterComponent) gridster: GridsterComponent;
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.gridster.reload();
-  }
   gridsterOptions: IGridsterOptions = {
     lanes: 4,
     direction: 'horizontal',
@@ -65,7 +61,10 @@ export class AppComponent {
       'laborum.'
     }
   ];
-
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.gridster.reload();
+  }
   removeLine (gridster: GridsterComponent) {
     gridster.setOption('lanes', --this.gridsterOptions.lanes)
         .reload();
