@@ -12,7 +12,7 @@ import {IGridsterOptions} from './IGridsterOptions';
 import {IGridsterDraggableOptions} from './IGridsterDraggableOptions';
 import {GridsterPrototypeService} from './gridster-prototype/gridster-prototype.service';
 import {GridsterItemPrototypeDirective} from './gridster-prototype/gridster-item-prototype.directive';
-import {GridListItem} from "./gridList/GridListItem";
+import {GridListItem} from './gridList/GridListItem';
 
 
 @Component({
@@ -99,7 +99,7 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
         this.gridster.$positionHighlight = this.$positionHighlight.nativeElement;
         // detectChanges is required because gridster.start changes values uses in template
         // this.cdr.detectChanges();
-        //this.cdr.detach();
+        // this.cdr.detach();
     }
 
     ngOnDestroy() {
@@ -179,16 +179,14 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
         if (name === 'dragAndDrop') {
             if (value) {
                 this.enableDraggable();
-            }
-            else {
+            } else {
                 this.disableDraggable();
             }
         }
         if (name === 'resizable') {
             if (value) {
                 this.enableResizable();
-            }
-            else {
+            } else {
                 this.disableResizable();
             }
         }
