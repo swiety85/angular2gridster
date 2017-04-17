@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, Inject, Host, Input, Output, ViewChild,
     EventEmitter, SimpleChange, OnChanges, OnDestroy, HostBinding, HostListener,
-    ChangeDetectionStrategy, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+    ChangeDetectionStrategy, AfterViewInit, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 import { ISubscription, Subscription } from 'rxjs/Subscription';
@@ -152,7 +152,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     private dragSubscriptions: Array<Subscription> = [];
     private resizeSubscriptions: Array<Subscription> = [];
 
-    constructor(private cdr: ChangeDetectorRef,
+    constructor(private zone: NgZone,
                 @Inject(ElementRef) elementRef: ElementRef,
                 @Host() gridster: GridsterService) {
 
@@ -172,8 +172,6 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         if (this.gridster.options.resizable) {
             this.enableResizable();
         }
-
-        this.cdr.detach();
     }
 
     ngOnInit() {
@@ -238,58 +236,65 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             return ;
         }
 
-        [].forEach.call(this.$element.querySelectorAll('.gridster-item-resizable-handler'), (handler) => {
-            handler.style.display = 'block';
-            const draggable = new Draggable(handler);
+        this.zone.runOutsideAngular(() => {
+            [].forEach.call(this.$element.querySelectorAll('.gridster-item-resizable-handler'), (handler) => {
+                handler.style.display = 'block';
+                const draggable = new Draggable(handler);
 
-            let direction;
-            let startEvent;
-            let startData;
-            let cursorToElementPosition;
+                let direction;
+                let startEvent;
+                let startData;
+                let cursorToElementPosition;
 
-            const dragStartSub = draggable.dragStart
-                .subscribe((event: DraggableEvent) => {
-                    this.isResizing = true;
+                const dragStartSub = draggable.dragStart
+                    .subscribe((event: DraggableEvent) => {
+                        this.zone.run(() => {
+                            this.isResizing = true;
 
-                    startEvent = event;
-                    direction = this.getResizeDirection(handler);
-                    startData = this.createResizeStartObject(direction);
-                    cursorToElementPosition = event.getRelativeCoordinates(this.$element);
+                            startEvent = event;
+                            direction = this.getResizeDirection(handler);
+                            startData = this.createResizeStartObject(direction);
+                            cursorToElementPosition = event.getRelativeCoordinates(this.$element);
 
-                    this.gridster.onResizeStart(this.item);
-                });
-
-            const dragSub = draggable.dragMove
-                .subscribe((event: DraggableEvent) => {
-                    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-                    this.resizeElement({
-                        direction,
-                        startData,
-                        position: {
-                            x: event.clientX - cursorToElementPosition.x -
-                            this.gridster.gridsterOffset.left - this.gridster.gridsterRect.left,
-                            y: event.clientY - cursorToElementPosition.y -
-                            this.gridster.gridsterOffset.top - this.gridster.gridsterRect.top
-                        },
-                        startEvent,
-                        moveEvent: event,
-                        scrollDiffX: scrollLeft - startData.scrollLeft,
-                        scrollDiffY: scrollTop - startData.scrollTop
+                            this.gridster.onResizeStart(this.item);
+                        });
                     });
 
-                    this.gridster.onResizeDrag(this.item);
-                });
+                const dragSub = draggable.dragMove
+                    .subscribe((event: DraggableEvent) => {
+                        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+                        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-            const dragStopSub = draggable.dragStop
-                .subscribe(() => {
-                    this.isResizing = false;
+                        this.resizeElement({
+                            direction,
+                            startData,
+                            position: {
+                                x: event.clientX - cursorToElementPosition.x -
+                                this.gridster.gridsterOffset.left - this.gridster.gridsterRect.left,
+                                y: event.clientY - cursorToElementPosition.y -
+                                this.gridster.gridsterOffset.top - this.gridster.gridsterRect.top
+                            },
+                            startEvent,
+                            moveEvent: event,
+                            scrollDiffX: scrollLeft - startData.scrollLeft,
+                            scrollDiffY: scrollTop - startData.scrollTop
+                        });
 
-                    this.gridster.onResizeStop(this.item);
-                });
+                        this.gridster.onResizeDrag(this.item);
+                    });
 
-            this.resizeSubscriptions = this.resizeSubscriptions.concat([dragStartSub, dragSub, dragStopSub]);
+                const dragStopSub = draggable.dragStop
+                    .subscribe(() => {
+                        this.zone.run(() => {
+                            this.isResizing = false;
+
+                            this.gridster.onResizeStop(this.item);
+                        });
+                    });
+
+                this.resizeSubscriptions = this.resizeSubscriptions.concat([dragStartSub, dragSub, dragStopSub]);
+
+            });
         });
     }
 
@@ -308,37 +313,42 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         if (this.dragSubscriptions.length) {
             return ;
         }
+        this.zone.runOutsideAngular(() => {
+            let cursorToElementPosition;
+            const draggable = new Draggable(this.$element, {
+                handlerClass: this.gridster.draggableOptions.handlerClass
+            });
 
-        let cursorToElementPosition;
-        const draggable = new Draggable(this.$element, {
-            handlerClass: this.gridster.draggableOptions.handlerClass
+            const dragStartSub = draggable.dragStart
+                .subscribe((event: DraggableEvent) => {
+                    this.zone.run(() => {
+                        this.gridster.onStart(this.item);
+                        this.isDragging = true;
+
+                        cursorToElementPosition = event.getRelativeCoordinates(this.$element);
+                    });
+                });
+
+            const dragSub = draggable.dragMove
+                .subscribe((event: DraggableEvent) => {
+                    this.$element.style.top = (event.clientY - cursorToElementPosition.y -
+                        this.gridster.gridsterOffset.top - this.gridster.gridsterRect.top) + 'px';
+                    this.$element.style.left = (event.clientX - cursorToElementPosition.x -
+                        this.gridster.gridsterOffset.left - this.gridster.gridsterRect.left) + 'px';
+
+                    this.gridster.onDrag(this.item);
+                });
+
+            const dragStopSub = draggable.dragStop
+                .subscribe(() => {
+                    this.zone.run(() => {
+                        this.gridster.onStop(this.item);
+                        this.isDragging = false;
+                    });
+                });
+
+            this.dragSubscriptions = this.dragSubscriptions.concat([dragStartSub, dragSub, dragStopSub]);
         });
-
-        const dragStartSub = draggable.dragStart
-            .subscribe((event: DraggableEvent) => {
-                this.gridster.onStart(this.item);
-                this.isDragging = true;
-
-                cursorToElementPosition = event.getRelativeCoordinates(this.$element);
-            });
-
-        const dragSub = draggable.dragMove
-            .subscribe((event: DraggableEvent) => {
-                this.$element.style.top = (event.clientY - cursorToElementPosition.y -
-                    this.gridster.gridsterOffset.top - this.gridster.gridsterRect.top) + 'px';
-                this.$element.style.left = (event.clientX - cursorToElementPosition.x -
-                    this.gridster.gridsterOffset.left - this.gridster.gridsterRect.left) + 'px';
-
-                this.gridster.onDrag(this.item);
-            });
-
-        const dragStopSub = draggable.dragStop
-            .subscribe(() => {
-                this.gridster.onStop(this.item);
-                this.isDragging = false;
-            });
-
-        this.dragSubscriptions = this.dragSubscriptions.concat([dragStartSub, dragSub, dragStopSub]);
     }
 
     public disableDraggable() {
