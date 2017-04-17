@@ -21,7 +21,6 @@ export class AppComponent {
   gridsterDraggableOptions: IGridsterDraggableOptions = {
     handlerClass: 'panel-heading'
   };
-  i = 0;
   title = 'Angular2Gridster';
   widgets: Array<any> = [
     {
@@ -71,7 +70,6 @@ export class AppComponent {
         .reload();
   }
   getTitle() {
-    console.log(++this.i);
     return this.title;
   }
   addLine (gridster: GridsterComponent) {
