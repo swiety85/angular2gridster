@@ -69,6 +69,9 @@ export class AppComponent {
     gridster.setOption('lanes', --this.gridsterOptions.lanes)
         .reload();
   }
+  getTitle() {
+    return this.title;
+  }
   addLine (gridster: GridsterComponent) {
     gridster.setOption('lanes', ++this.gridsterOptions.lanes)
         .reload();

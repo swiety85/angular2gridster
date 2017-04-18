@@ -1,6 +1,6 @@
 import {
-    Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild,
-    Input, Output, EventEmitter, ChangeDetectorRef, HostListener, HostBinding
+    Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild, NgZone,
+    Input, Output, EventEmitter, ChangeDetectionStrategy, HostListener, HostBinding
 } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -53,7 +53,8 @@ import {GridListItem} from './gridList/GridListItem';
         z-index: 1;
     }
     `],
-    providers: [ GridsterService ]
+    providers: [ GridsterService ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() options: IGridsterOptions;
@@ -71,8 +72,8 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     private subscribtions: Array<Subscription> = [];
 
     constructor(
+        private zone: NgZone,
         elementRef: ElementRef, gridster: GridsterService,
-        private cdr: ChangeDetectorRef,
         private gridsterPrototype: GridsterPrototypeService) {
 
         this.gridster = gridster;
@@ -83,10 +84,11 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnInit() {
         this.gridster.init(this.options, this.draggableOptions, this);
 
-        const scrollSub = Observable.fromEvent(document, 'scroll')
-            .subscribe(() => this.updateGridsterElementData());
-
-        this.subscribtions.push(scrollSub);
+        this.zone.runOutsideAngular(() => {
+            const scrollSub = Observable.fromEvent(document, 'scroll')
+                .subscribe(() => this.updateGridsterElementData());
+            this.subscribtions.push(scrollSub);
+        });
     }
 
     ngAfterViewInit() {
@@ -97,9 +99,6 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
         this.connectGridsterPrototype();
 
         this.gridster.$positionHighlight = this.$positionHighlight.nativeElement;
-        // detectChanges is required because gridster.start changes values uses in template
-        // this.cdr.detectChanges();
-        // this.cdr.detach();
     }
 
     ngOnDestroy() {
