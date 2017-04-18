@@ -1,3 +1,19 @@
+<a name="0.5.1"></a>
+# [0.5.1]((https://github.com/swiety85/angular2gridster/compare/0.5.0...0.5.1)) (2017-04-18)
+
+
+### Bug Fixes
+
+* **api:** fix two way binding and change event for "x", "y", "w", "h"
+
+
+### Features
+
+* **performance** Prevent detectChanges to be invoked while dragging
+* **performance** Prevent detectChanges to be invoked while scrolling
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0]((https://github.com/swiety85/angular2gridster/compare/0.4.1...0.5.0)) (2017-04-12)
 

@@ -1,4 +1,5 @@
-import { Directive, ElementRef, Input, Output, HostBinding, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, Input, Output, HostBinding, EventEmitter, OnInit, OnDestroy,
+    NgZone} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ISubscription, Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/of';
@@ -55,12 +56,17 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
 
     private subscribtions: Array<Subscription> = [];
 
-    constructor(private elementRef: ElementRef, private gridsterPrototype: GridsterPrototypeService) {
+    constructor(private zone: NgZone,
+                private elementRef: ElementRef,
+                private gridsterPrototype: GridsterPrototypeService) {
+
         this.item = (new GridListItem()).setFromGridsterItemPrototype(this);
     }
 
     ngOnInit() {
-        this.enableDragDrop();
+        this.zone.runOutsideAngular(() => {
+            this.enableDragDrop();
+        });
     }
 
     ngOnDestroy() {
@@ -106,11 +112,13 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
 
         const dragStartSub = draggable.dragStart
             .subscribe((event: DraggableEvent) => {
-                this.$element = this.provideDragElement();
-                this.updateParentElementData();
-                this.onStart();
+                this.zone.run(() => {
+                    this.$element = this.provideDragElement();
+                    this.updateParentElementData();
+                    this.onStart();
 
-                cursorToElementPosition = event.getRelativeCoordinates(this.$element);
+                    cursorToElementPosition = event.getRelativeCoordinates(this.$element);
+                });
             });
 
         const dragSub = draggable.dragMove
@@ -123,8 +131,10 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
 
         const dragStopSub = draggable.dragStop
             .subscribe(() => {
-                this.onStop();
-                this.$element = null;
+                this.zone.run(() => {
+                    this.onStop();
+                    this.$element = null;
+                });
             });
 
         const scrollSub = Observable.fromEvent(document, 'scroll')
