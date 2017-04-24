@@ -3,60 +3,59 @@
 
 Angular 2 implementation of well known Gridster (no jQuery, no external libraries, only Angular2 and Rx.js). [Demo](https://swiety85.github.io/angular2gridster/).
 
+1. [Getting started](https://github.com/swiety85/angular2gridster/wiki/Getting-started)
+2. [What is Angular2gridster and why to use it?](https://github.com/swiety85/angular2gridster/wiki) 
+3. [API Documentation](https://github.com/swiety85/angular2gridster/wiki/API-Documentation)
+4. [Roadmap](https://github.com/swiety85/angular2gridster/wiki/Roadmap)
+
+More comprehensive documentation is available in [Wiki](https://github.com/swiety85/angular2gridster/wiki).
+
 ## Installation
 ```shell
 npm install angular2gridster
-```  
-Once installed you need to import our module:
-```js
-    import {GridsterModule} from 'angular2gridster';
-
-    @NgModule({
-      declarations: [AppComponent, ...],
-      imports: [GridsterModule, ...],  
-      bootstrap: [AppComponent]
-    })
-    export class AppModule {
-    }
 ```
+Once installed you need to import our module:
+
+```js
+...
+import { GridsterModule } from 'angular2gridster';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    ...
+    GridsterModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+The example it imports in AppModule, but it could also be imported in any other module - depends where you want to use it.
+
 ## Example usage
 
 ```html
-    <gridster [options]="gridsterConfig"  [draggableOptions]="{ handlerClass: 'panel-heading' }">
-        <gridster-item *ngFor="let widget of widgets" [x]="widget.x" [y]="widget.y" [w]="widget.w" [h]="widget.h">
-            ...
-        </gridster-item>
-    </gridster>
+<gridster [options]="gridsterOptions" [draggableOptions]="{ handlerClass: 'panel-heading' }">
+
+  <gridster-item *ngFor="let widget of widgets" 
+                 [(x)]="widget.x" [(y)]="widget.y" [(w)]="widget.w" [(h)]="widget.h">
+      <!--some content-->
+  </gridster-item>
+
+</gridster>
 ```
 
 ```js
-gridsterConfig:IGridsterOptions = {
-    lanes: 5,
-    direction: 'vertical',
-    dragAndDrop: true
+widgets: Array<any> = [...];
+gridsterOptions = {
+  lanes: 5, // how many lines (grid cells) dashboard has
+  direction: 'vertical', // items floating direction: vertical/horizontal
+  dragAndDrop: true, // possible to change items position by drag n drop
+  resizable: true // possible to resize items by drag n drop by item edge/corner
 };
-```
-
-## Adding widgets
-Use directive "gridsterItemPrototype" that allows to add new widget to dashboard by dragging from outside.
-Directive expect following attributes:
- *    gridsterItemPrototype - (required) directive definition and configuration object as a value.
- Possible options:
-     helper - {boolean} if true, dragging element will be a clone of original appended to body
- *   w - (required) {number} widget width
- *   h - (required) {number} widget height
- *   drop - (optional) {EventEmitter} called on drop to gridster
- *   start - (optional) {EventEmitter} called on start dragging
- *   cancel - (optional) {EventEmitter} called on drop outside of gridster area
- *   enter - (optional) {EventEmitter} called on drag enter over gridster area
- *   out - (optional) {EventEmitter} called on drag out of gridster area
-
-### Example
-```html
-    <div gridsterItemPrototype [config]="{helper: true}" [w]="1" [h]="2"
-         (drop)="addWidget(gridster, $event)"
-         (enter)="over($event)"
-         (out)="out($event)"> ... </div>
 ```
 
 ## Demo
@@ -79,7 +78,9 @@ as a temporary solution copy files from /src folder to dedicated folder in your 
 ## Issues
 
 If the current behavior is a bug or you can illustrate your feature request better with an example, 
-please provide the steps to reproduce and if possible a minimal demo of the problem via plnkr (http://plnkr.co/edit/4pGyURZVVrL6MONXc8A0?p=preview)
+please provide the steps to reproduce and if possible a minimal demo of the problem via plnkr (http://plnkr.co/edit/4pGyURZVVrL6MONXc8A0?p=preview).
+The project is in development so don't hesitate to writte any questions or suggestion on issue list.
+I look forward to get response from you.
 
 ## Origin
 
