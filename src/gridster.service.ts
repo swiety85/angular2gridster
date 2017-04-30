@@ -43,7 +43,6 @@ export class GridsterService {
     };
 
     gridsterRect: ClientRect;
-    gridsterOffset: {left: number, top: number};
 
     public gridsterChange: EventEmitter<any>;
 

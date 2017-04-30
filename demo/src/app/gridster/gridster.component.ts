@@ -109,10 +109,6 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
 
     private updateGridsterElementData() {
         this.gridster.gridsterRect = this.$el.getBoundingClientRect();
-        this.gridster.gridsterOffset = {
-            left: this.$el.offsetLeft,
-            top: this.$el.offsetTop
-        };
     }
 
     /**

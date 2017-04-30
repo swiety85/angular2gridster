@@ -269,10 +269,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                             direction,
                             startData,
                             position: {
-                                x: event.clientX - cursorToElementPosition.x -
-                                this.gridster.gridsterOffset.left - this.gridster.gridsterRect.left,
-                                y: event.clientY - cursorToElementPosition.y -
-                                this.gridster.gridsterOffset.top - this.gridster.gridsterRect.top
+                                x: event.clientX - cursorToElementPosition.x - this.gridster.gridsterRect.left,
+                                y: event.clientY - cursorToElementPosition.y - this.gridster.gridsterRect.top
                             },
                             startEvent,
                             moveEvent: event,
@@ -332,9 +330,9 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             const dragSub = draggable.dragMove
                 .subscribe((event: DraggableEvent) => {
                     this.$element.style.top = (event.clientY - cursorToElementPosition.y -
-                        this.gridster.gridsterOffset.top - this.gridster.gridsterRect.top) + 'px';
+                        this.gridster.gridsterRect.top) + 'px';
                     this.$element.style.left = (event.clientX - cursorToElementPosition.x -
-                        this.gridster.gridsterOffset.left - this.gridster.gridsterRect.left) + 'px';
+                        this.gridster.gridsterRect.left) + 'px';
 
                     this.gridster.onDrag(this.item);
                 });
