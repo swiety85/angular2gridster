@@ -35,6 +35,25 @@ export class AppModule { }
 ```
 The example it imports in AppModule, but it could also be imported in any other module - depends where you want to use it.
 
+### Additional steps for System.js
+
+To make Angular2gridster works with System.js you need to provide dedicated configuration in `systemjs.config.js`.
+It requires change in `map` object and 'packages' as follows:
+```js
+System.config({
+  map: {
+    // ...
+    'rxjs':             'node_modules/rxjs',
+    'angular2gridster': 'node_modules/angular2gridster'
+  },
+  packages: {
+    // ...
+    'rxjs':             { defaultExtension: 'js' },
+    'angular2gridster': { main: 'dist/index.js', defaultExtension: 'js' }
+  }
+});
+```
+
 ## Example usage
 
 ```html
