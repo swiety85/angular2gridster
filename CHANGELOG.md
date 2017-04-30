@@ -1,3 +1,18 @@
+<a name="0.5.2"></a>
+# [0.5.2]((https://github.com/swiety85/angular2gridster/compare/0.5.1...0.5.2)) (2017-04-30)
+
+
+### Bug Fixes
+
+* **drag-drop:** item dragging position fix
+
+### Features
+
+* **doc** add System.js installation steps
+* **demo** add polyfills to support older IE
+
+
+
 <a name="0.5.1"></a>
 # [0.5.1]((https://github.com/swiety85/angular2gridster/compare/0.5.0...0.5.1)) (2017-04-18)
 
