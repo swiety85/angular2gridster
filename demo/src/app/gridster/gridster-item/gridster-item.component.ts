@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, Inject, Host, Input, Output, ViewChild,
-    EventEmitter, SimpleChange, OnChanges, OnDestroy, HostBinding, HostListener,
+    EventEmitter, SimpleChanges, OnChanges, OnDestroy, HostBinding, HostListener,
     ChangeDetectionStrategy, AfterViewInit, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
@@ -134,6 +134,9 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     @Input() h: number;
     @Output() hChange = new EventEmitter<number>();
 
+    @Input() dragAndDrop;
+    @Input() resizable;
+
     autoSize: boolean;
 
     @HostBinding('class.is-dragging') isDragging = false;
@@ -169,7 +172,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     }
 
     ngAfterViewInit() {
-        if (this.gridster.options.resizable) {
+        if (this.gridster.options.resizable && this.item.resizable) {
             this.enableResizable();
         }
     }
@@ -192,9 +195,25 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         }
     }
 
-    ngOnChanges() {
+    ngOnChanges(changes: SimpleChanges) {
         if (!this.gridster.gridList) {
             return;
+        }
+        if (changes['dragAndDrop']) {
+            if (changes['dragAndDrop'].currentValue) {
+                this.enableDragDrop();
+            }
+            else {
+                this.disableDraggable();
+            }
+        }
+        if (changes['resizable']) {
+            if (changes['resizable'].currentValue) {
+                this.enableResizable();
+            }
+            else {
+                this.disableResizable();
+            }
         }
 
         this.gridster.gridList.resolveCollisions(this.item);
@@ -226,7 +245,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             this.gridster.reflow();
         }
 
-        if (this.gridster.options.dragAndDrop) {
+        if (this.gridster.options.dragAndDrop && this.item.dragAndDrop) {
             this.enableDragDrop();
         }
     }

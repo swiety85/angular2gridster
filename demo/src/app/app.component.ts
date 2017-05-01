@@ -35,6 +35,7 @@ export class AppComponent {
     },
     {
       x: 1, y: 0, w: 2, h: 1,
+      resizable: false,
       title: 'Basic form inputs 2',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
       'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
@@ -53,6 +54,7 @@ export class AppComponent {
     },
     {
       x: 3, y: 0, w: 1, h: 2,
+      dragAndDrop: false,
       title: 'Basic form inputs 4',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
       'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +

@@ -213,7 +213,6 @@ export class GridList {
             h: item.h
         });
 
-
         this.updateItemPosition(item, [position.x, position.y]);
         this.resolveCollisions(item);
     }
@@ -320,6 +319,11 @@ export class GridList {
             if (fixedItem && item === fixedItem) {
                 continue;
             }
+            //
+            //if (!item.dragAndDrop) {
+            //    this.updateItemPosition(item, position);
+            //    continue;
+            //}
 
             const x = this.findLeftMostPositionForItem(item),
                 newPosition = this.findPositionForItem(
@@ -536,6 +540,10 @@ export class GridList {
         if (!collidingItems.length) {
             return true;
         }
+        //
+        //if (collidingItems.filter((item: GridListItem) => !item.dragAndDrop).length) {
+        //    return true;
+        //}
         const _gridList = new GridList([], this.options);
         let leftOfItem;
         let rightOfItem;

@@ -437,12 +437,32 @@ export class GridsterService {
         if (this.options.direction === 'horizontal') {
             col = Math.min(col, this._maxGridCols);
             row = Math.min(row, this.options.lanes - item.h);
+            // check if element is pinned
+            if (this.isOverFixedArea(col, row, item.w, item.h)) {
+                return [item.x, item.y];
+            }
         } else {
             col = Math.min(col, this.options.lanes - item.w);
             row = Math.min(row, this._maxGridCols);
+            // check if element is pinned
+            if (this.isOverFixedArea(row, col, item.h, item.w)) {
+                return [item.x, item.y];
+            }
         }
 
         return [col, row];
+    }
+
+    private isOverFixedArea(x: number, y: number, w: number, h: number): boolean {
+        for(let i = x; i < x + w; i++) {
+            for(let j = y; j < y + h; j++) {
+                if (this.gridList.grid[i] && this.gridList.grid[i][j] &&
+                    !this.gridList.grid[i][j].dragAndDrop) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private dragSizeChanged (newSize): boolean {
