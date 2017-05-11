@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, Inject, Host, Input, Output, ViewChild,
-    EventEmitter, SimpleChange, OnChanges, OnDestroy, HostBinding, HostListener,
+    EventEmitter, SimpleChanges, OnChanges, OnDestroy, HostBinding, HostListener,
     ChangeDetectionStrategy, AfterViewInit, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
@@ -192,7 +192,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         }
     }
 
-    ngOnChanges() {
+    ngOnChanges(changes: SimpleChanges) {
         if (!this.gridster.gridList) {
             return;
         }
