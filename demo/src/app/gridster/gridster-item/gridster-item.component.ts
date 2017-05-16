@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, Inject, Host, Input, Output, ViewChild,
-    EventEmitter, SimpleChange, OnChanges, OnDestroy, HostBinding, HostListener,
+    EventEmitter, SimpleChanges, OnChanges, OnDestroy, HostBinding, HostListener,
     ChangeDetectionStrategy, AfterViewInit, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
@@ -163,7 +163,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.item = (new GridListItem()).setFromGridsterItem(this);
 
         // if gridster is initialized do not show animation on new grid-item construct
-        if (this.gridster.$element) {
+        if (this.gridster.isInitialized()) {
             this.preventAnimation();
         }
     }
@@ -178,11 +178,15 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.w = this.w || this.gridster.options.defaultItemWidth;
         this.h = this.h || this.gridster.options.defaultItemHeight;
 
-        if (this.gridster.$element) {
+        if (this.gridster.isInitialized() && !this.hasPositionsDefined()) {
             const position = this.gridster.findDefaultPosition(this.item.w, this.item.h);
 
             this.item.x = position[0];
             this.item.y = position[1];
+            setTimeout(() => {
+                this.xChange.emit(position[0]);
+                this.yChange.emit(position[1]);
+            });
         }
 
         if ((this.x || this.x === 0) && (this.y || this.y === 0)) {
@@ -192,7 +196,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         }
     }
 
-    ngOnChanges() {
+    ngOnChanges(changes: SimpleChanges) {
         if (!this.gridster.gridList) {
             return;
         }
@@ -220,7 +224,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     public enableItem() {
         this.gridster.registerItem(this.item);
         //  only if new item is registered after bootstrap
-        if (this.gridster.$element) {
+        if (this.gridster.isInitialized()) {
 
             this.gridster.gridList.resolveCollisions(this.item);
             this.gridster.reflow();
@@ -528,5 +532,9 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         } else {
             this.$element.style.width = (config.startData.maxW * this.gridster.cellWidth) + 'px';
         }
+    }
+
+    private hasPositionsDefined(): boolean {
+        return typeof this.item.x === 'number' && typeof this.item.y === 'number';
     }
 }
