@@ -16,7 +16,8 @@ export class AppComponent {
     dragAndDrop: true,
     resizable: true,
     maxWidth: 3,
-    maxHeight: 3
+    maxHeight: 3,
+    widthHeightRatio: 1
   };
   gridsterDraggableOptions: IGridsterDraggableOptions = {
     handlerClass: 'panel-heading'
