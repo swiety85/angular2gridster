@@ -10,6 +10,9 @@
     <button (click)="addWidgetWithoutData()">
         Add widget without data
     </button>
+    <br>
+    <label for="ratio">Ratio</label><input type="number" id="ratio" [(ngModel)]="gridsterOptions.widthHeightRatio" min="0.1"
+           (change)="gridster.setOption('widthHeightRatio', gridsterOptions.widthHeightRatio).reload()">
 
     <input type="checkbox" [(ngModel)]="gridsterOptions.dragAndDrop" value="true"
                      (change)="gridster.setOption('dragAndDrop', gridsterOptions.dragAndDrop)"> Draggable
