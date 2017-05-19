@@ -30,7 +30,6 @@ import {Draggable} from '../utils/draggable';
         top: 0;
         left: 0;
         z-index: 1;
-        cursor: pointer;
         -webkit-transition: top 0.2s, left 0.2s, width 0.2s, height 0.2s, font-size 0.2s, line-height 0.2s;
         transition: top 0.2s, left 0.2s, width 0.2s, height 0.2s, font-size 0.2s, line-height 0.2s;
     }
@@ -134,8 +133,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     @Input() h: number;
     @Output() hChange = new EventEmitter<number>();
 
-    @Input() dragAndDrop;
-    @Input() resizable;
+    @Input() dragAndDrop = true;
+    @Input() resizable = true;
 
     autoSize: boolean;
 

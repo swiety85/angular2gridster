@@ -46,13 +46,11 @@ export class GridListItem {
     }
 
     get dragAndDrop() {
-        // default true
-        return this.getItem().dragAndDrop === false ? false : true;
+        return !!this.getItem().dragAndDrop;
     }
 
     get resizable() {
-        // default true
-        return this.getItem().resizable === false ? false : true;
+        return !!this.getItem().resizable;
     }
 
     constructor () {}
