@@ -319,9 +319,9 @@ export class GridList {
             if (fixedItem && item === fixedItem) {
                 continue;
             }
-            //
+
             //if (!item.dragAndDrop) {
-            //    this.updateItemPosition(item, position);
+            //    //this.updateItemPosition(item, position);
             //    continue;
             //}
 
@@ -653,10 +653,22 @@ export class GridList {
                 if (this.items.indexOf(otherItem) < this.items.indexOf(item)) {
                     tail = otherPosition.x + otherPosition.w;
                 }
+                const nextItem = this.findItemByPosition(i + otherPosition.w, j);
+                if (nextItem && !nextItem.dragAndDrop) {
+                    tail = tail + this.getItemPosition(nextItem).w;
+                }
             }
         }
 
         return tail;
+    }
+
+    private findItemByPosition(x: number, y: number): GridListItem {
+        for (let i = 0; i < this.items.length; i++) {
+            if (this.items[i].x === x && this.items[i].y === y) {
+                return this.items[i];
+            }
+        }
     }
 
     private getItemByAttribute (key, value) {
