@@ -311,19 +311,22 @@ export class GridList {
             this.updateItemPosition(fixedItem, [fixedPosition.x, fixedPosition.y]);
         }
 
+        this.items
+            .filter((item: GridListItem) => {
+                return !item.dragAndDrop;
+            })
+            .forEach((item: GridListItem) => {
+                this.updateItemPosition(item, [item.x, item.y]);
+            });
+
         for (let i = 0; i < this.items.length; i++) {
             const item = this.items[i],
                 position = this.getItemPosition(item);
 
             // The fixed item keeps its exact position
-            if (fixedItem && item === fixedItem) {
+            if (fixedItem && item === fixedItem || !item.dragAndDrop) {
                 continue;
             }
-
-            //if (!item.dragAndDrop) {
-            //    //this.updateItemPosition(item, position);
-            //    continue;
-            //}
 
             const x = this.findLeftMostPositionForItem(item),
                 newPosition = this.findPositionForItem(
@@ -653,10 +656,10 @@ export class GridList {
                 if (this.items.indexOf(otherItem) < this.items.indexOf(item)) {
                     tail = otherPosition.x + otherPosition.w;
                 }
-                const nextItem = this.findItemByPosition(i + otherPosition.w, j);
-                if (nextItem && !nextItem.dragAndDrop) {
-                    tail = tail + this.getItemPosition(nextItem).w;
-                }
+                //const nextItem = this.findItemByPosition(i + otherPosition.w, j);
+                //if (nextItem && !nextItem.dragAndDrop) {
+                //    tail = tail + this.getItemPosition(nextItem).w;
+                //}
             }
         }
 
