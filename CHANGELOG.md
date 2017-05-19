@@ -1,3 +1,18 @@
+<a name="0.5.3"></a>
+# [0.5.3]((https://github.com/swiety85/angular2gridster/compare/0.5.2...0.5.3)) (2017-05-16)
+
+
+### Bug Fixes
+
+* **drag-drop:** DnD ngOnInit gridster-item bug fix
+* **api:** AOT fix for mismatching signature call
+
+### Features
+
+* **config:** Dynamic widthHeightRatio option change
+
+
+
 <a name="0.5.2"></a>
 # [0.5.2]((https://github.com/swiety85/angular2gridster/compare/0.5.1...0.5.2)) (2017-04-30)
 

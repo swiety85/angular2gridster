@@ -66,6 +66,10 @@ export class GridsterService {
 
     constructor() {}
 
+    isInitialized(): boolean {
+        return !!this.$element;
+    }
+
     /**
      * Must be called before init
      * @param item
