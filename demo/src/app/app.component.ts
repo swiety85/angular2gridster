@@ -38,8 +38,8 @@ export class AppComponent {
     },
     {
       x: 1, y: 0, w: 2, h: 1,
-      dragAndDrop: false,
-      resizable: false,
+      dragAndDrop: true,
+      resizable: true,
       title: 'Basic form inputs 2',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
       'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
@@ -60,8 +60,8 @@ export class AppComponent {
     },
     {
       x: 3, y: 0, w: 1, h: 2,
-      dragAndDrop: true,
-      resizable: true,
+      dragAndDrop: false,
+      resizable: false,
       title: 'Basic form inputs 4',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
       'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
@@ -120,6 +120,8 @@ export class AppComponent {
     const item = event.item;
     this.widgets.push({
       x: item.x, y: item.y, w: item.w, h: item.h,
+      dragAndDrop: true,
+      resizable: true,
       title: 'Basic form inputs 5',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
       'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
@@ -147,6 +149,8 @@ export class AppComponent {
   addWidgetWithoutData() {
     this.widgets.push({
       title: 'Basic form inputs X',
+      dragAndDrop: true,
+      resizable: true,
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
       'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
       'commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla ' +
@@ -158,6 +162,8 @@ export class AppComponent {
   addWidget (gridster: GridsterComponent) {
     this.widgets.push({
       x: 4, y: 0, w: 1, h: 1,
+      dragAndDrop: true,
+      resizable: true,
       title: 'Basic form inputs 5',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
       'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +

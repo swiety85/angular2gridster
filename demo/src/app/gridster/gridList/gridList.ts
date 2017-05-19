@@ -333,6 +333,25 @@ export class GridList {
         }
     }
 
+    isOverFixedArea(x: number, y: number, w: number, h: number, item: GridListItem = null): boolean {
+        let itemData = { x, y, w, h };
+
+        if (this.options.direction !== 'horizontal') {
+            itemData = { x: y, y: x, w: h, h: w };
+        }
+
+        for(let i = itemData.x; i < itemData.x + itemData.w; i++) {
+            for(let j = itemData.y; j < itemData.y + itemData.h; j++) {
+                if (this.grid[i] && this.grid[i][j] &&
+                    this.grid[i][j] !== item &&
+                    !this.grid[i][j].dragAndDrop) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private sortItemsByPosition () {
         this.items.sort((item1, item2) => {
             const position1 = this.getItemPosition(item1),
@@ -405,6 +424,10 @@ export class GridList {
 
         // Make sure the item isn't larger than the entire grid
         if (newPosition[1] + position.h > this.options.lanes) {
+            return false;
+        }
+
+        if (this.isOverFixedArea(item.x, item.y, item.w, item.h)) {
             return false;
         }
 
