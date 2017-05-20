@@ -51,7 +51,10 @@ export class Draggable {
         return this.mousedown
             .map(md => new DraggableEvent(md))
             .filter((event: DraggableEvent) => this.isDragingByHandler(event))
-            .do(e => e.pauseEvent())
+            .do(e => {
+                e.pauseEvent();
+                (<any>document.activeElement).blur();
+            })
             .switchMap((startEvent: DraggableEvent) => {
 
                 return this.mousemove
@@ -84,8 +87,16 @@ export class Draggable {
     }
 
     private isDragingByHandler(event: DraggableEvent): boolean {
+        if (!this.isValidDragHandler(event.target)) {
+            return false;
+        }
+
         return !this.config.handlerClass ||
             (this.config.handlerClass && this.hasElementWithClass(this.config.handlerClass, event.target));
+    }
+
+    private isValidDragHandler(targetEl: any): boolean {
+        return ['input', 'textarea'].indexOf(targetEl.tagName.toLowerCase()) === -1;
     }
 
     private inRange(startEvent: DraggableEvent, moveEvent: DraggableEvent, range: number): boolean {
