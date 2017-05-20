@@ -424,6 +424,18 @@ export class GridsterService {
         colSize = Math.max(colSize, 1);
         rowSize = Math.max(rowSize, 1);
 
+        if (this.options.direction === 'horizontal') {
+            // check if element is pinned
+            if (this.gridList.isOverFixedArea(item.x, item.y, colSize, rowSize, item)) {
+                return [item.w, item.h];
+            }
+        } else {
+            // check if element is pinned
+            if (this.gridList.isOverFixedArea(item.y, item.x, rowSize, colSize, item)) {
+                return [item.w, item.h];
+            }
+        }
+
         return [colSize, rowSize];
     }
 
@@ -441,9 +453,15 @@ export class GridsterService {
         if (this.options.direction === 'horizontal') {
             col = Math.min(col, this._maxGridCols);
             row = Math.min(row, this.options.lanes - item.h);
+
         } else {
             col = Math.min(col, this.options.lanes - item.w);
             row = Math.min(row, this._maxGridCols);
+        }
+
+        // check if element is pinned
+        if (this.gridList.isOverFixedArea(col, row, item.w, item.h)) {
+            return [item.x, item.y];
         }
 
         return [col, row];

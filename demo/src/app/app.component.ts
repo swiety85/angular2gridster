@@ -49,7 +49,7 @@ export class AppComponent {
     },
     {
       x: 1, y: 1, w: 2, h: 1,
-      dragAndDrop: false,
+      dragAndDrop: true,
       resizable: true,
       title: 'Basic form inputs 3',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +

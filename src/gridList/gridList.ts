@@ -202,7 +202,7 @@ export class GridList {
         this.updateItemPosition(item, [position.x, position.y]);
         this.updateItemSize(item, width, height);
 
-        this.pullItemsToLeft(item);
+        this.resolveCollisions(item);
     }
 
     moveItemToPosition (item: GridListItem, newPosition: Array<number>) {
@@ -212,7 +212,6 @@ export class GridList {
             w: item.w,
             h: item.h
         });
-
 
         this.updateItemPosition(item, [position.x, position.y]);
         this.resolveCollisions(item);
@@ -312,12 +311,21 @@ export class GridList {
             this.updateItemPosition(fixedItem, [fixedPosition.x, fixedPosition.y]);
         }
 
+        this.items
+            .filter((item: GridListItem) => {
+                return !item.dragAndDrop && item !== fixedItem;
+            })
+            .forEach((item: GridListItem) => {
+                const fixedPosition = this.getItemPosition(item);
+                this.updateItemPosition(item, [fixedPosition.x, fixedPosition.y]);
+            });
+
         for (let i = 0; i < this.items.length; i++) {
             const item = this.items[i],
                 position = this.getItemPosition(item);
 
             // The fixed item keeps its exact position
-            if (fixedItem && item === fixedItem) {
+            if (fixedItem && item === fixedItem || !item.dragAndDrop) {
                 continue;
             }
 
@@ -327,6 +335,25 @@ export class GridList {
 
             this.updateItemPosition(item, newPosition);
         }
+    }
+
+    isOverFixedArea(x: number, y: number, w: number, h: number, item: GridListItem = null): boolean {
+        let itemData = { x, y, w, h };
+
+        if (this.options.direction !== 'horizontal') {
+            itemData = { x: y, y: x, w: h, h: w };
+        }
+
+        for (let i = itemData.x; i < itemData.x + itemData.w; i++) {
+            for (let j = itemData.y; j < itemData.y + itemData.h; j++) {
+                if (this.grid[i] && this.grid[i][j] &&
+                    this.grid[i][j] !== item &&
+                    !this.grid[i][j].dragAndDrop) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private sortItemsByPosition () {
@@ -401,6 +428,10 @@ export class GridList {
 
         // Make sure the item isn't larger than the entire grid
         if (newPosition[1] + position.h > this.options.lanes) {
+            return false;
+        }
+
+        if (this.isOverFixedArea(item.x, item.y, item.w, item.h)) {
             return false;
         }
 
@@ -536,6 +567,7 @@ export class GridList {
         if (!collidingItems.length) {
             return true;
         }
+
         const _gridList = new GridList([], this.options);
         let leftOfItem;
         let rightOfItem;
@@ -626,6 +658,14 @@ export class GridList {
         }
 
         return tail;
+    }
+
+    private findItemByPosition(x: number, y: number): GridListItem {
+        for (let i = 0; i < this.items.length; i++) {
+            if (this.items[i].x === x && this.items[i].y === y) {
+                return this.items[i];
+            }
+        }
     }
 
     private getItemByAttribute (key, value) {

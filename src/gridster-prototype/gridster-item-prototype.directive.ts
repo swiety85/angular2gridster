@@ -56,6 +56,11 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
 
     private subscribtions: Array<Subscription> = [];
 
+    // must be set to true because of item dragAndDrop configuration
+    get dragAndDrop() {
+        return true;
+    }
+
     constructor(private zone: NgZone,
                 private elementRef: ElementRef,
                 private gridsterPrototype: GridsterPrototypeService) {

@@ -30,7 +30,6 @@ import {Draggable} from '../utils/draggable';
         top: 0;
         left: 0;
         z-index: 1;
-        cursor: pointer;
         -webkit-transition: top 0.2s, left 0.2s, width 0.2s, height 0.2s, font-size 0.2s, line-height 0.2s;
         transition: top 0.2s, left 0.2s, width 0.2s, height 0.2s, font-size 0.2s, line-height 0.2s;
     }
@@ -134,6 +133,9 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     @Input() h: number;
     @Output() hChange = new EventEmitter<number>();
 
+    @Input() dragAndDrop = true;
+    @Input() resizable = true;
+
     autoSize: boolean;
 
     @HostBinding('class.is-dragging') isDragging = false;
@@ -169,7 +171,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     }
 
     ngAfterViewInit() {
-        if (this.gridster.options.resizable) {
+        if (this.gridster.options.resizable && this.item.resizable) {
             this.enableResizable();
         }
     }
@@ -199,6 +201,20 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     ngOnChanges(changes: SimpleChanges) {
         if (!this.gridster.gridList) {
             return;
+        }
+        if (changes['dragAndDrop']) {
+            if (changes['dragAndDrop'].currentValue) {
+                this.enableDragDrop();
+            } else {
+                this.disableDraggable();
+            }
+        }
+        if (changes['resizable']) {
+            if (changes['resizable'].currentValue) {
+                this.enableResizable();
+            } else {
+                this.disableResizable();
+            }
         }
 
         this.gridster.gridList.resolveCollisions(this.item);
@@ -230,7 +246,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             this.gridster.reflow();
         }
 
-        if (this.gridster.options.dragAndDrop) {
+        if (this.gridster.options.dragAndDrop && this.item.dragAndDrop) {
             this.enableDragDrop();
         }
     }

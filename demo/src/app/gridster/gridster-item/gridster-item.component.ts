@@ -205,16 +205,14 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         if (changes['dragAndDrop']) {
             if (changes['dragAndDrop'].currentValue) {
                 this.enableDragDrop();
-            }
-            else {
+            } else {
                 this.disableDraggable();
             }
         }
         if (changes['resizable']) {
             if (changes['resizable'].currentValue) {
                 this.enableResizable();
-            }
-            else {
+            } else {
                 this.disableResizable();
             }
         }

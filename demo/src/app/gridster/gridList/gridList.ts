@@ -202,7 +202,7 @@ export class GridList {
         this.updateItemPosition(item, [position.x, position.y]);
         this.updateItemSize(item, width, height);
 
-        this.pullItemsToLeft(item);
+        this.resolveCollisions(item);
     }
 
     moveItemToPosition (item: GridListItem, newPosition: Array<number>) {
@@ -313,10 +313,11 @@ export class GridList {
 
         this.items
             .filter((item: GridListItem) => {
-                return !item.dragAndDrop;
+                return !item.dragAndDrop && item !== fixedItem;
             })
             .forEach((item: GridListItem) => {
-                this.updateItemPosition(item, [item.x, item.y]);
+                const fixedPosition = this.getItemPosition(item);
+                this.updateItemPosition(item, [fixedPosition.x, fixedPosition.y]);
             });
 
         for (let i = 0; i < this.items.length; i++) {
@@ -343,8 +344,8 @@ export class GridList {
             itemData = { x: y, y: x, w: h, h: w };
         }
 
-        for(let i = itemData.x; i < itemData.x + itemData.w; i++) {
-            for(let j = itemData.y; j < itemData.y + itemData.h; j++) {
+        for (let i = itemData.x; i < itemData.x + itemData.w; i++) {
+            for (let j = itemData.y; j < itemData.y + itemData.h; j++) {
                 if (this.grid[i] && this.grid[i][j] &&
                     this.grid[i][j] !== item &&
                     !this.grid[i][j].dragAndDrop) {
@@ -566,10 +567,7 @@ export class GridList {
         if (!collidingItems.length) {
             return true;
         }
-        //
-        //if (collidingItems.filter((item: GridListItem) => !item.dragAndDrop).length) {
-        //    return true;
-        //}
+
         const _gridList = new GridList([], this.options);
         let leftOfItem;
         let rightOfItem;
@@ -656,10 +654,6 @@ export class GridList {
                 if (this.items.indexOf(otherItem) < this.items.indexOf(item)) {
                     tail = otherPosition.x + otherPosition.w;
                 }
-                //const nextItem = this.findItemByPosition(i + otherPosition.w, j);
-                //if (nextItem && !nextItem.dragAndDrop) {
-                //    tail = tail + this.getItemPosition(nextItem).w;
-                //}
             }
         }
 
