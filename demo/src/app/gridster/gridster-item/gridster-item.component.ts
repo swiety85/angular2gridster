@@ -252,7 +252,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     }
 
     public enableResizable() {
-        if (this.resizeSubscriptions.length) {
+        if (this.resizeSubscriptions.length || !this.resizable) {
             return ;
         }
 
@@ -328,7 +328,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     }
 
     public enableDragDrop() {
-        if (this.dragSubscriptions.length) {
+        if (this.dragSubscriptions.length || !this.dragAndDrop) {
             return ;
         }
         this.zone.runOutsideAngular(() => {
