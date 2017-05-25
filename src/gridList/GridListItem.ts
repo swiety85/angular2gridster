@@ -45,6 +45,14 @@ export class GridListItem {
         this.getItem().autoSize = value;
     }
 
+    get dragAndDrop() {
+        return !!this.getItem().dragAndDrop;
+    }
+
+    get resizable() {
+        return !!this.getItem().resizable;
+    }
+
     constructor () {}
 
     public setFromGridsterItem (item: GridsterItemComponent): GridListItem {
@@ -80,7 +88,9 @@ export class GridListItem {
             y: this.y,
             w: this.w,
             h: this.h,
-            autoSize: this.autoSize
+            autoSize: this.autoSize,
+            dragAndDrop: this.dragAndDrop,
+            resizable: this.resizable
         });
     }
 

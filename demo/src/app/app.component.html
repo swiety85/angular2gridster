@@ -14,11 +14,11 @@
     <label for="ratio">Ratio</label><input type="number" id="ratio" [(ngModel)]="gridsterOptions.widthHeightRatio" min="0.1"
            (change)="gridster.setOption('widthHeightRatio', gridsterOptions.widthHeightRatio).reload()">
 
-    <input type="checkbox" [(ngModel)]="gridsterOptions.dragAndDrop" value="true"
-                     (change)="gridster.setOption('dragAndDrop', gridsterOptions.dragAndDrop)"> Draggable
+    <input id="draggable" type="checkbox" [(ngModel)]="gridsterOptions.dragAndDrop" value="true"
+                     (change)="gridster.setOption('dragAndDrop', gridsterOptions.dragAndDrop)"><label for="draggable">Draggable</label>
 
-    <input type="checkbox" [(ngModel)]="gridsterOptions.resizable" value="true"
-                     (change)="gridster.setOption('resizable', gridsterOptions.resizable)"> Resizable
+    <input type="checkbox" [(ngModel)]="gridsterOptions.resizable" value="true" id="resizable"
+                     (change)="gridster.setOption('resizable', gridsterOptions.resizable)"><label for="resizable">Resizable</label>
     <br>
     Direction
     <label>
@@ -81,6 +81,7 @@
               (gridsterPositionChange)="logChanges($event)" (resize)="resize($event)" #gridster style="min-height: 500px;">
 
         <gridster-item *ngFor="let widget of widgets; let indx = index"
+                       [dragAndDrop]="widget.dragAndDrop" [resizable]="widget.resizable"
                        [(x)]="widget.x" [(y)]="widget.y"
                        [(w)]="widget.w" [(h)]="widget.h">
 
@@ -90,6 +91,12 @@
 
             <div class="panel-body">
                 <p>
+                    <label>
+                        <input type="checkbox" [(ngModel)]="widget.dragAndDrop" value="true"> Draggable
+                    </label>
+                    <label>
+                        <input type="checkbox" [(ngModel)]="widget.resizable" value="true"> Resizable
+                    </label>
                     <button (click)="setWidth(widget, widget.w+1, $event)">width +</button>
                     <button (click)="setWidth(widget, widget.w-1, $event)">width -</button>
                     <button (click)="setHeight(widget, widget.h+1, $event)">height +</button>
