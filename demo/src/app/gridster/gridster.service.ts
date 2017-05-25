@@ -424,16 +424,9 @@ export class GridsterService {
         colSize = Math.max(colSize, 1);
         rowSize = Math.max(rowSize, 1);
 
-        if (this.options.direction === 'horizontal') {
-            // check if element is pinned
-            if (this.gridList.isOverFixedArea(item.x, item.y, colSize, rowSize, item)) {
-                return [item.w, item.h];
-            }
-        } else {
-            // check if element is pinned
-            if (this.gridList.isOverFixedArea(item.y, item.x, rowSize, colSize, item)) {
-                return [item.w, item.h];
-            }
+        // check if element is pinned
+        if (this.gridList.isOverFixedArea(item.x, item.y, colSize, rowSize, item)) {
+            return [item.w, item.h];
         }
 
         return [colSize, rowSize];
