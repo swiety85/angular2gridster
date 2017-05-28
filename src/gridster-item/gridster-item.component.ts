@@ -132,6 +132,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     @Output() wChange = new EventEmitter<number>();
     @Input() h: number;
     @Output() hChange = new EventEmitter<number>();
+    @Input() responsiveOptions: Array <{x: number, y: number, w: number, h: number}> = [];
+    @Output() responsiveOptionsChange = new EventEmitter<Array<{x: number, y: number, w: number, h: number}>>();
 
     @Input() dragAndDrop = true;
     @Input() resizable = true;
@@ -253,7 +255,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
     public enableResizable() {
         if (this.resizeSubscriptions.length || !this.resizable) {
-            return ;
+            return;
         }
 
         this.zone.runOutsideAngular(() => {
@@ -329,7 +331,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
     public enableDragDrop() {
         if (this.dragSubscriptions.length || !this.dragAndDrop) {
-            return ;
+            return;
         }
         this.zone.runOutsideAngular(() => {
             let cursorToElementPosition;

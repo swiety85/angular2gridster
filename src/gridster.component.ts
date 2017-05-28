@@ -13,6 +13,7 @@ import {IGridsterDraggableOptions} from './IGridsterDraggableOptions';
 import {GridsterPrototypeService} from './gridster-prototype/gridster-prototype.service';
 import {GridsterItemPrototypeDirective} from './gridster-prototype/gridster-item-prototype.directive';
 import {GridListItem} from './gridList/GridListItem';
+import {GridsterOptions} from './GridsterOptions';
 
 
 @Component({
@@ -53,11 +54,11 @@ import {GridListItem} from './gridList/GridListItem';
         z-index: 1;
     }
     `],
-    providers: [ GridsterService ],
+    providers: [GridsterService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
-    @Input() options: IGridsterOptions;
+    @Input('options') rawOptions: IGridsterOptions;
     @Output() gridsterPositionChange = new EventEmitter<any>();
     @Output() resize = new EventEmitter<any>();
     @Input() draggableOptions: IGridsterDraggableOptions;
@@ -69,12 +70,12 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     gridster: GridsterService;
     $el: HTMLElement;
 
+    private options: IGridsterOptions;
     private subscribtions: Array<Subscription> = [];
 
-    constructor(
-        private zone: NgZone,
-        elementRef: ElementRef, gridster: GridsterService,
-        private gridsterPrototype: GridsterPrototypeService) {
+    constructor(private zone: NgZone,
+                elementRef: ElementRef, gridster: GridsterService,
+                private gridsterPrototype: GridsterPrototypeService) {
 
         this.gridster = gridster;
         this.gridster.gridsterChange = this.gridsterPositionChange;
@@ -82,6 +83,25 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngOnInit() {
+        const gridsterOptions = new GridsterOptions(this.rawOptions);
+
+        this.options = gridsterOptions.getOptionsByWidth(window.outerWidth);
+        gridsterOptions.change
+            .subscribe((options: IGridsterOptions) => {
+                this.options = options;
+                this.gridster.options = options;
+                this.gridster.initGridList();
+                this.gridster.reflow();
+            });
+
+        Observable.fromEvent(window, 'resize')
+            .debounceTime(this.options.responsiveDebounce || 0)
+            .subscribe(() => {
+                if (this.options.responsiveView) {
+                    this.reload();
+                }
+            });
+
         this.gridster.init(this.options, this.draggableOptions, this);
 
         this.zone.runOutsideAngular(() => {
@@ -105,63 +125,6 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
         this.subscribtions.forEach((sub: Subscription) => {
             sub.unsubscribe();
         });
-    }
-
-    private updateGridsterElementData() {
-        this.gridster.gridsterRect = this.$el.getBoundingClientRect();
-    }
-
-    /**
-     * Connect gridster prototype item to gridster dragging hooks (onStart, onDrag, onStop).
-     */
-    private connectGridsterPrototype () {
-        let isEntered = false;
-
-        this.gridsterPrototype.observeDropOut(this.gridster)
-            .subscribe();
-
-        const dropOverObservable = this.gridsterPrototype.observeDropOver(this.gridster)
-            .publish();
-
-        this.gridsterPrototype.observeDragOver(this.gridster).dragOver
-            .subscribe((prototype: GridsterItemPrototypeDirective) => {
-                if (!isEntered) {
-                    return ;
-                }
-                this.gridster.onDrag(prototype.item);
-            });
-
-        this.gridsterPrototype.observeDragOver(this.gridster).dragEnter
-            .subscribe((prototype: GridsterItemPrototypeDirective) => {
-                isEntered = true;
-
-                this.gridster.items.push(prototype.item);
-                this.gridster.onStart(prototype.item);
-            });
-
-        this.gridsterPrototype.observeDragOver(this.gridster).dragOut
-            .subscribe((prototype: GridsterItemPrototypeDirective) => {
-                if (!isEntered) {
-                    return ;
-                }
-                this.gridster.onDragOut(prototype.item);
-                isEntered = false;
-            });
-
-        dropOverObservable
-            .subscribe((prototype: GridsterItemPrototypeDirective) => {
-                if (!isEntered) {
-                    return ;
-                }
-                this.gridster.onStop(prototype.item);
-
-                const idx = this.gridster.items.indexOf(prototype.item);
-                this.gridster.items.splice(idx, 1);
-
-                isEntered = false;
-            });
-
-        dropOverObservable.connect();
     }
 
     /**
@@ -194,6 +157,9 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
         if (name === 'widthHeightRatio') {
             this.gridster.options.widthHeightRatio = parseFloat(value || 1);
         }
+        if (name === 'responsiveView') {
+            this.gridster.options.responsiveView = !!value;
+        }
         this.gridster.gridList.setOption(name, value);
 
         return this;
@@ -203,6 +169,63 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
         this.gridster.reflow();
 
         return this;
+    }
+
+    private updateGridsterElementData() {
+        this.gridster.gridsterRect = this.$el.getBoundingClientRect();
+    }
+
+    /**
+     * Connect gridster prototype item to gridster dragging hooks (onStart, onDrag, onStop).
+     */
+    private connectGridsterPrototype() {
+        let isEntered = false;
+
+        this.gridsterPrototype.observeDropOut(this.gridster)
+            .subscribe();
+
+        const dropOverObservable = this.gridsterPrototype.observeDropOver(this.gridster)
+            .publish();
+
+        this.gridsterPrototype.observeDragOver(this.gridster).dragOver
+            .subscribe((prototype: GridsterItemPrototypeDirective) => {
+                if (!isEntered) {
+                    return;
+                }
+                this.gridster.onDrag(prototype.item);
+            });
+
+        this.gridsterPrototype.observeDragOver(this.gridster).dragEnter
+            .subscribe((prototype: GridsterItemPrototypeDirective) => {
+                isEntered = true;
+
+                this.gridster.items.push(prototype.item);
+                this.gridster.onStart(prototype.item);
+            });
+
+        this.gridsterPrototype.observeDragOver(this.gridster).dragOut
+            .subscribe((prototype: GridsterItemPrototypeDirective) => {
+                if (!isEntered) {
+                    return;
+                }
+                this.gridster.onDragOut(prototype.item);
+                isEntered = false;
+            });
+
+        dropOverObservable
+            .subscribe((prototype: GridsterItemPrototypeDirective) => {
+                if (!isEntered) {
+                    return;
+                }
+                this.gridster.onStop(prototype.item);
+
+                const idx = this.gridster.items.indexOf(prototype.item);
+                this.gridster.items.splice(idx, 1);
+
+                isEntered = false;
+            });
+
+        dropOverObservable.connect();
     }
 
     private enableDraggable() {

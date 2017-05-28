@@ -11,6 +11,7 @@ import { GridsterPrototypeService } from './gridster-prototype/gridster-prototyp
 import { GridsterItemPrototypeDirective } from './gridster-prototype/gridster-item-prototype.directive';
 import { GridListItem } from './gridList/GridListItem';
 import { GridsterComponent } from './gridster.component';
+import {GridsterOptions} from './GridsterOptions';
 
 @Injectable()
 export class GridsterService {
@@ -34,6 +35,7 @@ export class GridsterService {
         direction: 'horizontal',
         itemSelector: 'li[data-w]',
         widthHeightRatio: 1,
+        responsiveView: true,
         dragAndDrop: true,
         resizable: false,
         minWidth: 1,
@@ -102,6 +104,12 @@ export class GridsterService {
         this.reflow();
 
         this.enableDisabledItems();
+    }
+
+    initGridList () {
+        // Create instance of GridList (decoupled lib for handling the grid
+        // positioning and sorting post-drag and dropping)
+        this.gridList = new GridList(this.items, this.options);
     }
 
     render () {
@@ -342,15 +350,6 @@ export class GridsterService {
             item.w = cachedItem.w;
             item.h = cachedItem.h;
             item.autoSize = cachedItem.autoSize;
-        });
-    }
-
-    private initGridList () {
-        // Create instance of GridList (decoupled lib for handling the grid
-        // positioning and sorting post-drag and dropping)
-        this.gridList = new GridList(this.items, {
-            lanes: this.options.lanes,
-            direction: this.options.direction
         });
     }
 
