@@ -72,6 +72,7 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
 
     private options: IGridsterOptions;
     private subscribtions: Array<Subscription> = [];
+    private gridsterOptions: GridsterOptions;
 
     constructor(private zone: NgZone,
                 elementRef: ElementRef, gridster: GridsterService,
@@ -83,16 +84,17 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngOnInit() {
-        const gridsterOptions = new GridsterOptions(this.rawOptions);
+        this.gridsterOptions = new GridsterOptions(this.rawOptions);
 
-        this.options = gridsterOptions.getOptionsByWidth(window.outerWidth);
-        gridsterOptions.change
-            .subscribe((options: IGridsterOptions) => {
+        //this.options = gridsterOptions.getOptionsByWidth(window.outerWidth);
+        this.gridsterOptions.change
+            .do((options) => {
                 this.options = options;
                 this.gridster.options = options;
-                this.gridster.initGridList();
-                this.gridster.reflow();
-            });
+            })
+            .subscribe();
+
+        this.gridster.init(this.options, this.draggableOptions, this);
 
         Observable.fromEvent(window, 'resize')
             .debounceTime(this.options.responsiveDebounce || 0)
@@ -102,8 +104,6 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             });
 
-        this.gridster.init(this.options, this.draggableOptions, this);
-
         this.zone.runOutsideAngular(() => {
             const scrollSub = Observable.fromEvent(document, 'scroll')
                 .subscribe(() => this.updateGridsterElementData());
@@ -112,7 +112,7 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-        this.gridster.start(this.$el);
+        this.gridster.start(this.$el, this.gridsterOptions);
 
         this.updateGridsterElementData();
 

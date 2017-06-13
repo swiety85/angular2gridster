@@ -66,6 +66,8 @@ export class GridsterService {
 
     private gridsterComponent: GridsterComponent;
 
+    private gridsterOptions: GridsterOptions;
+
     constructor() {}
 
     isInitialized(): boolean {
@@ -90,10 +92,11 @@ export class GridsterService {
             {}, this.draggableDefaults, draggableOptions);
     }
 
-    start (gridsterEl: HTMLElement) {
+    start (gridsterEl: HTMLElement, gridsterOptions: GridsterOptions) {
 
         this.updateMaxItemSize();
 
+        this.gridsterOptions = gridsterOptions;
         this.$element = gridsterEl;
         // Used to highlight a position an element will land on upon drop
         if (this.$positionHighlight) {
@@ -101,6 +104,18 @@ export class GridsterService {
         }
 
         this.initGridList();
+
+        setTimeout(() => {
+            this._items = this.copyItems();
+
+            this.gridList.prepareItemsPositions(gridsterOptions.basicOptions);
+            gridsterOptions.responsiveOptions.forEach((options: IGridsterOptions) => {
+                this.gridList.prepareItemsPositions(options);
+            });
+            this.updateCachedItems();
+            this.reflow();
+            this.updateCachedItems();
+        });
         this.reflow();
 
         this.enableDisabledItems();
@@ -127,7 +142,7 @@ export class GridsterService {
     enableDisabledItems() {
         while (this.disabledItems.length) {
             const item = this.disabledItems.shift();
-            const position = this.findDefaultPosition(item.w, item.h);
+            const position = this.gridList.findDefaultPosition(item.w, item.h);
 
             item.x = position[0];
             item.y = position[1];
@@ -278,54 +293,6 @@ export class GridsterService {
         };
     }
 
-    public findDefaultPosition(width: number, height: number) {
-
-        if (this.options.direction === 'horizontal') {
-            return this.findDefaultPositionHorizontal(width, height);
-        }
-        return this.findDefaultPositionVertical(width, height);
-    }
-
-    private findDefaultPositionHorizontal(width: number, height: number) {
-        for (const col of this.gridList.grid) {
-            const colIdx = this.gridList.grid.indexOf(col);
-            let rowIdx = 0;
-            while (rowIdx < (col.length - height + 1)) {
-                if (!this.checkItemsInArea(colIdx, colIdx + width - 1, rowIdx, rowIdx + height - 1)) {
-                    return [colIdx, rowIdx];
-                }
-                rowIdx++;
-            }
-        }
-        return [ this.gridList.grid.length, 0 ];
-    }
-
-    private findDefaultPositionVertical(width: number, height: number) {
-
-        for (const row of this.gridList.grid) {
-            const rowIdx = this.gridList.grid.indexOf(row);
-            let colIdx = 0;
-            while (colIdx < (row.length - width + 1)) {
-                if (!this.checkItemsInArea(rowIdx, rowIdx + height - 1, colIdx, colIdx + width - 1)) {
-                    return [colIdx, rowIdx];
-                }
-                colIdx++;
-            }
-        }
-        return [ 0 , this.gridList.grid.length];
-    }
-
-    private checkItemsInArea(rowStart: number, rowEnd: number, colStart: number, colEnd: number) {
-        for (let i = rowStart; i <= rowEnd; i++) {
-            for (let j = colStart; j <= colEnd; j++) {
-                if (this.gridList.grid[i] && this.gridList.grid[i][j]) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     /**
      * Update maxItemWidth and maxItemHeight vales according to current state of items
      */
@@ -353,7 +320,7 @@ export class GridsterService {
         });
     }
 
-    private calculateCellSize () {
+    calculateCellSize () {
         if (this.options.direction === 'horizontal') {
             // TODO: get rid of window.getComputedStyle
             this.cellHeight = Math.floor(parseFloat(window.getComputedStyle(this.$element).height) / this.options.lanes);
@@ -489,46 +456,41 @@ export class GridsterService {
 
     public updateCachedItems () {
         // Notify the user with the items that changed since the previous snapshot
-        this.triggerOnChange();
+        this.triggerOnChange(this.gridsterOptions.basicOptions.breakpoint);
+        this.gridsterOptions.responsiveOptions.forEach((options: IGridsterOptions) => {
+            this.triggerOnChange(options.breakpoint);
+        });
         this._items = this.copyItems();
     }
 
-    private triggerOnChange () {
-        const itemsChanged = this.gridList.getChangedItems(this._items, '$element');
-        const changeMap = this.gridList.getChangedItemsMap(this._items);
+    private triggerOnChange (breakpoint?) {
+        //const itemsChanged = this.gridList.getChangedItems(this._items, '$element');
+        const changeMap = this.gridList.getChangedItemsMap(this._items, breakpoint);
 
         changeMap.x
-            .filter(item => {
-                return item.itemComponent;
-            })
-            .forEach(item => {
-                item.itemComponent.xChange.emit(item.x);
+            .filter(item => item.itemComponent)
+            .forEach((item: GridListItem) => {
+                item.triggerChangeX(breakpoint);
             });
         changeMap.y
-            .filter(item => {
-                return item.itemComponent;
-            })
-            .forEach(item => {
-                item.itemComponent.yChange.emit(item.y);
+            .filter(item => item.itemComponent)
+            .forEach((item: GridListItem) => {
+                item.triggerChangeY(breakpoint);
             });
         changeMap.w
-            .filter(item => {
-                return item.itemComponent;
-            })
-            .forEach(item => {
+            .filter(item => item.itemComponent)
+            .forEach((item: GridListItem) => {
                 item.itemComponent.wChange.emit(item.w);
             });
         changeMap.h
-            .filter(item => {
-                return item.itemComponent;
-            })
-            .forEach(item => {
+            .filter(item => item.itemComponent)
+            .forEach((item: GridListItem) => {
                 item.itemComponent.hChange.emit(item.h);
             });
 
-        if (itemsChanged.length > 0) {
-            this.gridsterChange.emit(itemsChanged);
-        }
+        //if (itemsChanged.length > 0) {
+        //    this.gridsterChange.emit(itemsChanged);
+        //}
     }
 
     private removePositionHighlight () {

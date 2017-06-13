@@ -128,12 +128,32 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     @Output() xChange = new EventEmitter<number>();
     @Input() y: number;
     @Output() yChange = new EventEmitter<number>();
+
+    @Input() xSm: number;
+    @Output() xSmChange = new EventEmitter<number>();
+    @Input() ySm: number;
+    @Output() ySmChange = new EventEmitter<number>();
+
+    @Input() xMd: number;
+    @Output() xMdChange = new EventEmitter<number>();
+    @Input() yMd: number;
+    @Output() yMdChange = new EventEmitter<number>();
+
+    @Input() xLg: number;
+    @Output() xLgChange = new EventEmitter<number>();
+    @Input() yLg: number;
+    @Output() yLgChange = new EventEmitter<number>();
+
+    @Input() xXl: number;
+    @Output() xXlChange = new EventEmitter<number>();
+    @Input() yXl: number;
+    @Output() yXlChange = new EventEmitter<number>();
+
+
     @Input() w: number;
     @Output() wChange = new EventEmitter<number>();
     @Input() h: number;
     @Output() hChange = new EventEmitter<number>();
-    @Input() responsiveOptions: Array <{x: number, y: number, w: number, h: number}> = [];
-    @Output() responsiveOptionsChange = new EventEmitter<Array<{x: number, y: number, w: number, h: number}>>();
 
     @Input() dragAndDrop = true;
     @Input() resizable = true;
@@ -183,7 +203,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.h = this.h || this.gridster.options.defaultItemHeight;
 
         if (this.gridster.isInitialized() && !this.hasPositionsDefined()) {
-            const position = this.gridster.findDefaultPosition(this.item.w, this.item.h);
+            const position = this.gridster.gridList.findDefaultPosition(this.item.w, this.item.h);
 
             this.item.x = position[0];
             this.item.y = position[1];

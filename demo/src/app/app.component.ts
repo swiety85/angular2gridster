@@ -19,14 +19,16 @@ export class AppComponent {
         // maxHeight: 3,
         widthHeightRatio: 1,
         responsiveView: true,
-        // responsiveDebounce: 500,
+        responsiveDebounce: 500,
         responsiveOptions: [
             {
-                minWidth: 480,
+                breakpoint: 'sm',
+                // minWidth: 480,
                 lanes: 4
             },
             {
-                minWidth: 768,
+                breakpoint: 'md',
+                // minWidth: 768,
                 lanes: 6
             }
         ]
@@ -49,7 +51,7 @@ export class AppComponent {
             'laborum.'
         },
         {
-            x: 1, y: 0, w: 2, h: 1,
+            x: 1, y: 0, w: 3, h: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 2',
@@ -71,7 +73,7 @@ export class AppComponent {
             'laborum.'
         },
         {
-            x: 3, y: 0, w: 1, h: 2,
+            x: 3, y: 1, w: 1, h: 2,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 4',
