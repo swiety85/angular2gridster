@@ -9,6 +9,8 @@ import { GridsterService } from '../gridster.service';
 import { GridListItem } from '../gridList/GridListItem';
 import {DraggableEvent} from '../utils/DraggableEvent';
 import {Draggable} from '../utils/draggable';
+import {IGridsterOptions} from '../IGridsterOptions';
+import {GridList} from '../gridList/gridList';
 
 @Component({
     selector: 'gridster-item',
@@ -199,24 +201,17 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     }
 
     ngOnInit() {
-        this.w = this.w || this.gridster.options.defaultItemWidth;
-        this.h = this.h || this.gridster.options.defaultItemHeight;
+        this.w = this.w || this.gridster.options.defaultItemWidth || 1;
+        this.h = this.h || this.gridster.options.defaultItemHeight || 1;
 
-        if (this.gridster.isInitialized() && !this.hasPositionsDefined()) {
-            const position = this.gridster.gridList.findDefaultPosition(this.item.w, this.item.h);
-
-            this.item.x = position[0];
-            this.item.y = position[1];
-            setTimeout(() => {
-                this.xChange.emit(position[0]);
-                this.yChange.emit(position[1]);
-            });
+        if (this.gridster.isInitialized()) {
+            this.applyPositionsOnItem();
         }
 
-        if ((this.x || this.x === 0) && (this.y || this.y === 0)) {
-            this.enableItem();
-        } else {
-            this.gridster.disabledItems.push(this.item);
+        this.gridster.registerItem(this.item);
+
+        if (this.dragAndDrop) {
+            this.enableDragDrop();
         }
     }
 
@@ -225,7 +220,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             return;
         }
         if (changes['dragAndDrop']) {
-            if (changes['dragAndDrop'].currentValue) {
+            if (changes['dragAndDrop'].currentValue && this.gridster.options.dragAndDrop) {
                 this.enableDragDrop();
             } else {
                 this.disableDraggable();
@@ -239,7 +234,6 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             }
         }
 
-        this.gridster.gridList.resolveCollisions(this.item);
         this.gridster.render();
     }
 
@@ -259,18 +253,42 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.disableResizable();
     }
 
-    public enableItem() {
-        this.gridster.registerItem(this.item);
-        //  only if new item is registered after bootstrap
-        if (this.gridster.isInitialized()) {
-
-            this.gridster.gridList.resolveCollisions(this.item);
-            this.gridster.reflow();
+    applyPositionsOnItem() {
+        if (!this.item.hasPositions(null)) {
+            this.applyPositionsForGrid(this.gridster.gridsterOptions.basicOptions);
         }
 
-        if (this.gridster.options.dragAndDrop && this.item.dragAndDrop) {
-            this.enableDragDrop();
+        this.gridster.gridsterOptions.responsiveOptions
+            .filter((options: IGridsterOptions) => !this.item.hasPositions(options.breakpoint))
+            .forEach((options: IGridsterOptions) => this.applyPositionsForGrid(options));
+    }
+
+    private applyPositionsForGrid(options) {
+        const position = this.findPosition(options);
+
+        if (options.direction === 'horizontal') {
+            this.item.setValueX(position[0], options.breakpoint);
+            this.item.setValueY(position[1], options.breakpoint);
+        } else {
+            // We're supposed to subtract the rotated item's height which is actually
+            // the non-rotated item's width.
+            this.item.setValueX(position[1], options.breakpoint);
+            this.item.setValueY(position[0], options.breakpoint);
         }
+
+        setTimeout(() => {
+            this.item.triggerChangeX(options.breakpoint);
+            this.item.triggerChangeY(options.breakpoint);
+        });
+    }
+
+    private findPosition(options: IGridsterOptions): Array<number> {
+        const gridList = new GridList(
+            this.gridster.items.map(item => item.copyForBreakpoint(options.breakpoint)),
+            options
+        );
+
+        return gridList.findPositionForItem(this.item, {x: 0, y: 0});
     }
 
     public enableResizable() {
@@ -350,7 +368,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     }
 
     public enableDragDrop() {
-        if (this.dragSubscriptions.length || !this.dragAndDrop) {
+        if (this.dragSubscriptions.length) {
             return;
         }
         this.zone.runOutsideAngular(() => {
@@ -570,9 +588,5 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         } else {
             this.$element.style.width = (config.startData.maxW * this.gridster.cellWidth) + 'px';
         }
-    }
-
-    private hasPositionsDefined(): boolean {
-        return typeof this.item.x === 'number' && typeof this.item.y === 'number';
     }
 }

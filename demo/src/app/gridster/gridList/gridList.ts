@@ -148,7 +148,7 @@ export class GridList {
      *
      * @returns {Array} x and y.
      */
-    findPositionForItem(item: GridListItem, start: {x: number, y: number}, fixedRow?: number) {
+    findPositionForItem(item: GridListItem, start: {x: number, y: number}, fixedRow?: number): Array<number> {
         let x, y, position;
 
         // Start searching for a position from the horizontal position of the

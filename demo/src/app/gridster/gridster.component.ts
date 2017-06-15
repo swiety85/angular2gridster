@@ -230,29 +230,31 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
 
     private enableDraggable() {
         this.gridster.options.dragAndDrop = true;
-        this.gridster.items.forEach((item: GridListItem) => {
-            item.itemComponent.enableDragDrop();
-        });
+
+        this.gridster.items
+            .filter(item => item.itemComponent)
+            .filter(item => !item.itemComponent.dragAndDrop)
+            .forEach((item: GridListItem) => item.itemComponent.enableDragDrop());
     }
 
     private disableDraggable() {
         this.gridster.options.dragAndDrop = false;
-        this.gridster.items.forEach((item: GridListItem) => {
-            item.itemComponent.disableDraggable();
-        });
+
+        this.gridster.items
+            .filter(item => item.itemComponent)
+            .filter(item => item.itemComponent.dragAndDrop)
+            .forEach((item: GridListItem) => item.itemComponent.disableDraggable());
     }
 
     private enableResizable() {
         this.gridster.options.resizable = true;
-        this.gridster.items.forEach((item: GridListItem) => {
-            item.itemComponent.enableResizable();
-        });
+
+        this.gridster.items.forEach((item: GridListItem) => item.itemComponent.enableResizable());
     }
 
     private disableResizable() {
         this.gridster.options.resizable = false;
-        this.gridster.items.forEach((item: GridListItem) => {
-            item.itemComponent.disableResizable();
-        });
+
+        this.gridster.items.forEach((item: GridListItem) => item.itemComponent.disableResizable());
     }
 }

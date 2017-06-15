@@ -187,6 +187,14 @@ export class GridListItem {
         }
     }
 
+    public hasPositions(breakpoint?) {
+        const x = this.getValueX(breakpoint);
+        const y = this.getValueY(breakpoint);
+
+        return (x || x === 0) &&
+            (y || y === 0);
+    }
+
     private getXProperty(breakpoint?: string) {
 
         if (breakpoint && this.itemComponent) {

@@ -46,6 +46,8 @@ export class GridsterService {
 
     gridsterRect: ClientRect;
 
+    gridsterOptions: GridsterOptions;
+
     public gridsterChange: EventEmitter<any>;
 
     public $positionHighlight: HTMLElement;
@@ -65,8 +67,6 @@ export class GridsterService {
     private _maxGridCols: number;
 
     private gridsterComponent: GridsterComponent;
-
-    private gridsterOptions: GridsterOptions;
 
     constructor() {}
 
@@ -107,18 +107,12 @@ export class GridsterService {
 
         setTimeout(() => {
 
-            this.gridList.prepareItemsPositions(gridsterOptions.basicOptions);
-            gridsterOptions.responsiveOptions.forEach((options: IGridsterOptions) => {
-                this.gridList.prepareItemsPositions(options);
-            });
+            this.prepareItemsPositions();
 
             this.reflow();
             this._items = this.copyItems();
             this.updateCachedItems();
         });
-        this.reflow();
-
-        this.enableDisabledItems();
     }
 
     initGridList () {
@@ -139,15 +133,11 @@ export class GridsterService {
         this.render();
     }
 
-    enableDisabledItems() {
-        while (this.disabledItems.length) {
-            const item = this.disabledItems.shift();
-            const position = this.gridList.findDefaultPosition(item.w, item.h);
-
-            item.x = position[0];
-            item.y = position[1];
-            item.itemComponent.enableItem();
-        }
+    prepareItemsPositions() {
+        this.gridList.prepareItemsPositions(this.gridsterOptions.basicOptions);
+        this.gridsterOptions.responsiveOptions.forEach((options: IGridsterOptions) => {
+            this.gridList.prepareItemsPositions(options);
+        });
     }
 
     private copyItems (): Array<GridListItem> {
