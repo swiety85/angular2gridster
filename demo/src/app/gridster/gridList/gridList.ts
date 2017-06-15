@@ -368,7 +368,7 @@ export class GridList {
         // put items with defined positions to the grid
         gridList.items = validItems
             .map((item: GridListItem) => {
-                return item.copy(options.breakpoint);
+                return item.copyForBreakpoint(options.breakpoint);
             });
 
         gridList.generateGrid();

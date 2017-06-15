@@ -106,14 +106,14 @@ export class GridsterService {
         this.initGridList();
 
         setTimeout(() => {
-            this._items = this.copyItems();
 
             this.gridList.prepareItemsPositions(gridsterOptions.basicOptions);
             gridsterOptions.responsiveOptions.forEach((options: IGridsterOptions) => {
                 this.gridList.prepareItemsPositions(options);
             });
-            this.updateCachedItems();
+
             this.reflow();
+            this._items = this.copyItems();
             this.updateCachedItems();
         });
         this.reflow();

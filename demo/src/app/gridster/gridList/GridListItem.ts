@@ -119,7 +119,22 @@ export class GridListItem {
         return this;
     }
 
-    public copy (breakpoint?) {
+    public copy () {
+        const itemCopy = new GridListItem();
+
+        return itemCopy.setFromObjectLiteral({
+            $element: this.$element,
+            x: this.x,
+            y: this.y,
+            w: this.w,
+            h: this.h,
+            autoSize: this.autoSize,
+            dragAndDrop: this.dragAndDrop,
+            resizable: this.resizable
+        });
+    }
+
+    public copyForBreakpoint(breakpoint?) {
         const itemCopy = new GridListItem();
 
         return itemCopy.setFromObjectLiteral({
@@ -174,7 +189,7 @@ export class GridListItem {
 
     private getXProperty(breakpoint?: string) {
 
-        if (breakpoint) {
+        if (breakpoint && this.itemComponent) {
             return GridListItem.X_PROPERTY_MAP[breakpoint];
         } else {
             return 'x';
@@ -183,7 +198,7 @@ export class GridListItem {
 
     private getYProperty(breakpoint?: string) {
 
-        if (breakpoint) {
+        if (breakpoint && this.itemComponent) {
             return GridListItem.Y_PROPERTY_MAP[breakpoint];
         } else {
             return 'y';
