@@ -40,7 +40,7 @@ export class GridList {
     items: Array<GridListItem>;
     grid: Array<Array<GridListItem>>;
 
-    private options: IGridsterOptions;
+    options: IGridsterOptions;
 
     constructor(items: Array<GridListItem>, options: IGridsterOptions) {
         this.options = options;

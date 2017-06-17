@@ -205,6 +205,14 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.h = this.h || this.gridster.options.defaultItemHeight || 1;
 
         if (this.gridster.isInitialized()) {
+            if (this.x || this.x === 0) {
+                this.item.setValueX(this.x, this.gridster.options.breakpoint);
+                this.x = null;
+            }
+            if (this.y || this.y === 0) {
+                this.item.setValueY(this.y, this.gridster.options.breakpoint);
+                this.y = null;
+            }
             this.applyPositionsOnItem();
         }
 
@@ -213,28 +221,37 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         if (this.dragAndDrop) {
             this.enableDragDrop();
         }
+
+        if (this.gridster.isInitialized()) {
+            this.gridster.render();
+        }
     }
 
     ngOnChanges(changes: SimpleChanges) {
+        let changed = false;
         if (!this.gridster.gridList) {
             return;
         }
-        if (changes['dragAndDrop']) {
+        if (changes['dragAndDrop'] && !changes['dragAndDrop'].isFirstChange()) {
             if (changes['dragAndDrop'].currentValue && this.gridster.options.dragAndDrop) {
                 this.enableDragDrop();
             } else {
                 this.disableDraggable();
             }
+            changed = true;
         }
-        if (changes['resizable']) {
+        if (changes['resizable'] && !changes['resizable'].isFirstChange()) {
             if (changes['resizable'].currentValue) {
                 this.enableResizable();
             } else {
                 this.disableResizable();
             }
+            changed = true;
         }
 
-        this.gridster.render();
+        if (changed) {
+            this.gridster.render();
+        }
     }
 
     ngOnDestroy() {
@@ -264,17 +281,20 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     }
 
     private applyPositionsForGrid(options) {
+        let x, y;
+        //if (options.breakpoint && options.breakpoint === this.gridster.options.breakpoint) {
+        //    x = this.item.x;
+        //    y = this.item.y;
+        //    this.item.x = null;
+        //    this.item.y = null;
+        //} else {
         const position = this.findPosition(options);
+        x = options.direction === 'horizontal' ? position[0] : position[1];
+        y = options.direction === 'horizontal' ? position[1] : position[0];
+        //}
 
-        if (options.direction === 'horizontal') {
-            this.item.setValueX(position[0], options.breakpoint);
-            this.item.setValueY(position[1], options.breakpoint);
-        } else {
-            // We're supposed to subtract the rotated item's height which is actually
-            // the non-rotated item's width.
-            this.item.setValueX(position[1], options.breakpoint);
-            this.item.setValueY(position[0], options.breakpoint);
-        }
+        this.item.setValueX(x, options.breakpoint);
+        this.item.setValueY(y, options.breakpoint);
 
         setTimeout(() => {
             this.item.triggerChangeX(options.breakpoint);
@@ -401,6 +421,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                 .subscribe(() => {
                     this.zone.run(() => {
                         this.gridster.onStop(this.item);
+                        this.gridster.render();
                         this.isDragging = false;
                     });
                 });

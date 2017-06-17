@@ -91,6 +91,9 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
             .do((options) => {
                 this.options = options;
                 this.gridster.options = options;
+                if (this.gridster.gridList) {
+                    this.gridster.gridList.options = options;
+                }
             })
             .subscribe();
 

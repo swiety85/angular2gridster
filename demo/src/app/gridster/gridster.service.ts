@@ -258,7 +258,6 @@ export class GridsterService {
         this.removePositionHighlight();
 
         this.gridList.pullItemsToLeft();
-        this.render();
 
         this.gridsterComponent.isDragging = false;
     }
