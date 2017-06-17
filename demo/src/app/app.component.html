@@ -81,6 +81,7 @@
               (gridsterPositionChange)="logChanges($event)" (resize)="resize($event)" #gridster style="min-height: 500px;">
 
         <gridster-item *ngFor="let widget of widgets; let indx = index"
+                       [options]="itemOptions"
                        [dragAndDrop]="widget.dragAndDrop" [resizable]="widget.resizable"
                        [(x)]="widget.x" [(y)]="widget.y"
                        [(w)]="widget.w" [(h)]="widget.h">

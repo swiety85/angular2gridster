@@ -263,11 +263,21 @@ export class GridsterService {
     }
 
     public getItemWidth (item) {
-        return item.w * this.cellWidth;
+        let width = item.w;
+
+        if (this.options.direction === 'vertical') {
+            width = Math.min(item.w, this.options.lanes);
+        }
+        return width * this.cellWidth;
     }
 
     public getItemHeight (item) {
-        return item.h * this.cellHeight;
+        let height = item.h;
+
+        if (this.options.direction === 'horizontal') {
+            height = Math.min(item.h, this.options.lanes);
+        }
+        return height * this.cellHeight;
     }
 
     public offset (el: HTMLElement, relativeEl: HTMLElement): {left: number, top: number, right: number, bottom: number} {

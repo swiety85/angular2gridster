@@ -10,13 +10,15 @@ import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions'
 })
 export class AppComponent {
     @ViewChild(GridsterComponent) gridster: GridsterComponent;
+    itemOptions = {
+        maxWidth: 3,
+        maxHeight: 3
+    };
     gridsterOptions: IGridsterOptions = {
         lanes: 2,
         direction: 'vertical',
         dragAndDrop: true,
         resizable: true,
-        // maxWidth: 3,
-        // maxHeight: 3,
         widthHeightRatio: 1,
         responsiveView: true,
         responsiveDebounce: 500,

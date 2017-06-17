@@ -236,7 +236,6 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.gridster.items
             .filter(item => item.itemComponent)
-            .filter(item => !item.itemComponent.dragAndDrop)
             .forEach((item: GridListItem) => item.itemComponent.enableDragDrop());
     }
 
@@ -245,7 +244,6 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.gridster.items
             .filter(item => item.itemComponent)
-            .filter(item => item.itemComponent.dragAndDrop)
             .forEach((item: GridListItem) => item.itemComponent.disableDraggable());
     }
 

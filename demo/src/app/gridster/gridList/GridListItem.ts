@@ -52,13 +52,8 @@ export class GridListItem {
 
     get w () {
         const item = this.getItem();
-        const options = item.gridster ? item.gridster.options : null;
 
-        if (options && options.direction === 'vertical') {
-            return Math.min(item.w, options.lanes);
-        } else {
-            return item.w;
-        }
+        return item.w;
     }
     set w (value: number) {
         this.getItem().w = value;
@@ -66,13 +61,8 @@ export class GridListItem {
 
     get h () {
         const item = this.getItem();
-        const options = item.gridster ? item.gridster.options : null;
 
-        if (options && options.direction === 'horizontal') {
-            return Math.min(item.h, options.lanes);
-        } else {
-            return item.h;
-        }
+        return item.h;
     }
     set h (value: number) {
         this.getItem().h = value;

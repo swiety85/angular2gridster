@@ -125,7 +125,7 @@ import {GridList} from '../gridList/gridList';
     `],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+export class GridsterItemComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() x: number;
     @Output() xChange = new EventEmitter<number>();
     @Input() y: number;
@@ -160,6 +160,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     @Input() dragAndDrop = true;
     @Input() resizable = true;
 
+    @Input() options: any = {};
+
     autoSize: boolean;
 
     @HostBinding('class.is-dragging') isDragging = false;
@@ -174,6 +176,14 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
     item: GridListItem;
 
+    private defaultOptions: any = {
+        minWidth: 1,
+        minHeight: 1,
+        maxWidth: null,
+        maxHeight: null,
+        defaultWidth: 1,
+        defaultHeight: 1
+    };
     private subscriptions: Array<Subscription> = [];
     private dragSubscriptions: Array<Subscription> = [];
     private resizeSubscriptions: Array<Subscription> = [];
@@ -201,8 +211,10 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     }
 
     ngOnInit() {
-        this.w = this.w || this.gridster.options.defaultItemWidth || 1;
-        this.h = this.h || this.gridster.options.defaultItemHeight || 1;
+        this.options = Object.assign(this.defaultOptions, this.options);
+
+        this.w = this.w || this.options.defaultWidth;
+        this.h = this.h || this.options.defaultHeight;
 
         if (this.gridster.isInitialized()) {
             if (this.x || this.x === 0) {
@@ -248,8 +260,27 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             }
             changed = true;
         }
+        if (changes['w'] && !changes['w'].isFirstChange()) {
+            if (changes['w'].currentValue > this.options.maxWidth) {
+                this.w = this.options.maxWidth;
+                setTimeout(() => {
+                    this.wChange.emit(this.w);
+                });
+            }
+            changed = true;
+        }
+        if (changes['h'] && !changes['h'].isFirstChange()) {
+            if (changes['h'].currentValue > this.options.maxHeight) {
+                this.h = this.options.maxHeight;
+                setTimeout(() => {
+                    this.hChange.emit(this.h);
+                });
+            }
+            changed = true;
+        }
 
         if (changed) {
+            this.gridster.gridList.resolveCollisions(this.item);
             this.gridster.render();
         }
     }
@@ -282,16 +313,10 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
     private applyPositionsForGrid(options) {
         let x, y;
-        //if (options.breakpoint && options.breakpoint === this.gridster.options.breakpoint) {
-        //    x = this.item.x;
-        //    y = this.item.y;
-        //    this.item.x = null;
-        //    this.item.y = null;
-        //} else {
+
         const position = this.findPosition(options);
         x = options.direction === 'horizontal' ? position[0] : position[1];
         y = options.direction === 'horizontal' ? position[1] : position[0];
-        //}
 
         this.item.setValueX(x, options.breakpoint);
         this.item.setValueY(y, options.breakpoint);
@@ -446,25 +471,25 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             left: parseInt(this.$element.style.left, 10),
             height: parseInt(this.$element.style.height, 10),
             width: parseInt(this.$element.style.width, 10),
-            minX: Math.max(this.item.x + this.item.w - this.gridster.options.maxWidth, 0),
-            maxX: this.item.x + this.item.w - this.gridster.options.minWidth,
-            minY: Math.max(this.item.y + this.item.h - this.gridster.options.maxHeight, 0),
-            maxY: this.item.y + this.item.h - this.gridster.options.minHeight,
-            minW: this.gridster.options.minWidth,
+            minX: Math.max(this.item.x + this.item.w - this.options.maxWidth, 0),
+            maxX: this.item.x + this.item.w - this.options.minWidth,
+            minY: Math.max(this.item.y + this.item.h - this.options.maxHeight, 0),
+            maxY: this.item.y + this.item.h - this.options.minHeight,
+            minW: this.options.minWidth,
             maxW: Math.min(
-                this.gridster.options.maxWidth,
+                this.options.maxWidth,
                 (this.gridster.options.direction === 'vertical' && direction.indexOf('w') < 0) ?
-                this.gridster.options.lanes - this.item.x : this.gridster.options.maxWidth,
+                this.gridster.options.lanes - this.item.x : this.options.maxWidth,
                 direction.indexOf('w') >= 0 ?
-                this.item.x + this.item.w : this.gridster.options.maxWidth
+                this.item.x + this.item.w : this.options.maxWidth
             ),
-            minH: this.gridster.options.minHeight,
+            minH: this.options.minHeight,
             maxH: Math.min(
-                this.gridster.options.maxHeight,
+                this.options.maxHeight,
                 (this.gridster.options.direction === 'horizontal' && direction.indexOf('n') < 0) ?
-                this.gridster.options.lanes - this.item.y : this.gridster.options.maxHeight,
+                this.gridster.options.lanes - this.item.y : this.options.maxHeight,
                 direction.indexOf('n') >= 0 ?
-                this.item.y + this.item.h : this.gridster.options.maxHeight
+                this.item.y + this.item.h : this.options.maxHeight
             ),
             scrollLeft,
             scrollTop
@@ -515,10 +540,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         const height = config.startData.height + config.startEvent.clientY -
             config.moveEvent.clientY - config.scrollDiffY;
 
-        // if (this.isLessThanMinHeight(height)) { // lest than min
         if (height < (config.startData.minH * this.gridster.cellHeight)) {
             this.setMinHeight('n', config);
-            // } else if (this.isMoreThanMaxHeight(height, 'n')) { // more than max
         } else if (height > (config.startData.maxH * this.gridster.cellHeight)) {
             this.setMaxHeight('n', config);
         } else {
@@ -531,10 +554,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         const width = config.startData.width + config.startEvent.clientX -
             config.moveEvent.clientX - config.scrollDiffX;
 
-        // if (this.isLessThanMinWidth(width)) { // lest than min
         if (width < (config.startData.minW * this.gridster.cellWidth)) {
             this.setMinWidth('w', config);
-            // } else if (this.isMoreThanMaxWidth(width, 'w')) { // more than max
         } else if (width > (config.startData.maxW * this.gridster.cellWidth)) {
             this.setMaxWidth('w', config);
         } else {
@@ -547,10 +568,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         const width = config.startData.width + config.moveEvent.clientX -
             config.startEvent.clientX + config.scrollDiffX;
 
-        // if (this.isMoreThanMaxWidth(width, 'e')) {
         if (width > (config.startData.maxW * this.gridster.cellWidth)) {
             this.setMaxWidth('e', config);
-            // } else if (this.isLessThanMinWidth(width)) {
         } else if (width < (config.startData.minW * this.gridster.cellWidth)) {
             this.setMinWidth('e', config);
         } else {
@@ -562,10 +581,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         const height = config.startData.height + config.moveEvent.clientY -
             config.startEvent.clientY + config.scrollDiffY;
 
-        // if (this.isMoreThanMaxHeight(height, 's')) {
         if (height > config.startData.maxH * this.gridster.cellHeight) {
             this.setMaxHeight('s', config);
-            // } else if (this.isLessThanMinHeight(height)) {
         } else if (height < config.startData.minH * this.gridster.cellHeight) {
             this.setMinHeight('s', config);
         } else {
