@@ -279,6 +279,37 @@ export class GridsterItemComponent implements OnInit, AfterViewInit, OnDestroy {
             changed = true;
         }
 
+        if (changes['x'] && !changes['x'].isFirstChange()) {
+            changed = true;
+        }
+        if (changes['y'] && !changes['y'].isFirstChange()) {
+            changed = true;
+        }
+        if (changes['xSm'] && !changes['xSm'].isFirstChange()) {
+            changed = true;
+        }
+        if (changes['ySm'] && !changes['ySm'].isFirstChange()) {
+            changed = true;
+        }
+        if (changes['xMd'] && !changes['xMd'].isFirstChange()) {
+            changed = true;
+        }
+        if (changes['yMd'] && !changes['yMd'].isFirstChange()) {
+            changed = true;
+        }
+        if (changes['xLg'] && !changes['xLg'].isFirstChange()) {
+            changed = true;
+        }
+        if (changes['yLg'] && !changes['yLg'].isFirstChange()) {
+            changed = true;
+        }
+        if (changes['xXl'] && !changes['xXl'].isFirstChange()) {
+            changed = true;
+        }
+        if (changes['yXl'] && !changes['yXl'].isFirstChange()) {
+            changed = true;
+        }
+
         if (changed) {
             this.gridster.gridList.resolveCollisions(this.item);
             this.gridster.render();

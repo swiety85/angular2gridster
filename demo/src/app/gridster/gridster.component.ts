@@ -156,6 +156,7 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         if (name === 'direction') {
             this.gridster.options.direction = value;
+            this.gridster.gridList.pullItemsToLeft();
         }
         if (name === 'widthHeightRatio') {
             this.gridster.options.widthHeightRatio = parseFloat(value || 1);
