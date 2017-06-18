@@ -463,7 +463,6 @@ export class GridsterService {
     }
 
     private triggerOnChange (breakpoint?) {
-        //const itemsChanged = this.gridList.getChangedItems(this._items, '$element');
         const changeMap = this.gridList.getChangedItemsMap(this._items, breakpoint);
 
         changeMap.x
@@ -486,10 +485,6 @@ export class GridsterService {
             .forEach((item: GridListItem) => {
                 item.itemComponent.hChange.emit(item.h);
             });
-
-        //if (itemsChanged.length > 0) {
-        //    this.gridsterChange.emit(itemsChanged);
-        //}
     }
 
     private removePositionHighlight () {

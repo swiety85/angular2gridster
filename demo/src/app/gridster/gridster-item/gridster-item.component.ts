@@ -125,7 +125,7 @@ import {GridList} from '../gridList/gridList';
     `],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GridsterItemComponent implements OnInit, AfterViewInit, OnDestroy {
+export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     @Input() x: number;
     @Output() xChange = new EventEmitter<number>();
     @Input() y: number;
@@ -342,31 +342,6 @@ export class GridsterItemComponent implements OnInit, AfterViewInit, OnDestroy {
             .forEach((options: IGridsterOptions) => this.applyPositionsForGrid(options));
     }
 
-    private applyPositionsForGrid(options) {
-        let x, y;
-
-        const position = this.findPosition(options);
-        x = options.direction === 'horizontal' ? position[0] : position[1];
-        y = options.direction === 'horizontal' ? position[1] : position[0];
-
-        this.item.setValueX(x, options.breakpoint);
-        this.item.setValueY(y, options.breakpoint);
-
-        setTimeout(() => {
-            this.item.triggerChangeX(options.breakpoint);
-            this.item.triggerChangeY(options.breakpoint);
-        });
-    }
-
-    private findPosition(options: IGridsterOptions): Array<number> {
-        const gridList = new GridList(
-            this.gridster.items.map(item => item.copyForBreakpoint(options.breakpoint)),
-            options
-        );
-
-        return gridList.findPositionForItem(this.item, {x: 0, y: 0});
-    }
-
     public enableResizable() {
         if (this.resizeSubscriptions.length || !this.resizable) {
             return;
@@ -491,6 +466,31 @@ export class GridsterItemComponent implements OnInit, AfterViewInit, OnDestroy {
             sub.unsubscribe();
         });
         this.dragSubscriptions = [];
+    }
+
+    private applyPositionsForGrid(options) {
+        let x, y;
+
+        const position = this.findPosition(options);
+        x = options.direction === 'horizontal' ? position[0] : position[1];
+        y = options.direction === 'horizontal' ? position[1] : position[0];
+
+        this.item.setValueX(x, options.breakpoint);
+        this.item.setValueY(y, options.breakpoint);
+
+        setTimeout(() => {
+            this.item.triggerChangeX(options.breakpoint);
+            this.item.triggerChangeY(options.breakpoint);
+        });
+    }
+
+    private findPosition(options: IGridsterOptions): Array<number> {
+        const gridList = new GridList(
+            this.gridster.items.map(item => item.copyForBreakpoint(options.breakpoint)),
+            options
+        );
+
+        return gridList.findPositionForItem(this.item, {x: 0, y: 0});
     }
 
     private createResizeStartObject(direction: string) {

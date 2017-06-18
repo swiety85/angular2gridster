@@ -58,7 +58,7 @@ import {GridsterOptions} from './GridsterOptions';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
-    @Input('options') rawOptions: IGridsterOptions;
+    @Input() options: IGridsterOptions;
     @Output() gridsterPositionChange = new EventEmitter<any>();
     @Output() resize = new EventEmitter<any>();
     @Input() draggableOptions: IGridsterDraggableOptions;
@@ -70,7 +70,6 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     gridster: GridsterService;
     $el: HTMLElement;
 
-    private options: IGridsterOptions;
     private subscribtions: Array<Subscription> = [];
     private gridsterOptions: GridsterOptions;
 
@@ -84,12 +83,10 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.gridsterOptions = new GridsterOptions(this.rawOptions);
+        this.gridsterOptions = new GridsterOptions(this.options);
 
-        //this.options = gridsterOptions.getOptionsByWidth(window.outerWidth);
         this.gridsterOptions.change
             .do((options) => {
-                this.options = options;
                 this.gridster.options = options;
                 if (this.gridster.gridList) {
                     this.gridster.gridList.options = options;
@@ -97,12 +94,12 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
             })
             .subscribe();
 
-        this.gridster.init(this.options, this.draggableOptions, this);
+        this.gridster.init(this.gridster.options, this.draggableOptions, this);
 
         Observable.fromEvent(window, 'resize')
-            .debounceTime(this.options.responsiveDebounce || 0)
+            .debounceTime(this.gridster.options.responsiveDebounce || 0)
             .subscribe(() => {
-                if (this.options.responsiveView) {
+                if (this.gridster.options.responsiveView) {
                     this.reload();
                 }
             });

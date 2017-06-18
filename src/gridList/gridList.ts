@@ -40,7 +40,7 @@ export class GridList {
     items: Array<GridListItem>;
     grid: Array<Array<GridListItem>>;
 
-    private options: IGridsterOptions;
+    options: IGridsterOptions;
 
     constructor(items: Array<GridListItem>, options: IGridsterOptions) {
         this.options = options;
@@ -148,7 +148,7 @@ export class GridList {
      *
      * @returns {Array} x and y.
      */
-    findPositionForItem(item: GridListItem, start: {x: number, y: number}, fixedRow?: number) {
+    findPositionForItem(item: GridListItem, start: {x: number, y: number}, fixedRow?: number): Array<number> {
         let x, y, position;
 
         // Start searching for a position from the horizontal position of the
@@ -254,20 +254,21 @@ export class GridList {
         return changedItems;
     }
 
-    getChangedItemsMap(initialItems: Array<GridListItem>) {
+    getChangedItemsMap(initialItems: Array<GridListItem>, breakpoint?) {
         const changedItems = {
             x: [],
             y: [],
             w: [],
-            h: []
+            h: [],
+
         };
 
         for (let i = 0; i < initialItems.length; i++) {
             const item = this.getItemByAttribute('$element', initialItems[i].$element);
-            if (item.x !== initialItems[i].x) {
+            if (item.getValueX(breakpoint) !== initialItems[i].getValueX(breakpoint)) {
                 changedItems.x.push(item);
             }
-            if (item.y !== initialItems[i].y) {
+            if (item.getValueY(breakpoint) !== initialItems[i].getValueY(breakpoint)) {
                 changedItems.y.push(item);
             }
             if (item.w !== initialItems[i].w) {
@@ -345,6 +346,114 @@ export class GridList {
             for (let j = itemData.y; j < itemData.y + itemData.h; j++) {
                 if (this.grid[i] && this.grid[i][j] &&
                     this.grid[i][j] !== item && !this.grid[i][j].dragAndDrop) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    prepareItemsPositions(options: IGridsterOptions) {
+        // items with x, y that fits gird with size of options.lanes
+        const validItems = this.items
+            .filter((item: GridListItem) => item.itemComponent)
+            .filter((item: GridListItem) => this.isItemValidForGrid(item, options));
+        // items that x, y must be generated
+        const invalidItems = this.items
+            .filter((item: GridListItem) => item.itemComponent)
+            .filter((item: GridListItem) => !this.isItemValidForGrid(item, options));
+
+        const gridList = new GridList([], options);
+
+        // put items with defined positions to the grid
+        gridList.items = validItems
+            .map((item: GridListItem) => {
+                return item.copyForBreakpoint(options.breakpoint);
+            });
+
+        gridList.generateGrid();
+
+        invalidItems.forEach((item) => {
+            const itemCopy = item.copy();
+            const position = gridList.findPositionForItem(itemCopy, {x: 0, y: 0});
+
+            gridList.items.push(itemCopy);
+            gridList.setItemPosition(itemCopy, position);
+            gridList.markItemPositionToGrid(itemCopy);
+        });
+
+        this.items.forEach((itm: GridListItem) => {
+            const cachedItem = gridList.items.filter(cachedItm => {
+                return cachedItm.$element === itm.$element;
+            })[0];
+
+            itm.setValueX(cachedItem.x, options.breakpoint);
+            itm.setValueY(cachedItem.y, options.breakpoint);
+            itm.w = cachedItem.w;
+            itm.h = cachedItem.h;
+            itm.autoSize = cachedItem.autoSize;
+        });
+    }
+
+    public findDefaultPosition(width: number, height: number) {
+
+        if (this.options.direction === 'horizontal') {
+            return this.findDefaultPositionHorizontal(width, height);
+        }
+        return this.findDefaultPositionVertical(width, height);
+    }
+
+    private isItemValidForGrid(item: GridListItem, options: IGridsterOptions) {
+        const itemData = options.direction === 'horizontal' ? {
+            x: item.getValueY(options.breakpoint),
+            y: item.getValueX(options.breakpoint),
+            w: item.h,
+            h: item.w
+        } : {
+            x: item.getValueX(options.breakpoint),
+            y: item.getValueY(options.breakpoint),
+            w: item.w,
+            h: item.h
+        };
+
+        return typeof itemData.x === 'number' &&
+            typeof itemData.y === 'number' &&
+            (itemData.x + item.w) <= options.lanes;
+    }
+
+    private findDefaultPositionHorizontal(width: number, height: number) {
+        for (const col of this.grid) {
+            const colIdx = this.grid.indexOf(col);
+            let rowIdx = 0;
+            while (rowIdx < (col.length - height + 1)) {
+                if (!this.checkItemsInArea(colIdx, colIdx + width - 1, rowIdx, rowIdx + height - 1)) {
+                    return [colIdx, rowIdx];
+                }
+                rowIdx++;
+            }
+        }
+        return [ this.grid.length, 0 ];
+    }
+
+    private findDefaultPositionVertical(width: number, height: number) {
+
+        for (const row of this.grid) {
+            const rowIdx = this.grid.indexOf(row);
+            let colIdx = 0;
+            while (colIdx < (row.length - width + 1)) {
+                if (!this.checkItemsInArea(rowIdx, rowIdx + height - 1, colIdx, colIdx + width - 1)) {
+                    return [colIdx, rowIdx];
+                }
+                colIdx++;
+            }
+        }
+        return [ 0 , this.grid.length];
+    }
+
+    private checkItemsInArea(rowStart: number, rowEnd: number, colStart: number, colEnd: number) {
+        for (let i = rowStart; i <= rowEnd; i++) {
+            for (let j = colStart; j <= colEnd; j++) {
+                if (this.grid[i] && this.grid[i][j]) {
                     return true;
                 }
             }

@@ -58,7 +58,7 @@ import {GridsterOptions} from './GridsterOptions';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
-    @Input('options') rawOptions: IGridsterOptions;
+    @Input() options: IGridsterOptions;
     @Output() gridsterPositionChange = new EventEmitter<any>();
     @Output() resize = new EventEmitter<any>();
     @Input() draggableOptions: IGridsterDraggableOptions;
@@ -70,8 +70,8 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     gridster: GridsterService;
     $el: HTMLElement;
 
-    private options: IGridsterOptions;
     private subscribtions: Array<Subscription> = [];
+    private gridsterOptions: GridsterOptions;
 
     constructor(private zone: NgZone,
                 elementRef: ElementRef, gridster: GridsterService,
@@ -83,26 +83,26 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngOnInit() {
-        const gridsterOptions = new GridsterOptions(this.rawOptions);
+        this.gridsterOptions = new GridsterOptions(this.options);
 
-        this.options = gridsterOptions.getOptionsByWidth(window.outerWidth);
-        gridsterOptions.change
-            .subscribe((options: IGridsterOptions) => {
-                this.options = options;
+        this.gridsterOptions.change
+            .do((options) => {
                 this.gridster.options = options;
-                this.gridster.initGridList();
-                this.gridster.reflow();
-            });
+                if (this.gridster.gridList) {
+                    this.gridster.gridList.options = options;
+                }
+            })
+            .subscribe();
+
+        this.gridster.init(this.gridster.options, this.draggableOptions, this);
 
         Observable.fromEvent(window, 'resize')
-            .debounceTime(this.options.responsiveDebounce || 0)
+            .debounceTime(this.gridster.options.responsiveDebounce || 0)
             .subscribe(() => {
-                if (this.options.responsiveView) {
+                if (this.gridster.options.responsiveView) {
                     this.reload();
                 }
             });
-
-        this.gridster.init(this.options, this.draggableOptions, this);
 
         this.zone.runOutsideAngular(() => {
             const scrollSub = Observable.fromEvent(document, 'scroll')
@@ -112,7 +112,7 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-        this.gridster.start(this.$el);
+        this.gridster.start(this.$el, this.gridsterOptions);
 
         this.updateGridsterElementData();
 
@@ -153,6 +153,7 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         if (name === 'direction') {
             this.gridster.options.direction = value;
+            this.gridster.gridList.pullItemsToLeft();
         }
         if (name === 'widthHeightRatio') {
             this.gridster.options.widthHeightRatio = parseFloat(value || 1);
@@ -230,29 +231,29 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
 
     private enableDraggable() {
         this.gridster.options.dragAndDrop = true;
-        this.gridster.items.forEach((item: GridListItem) => {
-            item.itemComponent.enableDragDrop();
-        });
+
+        this.gridster.items
+            .filter(item => item.itemComponent)
+            .forEach((item: GridListItem) => item.itemComponent.enableDragDrop());
     }
 
     private disableDraggable() {
         this.gridster.options.dragAndDrop = false;
-        this.gridster.items.forEach((item: GridListItem) => {
-            item.itemComponent.disableDraggable();
-        });
+
+        this.gridster.items
+            .filter(item => item.itemComponent)
+            .forEach((item: GridListItem) => item.itemComponent.disableDraggable());
     }
 
     private enableResizable() {
         this.gridster.options.resizable = true;
-        this.gridster.items.forEach((item: GridListItem) => {
-            item.itemComponent.enableResizable();
-        });
+
+        this.gridster.items.forEach((item: GridListItem) => item.itemComponent.enableResizable());
     }
 
     private disableResizable() {
         this.gridster.options.resizable = false;
-        this.gridster.items.forEach((item: GridListItem) => {
-            item.itemComponent.disableResizable();
-        });
+
+        this.gridster.items.forEach((item: GridListItem) => item.itemComponent.disableResizable());
     }
 }
