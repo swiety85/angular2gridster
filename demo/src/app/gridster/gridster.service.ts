@@ -48,8 +48,6 @@ export class GridsterService {
 
     gridsterOptions: GridsterOptions;
 
-    public gridsterChange: EventEmitter<any>;
-
     public $positionHighlight: HTMLElement;
 
     public maxItemWidth: number;
@@ -107,7 +105,7 @@ export class GridsterService {
 
         setTimeout(() => {
 
-            this.prepareItemsPositions();
+            this.fixItemsPositions();
 
             this.reflow();
             this._items = this.copyItems();
@@ -133,10 +131,10 @@ export class GridsterService {
         this.render();
     }
 
-    prepareItemsPositions() {
-        this.gridList.prepareItemsPositions(this.gridsterOptions.basicOptions);
+    fixItemsPositions() {
+        this.gridList.fixItemsPositions(this.gridsterOptions.basicOptions);
         this.gridsterOptions.responsiveOptions.forEach((options: IGridsterOptions) => {
-            this.gridList.prepareItemsPositions(options);
+            this.gridList.fixItemsPositions(options);
         });
     }
 
@@ -192,7 +190,7 @@ export class GridsterService {
 
         this.gridsterComponent.isResizing = false;
 
-        this.gridsterComponent.resize.emit(item);
+        this.fixItemsPositions();
     }
 
     onStart (item: GridListItem) {
@@ -475,16 +473,20 @@ export class GridsterService {
             .forEach((item: GridListItem) => {
                 item.triggerChangeY(breakpoint);
             });
-        changeMap.w
-            .filter(item => item.itemComponent)
-            .forEach((item: GridListItem) => {
-                item.itemComponent.wChange.emit(item.w);
-            });
-        changeMap.h
-            .filter(item => item.itemComponent)
-            .forEach((item: GridListItem) => {
-                item.itemComponent.hChange.emit(item.h);
-            });
+
+        // size change should be called only once (not for each breakpoint)
+        if (!breakpoint) {
+            changeMap.w
+                .filter(item => item.itemComponent)
+                .forEach((item: GridListItem) => {
+                    item.itemComponent.wChange.emit(item.w);
+                });
+            changeMap.h
+                .filter(item => item.itemComponent)
+                .forEach((item: GridListItem) => {
+                    item.itemComponent.hChange.emit(item.h);
+                });
+        }
     }
 
     private removePositionHighlight () {

@@ -78,13 +78,13 @@
 <div class="main-content">
 
     <gridster [options]="gridsterOptions" [draggableOptions]="gridsterDraggableOptions"
-              (gridsterPositionChange)="logChanges($event)" (resize)="resize($event)" #gridster style="min-height: 500px;">
+              (optionsChange)="optionsChange($event)" #gridster style="min-height: 500px;">
 
         <gridster-item *ngFor="let widget of widgets; let indx = index"
                        [options]="itemOptions"
                        [dragAndDrop]="widget.dragAndDrop" [resizable]="widget.resizable"
                        [(x)]="widget.x" [(y)]="widget.y"
-                       [(w)]="widget.w" [(h)]="widget.h">
+                       [(w)]="widget.w" [(h)]="widget.h" (wChange)="resize(widget)" (hChange)="resize(widget)">
 
             <div class="panel-heading">
                 <h5 class="panel-title">{{ widget.title }}</h5>

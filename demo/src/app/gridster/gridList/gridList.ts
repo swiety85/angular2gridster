@@ -353,7 +353,7 @@ export class GridList {
         return false;
     }
 
-    prepareItemsPositions(options: IGridsterOptions) {
+    fixItemsPositions(options: IGridsterOptions) {
         // items with x, y that fits gird with size of options.lanes
         const validItems = this.items
             .filter((item: GridListItem) => item.itemComponent)

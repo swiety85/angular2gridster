@@ -59,8 +59,7 @@ import {GridsterOptions} from './GridsterOptions';
 })
 export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() options: IGridsterOptions;
-    @Output() gridsterPositionChange = new EventEmitter<any>();
-    @Output() resize = new EventEmitter<any>();
+    @Output() optionsChange = new EventEmitter<any>();
     @Input() draggableOptions: IGridsterDraggableOptions;
     @ViewChild('positionHighlight') $positionHighlight;
 
@@ -78,7 +77,6 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
                 private gridsterPrototype: GridsterPrototypeService) {
 
         this.gridster = gridster;
-        this.gridster.gridsterChange = this.gridsterPositionChange;
         this.$el = elementRef.nativeElement;
     }
 
@@ -91,6 +89,9 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
                 if (this.gridster.gridList) {
                     this.gridster.gridList.options = options;
                 }
+            })
+            .do((options) => {
+                this.optionsChange.emit(options);
             })
             .subscribe();
 
@@ -150,6 +151,9 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         if (name === 'lanes') {
             this.gridster.options.lanes = value;
+
+            this.gridster.gridList.fixItemsPositions(this.gridster.options);
+            this.gridster.reflow();
         }
         if (name === 'direction') {
             this.gridster.options.direction = value;
