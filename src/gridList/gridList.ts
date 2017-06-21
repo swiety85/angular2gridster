@@ -1,7 +1,9 @@
 import { EventEmitter } from '@angular/core';
 import {GridListItem} from './GridListItem';
+import {IGridsterOptions} from '../IGridsterOptions';
+import {GridsterOptions} from '../GridsterOptions';
 
-const GridCol = function(lanes) {
+const GridCol = function (lanes) {
     for (let i = 0; i < lanes; i++) {
         this.push(null);
     }
@@ -38,20 +40,10 @@ export class GridList {
     items: Array<GridListItem>;
     grid: Array<Array<GridListItem>>;
 
-    private options: {direction: string, lanes: number};
-    private defaults: Object = {
-        lanes: 5,
-        direction: 'horizontal'
-    };
+    options: IGridsterOptions;
 
-    constructor(items: Array<GridListItem>, options: {direction: string, lanes: number}) {
+    constructor(items: Array<GridListItem>, options: IGridsterOptions) {
         this.options = options;
-
-        for (const k in this.defaults) {
-            if (!this.options.hasOwnProperty(k)) {
-                this.options[k] = this.defaults[k];
-            }
-        }
 
         this.items = items;
 
@@ -59,6 +51,7 @@ export class GridList {
 
         this.generateGrid();
     }
+
     /**
      * Illustates grid as text-based table, using a number identifier for each
      * item. E.g.
@@ -71,7 +64,7 @@ export class GridList {
      * Warn: Does not work if items don't have a width or height specified
      * besides their position in the grid.
      */
-    toString () {
+    toString() {
         const widthOfGrid = this.grid.length;
         let output = '\n #|',
             border = '\n --',
@@ -102,10 +95,11 @@ export class GridList {
     setOption(name: string, value: any) {
         this.options[name] = value;
     }
+
     /**
      * Build the grid structure from scratch, with the current item positions
      */
-    generateGrid () {
+    generateGrid() {
         let i;
         this.resetGrid();
         for (i = 0; i < this.items.length; i++) {
@@ -113,7 +107,7 @@ export class GridList {
         }
     }
 
-    resizeGrid (lanes: number) {
+    resizeGrid(lanes: number) {
         let currentColumn = 0;
 
         this.options.lanes = lanes;
@@ -137,6 +131,7 @@ export class GridList {
 
         this.pullItemsToLeft();
     }
+
     /**
      * This method has two options for the position we want for the item:
      * - Starting from a certain row/column number and only looking for
@@ -153,7 +148,7 @@ export class GridList {
      *
      * @returns {Array} x and y.
      */
-    findPositionForItem (item: GridListItem, start: {x: number, y: number}, fixedRow?: number) {
+    findPositionForItem(item: GridListItem, start: {x: number, y: number}, fixedRow?: number): Array<number> {
         let x, y, position;
 
         // Start searching for a position from the horizontal position of the
@@ -205,7 +200,7 @@ export class GridList {
         this.resolveCollisions(item);
     }
 
-    moveItemToPosition (item: GridListItem, newPosition: Array<number>) {
+    moveItemToPosition(item: GridListItem, newPosition: Array<number>) {
         const position = this.getItemPosition({
             x: newPosition[0],
             y: newPosition[1],
@@ -216,6 +211,7 @@ export class GridList {
         this.updateItemPosition(item, [position.x, position.y]);
         this.resolveCollisions(item);
     }
+
     /**
      * Resize an item and resolve collisions.
      *
@@ -224,7 +220,7 @@ export class GridList {
      * @param {number} [size.w=item.w] The new width.
      * @param {number} [size.h=item.h] The new height.
      */
-    resizeItem (item: GridListItem, size: {w: number, h: number}) {
+    resizeItem(item: GridListItem, size: {w: number, h: number}) {
         const width = size.w || item.w,
             height = size.h || item.h;
 
@@ -232,6 +228,7 @@ export class GridList {
 
         this.pullItemsToLeft(item);
     }
+
     /**
      * Compare the current items against a previous snapshot and return only
      * the ones that changed their attributes in the meantime. This includes both
@@ -240,7 +237,7 @@ export class GridList {
      * Since both their position and size can change, the items need an
      * additional identifier attribute to match them with their previous state
      */
-    getChangedItems (initialItems: Array<GridListItem>, idAttribute: string): Array<GridListItem> {
+    getChangedItems(initialItems: Array<GridListItem>, idAttribute: string): Array<GridListItem> {
         const changedItems = [];
 
         for (let i = 0; i < initialItems.length; i++) {
@@ -257,20 +254,21 @@ export class GridList {
         return changedItems;
     }
 
-    getChangedItemsMap(initialItems: Array<GridListItem>) {
+    getChangedItemsMap(initialItems: Array<GridListItem>, breakpoint?) {
         const changedItems = {
             x: [],
             y: [],
             w: [],
-            h: []
+            h: [],
+
         };
 
         for (let i = 0; i < initialItems.length; i++) {
             const item = this.getItemByAttribute('$element', initialItems[i].$element);
-            if (item.x !== initialItems[i].x) {
+            if (item.getValueX(breakpoint) !== initialItems[i].getValueX(breakpoint)) {
                 changedItems.x.push(item);
             }
-            if (item.y !== initialItems[i].y) {
+            if (item.getValueY(breakpoint) !== initialItems[i].getValueY(breakpoint)) {
                 changedItems.y.push(item);
             }
             if (item.w !== initialItems[i].w) {
@@ -284,7 +282,7 @@ export class GridList {
         return changedItems;
     }
 
-    resolveCollisions (item: GridListItem) {
+    resolveCollisions(item: GridListItem) {
         if (!this.tryToResolveCollisionsLocally(item)) {
             this.pullItemsToLeft(item);
         }
@@ -299,7 +297,7 @@ export class GridList {
      * If a "fixed item" is provided, its position will be kept intact and the
      * rest of the items will be layed around it.
      */
-     pullItemsToLeft (fixedItem?) {
+    pullItemsToLeft(fixedItem?) {
 
         // Start a fresh grid with the fixed item already placed inside
         this.sortItemsByPosition();
@@ -338,17 +336,16 @@ export class GridList {
     }
 
     isOverFixedArea(x: number, y: number, w: number, h: number, item: GridListItem = null): boolean {
-        let itemData = { x, y, w, h };
+        let itemData = {x, y, w, h};
 
         if (this.options.direction !== 'horizontal') {
-            itemData = { x: y, y: x, w: h, h: w };
+            itemData = {x: y, y: x, w: h, h: w};
         }
 
         for (let i = itemData.x; i < itemData.x + itemData.w; i++) {
             for (let j = itemData.y; j < itemData.y + itemData.h; j++) {
                 if (this.grid[i] && this.grid[i][j] &&
-                    this.grid[i][j] !== item &&
-                    !this.grid[i][j].dragAndDrop) {
+                    this.grid[i][j] !== item && !this.grid[i][j].dragAndDrop) {
                     return true;
                 }
             }
@@ -356,7 +353,117 @@ export class GridList {
         return false;
     }
 
-    private sortItemsByPosition () {
+    fixItemsPositions(options: IGridsterOptions) {
+        // items with x, y that fits gird with size of options.lanes
+        const validItems = this.items
+            .filter((item: GridListItem) => item.itemComponent)
+            .filter((item: GridListItem) => this.isItemValidForGrid(item, options));
+        // items that x, y must be generated
+        const invalidItems = this.items
+            .filter((item: GridListItem) => item.itemComponent)
+            .filter((item: GridListItem) => !this.isItemValidForGrid(item, options));
+
+        const gridList = new GridList([], options);
+
+        // put items with defined positions to the grid
+        gridList.items = validItems
+            .map((item: GridListItem) => {
+                return item.copyForBreakpoint(options.breakpoint);
+            });
+
+        gridList.generateGrid();
+
+        invalidItems.forEach((item) => {
+            const itemCopy = item.copy();
+            const position = gridList.findPositionForItem(itemCopy, {x: 0, y: 0});
+
+            gridList.items.push(itemCopy);
+            gridList.setItemPosition(itemCopy, position);
+            gridList.markItemPositionToGrid(itemCopy);
+        });
+
+        gridList.pullItemsToLeft();
+
+        this.items.forEach((itm: GridListItem) => {
+            const cachedItem = gridList.items.filter(cachedItm => {
+                return cachedItm.$element === itm.$element;
+            })[0];
+
+            itm.setValueX(cachedItem.x, options.breakpoint);
+            itm.setValueY(cachedItem.y, options.breakpoint);
+            itm.w = cachedItem.w;
+            itm.h = cachedItem.h;
+            itm.autoSize = cachedItem.autoSize;
+        });
+    }
+
+    public findDefaultPosition(width: number, height: number) {
+
+        if (this.options.direction === 'horizontal') {
+            return this.findDefaultPositionHorizontal(width, height);
+        }
+        return this.findDefaultPositionVertical(width, height);
+    }
+
+    private isItemValidForGrid(item: GridListItem, options: IGridsterOptions) {
+        const itemData = options.direction === 'horizontal' ? {
+            x: item.getValueY(options.breakpoint),
+            y: item.getValueX(options.breakpoint),
+            w: item.h,
+            h: Math.min(item.w, options.lanes)
+        } : {
+            x: item.getValueX(options.breakpoint),
+            y: item.getValueY(options.breakpoint),
+            w: Math.min(item.w, options.lanes),
+            h: item.h
+        };
+
+        return typeof itemData.x === 'number' &&
+            typeof itemData.y === 'number' &&
+            (itemData.x + itemData.w) <= options.lanes;
+    }
+
+    private findDefaultPositionHorizontal(width: number, height: number) {
+        for (const col of this.grid) {
+            const colIdx = this.grid.indexOf(col);
+            let rowIdx = 0;
+            while (rowIdx < (col.length - height + 1)) {
+                if (!this.checkItemsInArea(colIdx, colIdx + width - 1, rowIdx, rowIdx + height - 1)) {
+                    return [colIdx, rowIdx];
+                }
+                rowIdx++;
+            }
+        }
+        return [ this.grid.length, 0 ];
+    }
+
+    private findDefaultPositionVertical(width: number, height: number) {
+
+        for (const row of this.grid) {
+            const rowIdx = this.grid.indexOf(row);
+            let colIdx = 0;
+            while (colIdx < (row.length - width + 1)) {
+                if (!this.checkItemsInArea(rowIdx, rowIdx + height - 1, colIdx, colIdx + width - 1)) {
+                    return [colIdx, rowIdx];
+                }
+                colIdx++;
+            }
+        }
+        return [ 0 , this.grid.length];
+    }
+
+    private checkItemsInArea(rowStart: number, rowEnd: number, colStart: number, colEnd: number) {
+        for (let i = rowStart; i <= rowEnd; i++) {
+            for (let j = colStart; j <= colEnd; j++) {
+                if (this.grid[i] && this.grid[i][j]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private sortItemsByPosition() {
         this.items.sort((item1, item2) => {
             const position1 = this.getItemPosition(item1),
                 position2 = this.getItemPosition(item2);
@@ -374,12 +481,13 @@ export class GridList {
             return 0;
         });
     }
+
     /**
      * Some items can have 100% height or 100% width. Those dimmensions are
      * expressed as 0. We need to ensure a valid width and height for each of
      * those items as the number of items per lane.
      */
-    private adjustSizeOfItems () {
+    private adjustSizeOfItems() {
 
         for (let i = 0; i < this.items.length; i++) {
             const item = this.items[i];
@@ -409,14 +517,15 @@ export class GridList {
         }
     }
 
-    private resetGrid () {
+    private resetGrid() {
         this.grid = [];
     }
+
     /**
      * Check that an item wouldn't overlap with another one if placed at a
      * certain position within the grid
      */
-    private itemFitsAtPosition (item: GridListItem, newPosition) {
+    private itemFitsAtPosition(item: GridListItem, newPosition) {
 
         const position = this.getItemPosition(item);
         let x, y;
@@ -456,7 +565,7 @@ export class GridList {
         return true;
     }
 
-    private updateItemPosition (item: GridListItem, position: Array<any>) {
+    private updateItemPosition(item: GridListItem, position: Array<any>) {
         if (item.x !== null && item.y !== null) {
             this.deleteItemPositionFromGrid(item);
         }
@@ -465,12 +574,13 @@ export class GridList {
 
         this.markItemPositionToGrid(item);
     }
+
     /**
      * @param {Object} item A reference to a grid item.
      * @param {number} width The new width.
      * @param {number} height The new height.
      */
-    private updateItemSize (item: GridListItem, width, height) {
+    private updateItemSize(item: GridListItem, width, height) {
         if (item.x !== null && item.y !== null) {
             this.deleteItemPositionFromGrid(item);
         }
@@ -480,11 +590,12 @@ export class GridList {
 
         this.markItemPositionToGrid(item);
     }
+
     /**
      * Mark the grid cells that are occupied by an item. This prevents items
      * from overlapping in the grid
      */
-    private markItemPositionToGrid (item: GridListItem) {
+    private markItemPositionToGrid(item: GridListItem) {
 
         const position = this.getItemPosition(item);
         let x, y;
@@ -499,7 +610,7 @@ export class GridList {
         }
     }
 
-    private deleteItemPositionFromGrid (item: GridListItem) {
+    private deleteItemPositionFromGrid(item: GridListItem) {
         const position = this.getItemPosition(item);
         let x, y;
 
@@ -522,10 +633,11 @@ export class GridList {
             }
         }
     }
+
     /**
      * Ensure that the grid has at least N columns available.
      */
-    private ensureColumns (N) {
+    private ensureColumns(N) {
         for (let i = 0; i < N; i++) {
             if (!this.grid[i]) {
                 this.grid.push(new GridCol(this.options.lanes));
@@ -533,7 +645,7 @@ export class GridList {
         }
     }
 
-    private getItemsCollidingWithItem (item: GridListItem) {
+    private getItemsCollidingWithItem(item: GridListItem) {
         const collidingItems = [];
         for (let i = 0; i < this.items.length; i++) {
             if (item !== this.items[i] &&
@@ -544,7 +656,7 @@ export class GridList {
         return collidingItems;
     }
 
-    private itemsAreColliding (item1: GridListItem, item2: GridListItem) {
+    private itemsAreColliding(item1: GridListItem, item2: GridListItem) {
         const position1 = this.getItemPosition(item1),
             position2 = this.getItemPosition(item2);
 
@@ -562,7 +674,7 @@ export class GridList {
      * revert to the initial item positions, we create a virtual grid in the
      * process
      */
-    private tryToResolveCollisionsLocally (item: GridListItem) {
+    private tryToResolveCollisionsLocally(item: GridListItem) {
         const collidingItems = this.getItemsCollidingWithItem(item);
         if (!collidingItems.length) {
             return true;
@@ -631,13 +743,14 @@ export class GridList {
         this.generateGrid();
         return true;
     }
+
     /**
      * When pulling items to the left, we need to find the leftmost position for
      * an item, with two considerations in mind:
      * - preserving its current row
      * - preserving the previous horizontal order between items
      */
-    private findLeftMostPositionForItem (item) {
+    private findLeftMostPositionForItem(item) {
         let tail = 0;
         const position = this.getItemPosition(item);
 
@@ -668,7 +781,7 @@ export class GridList {
         }
     }
 
-    private getItemByAttribute (key, value) {
+    private getItemByAttribute(key, value) {
         for (let i = 0; i < this.items.length; i++) {
             if (this.items[i][key] === value) {
                 return this.items[i];
@@ -677,10 +790,11 @@ export class GridList {
         return null;
     }
 
-    private padNumber (nr, prefix) {
+    private padNumber(nr, prefix) {
         // Currently works for 2-digit numbers (<100)
         return nr >= 10 ? nr : prefix + nr;
     }
+
     /**
      * If the direction is vertical we need to rotate the grid 90 deg to the
      * left. Thus, we simulate the fact that items are being pulled to the top.
@@ -704,7 +818,7 @@ export class GridList {
      * This restores the direction of the actions and greatly simplifies the
      * transformations.
      */
-    private getItemPosition (item: any) {
+    private getItemPosition(item: any) {
 
         if (this.options.direction === 'horizontal') {
             return item;
@@ -717,10 +831,11 @@ export class GridList {
             };
         }
     }
+
     /**
      * See getItemPosition.
      */
-    private setItemPosition (item, position) {
+    private setItemPosition(item, position) {
 
         if (this.options.direction === 'horizontal') {
             item.x = position[0];

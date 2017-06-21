@@ -12,4 +12,8 @@ export interface IGridsterOptions {
     maxHeight?: number;
     defaultItemWidth?: number;
     defaultItemHeight?: number;
+    responsiveView?: boolean;
+    responsiveDebounce?: number;
+    breakpoint?: string;
+    responsiveOptions?: Array<IGridsterOptions>;
 }
