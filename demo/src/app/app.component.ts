@@ -21,6 +21,7 @@ export class AppComponent {
         dragAndDrop: true, // enable/disable drag and drop for all items in grid
         resizable: true, // enable/disable resizing by drag and drop for all items in grid
         widthHeightRatio: 1, // proportion between item width and height
+        adoptingGridsterSize: true,
         responsiveView: true, // turn on adopting items sizes on window resize and enable responsiveOptions
         responsiveDebounce: 500, // window resize debounce time
         // List of different gridster configurations for different breakpoints.
