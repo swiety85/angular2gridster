@@ -35,13 +35,11 @@ export class GridsterService {
         direction: 'horizontal',
         itemSelector: 'li[data-w]',
         widthHeightRatio: 1,
+        adoptingGridsterSize: false,
         responsiveView: true,
         dragAndDrop: true,
         resizable: false,
-        minWidth: 1,
-        minHeight: 1,
-        defaultItemWidth: 1,
-        defaultItemHeight: 1
+        minWidth: 0
     };
 
     gridsterRect: ClientRect;
@@ -173,7 +171,7 @@ export class GridsterService {
             this.gridList.moveAndResize(item, newPosition, {w: newSize[0], h: newSize[1]});
 
             // Visually update item positions and highlight shape
-            this.applyPositionToItems();
+            this.applyPositionToItems(true);
             this.highlightPositionForItem(item);
         }
     }
@@ -226,7 +224,7 @@ export class GridsterService {
             this.gridList.moveItemToPosition(item, newPosition);
 
             // Visually update item positions and highlight shape
-            this.applyPositionToItems();
+            this.applyPositionToItems(true);
             this.highlightPositionForItem(item);
         }
     }
@@ -343,7 +341,10 @@ export class GridsterService {
         }
     }
 
-    private applyPositionToItems () {
+    applyPositionToItems (increaseGridsterSize?) {
+        if (!this.options.adoptingGridsterSize) {
+            increaseGridsterSize = true;
+        }
         // TODO: Implement group separators
         for (let i = 0; i < this.items.length; i++) {
             // Don't interfere with the positions of the dragged items
@@ -358,11 +359,13 @@ export class GridsterService {
         // Update the width of the entire grid container with enough room on the
         // right to allow dragging items to the end of the grid.
         if (this.options.direction === 'horizontal') {
+            const increaseWidthWith = (increaseGridsterSize) ? this.maxItemWidth : 0;
             child.style.height = (this.options.lanes * this.cellHeight) + 'px';
-            child.style.width = ((this.gridList.grid.length + this.maxItemWidth) * this.cellWidth) + 'px';
+            child.style.width = ((this.gridList.grid.length + increaseWidthWith) * this.cellWidth) + 'px';
 
         } else {
-            child.style.height = ((this.gridList.grid.length + this.maxItemHeight) * this.cellHeight) + 'px';
+            const increaseHeightWith = (increaseGridsterSize) ? this.maxItemHeight : 0;
+            child.style.height = ((this.gridList.grid.length + increaseHeightWith) * this.cellHeight) + 'px';
             child.style.width = (this.options.lanes * this.cellWidth) + 'px';
         }
     }
