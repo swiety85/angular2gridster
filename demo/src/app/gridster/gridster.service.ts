@@ -104,11 +104,11 @@ export class GridsterService {
         this.initGridList();
 
         setTimeout(() => {
-
+            this._items = this.copyItems();
             this.fixItemsPositions();
 
             this.reflow();
-            this._items = this.copyItems();
+
             this.updateCachedItems();
         });
     }

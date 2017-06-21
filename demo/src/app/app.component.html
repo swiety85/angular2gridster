@@ -80,11 +80,16 @@
     <gridster [options]="gridsterOptions" [draggableOptions]="gridsterDraggableOptions"
               (optionsChange)="optionsChange($event)" #gridster style="min-height: 500px;">
 
-        <gridster-item *ngFor="let widget of widgets; let indx = index"
+        <gridster-item *ngFor="let widget of widgets; let indx = index" #itemComp
                        [options]="itemOptions"
                        [dragAndDrop]="widget.dragAndDrop" [resizable]="widget.resizable"
                        [(x)]="widget.x" [(y)]="widget.y"
-                       [(w)]="widget.w" [(h)]="widget.h" (wChange)="resize(widget)" (hChange)="resize(widget)">
+                       [(xSm)]="widget.xSm" [(ySm)]="widget.ySm"
+                       [(xMd)]="widget.xMd" [(yMd)]="widget.yMd"
+                       [(xLg)]="widget.xLg" [(yLg)]="widget.yLg"
+                       [(xXl)]="widget.xXl" [(yXl)]="widget.yXl"
+                       [(w)]="widget.w" [(h)]="widget.h"
+                       (wChange)="resize(widget)" (hChange)="resize(widget)">
 
             <div class="panel-heading">
                 <h5 class="panel-title">{{ widget.title }}</h5>
@@ -107,10 +112,10 @@
                     <button (click)="remove($event, indx,gridster)">remove</button>
                 </p>
                 <p>
-                    Position: {{widget.x}} x {{widget.y}}<br>
+                    Position: {{itemComp.item.x}} x {{itemComp.item.y}}<br>
                     Size: {{widget.w}} x {{widget.h}}
                 </p>
-                <p>{{ widget.content }}</p>
+                <pre style="position: absolute">{{ widget | json }}</pre>
             </div>
 
         </gridster-item>
