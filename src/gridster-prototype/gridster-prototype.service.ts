@@ -71,7 +71,11 @@ export class GridsterPrototypeService {
                 };
             });
 
-        const dragExt = Observable.merge(over, drop)
+        const dragExt = Observable.concat(Observable.of({
+                item: null,
+                isOver: false,
+                isDrop: false
+        }), Observable.merge(over, drop))
             .scan((prev: any, next: any) => {
                 return {
                     item: next.item,

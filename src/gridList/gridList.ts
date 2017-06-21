@@ -353,7 +353,7 @@ export class GridList {
         return false;
     }
 
-    prepareItemsPositions(options: IGridsterOptions) {
+    fixItemsPositions(options: IGridsterOptions) {
         // items with x, y that fits gird with size of options.lanes
         const validItems = this.items
             .filter((item: GridListItem) => item.itemComponent)
@@ -382,6 +382,8 @@ export class GridList {
             gridList.markItemPositionToGrid(itemCopy);
         });
 
+        gridList.pullItemsToLeft();
+
         this.items.forEach((itm: GridListItem) => {
             const cachedItem = gridList.items.filter(cachedItm => {
                 return cachedItm.$element === itm.$element;
@@ -408,17 +410,17 @@ export class GridList {
             x: item.getValueY(options.breakpoint),
             y: item.getValueX(options.breakpoint),
             w: item.h,
-            h: item.w
+            h: Math.min(item.w, options.lanes)
         } : {
             x: item.getValueX(options.breakpoint),
             y: item.getValueY(options.breakpoint),
-            w: item.w,
+            w: Math.min(item.w, options.lanes),
             h: item.h
         };
 
         return typeof itemData.x === 'number' &&
             typeof itemData.y === 'number' &&
-            (itemData.x + item.w) <= options.lanes;
+            (itemData.x + itemData.w) <= options.lanes;
     }
 
     private findDefaultPositionHorizontal(width: number, height: number) {
