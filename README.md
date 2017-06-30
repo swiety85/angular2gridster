@@ -10,6 +10,21 @@ Angular 2 implementation of well known Gridster (no jQuery, no external librarie
 
 More comprehensive documentation is available in [Wiki](https://github.com/swiety85/angular2gridster/wiki).
 
+## Breaking changes v.0.6.x
+
+Configuration of GridsterItem should be set by ´option´ attribute on GridsterItem component itself - not on Gridster options like before.
+Map between deprecate Gridster options and new adequate GridsterItem options:
+
+
+| Gridster options (deprecated)       | GridsterItem option (new)          | Default value | Info         |
+| :---------------------------------- | :---------------------------------: | :---------------------------------: | :---------- |
+| minWidth     | minWidth        | 1 | Min width (in lanes) of item that can be set by resize feature. This option in Gridster options is still valid but has another meaning. Look for [responsive options](https://github.com/swiety85/angular2gridster). |
+| minHeight     | minHeight        | 1 | Min height (in lanes) of item that can be set by resize feature. |
+| maxWidth     | maxWidth        | null | Max width (in lanes) of item that can be set by resize feature. |
+| maxHeight     | maxHeight        | null | Max height (in lanes) of item that can be set by resize feature. |
+| defaultItemWidth     | defaultWidth        | 1 | Default width of an item when new item (without size) will be pushed to the gridster. |
+| defaultItemHeight     | defaultHeight        | 1 | Default height of an item when new item (without size) will be pushed to the gridster. |
+
 ## Installation
 ```shell
 npm install angular2gridster

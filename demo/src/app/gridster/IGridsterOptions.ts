@@ -6,14 +6,10 @@ export interface IGridsterOptions {
     dragAndDrop?: boolean;
     itemSelector?: string;
     resizable?: boolean;
-    minWidth?: number;
-    minHeight?: number;
-    maxWidth?: number;
-    maxHeight?: number;
-    defaultItemWidth?: number;
-    defaultItemHeight?: number;
+    adoptingGridsterSize?: boolean;
     responsiveView?: boolean;
     responsiveDebounce?: number;
     breakpoint?: string;
+    minWidth?: number;
     responsiveOptions?: Array<IGridsterOptions>;
 }
