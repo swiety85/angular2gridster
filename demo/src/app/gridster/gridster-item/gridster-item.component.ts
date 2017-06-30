@@ -204,12 +204,6 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         }
     }
 
-    ngAfterViewInit() {
-        if (this.gridster.options.resizable && this.item.resizable) {
-            this.enableResizable();
-        }
-    }
-
     ngOnInit() {
         this.options = Object.assign(this.defaultOptions, this.options);
 
@@ -225,10 +219,15 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                 this.item.setValueY(this.y, this.gridster.options.breakpoint);
                 this.y = null;
             }
-            this.applyPositionsOnItem();
+            this.setPositionsOnItem();
         }
 
         this.gridster.registerItem(this.item);
+
+        // TODO: calculateCellSize is throwing error because $element is undefined in gridster
+        this.gridster.calculateCellSize();
+        this.item.applySize();
+        this.item.applyPosition();
 
         if (this.dragAndDrop) {
             this.enableDragDrop();
@@ -236,6 +235,12 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
         if (this.gridster.isInitialized()) {
             this.gridster.render();
+        }
+    }
+
+    ngAfterViewInit() {
+        if (this.gridster.options.resizable && this.item.resizable) {
+            this.enableResizable();
         }
     }
 
@@ -332,14 +337,14 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.disableResizable();
     }
 
-    applyPositionsOnItem() {
+    setPositionsOnItem() {
         if (!this.item.hasPositions(null)) {
-            this.applyPositionsForGrid(this.gridster.gridsterOptions.basicOptions);
+            this.setPositionsForGrid(this.gridster.gridsterOptions.basicOptions);
         }
 
         this.gridster.gridsterOptions.responsiveOptions
             .filter((options: IGridsterOptions) => !this.item.hasPositions(options.breakpoint))
-            .forEach((options: IGridsterOptions) => this.applyPositionsForGrid(options));
+            .forEach((options: IGridsterOptions) => this.setPositionsForGrid(options));
     }
 
     public enableResizable() {
@@ -468,7 +473,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.dragSubscriptions = [];
     }
 
-    private applyPositionsForGrid(options) {
+    private setPositionsForGrid(options) {
         let x, y;
 
         const position = this.findPosition(options);

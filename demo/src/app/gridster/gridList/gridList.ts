@@ -374,7 +374,9 @@ export class GridList {
         gridList.generateGrid();
 
         invalidItems.forEach((item) => {
-            const itemCopy = item.copy();
+            // TODO: check if this change does not broke anything
+            // const itemCopy = item.copy();
+            const itemCopy = item.copyForBreakpoint(options.breakpoint);
             const position = gridList.findPositionForItem(itemCopy, {x: 0, y: 0});
 
             gridList.items.push(itemCopy);

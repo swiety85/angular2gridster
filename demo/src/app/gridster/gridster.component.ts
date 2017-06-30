@@ -69,8 +69,8 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     gridster: GridsterService;
     $el: HTMLElement;
 
+    gridsterOptions: GridsterOptions;
     private subscribtions: Array<Subscription> = [];
-    private gridsterOptions: GridsterOptions;
 
     constructor(private zone: NgZone,
                 elementRef: ElementRef, gridster: GridsterService,

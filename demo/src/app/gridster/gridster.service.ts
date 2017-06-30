@@ -64,10 +64,12 @@ export class GridsterService {
 
     private gridsterComponent: GridsterComponent;
 
+    private isInit = false;
+
     constructor() {}
 
     isInitialized(): boolean {
-        return !!this.$element;
+        return this.isInit;
     }
 
     /**
@@ -86,20 +88,25 @@ export class GridsterService {
         this.options = (<any>Object).assign({}, this.defaults, options);
         this.draggableOptions = (<any>Object).assign(
             {}, this.draggableDefaults, draggableOptions);
+
+        this.$element = gridsterComponent.$el;
+        this.gridsterOptions = gridsterComponent.gridsterOptions
     }
 
     start (gridsterEl: HTMLElement, gridsterOptions: GridsterOptions) {
 
         this.updateMaxItemSize();
 
-        this.gridsterOptions = gridsterOptions;
-        this.$element = gridsterEl;
+        //this.gridsterOptions = gridsterOptions;
+        //this.$element = gridsterEl;
         // Used to highlight a position an element will land on upon drop
         if (this.$positionHighlight) {
             this.$positionHighlight.style.display = 'none';
         }
 
         this.initGridList();
+
+        this.isInit = true;
 
         setTimeout(() => {
             this._items = this.copyItems();
@@ -133,12 +140,6 @@ export class GridsterService {
         this.gridList.fixItemsPositions(this.gridsterOptions.basicOptions);
         this.gridsterOptions.responsiveOptions.forEach((options: IGridsterOptions) => {
             this.gridList.fixItemsPositions(options);
-        });
-    }
-
-    private copyItems (): Array<GridListItem> {
-        return this.items.map((item: GridListItem) => {
-            return item.copy();
         });
     }
 
@@ -258,24 +259,6 @@ export class GridsterService {
         this.gridsterComponent.isDragging = false;
     }
 
-    public getItemWidth (item) {
-        let width = item.w;
-
-        if (this.options.direction === 'vertical') {
-            width = Math.min(item.w, this.options.lanes);
-        }
-        return width * this.cellWidth;
-    }
-
-    public getItemHeight (item) {
-        let height = item.h;
-
-        if (this.options.direction === 'horizontal') {
-            height = Math.min(item.h, this.options.lanes);
-        }
-        return height * this.cellHeight;
-    }
-
     public offset (el: HTMLElement, relativeEl: HTMLElement): {left: number, top: number, right: number, bottom: number} {
         const elRect = el.getBoundingClientRect();
         const relativeElRect = relativeEl.getBoundingClientRect();
@@ -286,6 +269,12 @@ export class GridsterService {
             right: relativeElRect.right - elRect.right,
             bottom: relativeElRect.bottom - elRect.bottom
         };
+    }
+
+    private copyItems (): Array<GridListItem> {
+        return this.items.map((item: GridListItem) => {
+            return item.copy();
+        });
     }
 
     /**
@@ -303,12 +292,13 @@ export class GridsterService {
      */
     private restoreCachedItems() {
         this.items.forEach((item: GridListItem) => {
-            const cachedItem = this._items.filter(cachedItm => {
+            const cachedItem: GridListItem = this._items.filter(cachedItm => {
                 return cachedItm.$element === item.$element;
             })[0];
 
             item.x = cachedItem.x;
             item.y = cachedItem.y;
+
             item.w = cachedItem.w;
             item.h = cachedItem.h;
             item.autoSize = cachedItem.autoSize;
@@ -332,8 +322,9 @@ export class GridsterService {
 
     private applySizeToItems () {
         for (let i = 0; i < this.items.length; i++) {
-            this.items[i].$element.style.width = this.getItemWidth(this.items[i]) + 'px';
-            this.items[i].$element.style.height = this.getItemHeight(this.items[i]) + 'px';
+            // this.items[i].$element.style.width = this.items[i].calculateWidth() + 'px';
+            // this.items[i].$element.style.height = this.items[i].calculateHeight() + 'px';
+            this.items[i].applySize();
 
             if (this.options.heightToFontSizeRatio) {
                 this.items[i].$element.style['font-size'] = this._fontSize;
@@ -351,8 +342,9 @@ export class GridsterService {
             if (this.isCurrentElement(this.items[i].$element)) {
                 continue;
             }
-            this.items[i].$element.style.left = (this.items[i].x * this.cellWidth) + 'px';
-            this.items[i].$element.style.top = (this.items[i].y * this.cellHeight) + 'px';
+            // this.items[i].$element.style.left = (this.items[i].x * this.cellWidth) + 'px';
+            // this.items[i].$element.style.top = (this.items[i].y * this.cellHeight) + 'px';
+            this.items[i].applyPosition(this);
         }
 
         const child = <HTMLElement>this.$element.firstChild;
@@ -443,10 +435,13 @@ export class GridsterService {
     }
 
     private highlightPositionForItem (item: GridListItem) {
-        this.$positionHighlight.style.width = this.getItemWidth(item) + 'px';
-        this.$positionHighlight.style.height = this.getItemHeight(item) + 'px';
-        this.$positionHighlight.style.left = item.x * this.cellWidth + 'px';
-        this.$positionHighlight.style.top = item.y * this.cellHeight + 'px';
+        const size = item.calculateSize(this);
+        const position = item.calculatePosition(this);
+
+        this.$positionHighlight.style.width = size.width + 'px';
+        this.$positionHighlight.style.height = size.height + 'px';
+        this.$positionHighlight.style.left = position.left + 'px';
+        this.$positionHighlight.style.top = position.top + 'px';
         this.$positionHighlight.style.display = '';
 
         if (this.options.heightToFontSizeRatio) {
@@ -460,6 +455,7 @@ export class GridsterService {
         this.gridsterOptions.responsiveOptions.forEach((options: IGridsterOptions) => {
             this.triggerOnChange(options.breakpoint);
         });
+        //this.triggerOnChange(this.options.breakpoint);
         this._items = this.copyItems();
     }
 

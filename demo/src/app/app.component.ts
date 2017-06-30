@@ -158,10 +158,10 @@ export class AppComponent {
     }
 
     over(event) {
-        event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.width =
-            event.gridster.getItemWidth(event.item) + 'px';
-        event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.height =
-            event.gridster.getItemHeight(event.item) + 'px';
+        const size = event.item.calculateSize(event.gridster);
+
+        event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.width = size.width + 'px';
+        event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.height = size.height + 'px';
         event.item.itemPrototype.$element.classList.add('is-over');
     }
 
