@@ -67,7 +67,7 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     @HostBinding('class.gridster--resizing') isResizing = false;
 
     gridster: GridsterService;
-    $el: HTMLElement;
+    $element: HTMLElement;
 
     gridsterOptions: GridsterOptions;
     private subscribtions: Array<Subscription> = [];
@@ -77,7 +77,7 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
                 private gridsterPrototype: GridsterPrototypeService) {
 
         this.gridster = gridster;
-        this.$el = elementRef.nativeElement;
+        this.$element = elementRef.nativeElement;
     }
 
     ngOnInit() {
@@ -113,7 +113,7 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-        this.gridster.start(this.$el, this.gridsterOptions);
+        this.gridster.start();
 
         this.updateGridsterElementData();
 
@@ -171,13 +171,16 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     reload() {
-        this.gridster.reflow();
+        setTimeout(() => {
+            this.gridster.fixItemsPositions();
+            this.gridster.reflow();
+        });
 
         return this;
     }
 
     private updateGridsterElementData() {
-        this.gridster.gridsterRect = this.$el.getBoundingClientRect();
+        this.gridster.gridsterRect = this.$element.getBoundingClientRect();
     }
 
     /**

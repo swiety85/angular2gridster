@@ -1,15 +1,17 @@
 import {GridsterItemComponent} from '../gridster-item/gridster-item.component';
 import {GridsterItemPrototypeDirective} from '../gridster-prototype/gridster-item-prototype.directive';
+import {GridsterService} from '../gridster.service';
 
 export class GridListItem {
-    static X_PROPERTY_MAP = {
+    static BREAKPOINTS: Array<string> = ['sm', 'md', 'lg', 'xl'];
+    static X_PROPERTY_MAP: any = {
         sm: 'xSm',
         md: 'xMd',
         lg: 'xLg',
         xl: 'xXl'
     };
 
-    static Y_PROPERTY_MAP = {
+    static Y_PROPERTY_MAP: any = {
         sm: 'ySm',
         md: 'yMd',
         lg: 'yLg',
@@ -18,7 +20,7 @@ export class GridListItem {
 
     itemComponent: GridsterItemComponent;
     itemPrototype: GridsterItemPrototypeDirective;
-    itemObject: Object;
+    itemObject: any;
 
     get $element () {
         return this.getItem().$element;
@@ -86,7 +88,7 @@ export class GridListItem {
     constructor () {}
 
     public setFromGridsterItem (item: GridsterItemComponent): GridListItem {
-        if (this.itemComponent || this.itemPrototype || this.itemObject) {
+        if (this.isItemSet()) {
             throw new Error('GridListItem is already set.');
         }
         this.itemComponent = item;
@@ -94,7 +96,7 @@ export class GridListItem {
     }
 
     public setFromGridsterItemPrototype (item: GridsterItemPrototypeDirective): GridListItem {
-        if (this.itemComponent || this.itemPrototype || this.itemObject) {
+        if (this.isItemSet()) {
             throw new Error('GridListItem is already set.');
         }
         this.itemPrototype = item;
@@ -102,14 +104,14 @@ export class GridListItem {
     }
 
     public setFromObjectLiteral (item: Object): GridListItem {
-        if (this.itemComponent || this.itemPrototype || this.itemObject) {
+        if (this.isItemSet()) {
             throw new Error('GridListItem is already set.');
         }
         this.itemObject = item;
         return this;
     }
 
-    public copy () {
+    public copy() {
         const itemCopy = new GridListItem();
 
         return itemCopy.setFromObjectLiteral({
@@ -185,6 +187,54 @@ export class GridListItem {
             (y || y === 0);
     }
 
+    public applyPosition(gridster?: GridsterService) {
+        const position = this.calculatePosition(gridster);
+
+        this.$element.style.left = position.left + 'px';
+        this.$element.style.top = position.top + 'px';
+    }
+
+    public calculatePosition(gridster?: GridsterService): {left: number, top: number} {
+        if (!gridster && !this.itemComponent) {
+            return {left: 0, top: 0};
+        }
+        gridster = gridster || this.itemComponent.gridster;
+
+        return {
+            left: this.x * gridster.cellWidth,
+            top: this.y * gridster.cellHeight
+        };
+    }
+
+    public applySize(gridster?: GridsterService): void {
+        const size = this.calculateSize(gridster);
+
+        this.$element.style.width = size.width + 'px';
+        this.$element.style.height = size.height + 'px';
+    }
+
+    public calculateSize(gridster?: GridsterService): {width: number, height: number} {
+        if (!gridster && !this.itemComponent) {
+            return {width: 0, height: 0};
+        }
+        gridster = gridster || this.itemComponent.gridster;
+
+        let width = this.w;
+        let height = this.h;
+
+        if (gridster.options.direction === 'vertical') {
+            width = Math.min(this.w, gridster.options.lanes);
+        }
+        if (gridster.options.direction === 'horizontal') {
+            height = Math.min(this.h, gridster.options.lanes);
+        }
+
+        return {
+            width: width * gridster.cellWidth,
+            height: height * gridster.cellHeight
+        };
+    }
+
     private getXProperty(breakpoint?: string) {
 
         if (breakpoint && this.itemComponent) {
@@ -210,5 +260,9 @@ export class GridListItem {
             throw new Error('GridListItem is not set.');
         }
         return item;
+    }
+
+    private isItemSet() {
+        return this.itemComponent || this.itemPrototype || this.itemObject;
     }
 }

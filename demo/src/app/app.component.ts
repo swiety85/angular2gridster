@@ -21,7 +21,7 @@ export class AppComponent {
         dragAndDrop: true, // enable/disable drag and drop for all items in grid
         resizable: true, // enable/disable resizing by drag and drop for all items in grid
         widthHeightRatio: 1, // proportion between item width and height
-        adoptingGridsterSize: true,
+        shrink: true,
         responsiveView: true, // turn on adopting items sizes on window resize and enable responsiveOptions
         responsiveDebounce: 500, // window resize debounce time
         // List of different gridster configurations for different breakpoints.
@@ -116,6 +116,8 @@ export class AppComponent {
         }
         widget.w = size;
 
+        this.gridster.reload();
+
         return false;
     }
 
@@ -126,6 +128,8 @@ export class AppComponent {
             size = 1;
         }
         widget.h = size;
+
+        this.gridster.reload();
 
         return false;
     }
@@ -146,12 +150,7 @@ export class AppComponent {
             x: item.x, y: item.y, w: item.w, h: item.h,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 5',
-            content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
-            'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
-            'commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla ' +
-            'pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est ' +
-            'laborum.'
+            title: 'Basic form inputs 5'
         });
 
         console.log('add widget from drag to:', gridster);
@@ -205,7 +204,7 @@ export class AppComponent {
         console.log('widget remove', index);
     }
 
-    resize(item) {
-        console.log('resize', item);
+    itemChange($event: any) {
+        console.log('item change', $event);
     }
 }

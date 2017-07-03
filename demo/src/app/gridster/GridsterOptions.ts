@@ -9,7 +9,7 @@ export class GridsterOptions {
     responsiveView: boolean;
     dragAndDrop: boolean;
     resizable: boolean;
-    adoptingGridsterSize: boolean;
+    shrink: boolean;
     minWidth: number;
 
     change: Observable<IGridsterOptions>;

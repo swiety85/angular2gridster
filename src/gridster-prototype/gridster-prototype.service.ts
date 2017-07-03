@@ -28,7 +28,7 @@ export class GridsterPrototypeService {
     observeDropOver (gridster: GridsterService) {
         return this.dragStopSubject.asObservable()
             .filter((item: GridsterItemPrototypeDirective) => {
-                return this.isInsideContainer(item.$element, gridster.$element);
+                return this.isInsideContainer(item.$element, gridster.gridsterComponent.$element);
             })
             .do((prototype: GridsterItemPrototypeDirective) => {
                 // TODO: what we should provide as a param?
@@ -40,7 +40,7 @@ export class GridsterPrototypeService {
     observeDropOut (gridster: GridsterService) {
         return this.dragStopSubject.asObservable()
             .filter((item: GridsterItemPrototypeDirective) => {
-                return !this.isInsideContainer(item.$element, gridster.$element);
+                return !this.isInsideContainer(item.$element, gridster.gridsterComponent.$element);
             })
             .do((prototype: GridsterItemPrototypeDirective) => {
                 // TODO: what we should provide as a param?
@@ -57,7 +57,7 @@ export class GridsterPrototypeService {
             .map((item: GridsterItemPrototypeDirective) => {
                 return {
                     item,
-                    isOver: this.isInsideContainer(item.$element, gridster.$element),
+                    isOver: this.isInsideContainer(item.$element, gridster.gridsterComponent.$element),
                     isDrop: false
                 };
             });
@@ -66,7 +66,7 @@ export class GridsterPrototypeService {
             .map((item: GridsterItemPrototypeDirective) => {
                 return {
                     item,
-                    isOver: this.isInsideContainer(item.$element, gridster.$element),
+                    isOver: this.isInsideContainer(item.$element, gridster.gridsterComponent.$element),
                     isDrop: true
                 };
             });

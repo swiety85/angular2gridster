@@ -89,7 +89,7 @@
                        [(xLg)]="widget.xLg" [(yLg)]="widget.yLg"
                        [(xXl)]="widget.xXl" [(yXl)]="widget.yXl"
                        [(w)]="widget.w" [(h)]="widget.h"
-                       (wChange)="resize(widget)" (hChange)="resize(widget)">
+                       (change)="itemChange($event)">
 
             <div class="panel-heading">
                 <h5 class="panel-title">{{ widget.title }}</h5>
@@ -113,7 +113,7 @@
                     <button (click)="remove($event, indx,gridster)">remove</button>
                 </p>
                 <p>
-                    Position: {{itemComp.item.x}} x {{itemComp.item.y}}<br>
+                    Position: {{itemComp?.item?.x}} x {{itemComp?.item?.y}}<br>
                     Size: {{widget.w}} x {{widget.h}}
                 </p>
                 <pre style="position: absolute">{{ widget | json }}</pre>

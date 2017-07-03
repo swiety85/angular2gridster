@@ -6,7 +6,7 @@ export interface IGridsterOptions {
     dragAndDrop?: boolean;
     itemSelector?: string;
     resizable?: boolean;
-    adoptingGridsterSize?: boolean;
+    shrink?: boolean;
     responsiveView?: boolean;
     responsiveDebounce?: number;
     breakpoint?: string;
