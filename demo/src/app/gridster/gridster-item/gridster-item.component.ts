@@ -288,8 +288,10 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             this.gridster.items.splice(index, 1);
         }
 
-        this.gridster.gridList.pullItemsToLeft();
-        this.gridster.render();
+        setTimeout(() => {
+            this.gridster.gridList.pullItemsToLeft();
+            this.gridster.render();
+        });
 
         this.subscriptions.forEach((sub: Subscription) => {
             sub.unsubscribe();

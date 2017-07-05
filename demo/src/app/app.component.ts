@@ -1,4 +1,4 @@
-import { Component, HostListener, ViewChild } from '@angular/core';
+import { Component, ViewChildren, QueryList } from '@angular/core';
 import { GridsterComponent } from './gridster/gridster.component';
 import { IGridsterOptions } from './gridster/IGridsterOptions';
 import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions';
@@ -9,7 +9,7 @@ import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions'
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    @ViewChild(GridsterComponent) gridster: GridsterComponent;
+    @ViewChildren(GridsterComponent) gridster: QueryList<GridsterComponent>;
     itemOptions = {
         maxWidth: 3,
         maxHeight: 3
@@ -108,7 +108,7 @@ export class AppComponent {
             .reload();
     }
 
-    setWidth(widget: any, size: number, e: MouseEvent) {
+    setWidth(widget: any, size: number, e: MouseEvent, gridster) {
         e.stopPropagation();
         e.preventDefault();
         if (size < 1) {
@@ -116,12 +116,12 @@ export class AppComponent {
         }
         widget.w = size;
 
-        this.gridster.reload();
+        gridster.reload();
 
         return false;
     }
 
-    setHeight(widget: any, size: number, e: MouseEvent) {
+    setHeight(widget: any, size: number, e: MouseEvent, gridster) {
         e.stopPropagation();
         e.preventDefault();
         if (size < 1) {
@@ -129,7 +129,7 @@ export class AppComponent {
         }
         widget.h = size;
 
-        this.gridster.reload();
+        gridster.reload();
 
         return false;
     }
@@ -204,7 +204,9 @@ export class AppComponent {
         console.log('widget remove', index);
     }
 
-    itemChange($event: any) {
+    itemChange($event: any, gridster) {
+        this.gridster.first.reload();
+        this.gridster.last.reload();
         console.log('item change', $event);
     }
 }
