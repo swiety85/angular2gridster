@@ -32,6 +32,11 @@ Map between deprecated Gridster options and new adequate GridsterItem options:
 | defaultItemWidth     | defaultWidth        | 1 | Default width of an item when new item (without size) will be pushed to the gridster. |
 | defaultItemHeight     | defaultHeight        | 1 | Default height of an item when new item (without size) will be pushed to the gridster. |
 
+Removed events on GridsterComponent:
+* gridsterPositionChange
+* resize
+
+In place of them use new `change` event on GridsterItemComponent. More info [here](https://github.com/swiety85/angular2gridster/wiki/API-Documentation#gridsteritemcomponent).
 
 
 ## Installation
