@@ -455,7 +455,7 @@ export class GridsterService {
 
     public updateCachedItems () {
         // Notify the user with the items that changed since the previous snapshot
-        this.triggerOnChange(this.gridsterOptions.basicOptions.breakpoint);
+        this.triggerOnChange(null);
         this.gridsterOptions.responsiveOptions.forEach((options: IGridsterOptions) => {
             this.triggerOnChange(options.breakpoint);
         });
