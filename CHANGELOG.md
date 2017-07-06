@@ -17,6 +17,7 @@
 * **config:** new GridsterItem options
 * **deps:** update angular env to newest version
 * **demo:** extend demo page
+* **config:** shrink Gridster height to fit items
 
 
 
