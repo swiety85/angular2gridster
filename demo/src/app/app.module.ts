@@ -6,10 +6,12 @@ import { GridsterModule } from './gridster/gridster.module';
 
 
 import { AppComponent } from './app.component';
+import { TestComponent } from './test/test.component';
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        TestComponent
     ],
     imports: [
         BrowserModule,

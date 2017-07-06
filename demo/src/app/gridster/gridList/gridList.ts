@@ -234,52 +234,36 @@ export class GridList {
      * the ones that changed their attributes in the meantime. This includes both
      * position (x, y) and size (w, h)
      *
-     * Since both their position and size can change, the items need an
-     * additional identifier attribute to match them with their previous state
+     * Each item that is returned is not the GridListItem but the helper that holds GridListItem
+     * and list of changed properties.
      */
-    getChangedItems(initialItems: Array<GridListItem>, idAttribute: string): Array<GridListItem> {
-        const changedItems = [];
+    getChangedItems(initialItems: Array<GridListItem>, breakpoint?): Array<{
+        item: GridListItem, changes: Array<string>
+    }> {
 
-        for (let i = 0; i < initialItems.length; i++) {
-            const item = this.getItemByAttribute(idAttribute, initialItems[i][idAttribute]);
+        return initialItems
+            .map((initItem: GridListItem) => {
+                const changes = [];
+                const item = this.getItemByAttribute('$element', initItem.$element);
 
-            if (item.x !== initialItems[i].x ||
-                item.y !== initialItems[i].y ||
-                item.w !== initialItems[i].w ||
-                item.h !== initialItems[i].h) {
-                changedItems.push(item);
-            }
-        }
+                if (item.getValueX(breakpoint) !== initItem.getValueX(breakpoint)) {
+                    changes.push('x');
+                }
+                if (item.getValueY(breakpoint) !== initItem.getValueY(breakpoint)) {
+                    changes.push('y');
+                }
+                if (item.w !== initItem.w) {
+                    changes.push('w');
+                }
+                if (item.h !== initItem.h) {
+                    changes.push('h');
+                }
 
-        return changedItems;
-    }
-
-    getChangedItemsMap(initialItems: Array<GridListItem>, breakpoint?) {
-        const changedItems = {
-            x: [],
-            y: [],
-            w: [],
-            h: [],
-
-        };
-
-        for (let i = 0; i < initialItems.length; i++) {
-            const item = this.getItemByAttribute('$element', initialItems[i].$element);
-            if (item.getValueX(breakpoint) !== initialItems[i].getValueX(breakpoint)) {
-                changedItems.x.push(item);
-            }
-            if (item.getValueY(breakpoint) !== initialItems[i].getValueY(breakpoint)) {
-                changedItems.y.push(item);
-            }
-            if (item.w !== initialItems[i].w) {
-                changedItems.w.push(item);
-            }
-            if (item.h !== initialItems[i].h) {
-                changedItems.h.push(item);
-            }
-        }
-
-        return changedItems;
+                return {item, changes};
+            })
+            .filter((itemChange: {item: GridListItem, changes: Array<string>}) => {
+                return itemChange.changes.length;
+            });
     }
 
     resolveCollisions(item: GridListItem) {
@@ -374,7 +358,9 @@ export class GridList {
         gridList.generateGrid();
 
         invalidItems.forEach((item) => {
-            const itemCopy = item.copy();
+            // TODO: check if this change does not broke anything
+            // const itemCopy = item.copy();
+            const itemCopy = item.copyForBreakpoint(options.breakpoint);
             const position = gridList.findPositionForItem(itemCopy, {x: 0, y: 0});
 
             gridList.items.push(itemCopy);

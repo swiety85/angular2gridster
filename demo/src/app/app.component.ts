@@ -1,4 +1,4 @@
-import { Component, HostListener, ViewChild } from '@angular/core';
+import { Component, ViewChildren, QueryList } from '@angular/core';
 import { GridsterComponent } from './gridster/gridster.component';
 import { IGridsterOptions } from './gridster/IGridsterOptions';
 import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions';
@@ -9,7 +9,7 @@ import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions'
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    @ViewChild(GridsterComponent) gridster: GridsterComponent;
+    @ViewChildren(GridsterComponent) gridster: QueryList<GridsterComponent>;
     itemOptions = {
         maxWidth: 3,
         maxHeight: 3
@@ -21,7 +21,7 @@ export class AppComponent {
         dragAndDrop: true, // enable/disable drag and drop for all items in grid
         resizable: true, // enable/disable resizing by drag and drop for all items in grid
         widthHeightRatio: 1, // proportion between item width and height
-        adoptingGridsterSize: true,
+        shrink: true,
         responsiveView: true, // turn on adopting items sizes on window resize and enable responsiveOptions
         responsiveDebounce: 500, // window resize debounce time
         // List of different gridster configurations for different breakpoints.
@@ -108,7 +108,7 @@ export class AppComponent {
             .reload();
     }
 
-    setWidth(widget: any, size: number, e: MouseEvent) {
+    setWidth(widget: any, size: number, e: MouseEvent, gridster) {
         e.stopPropagation();
         e.preventDefault();
         if (size < 1) {
@@ -116,16 +116,20 @@ export class AppComponent {
         }
         widget.w = size;
 
+        gridster.reload();
+
         return false;
     }
 
-    setHeight(widget: any, size: number, e: MouseEvent) {
+    setHeight(widget: any, size: number, e: MouseEvent, gridster) {
         e.stopPropagation();
         e.preventDefault();
         if (size < 1) {
             size = 1;
         }
         widget.h = size;
+
+        gridster.reload();
 
         return false;
     }
@@ -146,22 +150,17 @@ export class AppComponent {
             x: item.x, y: item.y, w: item.w, h: item.h,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 5',
-            content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
-            'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
-            'commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla ' +
-            'pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est ' +
-            'laborum.'
+            title: 'Basic form inputs 5'
         });
 
         console.log('add widget from drag to:', gridster);
     }
 
     over(event) {
-        event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.width =
-            event.gridster.getItemWidth(event.item) + 'px';
-        event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.height =
-            event.gridster.getItemHeight(event.item) + 'px';
+        const size = event.item.calculateSize(event.gridster);
+
+        event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.width = size.width + 'px';
+        event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.height = size.height + 'px';
         event.item.itemPrototype.$element.classList.add('is-over');
     }
 
@@ -205,7 +204,9 @@ export class AppComponent {
         console.log('widget remove', index);
     }
 
-    resize(item) {
-        console.log('resize', item);
+    itemChange($event: any, gridster) {
+        this.gridster.first.reload();
+        this.gridster.last.reload();
+        console.log('item change', $event);
     }
 }

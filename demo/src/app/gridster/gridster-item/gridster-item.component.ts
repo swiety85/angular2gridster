@@ -157,6 +157,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     @Input() h: number;
     @Output() hChange = new EventEmitter<number>();
 
+    @Output() change = new EventEmitter<any>();
+
     @Input() dragAndDrop = true;
     @Input() resizable = true;
 
@@ -204,12 +206,6 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         }
     }
 
-    ngAfterViewInit() {
-        if (this.gridster.options.resizable && this.item.resizable) {
-            this.enableResizable();
-        }
-    }
-
     ngOnInit() {
         this.options = Object.assign(this.defaultOptions, this.options);
 
@@ -225,10 +221,14 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                 this.item.setValueY(this.y, this.gridster.options.breakpoint);
                 this.y = null;
             }
-            this.applyPositionsOnItem();
+            this.setPositionsOnItem();
         }
 
         this.gridster.registerItem(this.item);
+
+        this.gridster.calculateCellSize();
+        this.item.applySize();
+        this.item.applyPosition();
 
         if (this.dragAndDrop) {
             this.enableDragDrop();
@@ -239,18 +239,23 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         }
     }
 
+    ngAfterViewInit() {
+        if (this.gridster.options.resizable && this.item.resizable) {
+            this.enableResizable();
+        }
+    }
+
     ngOnChanges(changes: SimpleChanges) {
-        let changed = false;
         if (!this.gridster.gridList) {
             return;
         }
+
         if (changes['dragAndDrop'] && !changes['dragAndDrop'].isFirstChange()) {
             if (changes['dragAndDrop'].currentValue && this.gridster.options.dragAndDrop) {
                 this.enableDragDrop();
             } else {
                 this.disableDraggable();
             }
-            changed = true;
         }
         if (changes['resizable'] && !changes['resizable'].isFirstChange()) {
             if (changes['resizable'].currentValue) {
@@ -258,7 +263,6 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             } else {
                 this.disableResizable();
             }
-            changed = true;
         }
         if (changes['w'] && !changes['w'].isFirstChange()) {
             if (changes['w'].currentValue > this.options.maxWidth) {
@@ -267,7 +271,6 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                     this.wChange.emit(this.w);
                 });
             }
-            changed = true;
         }
         if (changes['h'] && !changes['h'].isFirstChange()) {
             if (changes['h'].currentValue > this.options.maxHeight) {
@@ -276,43 +279,6 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                     this.hChange.emit(this.h);
                 });
             }
-            changed = true;
-        }
-
-        if (changes['x'] && !changes['x'].isFirstChange()) {
-            changed = true;
-        }
-        if (changes['y'] && !changes['y'].isFirstChange()) {
-            changed = true;
-        }
-        if (changes['xSm'] && !changes['xSm'].isFirstChange()) {
-            changed = true;
-        }
-        if (changes['ySm'] && !changes['ySm'].isFirstChange()) {
-            changed = true;
-        }
-        if (changes['xMd'] && !changes['xMd'].isFirstChange()) {
-            changed = true;
-        }
-        if (changes['yMd'] && !changes['yMd'].isFirstChange()) {
-            changed = true;
-        }
-        if (changes['xLg'] && !changes['xLg'].isFirstChange()) {
-            changed = true;
-        }
-        if (changes['yLg'] && !changes['yLg'].isFirstChange()) {
-            changed = true;
-        }
-        if (changes['xXl'] && !changes['xXl'].isFirstChange()) {
-            changed = true;
-        }
-        if (changes['yXl'] && !changes['yXl'].isFirstChange()) {
-            changed = true;
-        }
-
-        if (changed) {
-            this.gridster.gridList.resolveCollisions(this.item);
-            this.gridster.render();
         }
     }
 
@@ -322,8 +288,10 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             this.gridster.items.splice(index, 1);
         }
 
-        this.gridster.gridList.pullItemsToLeft();
-        this.gridster.render();
+        setTimeout(() => {
+            this.gridster.gridList.pullItemsToLeft();
+            this.gridster.render();
+        });
 
         this.subscriptions.forEach((sub: Subscription) => {
             sub.unsubscribe();
@@ -332,14 +300,14 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.disableResizable();
     }
 
-    applyPositionsOnItem() {
+    setPositionsOnItem() {
         if (!this.item.hasPositions(null)) {
-            this.applyPositionsForGrid(this.gridster.gridsterOptions.basicOptions);
+            this.setPositionsForGrid(this.gridster.gridsterOptions.basicOptions);
         }
 
         this.gridster.gridsterOptions.responsiveOptions
             .filter((options: IGridsterOptions) => !this.item.hasPositions(options.breakpoint))
-            .forEach((options: IGridsterOptions) => this.applyPositionsForGrid(options));
+            .forEach((options: IGridsterOptions) => this.setPositionsForGrid(options));
     }
 
     public enableResizable() {
@@ -468,7 +436,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.dragSubscriptions = [];
     }
 
-    private applyPositionsForGrid(options) {
+    private setPositionsForGrid(options) {
         let x, y;
 
         const position = this.findPosition(options);
