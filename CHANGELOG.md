@@ -1,3 +1,25 @@
+<a name="0.6.0"></a>
+# [0.6.0]((https://github.com/swiety85/angular2gridster/compare/0.5.3...0.6.0)) (2017-07-06)
+
+
+### Bug Fixes
+
+* **drag-drop:** solved problems with inputs in gridster-item container
+* **drag-drop:** bug fix with fast dragging item from outside
+
+### Features
+
+* **config:** Gridster responsive behaviour
+* **config:** different Gridster configuration for different breakpoints
+* **drag-drop:** disabling/enabling moving item in gridster
+* **resize:** disabling/enabling resizing item in gridster
+* **api:** new change event on GridsterItem
+* **config:** new GridsterItem options
+* **deps:** update angular env to newest version
+* **demo:** extend demo page
+
+
+
 <a name="0.5.3"></a>
 # [0.5.3]((https://github.com/swiety85/angular2gridster/compare/0.5.2...0.5.3)) (2017-05-16)
 
