@@ -37,8 +37,9 @@
     "@angular/core": "^2.0.0 || ^4.0.0"
   },
   "devDependencies": {
-    "@angular/compiler": "^2.4.8 || ^4.0.0",
-    "@angular/compiler-cli": "^2.4.8 || ^4.0.0",
+    "@angular/cli": "^1.2.0",
+    "@angular/compiler": "^4.2.5",
+    "@angular/compiler-cli": "^4.2.5",
     "@types/jasmine": "^2.5.43",
     "jasmine-core": "~2.5.2",
     "karma": "^1.5.0",
