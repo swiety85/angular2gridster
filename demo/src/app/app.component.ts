@@ -1,4 +1,4 @@
-import { Component, ViewChildren, QueryList } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { GridsterComponent } from './gridster/gridster.component';
 import { IGridsterOptions } from './gridster/IGridsterOptions';
 import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions';
@@ -9,7 +9,7 @@ import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions'
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    @ViewChildren(GridsterComponent) gridster: QueryList<GridsterComponent>;
+    @ViewChild(GridsterComponent) gridster: GridsterComponent;
     itemOptions = {
         maxWidth: 3,
         maxHeight: 3
@@ -205,8 +205,6 @@ export class AppComponent {
     }
 
     itemChange($event: any, gridster) {
-        this.gridster.first.reload();
-        this.gridster.last.reload();
         console.log('item change', $event);
     }
 }

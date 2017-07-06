@@ -122,49 +122,4 @@
         </gridster-item>
 
     </gridster>
-    <gridster [options]="gridsterOptions" [draggableOptions]="gridsterDraggableOptions"
-              (optionsChange)="optionsChange($event)" #gridster2 style="min-height: 500px;">
-
-        <gridster-item *ngFor="let widget of widgets; let indx = index" #itemComp
-                       [options]="itemOptions"
-                       [dragAndDrop]="widget.dragAndDrop" [resizable]="widget.resizable"
-                       [(x)]="widget.x" [(y)]="widget.y"
-                       [(xSm)]="widget.xSm" [(ySm)]="widget.ySm"
-                       [(xMd)]="widget.xMd" [(yMd)]="widget.yMd"
-                       [(xLg)]="widget.xLg" [(yLg)]="widget.yLg"
-                       [(xXl)]="widget.xXl" [(yXl)]="widget.yXl"
-                       [(w)]="widget.w" [(h)]="widget.h"
-                       (change)="itemChange($event, gridster2)">
-
-            <div class="panel-heading">
-                <h5 class="panel-title">{{ widget.title }}</h5>
-            </div>
-
-            <div class="panel-body">
-                <app-test></app-test>
-                <p>
-                    <label>
-                        <input type="checkbox" [(ngModel)]="widget.dragAndDrop" value="true"> Draggable
-                    </label>
-                    <label>
-                        <input type="checkbox" [(ngModel)]="widget.resizable" value="true"> Resizable
-                    </label>
-                    <button (click)="setWidth(widget, widget.w+1, $event, gridster2)">width +</button>
-                    <button (click)="setWidth(widget, widget.w-1, $event, gridster2)">width -</button>
-                    <button (click)="setHeight(widget, widget.h+1, $event, gridster2)">height +</button>
-                    <button (click)="setHeight(widget, widget.h-1, $event, gridster2)">height -</button>
-                </p>
-                <p>
-                    <button (click)="remove($event, indx,gridster2)">remove</button>
-                </p>
-                <p>
-                    Position: {{itemComp?.item?.x}} x {{itemComp?.item?.y}}<br>
-                    Size: {{widget.w}} x {{widget.h}}
-                </p>
-                <pre style="position: absolute">{{ widget | json }}</pre>
-            </div>
-
-        </gridster-item>
-
-    </gridster>
 </div>
