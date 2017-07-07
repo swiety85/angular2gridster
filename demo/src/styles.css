@@ -1,8 +1,10 @@
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+/*@import "~@angular/material/prebuilt-themes/indigo-pink.css";*/
+
 /* You can add global styles to this file, and also import other style files */
 *, :after, :before {
-@include box-sizing(border-box);
+    @include box-sizing(border-box);
 }
+
 
 body {
     font-family: Roboto,Helvetica Neue,Helvetica,Arial,sans-serif;
@@ -11,6 +13,8 @@ body {
     color: #333;
     background-color: #eeeded;
     margin: 0;
+    padding: 0;
+    height: 100%;
 }
 
 div {
@@ -54,3 +58,4 @@ a {
     top: -3px;
     bottom: 13px;
 }
+

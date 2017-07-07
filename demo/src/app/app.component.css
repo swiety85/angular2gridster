@@ -1,3 +1,15 @@
+:host {
+    height: 100%;
+}
+
+.a2g-container {
+    height: 100%;
+}
+
+.a2g-aside {
+    background-color: #ffffff;
+}
+
 h1 {
     font-size: 22px;
     padding: 0 20px;
