@@ -16,18 +16,18 @@ export class Draggable {
     dragMove: Observable<DraggableEvent>;
     dragStop: Observable<DraggableEvent>;
 
-    private mousemove: Observable<Event> = Observable.merge(
+    private mousemove: Observable<{} | Event> = Observable.merge(
         Observable.fromEvent(document, 'mousemove'),
         Observable.fromEvent(document, 'touchmove', {passive: true})
     );
 
-    private mouseup: Observable<Event> = Observable.merge(
+    private mouseup: Observable<{} | Event> = Observable.merge(
         Observable.fromEvent(document, 'mouseup'),
         Observable.fromEvent(document, 'touchend'),
         Observable.fromEvent(document, 'touchcancel')
     );
 
-    private mousedown: Observable<Event>;
+    private mousedown: Observable<{} | Event>;
 
     private config = {
         handlerClass: null

@@ -2,8 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { GridsterModule } from './gridster/gridster.module';
-
 
 import { AppComponent } from './app.component';
 import { TestComponent } from './test/test.component';
@@ -17,7 +17,8 @@ import { TestComponent } from './test/test.component';
         BrowserModule,
         FormsModule,
         HttpModule,
-        GridsterModule
+        GridsterModule,
+        NoopAnimationsModule
     ],
     providers: [],
     bootstrap: [AppComponent]
