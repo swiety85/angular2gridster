@@ -4,7 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { GridsterModule } from './gridster/gridster.module';
-import { MdSidenavModule, MdButtonModule } from '@angular/material';
+import {
+    MdSidenavModule,
+    MdButtonModule,
+    MdToolbarModule
+} from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { TestComponent } from './test/test.component';
@@ -21,7 +25,8 @@ import { TestComponent } from './test/test.component';
         GridsterModule,
         NoopAnimationsModule,
         MdSidenavModule,
-        MdButtonModule
+        MdButtonModule,
+        MdToolbarModule
     ],
     providers: [],
     bootstrap: [AppComponent]

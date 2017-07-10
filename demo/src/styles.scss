@@ -36,28 +36,41 @@ a {
     right: 5px;
 
     background-color: #768294;
-    border: 1px solid transparent;
-    -webkit-transition: background 3s;
-    transition: background 3s;
+    transition: box-shadow 280ms cubic-bezier(.4,0,.2,1);
     border-radius: 3px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    border: 1px solid #ddd;
+    color: #333;
 }
 
 .gridster-item-inner {
     position: absolute;
-    background: #fff;
-    border: 1px solid transparent;
+
     top: 5px;
     bottom: 5px;
     left: 5px;
     right: 5px;
-    -webkit-transition: background 3s;
-    transition: background 3s;
+    background: #fff;
+    color: rgba(0,0,0,.87);
+
+    // material design cart:
+    //transition: box-shadow 280ms cubic-bezier(.4,0,.2,1);
+    //display: block;
+    //padding: 24px;
+    //border-radius: 2px;
+    //box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+
+    transition: box-shadow 280ms cubic-bezier(.4,0,.2,1);
     border-radius: 3px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    border: 1px solid #ddd;
+    color: #333;
+
 }
 .is-dragging .gridster-item-inner {
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.24), 0 2px 4px rgba(0, 0, 0, 0.48);
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
     top: -3px;
     bottom: 13px;
 }

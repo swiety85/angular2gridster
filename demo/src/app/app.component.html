@@ -3,18 +3,50 @@
         <img class="a2g-logo" src="assets/logo.png" alt="Angular2gridster">
         <h1 class="a2g-title">Angular2gridster</h1>
     </div>
+    <div class="a2g-middle-space"></div>
 </header>
-<nav class="a2g-header a2g-header-second"></nav>
+<nav class="a2g-header a2g-header-second">
+    <ul class="a2g-navbar">
+        <li class="a2g-active">
+            <a href="#">
+                <i class="material-icons">dashboard</i>
+                Dashboard
+            </a>
+        </li>
+    </ul>
+    <div class="a2g-middle-space"></div>
+</nav>
 <div class="a2g-container">
     <main class="a2g-main">
+
+
+        <gridster [options]="gridsterOptions" #gridster1>
+
+            <gridster-item *ngFor="let widget of widgets; let indx = index" #itemComp
+                           [options]="itemOptions"
+                           [dragAndDrop]="widget.dragAndDrop" [resizable]="widget.resizable"
+                           [(x)]="widget.x" [(y)]="widget.y"
+                           [(xSm)]="widget.xSm" [(ySm)]="widget.ySm"
+                           [(xMd)]="widget.xMd" [(yMd)]="widget.yMd"
+                           [(xLg)]="widget.xLg" [(yLg)]="widget.yLg"
+                           [(xXl)]="widget.xXl" [(yXl)]="widget.yXl"
+                           [(w)]="widget.w" [(h)]="widget.h"
+                           (change)="itemChange($event, gridster1)">
+
+            </gridster-item>
+
+        </gridster>
+
+
     </main>
 
-    <nav class="a2g-nav">
-    </nav>
+    <!--<nav class="a2g-nav">-->
+    <!--</nav>-->
 
-    <aside class="a2g-ads">
-    </aside>
+    <!--<aside class="a2g-ads">-->
+    <!--</aside>-->
 </div>
+
 
 <!--<div class="mdl-layout__container">-->
 <!--<md-sidenav-container #sidenav>-->

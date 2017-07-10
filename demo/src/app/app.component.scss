@@ -53,53 +53,67 @@
     }
 }
 
+.a2g-navbar {
+    padding-left: 0;
+    list-style: none;
+    margin: 0;
+    text-align: left;
 
-//.navbar-inverse {
-//    border-bottom-color: rgba(255,255,255,.1);
-//    color: #fff;
-//}
-//@media (min-width: 769px)
-//core.css:1
-//.navbar {
-//    padding-left: 20px;
-//    padding-right: 20px;
-//}
-//core.css:1
-//.navbar {
-//    margin-bottom: 0;
-//    border-width: 1px 0;
-//    padding-left: 0;
-//    padding-right: 0;
-//}
-//bootstrap.css:1
-//.navbar-inverse {
-//    background-color: #37474f;
-//    border-color: #37474f;
-//}
-//@media (min-width: 769px)
-//bootstrap.css:1
-//.navbar {
-//    border-radius: 0;
-//}
-//bootstrap.css:1
-//.navbar {
-//    position: relative;
-//    min-height: 46px;
-//    margin-bottom: 20px;
-//    border: 1px solid transparent;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: stretch;
+
+    li {
+        display: flex;
+        align-items: stretch;
+        align-content: center;
+
+        a {
+            display: flex;
+            align-items: center;
+            align-content: center;
+            padding: 0 15px;
+        }
+
+        &.a2g-active {
+            a {
+                color: #333;
+                background-color: #f8f8f8;
+            }
+        }
+    }
+}
+
+.a2g-middle-space {
+    // This fills the remaining space, by using flexbox.
+    // Every toolbar row uses a flexbox row layout.
+    flex: 1 1 auto;
+}
+
 
 .a2g-container {
+    display: flex;
     flex: 1;
-}
 
-.a2g-nav, .a2g-ads {
-    /* 12em is the width of the columns */
-    flex: 0 0 12em;
-}
+    .a2g-main {
+        flex: 1;
+    }
 
-.a2g-nav {
-    /* put the nav on the left */
-    order: -1;
+    .a2g-nav, .a2g-ads {
+        /* 12em is the width of the columns */
+        flex: 0 0 12em;
+    }
+
+    .a2g-nav {
+        /* put the nav on the left */
+        order: -1;
+    }
+
+    @media (min-width: 769px) {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 }
 
 
