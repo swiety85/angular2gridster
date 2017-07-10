@@ -31,17 +31,6 @@ export class GridsterService {
         scroll: false,
         containment: 'parent'
     };
-    defaults: IGridsterOptions = {
-        lanes: 5,
-        direction: 'horizontal',
-        itemSelector: 'li[data-w]',
-        widthHeightRatio: 1,
-        shrink: false,
-        responsiveView: true,
-        dragAndDrop: true,
-        resizable: false,
-        minWidth: 0
-    };
 
     gridsterRect: ClientRect;
 

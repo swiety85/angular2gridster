@@ -192,7 +192,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
     constructor(private zone: NgZone,
                 @Inject(ElementRef) elementRef: ElementRef,
-                @Inject(GridsterService) gridster:GridsterService) {
+                @Host() gridster: GridsterService) {
 
         this.gridster = gridster;
         this.elementRef = elementRef;
