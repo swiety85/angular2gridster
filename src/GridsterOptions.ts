@@ -12,6 +12,16 @@ export class GridsterOptions {
     shrink: boolean;
     minWidth: number;
 
+    defaults: IGridsterOptions = {
+        lanes: 5,
+        direction: 'horizontal',
+        widthHeightRatio: 1,
+        shrink: false,
+        responsiveView: true,
+        dragAndDrop: true,
+        resizable: false
+    };
+
     change: Observable<IGridsterOptions>;
 
     responsiveOptions: Array<IGridsterOptions> = [];
@@ -40,7 +50,7 @@ export class GridsterOptions {
 
     getOptionsByWidth(width: number): IGridsterOptions {
         let i = 0;
-        let options: IGridsterOptions = this.basicOptions;
+        let options: IGridsterOptions = Object.assign({}, this.defaults, this.basicOptions);
 
         while (this.responsiveOptions[i]) {
             if (this.responsiveOptions[i].minWidth <= width) {
@@ -63,6 +73,6 @@ export class GridsterOptions {
                 }, options);
             })
             .sort((curr, next) => curr.minWidth - next.minWidth)
-            .map((options) => Object.assign({}, this.basicOptions, options));
+            .map((options) => <IGridsterOptions>Object.assign({}, this.defaults, this.basicOptions, options));
     }
 }
