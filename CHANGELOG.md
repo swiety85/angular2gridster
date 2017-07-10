@@ -1,3 +1,14 @@
+<a name="0.6.1"></a>
+# [0.6.1]((https://github.com/swiety85/angular2gridster/compare/0.6.0...0.6.1)) (2017-07-10)
+
+
+### Bug Fixes
+
+* **config:** fix default gridster options
+* **responsiveness:** fix responsive behaviour on iPhones and iPads
+
+
+
 <a name="0.6.0"></a>
 # [0.6.0]((https://github.com/swiety85/angular2gridster/compare/0.5.3...0.6.0)) (2017-07-06)
 
