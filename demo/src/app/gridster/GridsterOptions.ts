@@ -40,10 +40,10 @@ export class GridsterOptions {
         this.responsiveOptions = this.extendResponsiveOptions(config.responsiveOptions || []);
 
         this.change = Observable.merge(
-                Observable.of(this.getOptionsByWidth(window.outerWidth)),
+                Observable.of(this.getOptionsByWidth(document.documentElement.clientWidth)),
                 Observable.fromEvent(window, 'resize')
                     .debounceTime(config.responsiveDebounce || 0)
-                    .map((event: Event) => this.getOptionsByWidth(window.outerWidth))
+                    .map((event: Event) => this.getOptionsByWidth(document.documentElement.clientWidth))
             )
             .distinctUntilChanged(null, (options: any) => options.minWidth);
     }
