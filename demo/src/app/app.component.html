@@ -1,7 +1,6 @@
 <header class="a2g-header a2g-header-first">
     <div class="a2g-header-col-title">
-        <img class="a2g-logo" src="assets/logo.png" alt="Angular2gridster">
-        <h1 class="a2g-title">Angular2gridster</h1>
+        <h1 class="a2g-title">swiety85</h1>
     </div>
     <div class="a2g-middle-space"></div>
 </header>
@@ -9,8 +8,8 @@
     <ul class="a2g-navbar">
         <li class="a2g-active">
             <a href="#">
-                <i class="material-icons">dashboard</i>
-                Dashboard
+                <i class="material-icons margin-right">dashboard</i>
+                Angular2gridster
             </a>
         </li>
     </ul>
@@ -20,9 +19,9 @@
     <main class="a2g-main">
 
 
-        <gridster [options]="gridsterOptions" #gridster1>
+        <gridster [options]="gridsterOptions" [draggableOptions]="{handlerClass: 'a2g-drag-handler'}" #gridster1>
 
-            <gridster-item *ngFor="let widget of widgets; let indx = index" #itemComp
+            <gridster-item *ngFor="let widget of widgets"
                            [options]="itemOptions"
                            [dragAndDrop]="widget.dragAndDrop" [resizable]="widget.resizable"
                            [(x)]="widget.x" [(y)]="widget.y"
@@ -32,6 +31,24 @@
                            [(xXl)]="widget.xXl" [(yXl)]="widget.yXl"
                            [(w)]="widget.w" [(h)]="widget.h"
                            (change)="itemChange($event, gridster1)">
+
+                <div class="a2g-panel__heading a2g-drag-handler">
+                    <h6 class="a2g-panel__heading-title">
+                        Widget title
+                    </h6>
+                    <div class="a2g-panel__heading-config">
+                        <ngl-form-checkbox-toggle label="Move" class="slds-m-top--small" enabledText="" disabledText="">
+                            <input nglFormControl [(ngModel)]="widget.dragAndDrop" type="checkbox" />
+                        </ngl-form-checkbox-toggle>
+                        <ngl-form-checkbox-toggle label="Resize" class="slds-m-top--small" enabledText="" disabledText="">
+                            <input nglFormControl [(ngModel)]="widget.resizable" type="checkbox" />
+                        </ngl-form-checkbox-toggle>
+                    </div>
+                </div>
+
+                <div class="a2g-panel__body">
+
+                </div>
 
             </gridster-item>
 

@@ -111,91 +111,120 @@
     }
 
     @media (min-width: 769px) {
-        padding-left: 20px;
-        padding-right: 20px;
+        padding: 20px;
     }
 }
 
-
-
-
-
-
-
-
-
-
-.toolbar {
-    position: relative;
-    padding: 0 20px;
-}
-
-.widgetbar {
-    width: 100%;
-    position: relative;
-    height: 100px;
-    padding: 10px 0;
-}
-
-.main-content {
-    position: absolute;
-    top: 200px;
-    left: 0;
-    width: 100%;
-}
-
-.panel-heading {
-    border-bottom: 1px solid #F0F0F0;
-    display: inline-block;
-    position: relative;
-    width: 100%;
-    top: 0;
-}
-.panel-heading .panel-title {
+.a2g-panel__heading {
     padding: 10px;
-    margin: 0;
+    flex: 0 1 auto;
+    display: flex;
+    border-bottom: 1px solid #ddd;
 }
 
-.panel-body {
-    overflow: auto;
-    padding: 0 10px 10px;
-    position: absolute;
-    top: 37px;
-    bottom: 0;
-    left: 0;
-    right: 0;
+.a2g-panel__heading-title {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: left;
+    font-size: 1.4rem;
+}
+.a2g-panel__heading-config {
+    flex: 0 1 auto;
+    display: flex;
+    flex-direction: column;
 }
 
-.gridster-item-prototype {
-    display: block;
-    background-color: #afafaf;
-    position: relative;
-    float: left;
-    z-index: 99;
-    text-align: center;
-    font-weight: bold;
-    margin: 5px;
-    width: 80px;
-    height: 60px;
-
+.a2g-panel__body {
+    padding: 10px;
+    flex: 1;
 }
 
-.gridster-item-prototype.is-over .gridster-item-inner {
 
-    visibility: visible;
-}
 
-.gridster-item-inner {
-    position: absolute;
-    top:0;
-    left: 0;
-    overflow: auto;
-    width: 80px;
-    height: 60px;
-    visibility: hidden;
 
-    -webkit-transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
-    -moz-transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
-    -o-transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
-    transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
-}
+
+
+//.toolbar {
+//    position: relative;
+//    padding: 0 20px;
+//}
+//
+//.widgetbar {
+//    width: 100%;
+//    position: relative;
+//    height: 100px;
+//    padding: 10px 0;
+//}
+//
+//.main-content {
+//    position: absolute;
+//    top: 200px;
+//    left: 0;
+//    width: 100%;
+//}
+//
+//.panel-heading {
+//    border-bottom: 1px solid #F0F0F0;
+//    display: inline-block;
+//    position: relative;
+//    width: 100%;
+//    top: 0;
+//}
+//.panel-heading .panel-title {
+//    padding: 10px;
+//    margin: 0;
+//}
+//
+//.panel-body {
+//    overflow: auto;
+//    padding: 0 10px 10px;
+//    position: absolute;
+//    top: 37px;
+//    bottom: 0;
+//    left: 0;
+//    right: 0;
+//}
+//
+//.gridster-item-prototype {
+//    display: block;
+//    background-color: #afafaf;
+//    position: relative;
+//    float: left;
+//    z-index: 99;
+//    text-align: center;
+//    font-weight: bold;
+//    margin: 5px;
+//    width: 80px;
+//    height: 60px;
+//
+//}
+//
+//.gridster-item-prototype.is-over .gridster-item-inner {
+//
+//    visibility: visible;
+//}
+//
+//.gridster-item-inner {
+//    position: absolute;
+//    top:0;
+//    left: 0;
+//    overflow: auto;
+//    width: 80px;
+//    height: 60px;
+//    visibility: hidden;
+//
+//    -webkit-transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
+//    -moz-transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
+//    -o-transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
+//    transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
+//}
+//
+
+
+
+
+
+
+
