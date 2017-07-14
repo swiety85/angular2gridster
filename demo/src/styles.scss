@@ -115,4 +115,9 @@ a {
         cursor: -moz-grabbing;
         cursor: -webkit-grabbing;
     }
+
+    .a2g-btn__remove,
+    .a2g-drag-handler .a2g-btn__remove {
+        cursor: pointer;
+    }
 }

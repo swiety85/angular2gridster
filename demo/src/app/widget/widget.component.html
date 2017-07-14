@@ -1,0 +1,22 @@
+<div class="a2g-panel__heading a2g-drag-handler">
+    <div class="a2g-panel__heading-title">
+        <h6>
+            {{ title }}
+        </h6>
+        <div (click)="remove.emit($event)" class="a2g-btn__remove">
+            <i class="material-icons">clear</i>
+        </div>
+    </div>
+    <div class="a2g-panel__heading-config">
+        <ngl-form-checkbox-toggle label="Move" class="slds-m-top--small a2g-form-group" enabledText="" disabledText="">
+            <input nglFormControl [(ngModel)]="move" type="checkbox" (change)="moveChange.emit(move)" />
+        </ngl-form-checkbox-toggle>
+        <ngl-form-checkbox-toggle label="Resize" class="slds-m-top--small" enabledText="" disabledText="">
+            <input nglFormControl [(ngModel)]="resize" type="checkbox" (change)="resizeChange.emit(resize)" />
+        </ngl-form-checkbox-toggle>
+    </div>
+</div>
+
+<div class="a2g-panel__body">
+    <ng-content></ng-content>
+</div>

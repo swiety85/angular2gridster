@@ -4,7 +4,7 @@ import { IGridsterOptions } from './gridster/IGridsterOptions';
 import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions';
 
 @Component({
-    selector: 'app-root',
+    selector: 'a2g-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
@@ -198,10 +198,8 @@ export class AppComponent {
         console.log('widget push', this.widgets[this.widgets.length - 1]);
     }
 
-    remove($event, index: number, gridster: GridsterComponent) {
-        $event.preventDefault();
+    removeItem(index: number): void {
         this.widgets.splice(index, 1);
-        console.log('widget remove', index);
     }
 
     itemChange($event: any, gridster) {

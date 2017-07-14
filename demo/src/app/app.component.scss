@@ -132,37 +132,6 @@
     }
 }
 
-.a2g-panel__heading {
-    padding: 10px;
-    flex: 0 1 auto;
-    display: flex;
-    border-bottom: 1px solid #ddd;
-    flex-direction: column;
-
-    .a2g-form-group {
-        margin-right: 10px;
-    }
-}
-
-.a2g-panel__heading-title {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    text-align: left;
-    font-size: 1.4rem;
-}
-.a2g-panel__heading-config {
-    flex: 0 1 auto;
-    display: flex;
-    flex-direction: row;
-}
-
-.a2g-panel__body {
-    padding: 10px;
-    flex: 1;
-}
-
 
 
 
