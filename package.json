@@ -18,7 +18,8 @@
   },
   "keywords": [
     "gridster",
-    "angular2"
+    "angular2",
+    "dashboard"
   ],
   "bugs": {
     "url": "https://github.com/swiety85/angular2gridster/issues"
@@ -28,7 +29,7 @@
   "dependencies": {
     "@angular/common": "^2.4.8 || ^4.0.0",
     "@angular/core": "^2.4.8 || ^4.0.0",
-    "rxjs": "^5.2.0",
+    "rxjs": "^5.1.0",
     "webpack": "^2.2.1",
     "zone.js": "~0.7.2 || ~0.8.5"
   },
@@ -37,21 +38,17 @@
     "@angular/core": "^2.0.0 || ^4.0.0"
   },
   "devDependencies": {
-    "@angular/cli": "^1.2.0",
-    "@angular/compiler": "^4.2.5",
-    "@angular/compiler-cli": "^4.2.5",
-    "@types/jasmine": "^2.5.43",
-    "jasmine-core": "~2.5.2",
-    "karma": "^1.5.0",
-    "karma-jasmine": "~1.1.0",
-    "karma-phantomjs-launcher": "~1.0.2",
-    "karma-sourcemap-loader": "~0.3.7",
-    "karma-webpack": "^2.0.2",
-    "phantomjs-prebuilt": "~2.1.14",
+    "@angular/cli": "1.2.1",
+    "@angular/compiler-cli": "^4.2.6",
+    "@angular/compiler": "^4.2.6",
+    "@angular/language-service": "^4.2.6",
     "reflect-metadata": "~0.1.9",
     "ts-loader": "^2.0.1",
-    "tslint": "^4.4.2",
-    "typescript": "^2.2.1"
+    "@types/node": "~6.0.60",
+    "codelyzer": "~3.0.1",
+    "ts-node": "~3.0.4",
+    "tslint": "~5.3.2",
+    "typescript": "~2.3.3"
   },
   "engines": {
     "node": ">=0.8.0"
