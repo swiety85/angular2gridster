@@ -71,12 +71,15 @@ export class GridsterPrototypeService {
                 };
             });
 
-        const dragExt = Observable.concat(Observable.of({
-                item: null,
-                isOver: false,
-                isDrop: false
-        }), Observable.merge(over, drop))
+        const dragExt = Observable.merge(
+                // dragStartSubject is connected in case when item prototype is placed above gridster
+                // and drag enter is not fired
+                this.dragStartSubject.map(() => ({ item: null, isOver: false, isDrop: false })),
+                over,
+                drop
+            )
             .scan((prev: any, next: any) => {
+
                 return {
                     item: next.item,
                     isOver: next.isOver,

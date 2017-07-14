@@ -19,13 +19,13 @@ export class Draggable {
     private mousemove: Observable<{} | Event> = Observable.merge(
         Observable.fromEvent(document, 'mousemove'),
         Observable.fromEvent(document, 'touchmove', {passive: true})
-    );
+    ).share();
 
     private mouseup: Observable<{} | Event> = Observable.merge(
         Observable.fromEvent(document, 'mouseup'),
         Observable.fromEvent(document, 'touchend'),
         Observable.fromEvent(document, 'touchcancel')
-    );
+    ).share();
 
     private mousedown: Observable<{} | Event>;
 
@@ -38,7 +38,7 @@ export class Draggable {
         this.mousedown = Observable.merge(
             Observable.fromEvent(element, 'mousedown'),
             Observable.fromEvent(element, 'touchstart')
-        );
+        ).share();
 
         this.config.handlerClass = config.handlerClass;
 
@@ -68,7 +68,7 @@ export class Draggable {
 
     private createDragMoveObservable(dragStart: Observable<DraggableEvent>): Observable<DraggableEvent> {
         return dragStart
-            .flatMap(() => {
+            .switchMap(() => {
                 return this.mousemove
                     .skip(1)
                     .map(mm => new DraggableEvent(mm))
@@ -79,10 +79,8 @@ export class Draggable {
 
     private createDragStopObservable(dragStart: Observable<DraggableEvent>): Observable<any> {
         return dragStart
-            .flatMap(() => {
-                return this.mousemove
-                    .takeUntil(this.mouseup)
-                    .last();
+            .switchMap(() => {
+                return this.mouseup.take(1);
             });
     }
 

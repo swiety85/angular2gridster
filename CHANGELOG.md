@@ -1,3 +1,34 @@
+<a name="0.6.3"></a>
+# [0.6.3]((https://github.com/swiety85/angular2gridster/compare/0.6.2...0.6.3)) (2017-07-14)
+
+
+### Bug Fixes
+
+* **drag-drop:** fix problem with not working drag n drop events in angular 4.2.6
+
+
+
+<a name="0.6.2"></a>
+# [0.6.2]((https://github.com/swiety85/angular2gridster/compare/0.6.1...0.6.2)) (2017-07-13)
+
+
+### Bug Fixes
+
+* **drag-drop:** fix dragging new item (gridster-item-prototype) when it's placed in the area of gridster #64
+
+
+
+<a name="0.6.1"></a>
+# [0.6.1]((https://github.com/swiety85/angular2gridster/compare/0.6.0...0.6.1)) (2017-07-10)
+
+
+### Bug Fixes
+
+* **config:** fix default gridster options
+* **responsiveness:** fix responsive behaviour on iPhones and iPads
+
+
+
 <a name="0.6.0"></a>
 # [0.6.0]((https://github.com/swiety85/angular2gridster/compare/0.5.3...0.6.0)) (2017-07-06)
 
