@@ -98,20 +98,37 @@
 
     .a2g-main {
         flex: 1;
+
+        @media (min-width: 769px) {
+            padding: 20px;
+        }
     }
 
     .a2g-nav, .a2g-ads {
         /* 12em is the width of the columns */
-        flex: 0 0 12em;
+        flex: 0 0 24em;
     }
 
     .a2g-nav {
         /* put the nav on the left */
         order: -1;
     }
+}
 
-    @media (min-width: 769px) {
-        padding: 20px;
+.a2g-ads {
+    display: flex;
+    background-color: #ffffff;
+    flex-direction: row;
+
+    .a2g-ads__action-area {
+        flex: 0 0 auto;
+        width: 30px;
+    }
+
+    .a2g-ads__main-area {
+        flex: 1;
+        overflow-x: hidden;
+        overflow-y: auto;
     }
 }
 
@@ -120,6 +137,11 @@
     flex: 0 1 auto;
     display: flex;
     border-bottom: 1px solid #ddd;
+    flex-direction: column;
+
+    .a2g-form-group {
+        margin-right: 10px;
+    }
 }
 
 .a2g-panel__heading-title {
@@ -133,7 +155,7 @@
 .a2g-panel__heading-config {
     flex: 0 1 auto;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 }
 
 .a2g-panel__body {

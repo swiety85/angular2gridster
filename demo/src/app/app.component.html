@@ -30,14 +30,15 @@
                            [(xLg)]="widget.xLg" [(yLg)]="widget.yLg"
                            [(xXl)]="widget.xXl" [(yXl)]="widget.yXl"
                            [(w)]="widget.w" [(h)]="widget.h"
-                           (change)="itemChange($event, gridster1)">
+                           (change)="itemChange($event, gridster1)"
+                           [ngClass]="{'a2g-draggable': widget.dragAndDrop}">
 
                 <div class="a2g-panel__heading a2g-drag-handler">
                     <h6 class="a2g-panel__heading-title">
                         Widget title
                     </h6>
                     <div class="a2g-panel__heading-config">
-                        <ngl-form-checkbox-toggle label="Move" class="slds-m-top--small" enabledText="" disabledText="">
+                        <ngl-form-checkbox-toggle label="Move" class="slds-m-top--small a2g-form-group" enabledText="" disabledText="">
                             <input nglFormControl [(ngModel)]="widget.dragAndDrop" type="checkbox" />
                         </ngl-form-checkbox-toggle>
                         <ngl-form-checkbox-toggle label="Resize" class="slds-m-top--small" enabledText="" disabledText="">
@@ -60,8 +61,10 @@
     <!--<nav class="a2g-nav">-->
     <!--</nav>-->
 
-    <!--<aside class="a2g-ads">-->
-    <!--</aside>-->
+    <aside class="a2g-ads">
+        <div class="a2g-ads__action-area"></div>
+        <div class="a2g-ads__main-area"></div>
+    </aside>
 </div>
 
 
