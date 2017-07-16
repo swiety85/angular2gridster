@@ -1,0 +1,58 @@
+<div class="a2g-title">
+    <div class="a2g-title__icon">
+        <i class="material-icons">settings</i>
+    </div>
+
+    <h6 class="a2g-title__text">Gridster configuration</h6>
+
+</div>
+
+<div class="a2g-form-group">
+    <label>Current breakpoint: <b>{{gridsterOptions.breakpoint || 'mobile'}}</b></label>
+</div>
+
+<div class="a2g-form-group">
+    <md-checkbox [(ngModel)]="gridsterOptions.dragAndDrop" (change)="gridster.setOption('dragAndDrop', $event.checked)">
+        Draggable
+    </md-checkbox>
+</div>
+
+<div class="a2g-form-group">
+    <md-checkbox [(ngModel)]="gridsterOptions.resizable" (change)="gridster.setOption('resizable', $event.checked)">
+        Resizable
+    </md-checkbox>
+</div>
+
+<div class="a2g-form-group a2g-form-group--one-column">
+    <label>Amount of lanes:</label>
+    <md-slider
+            max="12"
+            min="2"
+            step="1"
+            [thumb-label]="true"
+            [tick-interval]="1"
+            [value]="gridsterOptions?.lanes"
+            (change)="lanesChange($event.value)">
+    </md-slider>
+</div>
+
+<div class="a2g-form-group a2g-form-group--one-column">
+    <label>Width to height ration</label>
+    <md-slider
+            max="2"
+            min="0.2"
+            step="0.1"
+            [thumb-label]="true"
+            [tick-interval]="0.1"
+            [value]="gridsterOptions?.widthHeightRatio"
+            (change)="ratioChange($event.value)">
+    </md-slider>
+</div>
+
+<div class="a2g-form-group a2g-form-group--one-column">
+    <label class="m-botom">Pull direction:</label>
+    <md-radio-group [(ngModel)]="gridsterOptions.direction" (change)="gridster.setOption('direction', $event.value).reload()">
+        <md-radio-button value="vertical">Vertical</md-radio-button>
+        <md-radio-button value="horizontal">Horizontal</md-radio-button>
+    </md-radio-group>
+</div>

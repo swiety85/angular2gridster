@@ -95,9 +95,11 @@
 .a2g-container {
     display: flex;
     flex: 1;
+    min-height: 400px;
 
     .a2g-main {
         flex: 1;
+        padding: 5px;
 
         @media (min-width: 769px) {
             padding: 20px;
@@ -112,6 +114,16 @@
     .a2g-nav {
         /* put the nav on the left */
         order: -1;
+    }
+}
+
+.a2g-right-aside--open {
+    .a2g-main {
+        padding-right: 35px;
+
+        @media (min-width: 769px) {
+            padding-right: 50px;
+        }
     }
 }
 
@@ -132,10 +144,46 @@
     }
 }
 
+.a2g-right-aside {
+    width: 100%;
+    border-left: 1px solid #dddddd;
+    box-shadow: -2px 2px 2px rgba(0, 0, 0, 0.05);
+    padding: 10px 10px 10px 40px;
+    display: flex;
 
+    @media (min-width: 769px) {
+        width: 250px;
+    }
+}
 
+.a2g-aside-toggle-btn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+    min-width: 30px;
+    height: 60px;
+}
 
+.a2g-mini-sidebar {
+    width: 30px;
+    border-left: 1px solid #dddddd;
+    box-shadow: -2px 2px 2px rgba(0, 0, 0, 0.05);
+    padding: 0;
+    display: flex;
 
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 3;
+    outline: 0;
+    height: 100%;
+    overflow-y: auto;
+
+    background-color: #fff;
+    color: rgba(0,0,0,.87);
+}
 
 //.toolbar {
 //    position: relative;

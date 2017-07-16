@@ -34,6 +34,7 @@ import {GridList} from '../gridList/gridList';
         z-index: 1;
         -webkit-transition: top 0.2s, left 0.2s, width 0.2s, height 0.2s, font-size 0.2s, line-height 0.2s;
         transition: top 0.2s, left 0.2s, width 0.2s, height 0.2s, font-size 0.2s, line-height 0.2s;
+        box-sizing: border-box;
     }
 
     :host.is-dragging, :host.is-resizing {
@@ -157,7 +158,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     @Input() h: number;
     @Output() hChange = new EventEmitter<number>();
 
-    @Output() change = new EventEmitter<any>();
+    @Output() itemChange = new EventEmitter<any>();
 
     @Input() dragAndDrop = true;
     @Input() resizable = true;

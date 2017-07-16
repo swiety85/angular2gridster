@@ -1,23 +1,30 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 @Component({
-  selector: 'a2g-widget',
-  templateUrl: './widget.component.html',
-  styleUrls: ['./widget.component.scss']
+    selector: 'a2g-widget',
+    templateUrl: './widget.component.html',
+    styleUrls: ['./widget.component.scss']
 })
 export class WidgetComponent implements OnInit {
-  @Input() move: boolean;
-  @Output() moveChange = new EventEmitter<boolean>();
-  @Input() resize: boolean;
-  @Output() resizeChange = new EventEmitter<boolean>();
+    @Input() move: boolean;
+    @Output() moveChange = new EventEmitter<boolean>();
+    @Input() resize: boolean;
+    @Output() resizeChange = new EventEmitter<boolean>();
 
-  @Input() title: string;
+    @Input() options: any = {
+        removable: false,
+        hasMoveSwitcher: false,
+        hasResizeSwitcher: false
+    };
 
-  @Output() remove = new EventEmitter<any>();
+    @Input() title: string;
 
-  constructor() { }
+    @Output() remove = new EventEmitter<any>();
 
-  ngOnInit() {
-  }
+    constructor() {
+    }
+
+    ngOnInit() {
+    }
 
 }

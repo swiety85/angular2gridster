@@ -1,15 +1,14 @@
+:host {
+}
+
 .a2g-panel__heading {
-  padding: 10px;
-  flex: 0 1 auto;
+  padding: 10px 10px 0;
+  height: 72px;
   display: flex;
   border-bottom: 1px solid #ddd;
   flex-direction: column;
 
   user-select: none;
-
-  .a2g-form-group {
-    margin-right: 10px;
-  }
 }
 
 .a2g-panel__heading-title {
@@ -19,7 +18,30 @@
   text-align: left;
   font-size: 1.4rem;
   justify-content: space-between;
+  align-items: center;
+
+  .a2g-panel__heading-title-icon {
+    flex: 0 1 auto;
+    margin: 0 10px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+  .a2g-panel__heading-title-text {
+    flex: 1;
+    font-size: 15px;
+    font-weight: normal;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
+
 .a2g-panel__heading-config {
   flex: 0 1 auto;
   display: flex;
@@ -29,5 +51,11 @@
 
 .a2g-panel__body {
   padding: 10px;
-  flex: 1;
+  position: absolute;
+  top: 72px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
 }

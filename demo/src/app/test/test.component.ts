@@ -7,11 +7,14 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 })
 export class TestComponent implements OnInit, AfterViewInit {
 
+  data: any;
+
   constructor() { }
 
   ngOnInit() {}
 
   ngAfterViewInit() {
+    //console.log(this.data);
     // console.log('ngAfterViewInit', this.elementRef.nativeElement);
   }
 }

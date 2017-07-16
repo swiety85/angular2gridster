@@ -15,38 +15,53 @@
     </ul>
     <div class="a2g-middle-space"></div>
 </nav>
-<div class="a2g-container">
-    <main class="a2g-main">
+<md-sidenav-container>
+    <div class="a2g-container" [ngClass]="{'a2g-right-aside--open': !isAsideOpen}">
+        <main class="a2g-main">
 
 
-        <gridster [options]="gridsterOptions" [draggableOptions]="{handlerClass: 'a2g-drag-handler'}" #gridster1>
+            <gridster [options]="gridsterOptions" [draggableOptions]="{handlerClass: 'a2g-drag-handler'}" #gridster1>
 
-            <gridster-item *ngFor="let widget of widgets; let i = index"
-                           [options]="itemOptions"
-                           [dragAndDrop]="widget.dragAndDrop" [resizable]="widget.resizable"
-                           [(x)]="widget.x" [(y)]="widget.y"
-                           [(xSm)]="widget.xSm" [(ySm)]="widget.ySm"
-                           [(xMd)]="widget.xMd" [(yMd)]="widget.yMd"
-                           [(xLg)]="widget.xLg" [(yLg)]="widget.yLg"
-                           [(xXl)]="widget.xXl" [(yXl)]="widget.yXl"
-                           [(w)]="widget.w" [(h)]="widget.h"
-                           (itemChange)="itemChange($event, gridster1)"
-                           [ngClass]="{'a2g-draggable': widget.dragAndDrop}">
+                <gridster-item *ngFor="let widget of widgets; let i = index"
+                               [options]="itemOptions"
+                               [dragAndDrop]="widget.dragAndDrop" [resizable]="widget.resizable"
+                               [(x)]="widget.x" [(y)]="widget.y"
+                               [(xSm)]="widget.xSm" [(ySm)]="widget.ySm"
+                               [(xMd)]="widget.xMd" [(yMd)]="widget.yMd"
+                               [(xLg)]="widget.xLg" [(yLg)]="widget.yLg"
+                               [(xXl)]="widget.xXl" [(yXl)]="widget.yXl"
+                               [(w)]="widget.w" [(h)]="widget.h"
+                               (itemChange)="itemChange($event, gridster1)"
+                               [ngClass]="{'a2g-draggable': widget.dragAndDrop && gridsterOptions.dragAndDrop}">
 
-                <a2g-widget title="Widget title"
-                            [(move)]="widget.dragAndDrop"
-                            [(resize)]="widget.resizable"
-                            (remove)="removeItem(i)">
+                    <a2g-widget [title]="widget.title" [options]="widget"
+                                [(move)]="widget.dragAndDrop"
+                                [(resize)]="widget.resizable"
+                                (remove)="removeItem(i)">
 
-                    Body content
-                </a2g-widget>
+                        <ng-template [a2gDynamicComponent]="widget.component"
+                                     [attributes]="{data: widget.data}"></ng-template>
+                    </a2g-widget>
 
-            </gridster-item>
+                </gridster-item>
 
-        </gridster>
+            </gridster>
 
 
-    </main>
+        </main>
+    </div>
+
+    <div class="a2g-mini-sidebar" *ngIf="!isAsideOpen">
+        <button md-button (click)="rightAside.open(); isAsideOpen=true; gridster1.resetSize()" class="a2g-aside-toggle-btn">
+            <md-icon>keyboard_arrow_left</md-icon>
+        </button>
+    </div>
+    <md-sidenav #sidenav mode="side" [opened]="isAsideOpen" align="end" class="a2g-right-aside" #rightAside (close)="gridster1.reload()" (open)="gridster1.reload()">
+        <button md-button (click)="rightAside.close(); isAsideOpen=false; gridster1.resetSize()" class="a2g-aside-toggle-btn">
+            <md-icon>keyboard_arrow_right</md-icon>
+        </button>
+        <a2g-gridster-configurator [gridster]="gridster1"></a2g-gridster-configurator>
+    </md-sidenav>
 
     <!--<nav class="a2g-nav">-->
     <!--</nav>-->
@@ -55,7 +70,12 @@
         <!--<div class="a2g-ads__action-area"></div>-->
         <!--<div class="a2g-ads__main-area"></div>-->
     <!--</aside>-->
-</div>
+</md-sidenav-container>
+
+
+
+
+
 
 
 <!--<div class="mdl-layout__container">-->

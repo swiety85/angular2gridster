@@ -1,4 +1,5 @@
 @import "../node_modules/bourbon/app/assets/stylesheets/bourbon";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 /* You can add global styles to this file, and also import other style files */
 *, :after, :before {
@@ -28,6 +29,11 @@ div {
 
 a {
     text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    padding: 0;
+    margin: 0;
 }
 
 .margin-left {
@@ -120,4 +126,72 @@ a {
     .a2g-drag-handler .a2g-btn__remove {
         cursor: pointer;
     }
+}
+
+
+.a2g-form-group {
+    display: flex;
+    margin-right: 10px;
+
+    label {
+        margin-right: 10px;
+    }
+
+    &:first-child {
+        margin-left: 0;
+    }
+    &:last-child {
+        margin-right: 0;
+    }
+
+    &.a2g-form-group--one-column {
+        flex-direction: column;
+    }
+}
+
+.a2g-title {
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    font-size: 1.4rem;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .a2g-title__icon {
+        display: flex;
+        flex: 0 1 auto;
+        margin: 0 10px;
+
+        &:first-child {
+            margin-left: 0;
+        }
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+
+    .a2g-title__text {
+        display: flex;
+        flex: 1;
+        font-size: 15px;
+        font-weight: normal;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+.m-botom {
+    margin-bottom: 10px;
+}
+.m-top {
+    margin-top: 10px;
+}
+.m-left {
+    margin-left: 10px;
+}
+.m-right {
+    margin-right: 10px;
 }

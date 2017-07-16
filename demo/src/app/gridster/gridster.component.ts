@@ -179,6 +179,15 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
         return this;
     }
 
+    resetSize(): void {
+        const child = <HTMLElement>this.$element.firstChild;
+        if (this.gridster.options.direction === 'vertical') {
+            child.style.width = '';
+        } else {
+            child.style.height = '';
+        }
+    }
+
     private updateGridsterElementData() {
         this.gridster.gridsterRect = this.$element.getBoundingClientRect();
     }

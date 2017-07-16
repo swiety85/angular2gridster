@@ -476,7 +476,7 @@ export class GridsterService {
                     itemChange.item.itemComponent.hChange.emit(itemChange.item.h);
                 }
                 // should be called only once (not for each breakpoint)
-                itemChange.item.itemComponent.itemChange.emit({
+                itemChange.item.itemComponent.change.emit({
                     item: itemChange.item,
                     changes: itemChange.changes,
                     breakpoint: breakpoint

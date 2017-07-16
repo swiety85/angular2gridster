@@ -2,6 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { GridsterComponent } from './gridster/gridster.component';
 import { IGridsterOptions } from './gridster/IGridsterOptions';
 import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions';
+import { TestComponent } from './test/test.component';
+import {GridsterConfiguratorComponent} from './gridster-configurator/gridster-configurator.component';
 
 @Component({
     selector: 'a2g-root',
@@ -10,6 +12,8 @@ import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions'
 })
 export class AppComponent {
     @ViewChild(GridsterComponent) gridster: GridsterComponent;
+    isAsideOpen = true;
+
     itemOptions = {
         maxWidth: 3,
         maxHeight: 3
@@ -63,36 +67,69 @@ export class AppComponent {
     widgets: Array<any> = [
         {
             x: 0, y: 0,
-            w: 1, h: 2,
+            w: 2, h: 3,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 1'
+            removable: false,
+            hasMoveSwitcher: true,
+            hasResizeSwitcher: true,
+            title: 'Basic form inputs 1',
+            component: TestComponent,
+            data: {test: 'test1'}
         },
         {
             x: 1, y: 0, w: 3, h: 1,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 2'
+            removable: true,
+            hasMoveSwitcher: true,
+            hasResizeSwitcher: true,
+            title: 'Basic form inputs 2',
+            component: TestComponent,
+            data: {test: 'test2'}
         },
         {
             x: 1, y: 1, w: 2, h: 1,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 3'
+            removable: true,
+            hasMoveSwitcher: true,
+            hasResizeSwitcher: true,
+            title: 'Basic form inputs 3',
+            component: TestComponent,
+            data: {test: 'test3'}
         },
         {
             x: 3, y: 1, w: 1, h: 2,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 4'
+            removable: true,
+            hasMoveSwitcher: true,
+            hasResizeSwitcher: true,
+            title: 'Basic form inputs 4',
+            component: TestComponent,
+            data: {test: 'test4'}
         },
         {
             w: 1, h: 2,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs x'
+            removable: true,
+            hasMoveSwitcher: true,
+            hasResizeSwitcher: true,
+            title: 'Basic form inputs x',
+            component: TestComponent,
+            data: {test: 'test'}
         }
     ];
+
+    constructor() { }
+
+    resetGridsterSize() {
+        console.log(<HTMLElement>document.querySelector('.gridster-container'));
+        (<HTMLElement>document.querySelector('.gridster-container')).style.width = '';
+
+    }
 
     removeLine(gridster: GridsterComponent) {
         gridster.setOption('lanes', --this.gridsterOptions.lanes)
