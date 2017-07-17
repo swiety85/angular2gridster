@@ -15,8 +15,8 @@
     </ul>
     <div class="a2g-middle-space"></div>
 </nav>
-<md-sidenav-container>
-    <div class="a2g-container" [ngClass]="{'a2g-right-aside--open': !isAsideOpen}">
+<md-sidenav-container class="a2g-sidenav-container">
+    <div class="a2g-container" [ngClass]="{'a2g-right-aside--closed': !isAsideOpen}">
         <main class="a2g-main">
 
 
@@ -52,14 +52,23 @@
     </div>
 
     <div class="a2g-mini-sidebar" *ngIf="!isAsideOpen">
-        <button md-button (click)="rightAside.open(); isAsideOpen=true; gridster1.resetSize()" class="a2g-aside-toggle-btn">
+        <button md-button (click)="rightAside.open(); isAsideOpen=true; gridster1.resetSize()" class="a2g-mini-sidebar__btn">
             <md-icon>keyboard_arrow_left</md-icon>
         </button>
-    </div>
-    <md-sidenav #sidenav mode="side" [opened]="isAsideOpen" align="end" class="a2g-right-aside" #rightAside (close)="gridster1.reload()" (open)="gridster1.reload()">
-        <button md-button (click)="rightAside.close(); isAsideOpen=false; gridster1.resetSize()" class="a2g-aside-toggle-btn">
-            <md-icon>keyboard_arrow_right</md-icon>
+        <button md-button (click)="widgetbar.open(); $event.stopPropagation()" class="a2g-mini-sidebar__btn">
+            <md-icon>add</md-icon>
         </button>
+    </div>
+
+    <md-sidenav #sidenav mode="side" [opened]="isAsideOpen" align="end" class="a2g-right-aside" #rightAside (close)="gridster1.reload()" (open)="gridster1.reload()">
+        <div class="a2g-aside-buttons-bar">
+            <button md-button (click)="rightAside.close(); isAsideOpen=false; gridster1.resetSize()" class="a2g-aside-buttons-bar__btn">
+                <md-icon>keyboard_arrow_right</md-icon>
+            </button>
+            <button md-button (click)="widgetbar.open(); $event.stopPropagation()" class="a2g-aside-buttons-bar__btn">
+                <md-icon>add</md-icon>
+            </button>
+        </div>
         <a2g-gridster-configurator [gridster]="gridster1"></a2g-gridster-configurator>
     </md-sidenav>
 
@@ -72,7 +81,7 @@
     <!--</aside>-->
 </md-sidenav-container>
 
-
+<a2g-widget-bar #widgetbar [ngClass]="{'a2g-right-aside--open': isAsideOpen}"></a2g-widget-bar>
 
 
 

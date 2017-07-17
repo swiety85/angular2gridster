@@ -11,7 +11,7 @@ import { TestComponent } from './test/test.component';
 import { WidgetComponent } from './widget/widget.component';
 import { GridsterConfiguratorComponent } from './gridster-configurator/gridster-configurator.component';
 import { DynamicComponentDirective } from './dynamic-component.directive';
-
+import {SharedModule} from "./shared/shared.module";
 
 import { MdCheckboxModule } from '@angular/material';
 import { MdSidenavModule } from '@angular/material';
@@ -19,6 +19,8 @@ import { MdSliderModule } from '@angular/material';
 import { MdRadioModule } from '@angular/material';
 import { MdButtonModule } from '@angular/material';
 import { MdIconModule } from '@angular/material';
+import { WidgetBarComponent } from './widget-bar/widget-bar.component';
+
 
 @NgModule({
     declarations: [
@@ -26,13 +28,15 @@ import { MdIconModule } from '@angular/material';
         TestComponent,
         WidgetComponent,
         GridsterConfiguratorComponent,
-        DynamicComponentDirective
+        DynamicComponentDirective,
+        WidgetBarComponent
     ],
     entryComponents: [ TestComponent, GridsterConfiguratorComponent ],
     imports: [
         BrowserModule,
         FormsModule,
         HttpModule,
+        SharedModule,
         GridsterModule,
         BrowserAnimationsModule,
         UiSwitchModule,
