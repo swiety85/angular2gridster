@@ -36,6 +36,14 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
 
+hr {
+    width: 100%;
+    border: 0;
+    height: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
 .margin-left {
     margin-left: 7px;
 }
@@ -108,7 +116,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .a2g-draggable {
-    .a2g-drag-handler {
+    .a2g-drag-handler, &.a2g-drag-handler {
         cursor: move; /* fallback if grab cursor is unsupported */
         cursor: grab;
         cursor: -moz-grab;
@@ -116,7 +124,7 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     /* (Optional) Apply a "closed-hand" cursor during drag operation. */
-    &.is-dragging .a2g-drag-handler {
+    &.is-dragging .a2g-drag-handler, &.is-dragging.a2g-drag-handler {
         cursor: grabbing;
         cursor: -moz-grabbing;
         cursor: -webkit-grabbing;

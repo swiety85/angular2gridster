@@ -1,5 +1,34 @@
 <div class="a2g-widget-bar__drawer" [ngClass]="{'active': isOpen()}" (a2gOutsideElementClick)="close()">
 
-    widget-bar works!
-
+    <ul class="a2g-widget-bar__drawer-row">
+        <li class="a2g-widget-bar__widget a2g-draggable a2g-drag-handler"
+            gridsterItemPrototype [config]="{helper: true}" [w]="2" [h]="2"
+            (start)="close()"
+            (drop)="drop.emit($event)"
+            (enter)="over($event)"
+            (out)="out($event)">
+            <div class="a2g-widget-bar__widget-icon">
+                <div class="a2g-widget-bar__widget-icon-circle">
+                    <md-icon>insert_chart</md-icon>
+                </div>
+            </div>
+            <div class="a2g-widget-bar__widget-name">Bar chart</div>
+        </li>
+        <li class="a2g-widget-bar__widget a2g-draggable a2g-drag-handler">
+            <div class="a2g-widget-bar__widget-icon">
+                <div class="a2g-widget-bar__widget-icon-circle">
+                    <md-icon>pie_chart</md-icon>
+                </div>
+            </div>
+            <div class="a2g-widget-bar__widget-name">Pie chart</div>
+        </li>
+        <li class="a2g-widget-bar__widget a2g-draggable a2g-drag-handler">
+            <div class="a2g-widget-bar__widget-icon">
+                <div class="a2g-widget-bar__widget-icon-circle">
+                    <md-icon>short_text</md-icon>
+                </div>
+            </div>
+            <div class="a2g-widget-bar__widget-name">Note</div>
+        </li>
+    </ul>
 </div>

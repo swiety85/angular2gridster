@@ -81,7 +81,7 @@
     <!--</aside>-->
 </md-sidenav-container>
 
-<a2g-widget-bar #widgetbar [ngClass]="{'a2g-right-aside--open': isAsideOpen}"></a2g-widget-bar>
+<a2g-widget-bar (drop)="addWidget($event)" #widgetbar [ngClass]="{'a2g-right-aside--open': isAsideOpen}"></a2g-widget-bar>
 
 
 

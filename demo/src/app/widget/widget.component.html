@@ -1,9 +1,6 @@
 <div class="a2g-panel__heading a2g-drag-handler" title="Drag me">
 
     <div class="a2g-panel__heading-title">
-        <!--<div class="a2g-panel__heading-title-icon">-->
-            <!--<i class="material-icons">settings</i>-->
-        <!--</div>-->
 
         <h6 class="a2g-panel__heading-title-text"> {{ title }}</h6>
 
@@ -17,12 +14,12 @@
 
         <div class="a2g-form-group" *ngIf="options.hasMoveSwitcher">
             <label>Move</label>
-            <ui-switch [ngModel]="move" (change)="moveChange.emit($event)" size="small"></ui-switch>
+            <ui-switch [ngModel]="move" (change)="moveChange.emit($event)" size="small" color="#ff4081"></ui-switch>
         </div>
 
         <div class="a2g-form-group" *ngIf="options.hasResizeSwitcher">
             <label>Resize</label>
-            <ui-switch [ngModel]="resize" (change)="resizeChange.emit($event)" size="small"></ui-switch>
+            <ui-switch [ngModel]="resize" (change)="resizeChange.emit($event)" size="small" color="#ff4081"></ui-switch>
         </div>
 
     </div>

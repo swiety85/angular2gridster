@@ -194,12 +194,12 @@ export class AppComponent {
     }
 
     over(event) {
-        const size = event.item.calculateSize(event.gridster);
+    const size = event.item.calculateSize(event.gridster);
 
-        event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.width = size.width + 'px';
-        event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.height = size.height + 'px';
-        event.item.itemPrototype.$element.classList.add('is-over');
-    }
+    event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.width = size.width + 'px';
+    event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.height = size.height + 'px';
+    event.item.itemPrototype.$element.classList.add('is-over');
+}
 
     out(event) {
         event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.width = '';
@@ -220,19 +220,20 @@ export class AppComponent {
         });
     }
 
-    addWidget(gridster: GridsterComponent) {
+    addWidget(event: any) {
+        const item = event.item;
         this.widgets.push({
-            x: 4, y: 0, w: 1, h: 1,
+            x: item.x, y: item.y, w: item.w, h: item.h,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 5',
-            content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
-            'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
-            'commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla ' +
-            'pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est ' +
-            'laborum.'
+            removable: false,
+            hasMoveSwitcher: true,
+            hasResizeSwitcher: true,
+            title: 'New widget',
+            component: TestComponent,
+            data: {test: 'new'}
         });
-        console.log('widget push', this.widgets[this.widgets.length - 1]);
+
     }
 
     removeItem(index: number): void {

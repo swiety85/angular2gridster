@@ -2,9 +2,8 @@
     position: fixed;
     bottom: 0;
     left: 0;
-    right: 30px;
+    right: 40px;
     height: 0;
-    color: #fff;
 
     &.a2g-right-aside--open {
         right: 250px;
@@ -12,17 +11,74 @@
 }
 
 .a2g-widget-bar__drawer {
+    flex-direction: column;
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -105px;
-    height: 100px;
+    bottom: -110px;
+    height: 110px;
     background-color: #37474F;
-    box-shadow: 0px -2px 2px rgba(0, 0, 0, 0.5);
+    // box-shadow: 0px -2px 2px rgba(0, 0, 0, 0.5);
+    border-top: 1px sold #dddddd;
+    padding: 0px;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     transition: bottom 0.3s ease-out;
 
     &.active {
         bottom: 0;
+    }
+}
+
+.a2g-widget-bar__drawer-row {
+    list-style: none;
+    overflow-x: visible;
+    overflow-y: hidden;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+
+}
+
+.a2g-widget-bar__widget {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    float: left;
+    width: 100px;
+    height: 90px;
+    margin: 5px 2px;
+    color: #fff;
+    border: 1px solid #526166;
+    background: linear-gradient(to bottom, #526166 0%,#37474f 33%);
+
+    &.is-over {
+        -webkit-box-shadow: 0 2px 2px rgba(0,0,0,.05);
+    }
+
+    .a2g-widget-bar__widget-icon {
+        display: flex;
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+    }
+    .a2g-widget-bar__widget-icon-circle {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 40%;
+        border: 1px solid #ff4081;
+        background-color: #ff4081;
+        color: #ffffff
+    }
+
+    .a2g-widget-bar__widget-name {
+        flex: 0 1 auto;
+        height: 35px;
+        text-align: center;
+        font-size: 12px;
     }
 }
