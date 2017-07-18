@@ -1,16 +1,19 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { GridsterComponent } from './gridster/gridster.component';
 import { IGridsterOptions } from './gridster/IGridsterOptions';
 import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions';
 import { TestComponent } from './test/test.component';
-import {GridsterConfiguratorComponent} from './gridster-configurator/gridster-configurator.component';
+import { DashboardService } from './dashboard.service';
+import {Observable} from 'rxjs/Observable';
+import {GridListItem} from './gridster/gridList/GridListItem';
 
 @Component({
     selector: 'a2g-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+    styleUrls: ['./app.component.scss'],
+    providers: [DashboardService]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     @ViewChild(GridsterComponent) gridster: GridsterComponent;
     isAsideOpen = true;
 
@@ -24,7 +27,7 @@ export class AppComponent {
         direction: 'vertical', // floating top - vertical, left - horizontal
         dragAndDrop: true, // enable/disable drag and drop for all items in grid
         resizable: true, // enable/disable resizing by drag and drop for all items in grid
-        widthHeightRatio: 1, // proportion between item width and height
+        widthHeightRatio: 0.8, // proportion between item width and height
         shrink: true,
         responsiveView: true, // turn on adopting items sizes on window resize and enable responsiveOptions
         responsiveDebounce: 500, // window resize debounce time
@@ -64,66 +67,71 @@ export class AppComponent {
         handlerClass: 'panel-heading'
     };
     title = 'Angular2Gridster';
-    widgets: Array<any> = [
-        {
-            x: 0, y: 0,
-            w: 2, h: 3,
-            dragAndDrop: true,
-            resizable: true,
-            removable: false,
-            hasMoveSwitcher: true,
-            hasResizeSwitcher: true,
-            title: 'Basic form inputs 1',
-            component: TestComponent,
-            data: {test: 'test1'}
-        },
-        {
-            x: 1, y: 0, w: 3, h: 1,
-            dragAndDrop: true,
-            resizable: true,
-            removable: true,
-            hasMoveSwitcher: true,
-            hasResizeSwitcher: true,
-            title: 'Basic form inputs 2',
-            component: TestComponent,
-            data: {test: 'test2'}
-        },
-        {
-            x: 1, y: 1, w: 2, h: 1,
-            dragAndDrop: true,
-            resizable: true,
-            removable: true,
-            hasMoveSwitcher: true,
-            hasResizeSwitcher: true,
-            title: 'Basic form inputs 3',
-            component: TestComponent,
-            data: {test: 'test3'}
-        },
-        {
-            x: 3, y: 1, w: 1, h: 2,
-            dragAndDrop: true,
-            resizable: true,
-            removable: true,
-            hasMoveSwitcher: true,
-            hasResizeSwitcher: true,
-            title: 'Basic form inputs 4',
-            component: TestComponent,
-            data: {test: 'test4'}
-        },
-        {
-            w: 1, h: 2,
-            dragAndDrop: true,
-            resizable: true,
-            removable: true,
-            hasMoveSwitcher: true,
-            hasResizeSwitcher: true,
-            title: 'Basic form inputs x',
-            component: TestComponent,
-            data: {test: 'test'}
-        }
-    ];
+    widgets: Observable<Array<any>>;
+    // widgets: Array<any> = [
+    //     {
+    //         x: 0, y: 0,
+    //         w: 2, h: 3,
+    //         dragAndDrop: true,
+    //         resizable: true,
+    //         removable: false,
+    //         hasMoveSwitcher: true,
+    //         hasResizeSwitcher: true,
+    //         title: 'Basic form inputs 1',
+    //         component: TestComponent,
+    //         data: {test: 'test1'}
+    //     },
+    //     {
+    //         x: 1, y: 0, w: 3, h: 1,
+    //         dragAndDrop: true,
+    //         resizable: true,
+    //         removable: true,
+    //         hasMoveSwitcher: true,
+    //         hasResizeSwitcher: true,
+    //         title: 'Basic form inputs 2',
+    //         component: TestComponent,
+    //         data: {test: 'test2'}
+    //     },
+    //     {
+    //         x: 1, y: 1, w: 2, h: 1,
+    //         dragAndDrop: true,
+    //         resizable: true,
+    //         removable: true,
+    //         hasMoveSwitcher: true,
+    //         hasResizeSwitcher: true,
+    //         title: 'Basic form inputs 3',
+    //         component: TestComponent,
+    //         data: {test: 'test3'}
+    //     },
+    //     {
+    //         x: 3, y: 1, w: 1, h: 2,
+    //         dragAndDrop: true,
+    //         resizable: true,
+    //         removable: true,
+    //         hasMoveSwitcher: true,
+    //         hasResizeSwitcher: true,
+    //         title: 'Basic form inputs 4',
+    //         component: TestComponent,
+    //         data: {test: 'test4'}
+    //     },
+    //     {
+    //         w: 1, h: 2,
+    //         dragAndDrop: true,
+    //         resizable: true,
+    //         removable: true,
+    //         hasMoveSwitcher: true,
+    //         hasResizeSwitcher: true,
+    //         title: 'Basic form inputs x',
+    //         component: TestComponent,
+    //         data: {test: 'test'}
+    //     }
+    // ];
 
-    constructor() { }
+    constructor(private dashboardService: DashboardService) { }
+
+    ngOnInit() {
+        this.widgets = this.dashboardService.getWidgets();
+    }
 
     resetGridsterSize() {
         console.log(<HTMLElement>document.querySelector('.gridster-container'));
@@ -177,18 +185,18 @@ export class AppComponent {
     }
 
     swap() {
-        this.widgets[0].x = 3;
-        this.widgets[3].x = 0;
+        // this.widgets[0].x = 3;
+        // this.widgets[3].x = 0;
     }
 
     addWidgetFromDrag(gridster: GridsterComponent, event: any) {
         const item = event.item;
-        this.widgets.push({
-            x: item.x, y: item.y, w: item.w, h: item.h,
-            dragAndDrop: true,
-            resizable: true,
-            title: 'Basic form inputs 5'
-        });
+        // this.widgets.push({
+        //     x: item.x, y: item.y, w: item.w, h: item.h,
+        //     dragAndDrop: true,
+        //     resizable: true,
+        //     title: 'Basic form inputs 5'
+        // });
 
         console.log('add widget from drag to:', gridster);
     }
@@ -208,39 +216,56 @@ export class AppComponent {
     }
 
     addWidgetWithoutData() {
-        this.widgets.push({
-            title: 'Basic form inputs X',
-            dragAndDrop: true,
-            resizable: true,
-            content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
-            'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
-            'commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla ' +
-            'pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est ' +
-            'laborum.'
-        });
+        // this.widgets.push({
+        //     title: 'Basic form inputs X',
+        //     dragAndDrop: true,
+        //     resizable: true,
+        //     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
+        //     'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
+        //     'commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla ' +
+        //     'pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est ' +
+        //     'laborum.'
+        // });
     }
 
     addWidget(event: any) {
-        const item = event.item;
-        this.widgets.push({
-            x: item.x, y: item.y, w: item.w, h: item.h,
-            dragAndDrop: true,
-            resizable: true,
-            removable: false,
-            hasMoveSwitcher: true,
-            hasResizeSwitcher: true,
-            title: 'New widget',
-            component: TestComponent,
-            data: {test: 'new'}
-        });
+        const item: GridListItem = event.item;
+
+        this.dashboardService.addWidget(Object.assign({}, event.prototype, {
+            x: item.getValueX(),
+            y: item.getValueY(),
+            xSm: item.getValueX('sm'),
+            ySm: item.getValueY('sm'),
+            xMd: item.getValueX('md'),
+            yMd: item.getValueY('md'),
+            xLg: item.getValueX('lg'),
+            yLg: item.getValueY('lg'),
+            xXl: item.getValueX('xl'),
+            yXl: item.getValueY('xl'),
+        }));
 
     }
 
     removeItem(index: number): void {
-        this.widgets.splice(index, 1);
+        this.dashboardService.removeWidget(index);
     }
 
-    itemChange($event: any, gridster) {
-        console.log('item change', $event);
+    itemChange(event: any, widget, index: number) {
+        const item: GridListItem = event.item;
+
+        this.dashboardService.updateWidget(index, Object.assign({}, widget, {
+            x: item.getValueX(),
+            y: item.getValueY(),
+            xSm: item.getValueX('sm'),
+            ySm: item.getValueY('sm'),
+            xMd: item.getValueX('md'),
+            yMd: item.getValueY('md'),
+            xLg: item.getValueX('lg'),
+            yLg: item.getValueY('lg'),
+            xXl: item.getValueX('xl'),
+            yXl: item.getValueY('xl'),
+            resizable: item.resizable,
+            dragAndDrop: item.dragAndDrop
+        }));
     }
 }

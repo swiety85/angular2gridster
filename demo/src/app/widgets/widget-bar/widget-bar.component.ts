@@ -1,19 +1,24 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {WidgetTypesService} from '../widget-types.service';
 
 @Component ({
     selector: 'a2g-widget-bar',
     templateUrl: './widget-bar.component.html',
-    styleUrls: ['./widget-bar.component.scss']
+    styleUrls: ['./widget-bar.component.scss'],
+    providers: [WidgetTypesService]
 })
 export class WidgetBarComponent implements OnInit {
     @Output() drop = new EventEmitter<any>();
 
+    types: Array<any>;
+
     private _isOpen = false;
 
-    constructor () {
+    constructor (private widgetTypesService: WidgetTypesService) {
     }
 
     ngOnInit () {
+        this.types = this.widgetTypesService.widgetTypes;
     }
 
     open () {
@@ -44,5 +49,13 @@ export class WidgetBarComponent implements OnInit {
         event.item.itemPrototype.$element.style.width = '';
         event.item.itemPrototype.$element.style.height = '';
         event.item.itemPrototype.$element.classList.remove('is-over');
+    }
+
+    dropType($event, type) {
+        this.drop.emit({
+            item: $event.item,
+            dashboard: $event.dashboard,
+            prototype: type
+        });
     }
 }

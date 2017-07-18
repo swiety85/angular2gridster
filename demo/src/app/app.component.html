@@ -22,7 +22,7 @@
 
             <gridster [options]="gridsterOptions" [draggableOptions]="{handlerClass: 'a2g-drag-handler'}" #gridster1>
 
-                <gridster-item *ngFor="let widget of widgets; let i = index"
+                <gridster-item *ngFor="let widget of widgets | async; let i = index"
                                [options]="itemOptions"
                                [dragAndDrop]="widget.dragAndDrop" [resizable]="widget.resizable"
                                [(x)]="widget.x" [(y)]="widget.y"
@@ -31,17 +31,17 @@
                                [(xLg)]="widget.xLg" [(yLg)]="widget.yLg"
                                [(xXl)]="widget.xXl" [(yXl)]="widget.yXl"
                                [(w)]="widget.w" [(h)]="widget.h"
-                               (itemChange)="itemChange($event, gridster1)"
+                               (itemChange)="itemChange($event, widget, i)"
                                [ngClass]="{'a2g-draggable': widget.dragAndDrop && gridsterOptions.dragAndDrop}">
 
-                    <a2g-widget [title]="widget.title" [options]="widget"
+                    <a2g-widget-panel [title]="widget.title" [options]="widget"
                                 [(move)]="widget.dragAndDrop"
                                 [(resize)]="widget.resizable"
                                 (remove)="removeItem(i)">
 
                         <ng-template [a2gDynamicComponent]="widget.component"
                                      [attributes]="{data: widget.data}"></ng-template>
-                    </a2g-widget>
+                    </a2g-widget-panel>
 
                 </gridster-item>
 

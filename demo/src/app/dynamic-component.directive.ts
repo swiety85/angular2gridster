@@ -13,6 +13,7 @@ export class DynamicComponentDirective implements OnInit {
     }
 
     ngOnInit() {
+
         const componentFactory = this.componentFactoryResolver
             .resolveComponentFactory(this.component);
 

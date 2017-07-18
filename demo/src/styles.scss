@@ -121,6 +121,7 @@ hr {
         cursor: grab;
         cursor: -moz-grab;
         cursor: -webkit-grab;
+        touch-action: none;
     }
 
     /* (Optional) Apply a "closed-hand" cursor during drag operation. */

@@ -52,6 +52,7 @@
     color: #fff;
     border: 1px solid #526166;
     background: linear-gradient(to bottom, #526166 0%,#37474f 33%);
+    // transition: width 0.3s ease-out, height 0.3s ease-out;
 
     &.is-over {
         -webkit-box-shadow: 0 2px 2px rgba(0,0,0,.05);

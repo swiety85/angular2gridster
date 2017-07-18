@@ -12,12 +12,12 @@
 
     <div class="a2g-panel__heading-config">
 
-        <div class="a2g-form-group" *ngIf="options.hasMoveSwitcher">
+        <div class="a2g-form-group">
             <label>Move</label>
             <ui-switch [ngModel]="move" (change)="moveChange.emit($event)" size="small" color="#ff4081"></ui-switch>
         </div>
 
-        <div class="a2g-form-group" *ngIf="options.hasResizeSwitcher">
+        <div class="a2g-form-group">
             <label>Resize</label>
             <ui-switch [ngModel]="resize" (change)="resizeChange.emit($event)" size="small" color="#ff4081"></ui-switch>
         </div>

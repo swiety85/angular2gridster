@@ -1,11 +1,11 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 @Component({
-    selector: 'a2g-widget',
-    templateUrl: './widget.component.html',
-    styleUrls: ['./widget.component.scss']
+    selector: 'a2g-widget-panel',
+    templateUrl: './widget-panel.component.html',
+    styleUrls: ['./widget-panel.component.scss']
 })
-export class WidgetComponent implements OnInit {
+export class WidgetPanelComponent implements OnInit {
     @Input() move: boolean;
     @Output() moveChange = new EventEmitter<boolean>();
     @Input() resize: boolean;

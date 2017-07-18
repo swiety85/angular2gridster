@@ -4,14 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GridsterModule } from './gridster/gridster.module';
-import { UiSwitchModule } from 'ngx-ui-switch/src'
 
 import { AppComponent } from './app.component';
-import { TestComponent } from './test/test.component';
-import { WidgetComponent } from './widget/widget.component';
-import { GridsterConfiguratorComponent } from './gridster-configurator/gridster-configurator.component';
 import { DynamicComponentDirective } from './dynamic-component.directive';
-import {SharedModule} from "./shared/shared.module";
+import { GridsterConfiguratorComponent } from './gridster-configurator/gridster-configurator.component';
+import { SharedModule } from "./shared/shared.module";
+import { WidgetsModule } from './widgets/widgets.module';
+
+import { TestComponent } from './test/test.component';
 
 import { MdCheckboxModule } from '@angular/material';
 import { MdSidenavModule } from '@angular/material';
@@ -19,27 +19,25 @@ import { MdSliderModule } from '@angular/material';
 import { MdRadioModule } from '@angular/material';
 import { MdButtonModule } from '@angular/material';
 import { MdIconModule } from '@angular/material';
-import { WidgetBarComponent } from './widget-bar/widget-bar.component';
 
 
 @NgModule({
     declarations: [
         AppComponent,
         TestComponent,
-        WidgetComponent,
         GridsterConfiguratorComponent,
-        DynamicComponentDirective,
-        WidgetBarComponent
+        DynamicComponentDirective
     ],
-    entryComponents: [ TestComponent, GridsterConfiguratorComponent ],
+    entryComponents: [ TestComponent ],
     imports: [
+        GridsterModule,
+        SharedModule,
+        WidgetsModule,
+
         BrowserModule,
         FormsModule,
         HttpModule,
-        SharedModule,
-        GridsterModule,
         BrowserAnimationsModule,
-        UiSwitchModule,
 
         MdCheckboxModule,
         MdSidenavModule,
