@@ -1,7 +1,13 @@
 import {Injectable} from '@angular/core';
+import {TextWidgetComponent} from './text-widget/text-widget.component';
+import {ChartWidgetComponent} from './chart-widget/chart-widget.component';
 
 @Injectable()
 export class WidgetTypesService {
+    static COMPONENTS_MAP = {
+        'text': TextWidgetComponent,
+        'chart': ChartWidgetComponent,
+    };
 
     widgetTypes = [
         {
@@ -12,6 +18,7 @@ export class WidgetTypesService {
             w: 2, h: 2,
             dragAndDrop: true,
             resizable: true,
+            removable: true,
             data: {
                 type: 'pie',
                 data: [350, 450, 100],
@@ -26,6 +33,7 @@ export class WidgetTypesService {
             w: 3, h: 2,
             dragAndDrop: true,
             resizable: true,
+            removable: true,
             data: {
                 type: 'bar',
                 datasets: [
@@ -42,16 +50,15 @@ export class WidgetTypesService {
         },
         {
             id: 'text',
-            component: 'test',
+            component: 'text',
             title: 'Sample text',
             icon: 'short_text',
             w: 2, h: 2,
-            dargAndDrop: true,
+            dragAndDrop: true,
             resizable: true,
+            removable: true,
             data: {
-                type: 'pie',
-                data: [350, 450, 100],
-                labels: ['Download Sales', 'In-Store Sales', 'Mail-Order Sales']
+                text: 'Sample text'
             }
         },
     ];

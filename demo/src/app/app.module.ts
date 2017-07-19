@@ -28,7 +28,6 @@ import { MdIconModule } from '@angular/material';
         GridsterConfiguratorComponent,
         DynamicComponentDirective
     ],
-    entryComponents: [ TestComponent ],
     imports: [
         GridsterModule,
         SharedModule,

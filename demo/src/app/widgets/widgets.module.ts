@@ -9,17 +9,18 @@ import {WidgetBarComponent} from './widget-bar/widget-bar.component';
 import {ChartWidgetComponent} from './chart-widget/chart-widget.component';
 import {GridsterModule} from '../gridster/gridster.module';
 import {MdIconModule} from '@angular/material';
-import {TestComponent} from '../test/test.component';
+import {TextWidgetComponent} from './text-widget/text-widget.component';
 
 @NgModule({
     declarations: [
         WidgetPanelComponent,
         WidgetBarComponent,
-        ChartWidgetComponent
+        ChartWidgetComponent,
+        TextWidgetComponent
     ],
     entryComponents: [
-        TestComponent,
-        ChartWidgetComponent
+        ChartWidgetComponent,
+        TextWidgetComponent
     ],
     imports: [
         CommonModule,
