@@ -351,7 +351,7 @@ export class GridsterService {
         } else {
             const increaseHeightWith = (increaseGridsterSize) ? this.maxItemHeight : 0;
             child.style.height = ((this.gridList.grid.length + increaseHeightWith) * this.cellHeight) + 'px';
-            child.style.width = (this.options.lanes * this.cellWidth) + 'px';
+            //child.style.width = (this.options.lanes * this.cellWidth) + 'px';
         }
     }
 
