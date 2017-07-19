@@ -51,7 +51,7 @@
     margin: 5px 2px;
     color: #fff;
     border: 1px solid #526166;
-    background: linear-gradient(to bottom, #526166 0%,#37474f 33%);
+    background-color: #273238;
     // transition: width 0.3s ease-out, height 0.3s ease-out;
 
     &.is-over {
@@ -78,7 +78,7 @@
 
     .a2g-widget-bar__widget-name {
         flex: 0 1 auto;
-        height: 35px;
+        height: 30px;
         text-align: center;
         font-size: 12px;
     }
