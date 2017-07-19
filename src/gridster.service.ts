@@ -351,7 +351,7 @@ export class GridsterService {
         } else {
             const increaseHeightWith = (increaseGridsterSize) ? this.maxItemHeight : 0;
             child.style.height = ((this.gridList.grid.length + increaseHeightWith) * this.cellHeight) + 'px';
-            child.style.width = (this.options.lanes * this.cellWidth) + 'px';
+            //child.style.width = (this.options.lanes * this.cellWidth) + 'px';
         }
     }
 
@@ -476,7 +476,7 @@ export class GridsterService {
                     itemChange.item.itemComponent.hChange.emit(itemChange.item.h);
                 }
                 // should be called only once (not for each breakpoint)
-                itemChange.item.itemComponent.change.emit({
+                itemChange.item.itemComponent.itemChange.emit({
                     item: itemChange.item,
                     changes: itemChange.changes,
                     breakpoint: breakpoint
