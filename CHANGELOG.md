@@ -1,3 +1,13 @@
+<a name="0.6.4"></a>
+# [0.6.4]((https://github.com/swiety85/angular2gridster/compare/0.6.3...0.6.4)) (2017-07-28)
+
+
+### Bug Fixes
+
+* **deps:** Reorganise project deps - try to fix bug with angular-cli #57
+
+
+
 <a name="0.6.3"></a>
 # [0.6.3]((https://github.com/swiety85/angular2gridster/compare/0.6.2...0.6.3)) (2017-07-14)
 
