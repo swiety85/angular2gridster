@@ -179,7 +179,7 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
         return this;
     }
 
-    private updateGridsterElementData() {
+    updateGridsterElementData() {
         this.gridster.gridsterRect = this.$element.getBoundingClientRect();
     }
 
