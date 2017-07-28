@@ -1,3 +1,15 @@
+<a name="0.6.5"></a>
+# [0.6.5]((https://github.com/swiety85/angular2gridster/compare/0.6.4...0.6.5)) (2017-07-28)
+
+
+### Bug Fixes
+
+* **drag:** Update gridster element item on drag start
+* **config:** Fix snap issue with new items and no responsive configuration
+* **resize:** Fix problem with item resize when no maxWidth and maxHeight option
+
+
+
 <a name="0.6.4"></a>
 # [0.6.4]((https://github.com/swiety85/angular2gridster/compare/0.6.3...0.6.4)) (2017-07-28)
 
