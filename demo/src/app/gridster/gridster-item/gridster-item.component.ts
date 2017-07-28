@@ -181,8 +181,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     private defaultOptions: any = {
         minWidth: 1,
         minHeight: 1,
-        maxWidth: null,
-        maxHeight: null,
+        maxWidth: Infinity,
+        maxHeight: Infinity,
         defaultWidth: 1,
         defaultHeight: 1
     };
