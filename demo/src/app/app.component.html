@@ -52,7 +52,7 @@
     </div>
 
     <div class="a2g-mini-sidebar" *ngIf="!isAsideOpen">
-        <button md-button (click)="rightAside.open(); isAsideOpen=true; gridster1.resetSize()" class="a2g-mini-sidebar__btn">
+        <button md-button (click)="rightAside.open(); isAsideOpen=true" class="a2g-mini-sidebar__btn">
             <md-icon>keyboard_arrow_left</md-icon>
         </button>
         <button md-button (click)="widgetbar.open(); $event.stopPropagation()" class="a2g-mini-sidebar__btn">
@@ -62,7 +62,7 @@
 
     <md-sidenav #sidenav mode="side" [opened]="isAsideOpen" align="end" class="a2g-right-aside" #rightAside (close)="gridster1.reload()" (open)="gridster1.reload()">
         <div class="a2g-aside-buttons-bar">
-            <button md-button (click)="rightAside.close(); isAsideOpen=false; gridster1.resetSize()" class="a2g-aside-buttons-bar__btn">
+            <button md-button (click)="rightAside.close(); isAsideOpen=false" class="a2g-aside-buttons-bar__btn">
                 <md-icon>keyboard_arrow_right</md-icon>
             </button>
             <button md-button (click)="widgetbar.open(); $event.stopPropagation()" class="a2g-aside-buttons-bar__btn">

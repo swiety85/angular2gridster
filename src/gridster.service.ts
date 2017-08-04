@@ -193,6 +193,7 @@ export class GridsterService {
         this.highlightPositionForItem(item);
 
         this.gridsterComponent.isDragging = true;
+        this.gridsterComponent.updateGridsterElementData();
     }
 
     onDrag (item: GridListItem) {
