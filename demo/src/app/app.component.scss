@@ -1,6 +1,6 @@
 :host {
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
     flex-direction: column;
     flex: 1;
 }
@@ -188,12 +188,11 @@
     flex-direction: column;
 
     position: absolute;
-    top: 0;
+    top: 92px;
     bottom: 0;
     right: 0;
     z-index: 3;
     outline: 0;
-    height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
 
@@ -205,6 +204,12 @@
         width: 30px;
         padding: 0;
         height: 60px;
+    }
+}
+
+.a2g-navbar-buttons {
+    * {
+        margin-top: 4px;
     }
 }
 

@@ -2,6 +2,7 @@ import {Component, OnInit, OnDestroy, Input} from '@angular/core';
 import {GridsterComponent} from '../gridster/gridster.component';
 import {IGridsterOptions} from '../gridster/IGridsterOptions';
 import { Subscription } from 'rxjs/Subscription';
+import {DashboardService} from '../dashboard.service';
 
 @Component({
     selector: 'a2g-gridster-configurator',
@@ -16,7 +17,7 @@ export class GridsterConfiguratorComponent implements OnInit, OnDestroy {
 
     private subscribtions: Array<Subscription> = [];
 
-    constructor() {
+    constructor(private dashboardService: DashboardService) {
     }
 
     ngOnInit() {
@@ -41,5 +42,17 @@ export class GridsterConfiguratorComponent implements OnInit, OnDestroy {
         this.subscribtions.forEach((sub: Subscription) => {
             sub.unsubscribe();
         });
+    }
+
+    resetOptions () {
+        this.dashboardService
+            .resetOptions()
+            .store();
+    }
+
+    resetWidgets () {
+        this.dashboardService
+            .resetWidgets()
+            .store();
     }
 }

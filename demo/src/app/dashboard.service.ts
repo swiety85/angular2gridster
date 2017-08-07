@@ -72,14 +72,16 @@ export class DashboardService {
         this.options = this.getOptionsFromStorage() || this._options;
     }
 
-    addWidget(widget) {
+    addWidget(widget): this {
         this.widgets.push(widget);
-        this.store();
+
+        return this;
     }
 
-    removeWidget(index: number) {
+    removeWidget(index: number): this {
         this.widgets.splice(index, 1);
-        this.store();
+
+        return this;
     }
 
     store() {
@@ -88,6 +90,20 @@ export class DashboardService {
 
         const jsonOptions = JSON.stringify(this.options);
         localStorage.setItem(DashboardService.STORAGE_KEY_OPTIONS, jsonOptions);
+
+        return this;
+    }
+
+    resetOptions(): this {
+        this.options = this._options;
+
+        return this;
+    }
+
+    resetWidgets(): this {
+        this.widgets = JSON.parse(this.initWidgets);
+
+        return this;
     }
 
     private getWidgetsFromStorage(): Array<any> | null {

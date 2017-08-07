@@ -10,6 +10,7 @@ import {ChartWidgetComponent} from './chart-widget/chart-widget.component';
 import {GridsterModule} from '../gridster/gridster.module';
 import {MdIconModule} from '@angular/material';
 import {TextWidgetComponent} from './text-widget/text-widget.component';
+import {SharedModule} from '../shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -28,6 +29,7 @@ import {TextWidgetComponent} from './text-widget/text-widget.component';
         ChartsModule,
         UiSwitchModule,
         GridsterModule,
+        SharedModule,
 
         MdIconModule
     ],

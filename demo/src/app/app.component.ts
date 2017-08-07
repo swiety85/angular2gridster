@@ -55,12 +55,12 @@ export class AppComponent implements OnInit {
             yLg: item.getValueY('lg'),
             xXl: item.getValueX('xl'),
             yXl: item.getValueY('xl')
-        }));
+        })).store();
 
     }
 
     removeItem(index: number): void {
-        this.dashboardService.removeWidget(index);
+        this.dashboardService.removeWidget(index).store();
     }
 
     widgetChanged() {

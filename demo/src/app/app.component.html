@@ -14,6 +14,11 @@
         </li>
     </ul>
     <div class="a2g-middle-space"></div>
+    <div class="a2g-navbar-buttons">
+        <button md-button (click)="widgetbar.open(); $event.stopPropagation()" class="a2g-aside-buttons-bar__btn">
+            Add widget
+        </button>
+    </div>
 </nav>
 <md-sidenav-container class="a2g-sidenav-container">
     <div class="a2g-container" [ngClass]="{'a2g-right-aside--closed': !isAsideOpen}">
@@ -31,7 +36,7 @@
                                [(xLg)]="widget.xLg" [(yLg)]="widget.yLg"
                                [(xXl)]="widget.xXl" [(yXl)]="widget.yXl"
                                [(w)]="widget.w" [(h)]="widget.h"
-                               (itemChange)="widgetChanged()"
+                               (change)="widgetChanged()"
                                [ngClass]="{'a2g-draggable': widget.dragAndDrop && gridsterOptions.dragAndDrop}">
 
                     <a2g-widget-panel [title]="widget.title" [options]="widget"
@@ -51,202 +56,25 @@
         </main>
     </div>
 
-    <div class="a2g-mini-sidebar" *ngIf="!isAsideOpen">
-        <button md-button (click)="rightAside.open(); isAsideOpen=true" class="a2g-mini-sidebar__btn">
-            <md-icon>keyboard_arrow_left</md-icon>
-        </button>
-        <button md-button (click)="widgetbar.open(); $event.stopPropagation()" class="a2g-mini-sidebar__btn">
-            <md-icon>add</md-icon>
-        </button>
-    </div>
+
 
     <md-sidenav #sidenav mode="side" [opened]="isAsideOpen" align="end" class="a2g-right-aside" #rightAside (close)="gridster1.reload()" (open)="gridster1.reload()">
         <div class="a2g-aside-buttons-bar">
             <button md-button (click)="rightAside.close(); isAsideOpen=false" class="a2g-aside-buttons-bar__btn">
                 <md-icon>keyboard_arrow_right</md-icon>
             </button>
-            <button md-button (click)="widgetbar.open(); $event.stopPropagation()" class="a2g-aside-buttons-bar__btn">
-                <md-icon>add</md-icon>
-            </button>
         </div>
         <a2g-gridster-configurator [gridster]="gridster1"></a2g-gridster-configurator>
     </md-sidenav>
 
-    <!--<nav class="a2g-nav">-->
-    <!--</nav>-->
 
-    <!--<aside class="a2g-ads">-->
-        <!--<div class="a2g-ads__action-area"></div>-->
-        <!--<div class="a2g-ads__main-area"></div>-->
-    <!--</aside>-->
 </md-sidenav-container>
+<div class="a2g-mini-sidebar" *ngIf="!isAsideOpen">
+    <button md-button (click)="rightAside.open(); isAsideOpen=true" class="a2g-mini-sidebar__btn">
+        <md-icon>keyboard_arrow_left</md-icon>
+    </button>
+</div>
 
 <a2g-widget-bar (drop)="addWidget($event)" #widgetbar [ngClass]="{'a2g-right-aside--open': isAsideOpen}"></a2g-widget-bar>
 
 
-
-
-
-<!--<div class="mdl-layout__container">-->
-<!--<md-sidenav-container #sidenav>-->
-<!--<md-sidenav>-->
-<!--test-->
-<!--</md-sidenav>-->
-
-
-<!--<div class="demo-layout mdl-layout mdl-js-layout mdl-layout&#45;&#45;fixed-header">-->
-<!--<header class="demo-header mdl-layout__header mdl-color&#45;&#45;grey-100 mdl-color-text&#45;&#45;grey-600">-->
-<!--<div class="mdl-layout__header-row">-->
-<!--<span class="mdl-layout-title">Angular2gridster</span>-->
-<!--<div class="mdl-layout-spacer"></div>-->
-<!--<button type="button" md-button (click)="sidenav.open()">-->
-<!--Open sidenav-->
-<!--</button>-->
-<!--<button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button&#45;&#45;icon" id="hdrbtn">-->
-<!--<i class="material-icons">more_vert</i>-->
-<!--</button>-->
-<!--<ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu&#45;&#45;bottom-right" for="hdrbtn">-->
-<!--<li class="mdl-menu__item">About</li>-->
-<!--<li class="mdl-menu__item">Contact</li>-->
-<!--<li class="mdl-menu__item">Legal information</li>-->
-<!--</ul>-->
-
-<!--</div>-->
-<!--</header>-->
-
-
-<!--<main class="mdl-layout__content mdl-color&#45;&#45;grey-100">-->
-
-
-<!--</main>-->
-<!--</div>-->
-<!--&lt;!&ndash; primary content &ndash;&gt;-->
-<!--</md-sidenav-container>-->
-<!--</div>-->
-
-
-<!--<h1>-->
-<!--{{getTitle()}}-->
-<!--</h1>-->
-<!--<div class="toolbar">-->
-<!--Lanes:-->
-<!--<button (click)="removeLine(gridster)">-</button>-->
-<!--{{ gridsterOptions.lanes }}-->
-<!--<button (click)="addLine(gridster)">+</button>-->
-
-<!--<button (click)="addWidgetWithoutData()">-->
-<!--Add widget without data-->
-<!--</button>-->
-<!--<br>-->
-<!--<label for="ratio">Ratio</label><input type="number" id="ratio" [(ngModel)]="gridsterOptions.widthHeightRatio" min="0.1"-->
-<!--(change)="gridster.setOption('widthHeightRatio', gridsterOptions.widthHeightRatio).reload()">-->
-
-<!--<input id="draggable" type="checkbox" [(ngModel)]="gridsterOptions.dragAndDrop" value="true"-->
-<!--(change)="gridster.setOption('dragAndDrop', gridsterOptions.dragAndDrop)"><label for="draggable">Draggable</label>-->
-
-<!--<input type="checkbox" [(ngModel)]="gridsterOptions.resizable" value="true" id="resizable"-->
-<!--(change)="gridster.setOption('resizable', gridsterOptions.resizable)"><label for="resizable">Resizable</label>-->
-<!--<br>-->
-<!--Direction-->
-<!--<label>-->
-<!--<input type="radio" [(ngModel)]="gridsterOptions.direction" value="horizontal"-->
-<!--(change)="gridster.setOption('direction', 'horizontal').reload()">Horizontal-->
-<!--</label>-->
-<!--<label>-->
-<!--<input type="radio" [(ngModel)]="gridsterOptions.direction" value="vertical"-->
-<!--(change)="gridster.setOption('direction', 'vertical').reload()">Vertical-->
-<!--</label>-->
-<!--<br>-->
-<!--Max item size: {{itemOptions.maxWidth}} x {{itemOptions.maxHeight}}-->
-<!--</div>-->
-<!--<div class="widgetbar">-->
-<!--<div gridsterItemPrototype [config]="{helper: true}" [w]="1" [h]="1"-->
-<!--(drop)="addWidgetFromDrag(gridster, $event)"-->
-<!--(enter)="over($event)"-->
-<!--(out)="out($event)"-->
-<!--class="gridster-item-prototype">-->
-<!--Drag me (clone)<br>-->
-<!--1x1-->
-<!--<div _ngcontent-uoe-1="" class="gridster-item-inner" style="width: 0;height: 0;">-->
-<!--<div _ngcontent-uoe-2="" class="panel-heading">-->
-<!--<h5 _ngcontent-uoe-2="" class="panel-title">New widget</h5>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-
-<!--<div gridsterItemPrototype [config]="{helper: true}" [w]="1" [h]="2"-->
-<!--(drop)="addWidgetFromDrag(gridster, $event)"-->
-<!--(enter)="over($event)"-->
-<!--(out)="out($event)"-->
-<!--class="gridster-item-prototype">-->
-<!--Drag me (clone)<br>-->
-<!--1x2-->
-<!--<div _ngcontent-uoe-1="" class="gridster-item-inner" style="width: 0;height: 0;">-->
-<!--<div _ngcontent-uoe-2="" class="panel-heading">-->
-<!--<h5 _ngcontent-uoe-2="" class="panel-title">New widget</h5>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-
-<!--<div gridsterItemPrototype [config]="{helper: false}" [w]="2" [h]="1"-->
-<!--(drop)="addWidgetFromDrag(gridster, $event)"-->
-<!--(enter)="over($event)"-->
-<!--(out)="out($event)"-->
-<!--class="gridster-item-prototype">-->
-<!--Drag me <br>-->
-<!--2x1-->
-<!--<div _ngcontent-uoe-1="" class="gridster-item-inner" style="width: 0;height: 0;">-->
-<!--<div _ngcontent-uoe-2="" class="panel-heading">-->
-<!--<h5 _ngcontent-uoe-2="" class="panel-title">New widget</h5>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--<div class="main-content">-->
-
-<!--<gridster [options]="gridsterOptions" [draggableOptions]="gridsterDraggableOptions"-->
-<!--(optionsChange)="optionsChange($event)" #gridster1 style="min-height: 500px;">-->
-
-<!--<gridster-item *ngFor="let widget of widgets; let indx = index" #itemComp-->
-<!--[options]="itemOptions"-->
-<!--[dragAndDrop]="widget.dragAndDrop" [resizable]="widget.resizable"-->
-<!--[(x)]="widget.x" [(y)]="widget.y"-->
-<!--[(xSm)]="widget.xSm" [(ySm)]="widget.ySm"-->
-<!--[(xMd)]="widget.xMd" [(yMd)]="widget.yMd"-->
-<!--[(xLg)]="widget.xLg" [(yLg)]="widget.yLg"-->
-<!--[(xXl)]="widget.xXl" [(yXl)]="widget.yXl"-->
-<!--[(w)]="widget.w" [(h)]="widget.h"-->
-<!--(change)="itemChange($event, gridster1)">-->
-
-<!--<div class="panel-heading">-->
-<!--<h5 class="panel-title">{{ widget.title }}</h5>-->
-<!--</div>-->
-
-<!--<div class="panel-body">-->
-<!--<app-test></app-test>-->
-<!--<p>-->
-<!--<label>-->
-<!--<input type="checkbox" [(ngModel)]="widget.dragAndDrop" value="true"> Draggable-->
-<!--</label>-->
-<!--<label>-->
-<!--<input type="checkbox" [(ngModel)]="widget.resizable" value="true"> Resizable-->
-<!--</label>-->
-<!--<button (click)="setWidth(widget, widget.w+1, $event, gridster1)">width +</button>-->
-<!--<button (click)="setWidth(widget, widget.w-1, $event, gridster1)">width -</button>-->
-<!--<button (click)="setHeight(widget, widget.h+1, $event, gridster1)">height +</button>-->
-<!--<button (click)="setHeight(widget, widget.h-1, $event, gridster1)">height -</button>-->
-<!--</p>-->
-<!--<p>-->
-<!--<button (click)="remove($event, indx,gridster1)">remove</button>-->
-<!--</p>-->
-<!--<p>-->
-<!--Position: {{itemComp?.item?.x}} x {{itemComp?.item?.y}}<br>-->
-<!--Size: {{widget.w}} x {{widget.h}}-->
-<!--</p>-->
-<!--<pre style="position: absolute">{{ widget | json }}</pre>-->
-<!--</div>-->
-
-<!--</gridster-item>-->
-
-<!--</gridster>-->
-<!--</div>-->
