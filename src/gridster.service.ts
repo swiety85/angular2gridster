@@ -33,6 +33,7 @@ export class GridsterService {
     };
 
     gridsterRect: ClientRect;
+    gridsterScrollData: {scrollTop: number, scrollLeft: number};
 
     gridsterOptions: GridsterOptions;
 
