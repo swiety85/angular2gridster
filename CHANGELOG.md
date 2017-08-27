@@ -1,3 +1,13 @@
+<a name="0.6.6"></a>
+# [0.6.6]((https://github.com/swiety85/angular2gridster/compare/0.6.5...0.6.6)) (2017-08-27)
+
+
+### Bug Fixes
+
+* **drag:** Make dragging works when gridster is in scrollable element. Issue #21
+
+
+
 <a name="0.6.5"></a>
 # [0.6.5]((https://github.com/swiety85/angular2gridster/compare/0.6.4...0.6.5)) (2017-07-28)
 
