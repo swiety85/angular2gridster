@@ -45,6 +45,8 @@ export class Draggable {
         this.dragStart = this.createDragStartObservable().share();
         this.dragMove = this.createDragMoveObservable(this.dragStart);
         this.dragStop = this.createDragStopObservable(this.dragStart);
+
+        this.fixProblemWithDnDForIE(element);
     }
 
     private createDragStartObservable(): Observable<DraggableEvent> {
@@ -121,5 +123,9 @@ export class Draggable {
         }
         e.cancelBubble = true;
         e.returnValue = false;
+    }
+
+    private fixProblemWithDnDForIE(element: Element) {
+        (<HTMLElement>element).style['touch-action'] = 'none';
     }
 }
