@@ -106,7 +106,7 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
             });
 
         this.zone.runOutsideAngular(() => {
-            const scrollSub = Observable.fromEvent(document, 'scroll')
+            const scrollSub = Observable.fromEvent(document, 'scroll', true)
                 .subscribe(() => this.updateGridsterElementData());
             this.subscribtions.push(scrollSub);
         });
@@ -180,7 +180,23 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     updateGridsterElementData() {
+        this.gridster.gridsterScrollData = this.getScrollPositionFromParents(this.$element);
         this.gridster.gridsterRect = this.$element.getBoundingClientRect();
+    }
+
+    private getScrollPositionFromParents(element: Element, data = {scrollTop: 0, scrollLeft: 0}): {scrollTop: number, scrollLeft: number} {
+
+        if (element.parentElement !== document.body) {
+            data.scrollTop += element.parentElement.scrollTop;
+            data.scrollLeft += element.parentElement.scrollLeft;
+
+            return this.getScrollPositionFromParents(element.parentElement, data);
+        }
+
+        return {
+            scrollTop: data.scrollTop,
+            scrollLeft: data.scrollLeft
+        };
     }
 
     /**

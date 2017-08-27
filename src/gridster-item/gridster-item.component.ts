@@ -339,8 +339,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
                 const dragSub = draggable.dragMove
                     .subscribe((event: DraggableEvent) => {
-                        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-                        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                        const scrollData = this.gridster.gridsterScrollData;
 
                         this.resizeElement({
                             direction,
@@ -351,8 +350,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                             },
                             startEvent,
                             moveEvent: event,
-                            scrollDiffX: scrollLeft - startData.scrollLeft,
-                            scrollDiffY: scrollTop - startData.scrollTop
+                            scrollDiffX: scrollData.scrollLeft - startData.scrollLeft,
+                            scrollDiffY: scrollData.scrollTop - startData.scrollTop
                         });
 
                         this.gridster.onResizeDrag(this.item);
@@ -390,6 +389,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         }
         this.zone.runOutsideAngular(() => {
             let cursorToElementPosition;
+
             const draggable = new Draggable(this.$element, {
                 handlerClass: this.gridster.draggableOptions.handlerClass
             });
@@ -406,9 +406,11 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
             const dragSub = draggable.dragMove
                 .subscribe((event: DraggableEvent) => {
-                    this.$element.style.top = (event.clientY - cursorToElementPosition.y -
+                    const scrollData = this.gridster.gridsterScrollData;
+
+                    this.$element.style.top = (event.clientY - cursorToElementPosition.y - scrollData.scrollTop -
                         this.gridster.gridsterRect.top) + 'px';
-                    this.$element.style.left = (event.clientX - cursorToElementPosition.x -
+                    this.$element.style.left = (event.clientX - cursorToElementPosition.x - scrollData.scrollLeft -
                         this.gridster.gridsterRect.left) + 'px';
 
                     this.gridster.onDrag(this.item);
@@ -460,8 +462,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     }
 
     private createResizeStartObject(direction: string) {
-        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollData = this.gridster.gridsterScrollData;
 
         return {
             top: parseInt(this.$element.style.top, 10),
@@ -488,8 +489,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                 direction.indexOf('n') >= 0 ?
                 this.item.y + this.item.h : this.options.maxHeight
             ),
-            scrollLeft,
-            scrollTop
+            scrollLeft: scrollData.scrollLeft,
+            scrollTop: scrollData.scrollTop
         };
     }
 
