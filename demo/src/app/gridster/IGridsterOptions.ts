@@ -11,5 +11,6 @@ export interface IGridsterOptions {
     responsiveDebounce?: number;
     breakpoint?: string;
     minWidth?: number;
+    useCSSTransforms?: boolean;
     responsiveOptions?: Array<IGridsterOptions>;
 }

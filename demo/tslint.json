@@ -1,7 +1,5 @@
 {
-  "rulesDirectory": [
-    "node_modules/codelyzer"
-  ],
+  "rulesDirectory": [],
   "rules": {
     "callable-types": true,
     "class-name": true,
