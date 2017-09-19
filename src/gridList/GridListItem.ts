@@ -85,6 +85,26 @@ export class GridListItem {
         return !!this.getItem().resizable;
     }
 
+    get positionX() {
+        const item = this.itemComponent || this.itemPrototype;
+
+        if (!item) {
+            return null;
+        }
+
+        return item.positionX;
+    }
+
+    get positionY() {
+        const item = this.itemComponent || this.itemPrototype;
+
+        if (!item) {
+            return null;
+        }
+
+        return item.positionY;
+    }
+
     constructor () {}
 
     public setFromGridsterItem (item: GridsterItemComponent): GridListItem {
@@ -190,8 +210,9 @@ export class GridListItem {
     public applyPosition(gridster?: GridsterService) {
         const position = this.calculatePosition(gridster);
 
-        this.$element.style.left = position.left + 'px';
-        this.$element.style.top = position.top + 'px';
+        this.itemComponent.positionX = position.left;
+        this.itemComponent.positionY = position.top;
+        this.itemComponent.updateElemenetPosition();
     }
 
     public calculatePosition(gridster?: GridsterService): {left: number, top: number} {

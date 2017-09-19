@@ -246,18 +246,6 @@ export class GridsterService {
         this.gridsterComponent.isDragging = false;
     }
 
-    public offset (el: HTMLElement, relativeEl: HTMLElement): {left: number, top: number, right: number, bottom: number} {
-        const elRect = el.getBoundingClientRect();
-        const relativeElRect = relativeEl.getBoundingClientRect();
-
-        return {
-            left: elRect.left - relativeElRect.left,
-            top: elRect.top - relativeElRect.top,
-            right: relativeElRect.right - elRect.right,
-            bottom: relativeElRect.bottom - elRect.bottom
-        };
-    }
-
     private copyItems (): void {
         this._items = this.items.map((item: GridListItem) => {
             return item.copyForBreakpoint(null);
@@ -385,11 +373,29 @@ export class GridsterService {
         return [colSize, rowSize];
     }
 
-    private snapItemPositionToGrid (item: GridListItem) {
-        const position = this.offset(item.$element, this.gridsterComponent.$element);
+    private generateItemPosition(item: GridListItem): {x: number, y: number} {
+        let position;
 
-        let col = Math.round(position.left / this.cellWidth),
-            row = Math.round(position.top / this.cellHeight);
+        if (item.itemPrototype) {
+            const coords = item.itemPrototype.getPositionToGridster(this);
+            position = {
+                x: Math.round(coords.x / this.cellWidth),
+                y: Math.round(coords.y / this.cellHeight)
+            };
+        } else {
+            position = {
+                x: Math.round(item.positionX / this.cellWidth),
+                y: Math.round(item.positionY / this.cellHeight)
+            };
+        }
+
+        return position;
+    }
+
+    private snapItemPositionToGrid (item: GridListItem) {
+        const position = this.generateItemPosition(item);
+        let col = position.x;
+        let row = position.y;
 
         // Keep item position within the grid and don't let the item create more
         // than one extra column

@@ -152,7 +152,7 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
         const dragSub = draggable.dragMove
             .subscribe((event: DraggableEvent) => {
 
-                this.setElementPosition(this.$element,{
+                this.setElementPosition(this.$element, {
                     x: event.clientX - cursorToElementPosition.x  - this.parentRect.left,
                     y: event.clientY - cursorToElementPosition.y  - this.parentRect.top
                 });
@@ -239,7 +239,7 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
             return el;
         }
         const rect = this.elementRef.nativeElement.getBoundingClientRect();
-        this.containerRectange = el.parentElement.getBoundingClientRect()
+        this.containerRectange = el.parentElement.getBoundingClientRect();
 
         el.style.position = 'absolute';
         this.setElementPosition(el, {
