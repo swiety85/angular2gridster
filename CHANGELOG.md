@@ -6,6 +6,7 @@
 
 * **drag:** Fix problem with IE touch drag by touch-action css. Issue #72
 * **performance** Prevent performance issues while dragging item with selected text inside
+* **resize** Fix problem with assigning width/height to gridster element
 
 ### Features
 
