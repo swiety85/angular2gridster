@@ -305,8 +305,6 @@ export class GridsterService {
 
     private applySizeToItems () {
         for (let i = 0; i < this.items.length; i++) {
-            // this.items[i].$element.style.width = this.items[i].calculateWidth() + 'px';
-            // this.items[i].$element.style.height = this.items[i].calculateHeight() + 'px';
             this.items[i].applySize();
 
             if (this.options.heightToFontSizeRatio) {
@@ -325,8 +323,6 @@ export class GridsterService {
             if (this.isCurrentElement(this.items[i].$element)) {
                 continue;
             }
-            // this.items[i].$element.style.left = (this.items[i].x * this.cellWidth) + 'px';
-            // this.items[i].$element.style.top = (this.items[i].y * this.cellHeight) + 'px';
             this.items[i].applyPosition(this);
         }
 
@@ -336,12 +332,10 @@ export class GridsterService {
         if (this.options.direction === 'horizontal') {
             const increaseWidthWith = (increaseGridsterSize) ? this.maxItemWidth : 0;
             child.style.height = (this.options.lanes * this.cellHeight) + 'px';
-            child.style.width = ((this.gridList.grid.length + increaseWidthWith) * this.cellWidth) + 'px';
 
         } else {
             const increaseHeightWith = (increaseGridsterSize) ? this.maxItemHeight : 0;
             child.style.height = ((this.gridList.grid.length + increaseHeightWith) * this.cellHeight) + 'px';
-            child.style.width = (this.options.lanes * this.cellWidth) + 'px';
         }
     }
 
