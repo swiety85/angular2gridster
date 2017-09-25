@@ -1,3 +1,18 @@
+<a name="0.6.7"></a>
+# [0.6.7]((https://github.com/swiety85/angular2gridster/compare/0.6.6...0.6.7)) (2017-09-25)
+
+
+### Bug Fixes
+
+* **drag:** Fix problem with IE touch drag by touch-action css. Issue #72
+* **performance** Prevent performance issues while dragging item with selected text inside
+
+### Features
+
+* **performance** useCSSTransforms option for more effective moving rendering while dragging item
+* **performance** Get rid of getBoundingRect in drag event
+
+
 <a name="0.6.6"></a>
 # [0.6.6]((https://github.com/swiety85/angular2gridster/compare/0.6.5...0.6.6)) (2017-08-27)
 
