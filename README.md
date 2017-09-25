@@ -8,7 +8,8 @@ Angular 2 implementation of well known Gridster (no jQuery, no external librarie
 3. [API Documentation](https://github.com/swiety85/angular2gridster/wiki/API-Documentation)
 4. [Roadmap](https://github.com/swiety85/angular2gridster/wiki/Roadmap)
 
-More comprehensive documentation is available in [Wiki](https://github.com/swiety85/angular2gridster/wiki). 
+More comprehensive documentation is available in [Wiki](https://github.com/swiety85/angular2gridster/wiki).
+
 Development progress you can track in [Milestones](https://github.com/swiety85/angular2gridster/milestones) and in [Project board](https://github.com/swiety85/angular2gridster/projects/1).
 
 ## Installation
