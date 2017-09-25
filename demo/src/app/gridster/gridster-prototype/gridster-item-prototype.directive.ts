@@ -14,6 +14,7 @@ import {GridListItem} from '../gridList/GridListItem';
 import {GridsterService} from '../gridster.service';
 import {DraggableEvent} from '../utils/DraggableEvent';
 import {Draggable} from '../utils/draggable';
+import {utils} from '../utils/utils';
 
 @Directive({
     selector: '[gridsterItemPrototype]'
@@ -33,6 +34,9 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
     @Input() w: number;
     @Input() h: number;
 
+    positionX: number;
+    positionY: number;
+
     autoSize = false;
 
     $element: HTMLElement;
@@ -50,6 +54,8 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
     isDragging = false;
 
     item: GridListItem;
+
+    containerRectange: ClientRect;
 
     private parentRect: ClientRect;
     private parentOffset: {left: number, top: number};
@@ -111,6 +117,22 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
         });
     }
 
+    public getPositionToGridster(gridster: GridsterService) {
+        const relativeContainerCoords = this.getContainerCoordsToGridster(gridster);
+
+        return {
+            y: this.positionY - relativeContainerCoords.top,
+            x: this.positionX - relativeContainerCoords.left
+        };
+    }
+
+    private getContainerCoordsToGridster(gridster: GridsterService): {top: number, left: number} {
+        return {
+            left: gridster.gridsterRect.left - this.parentRect.left,
+            top: gridster.gridsterRect.top - this.parentRect.top
+        };
+    }
+
     private enableDragDrop() {
         let cursorToElementPosition;
         const draggable = new Draggable(this.elementRef.nativeElement);
@@ -119,6 +141,7 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
             .subscribe((event: DraggableEvent) => {
                 this.zone.run(() => {
                     this.$element = this.provideDragElement();
+                    this.containerRectange = this.$element.parentElement.getBoundingClientRect();
                     this.updateParentElementData();
                     this.onStart();
 
@@ -128,8 +151,11 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
 
         const dragSub = draggable.dragMove
             .subscribe((event: DraggableEvent) => {
-                this.$element.style.top = (event.clientY - cursorToElementPosition.y  - this.parentRect.top) + 'px';
-                this.$element.style.left = (event.clientX - cursorToElementPosition.x  - this.parentRect.left) + 'px';
+
+                this.setElementPosition(this.$element, {
+                    x: event.clientX - cursorToElementPosition.x  - this.parentRect.left,
+                    y: event.clientY - cursorToElementPosition.y  - this.parentRect.top
+                });
 
                 this.onDrag();
             });
@@ -150,6 +176,12 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
             });
 
         this.subscribtions = this.subscribtions.concat([dragStartSub, dragSub, dragStopSub, scrollSub]);
+    }
+
+    private setElementPosition(element: HTMLElement, position: {x: number, y: number}) {
+        this.positionX = position.x;
+        this.positionY = position.y;
+        utils.setCssElementPosition(element, position);
     }
 
     private updateParentElementData() {
@@ -181,8 +213,7 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
         this.isDragging = false;
         this.$element.style.pointerEvents = 'auto';
         this.$element.style.position = '';
-        this.$element.style.top = '';
-        this.$element.style.left = '';
+        utils.resetCSSElementPosition(this.$element);
 
         if (this.config.helper) {
             this.$element.parentNode.removeChild(this.$element);
@@ -207,13 +238,14 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
         if (window.getComputedStyle(el).position === 'absolute') {
             return el;
         }
-
-        const containerRect = el.parentElement.getBoundingClientRect();
         const rect = this.elementRef.nativeElement.getBoundingClientRect();
+        this.containerRectange = el.parentElement.getBoundingClientRect();
 
         el.style.position = 'absolute';
-        el.style.left = (rect.left - containerRect.left) + 'px';
-        el.style.top = (rect.top - containerRect.top) + 'px';
+        this.setElementPosition(el, {
+            x: rect.left - this.containerRectange.left,
+            y: rect.top - this.containerRectange.top
+        });
 
         return el;
     }
@@ -229,8 +261,10 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
         const rect = this.elementRef.nativeElement.getBoundingClientRect();
 
         el.style.position = 'absolute';
-        el.style.left = (rect.left - bodyRect.left) + 'px';
-        el.style.top = (rect.top - bodyRect.top) + 'px';
+        this.setElementPosition(el, {
+            x: rect.left - bodyRect.left,
+            y: rect.top - bodyRect.top
+        });
 
         return el;
     }

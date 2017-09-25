@@ -83,6 +83,10 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnInit() {
         this.gridsterOptions = new GridsterOptions(this.options);
 
+        if (this.options.useCSSTransforms) {
+            this.$element.classList.add('css-transform');
+        }
+
         this.gridsterOptions.change
             .do((options) => {
                 this.gridster.options = options;

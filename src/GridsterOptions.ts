@@ -11,6 +11,7 @@ export class GridsterOptions {
     resizable: boolean;
     shrink: boolean;
     minWidth: number;
+    useCSSTransforms: boolean;
 
     defaults: IGridsterOptions = {
         lanes: 5,
@@ -19,7 +20,8 @@ export class GridsterOptions {
         shrink: false,
         responsiveView: true,
         dragAndDrop: true,
-        resizable: false
+        resizable: false,
+        useCSSTransforms: false
     };
 
     change: Observable<IGridsterOptions>;

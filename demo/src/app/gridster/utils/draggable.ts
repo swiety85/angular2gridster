@@ -1,5 +1,4 @@
 import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/switchMap';
@@ -8,6 +7,7 @@ import 'rxjs/add/operator/merge';
 import 'rxjs/add/operator/map';
 
 import {DraggableEvent} from './DraggableEvent';
+import {utils} from './utils';
 
 export class Draggable {
     element: Element;
@@ -56,6 +56,8 @@ export class Draggable {
             .do(e => {
                 e.pauseEvent();
                 (<any>document.activeElement).blur();
+                // prevents rendering performance issues while dragging item with selection inside
+                utils.clearSelection();
             })
             .switchMap((startEvent: DraggableEvent) => {
 

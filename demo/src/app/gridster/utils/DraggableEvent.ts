@@ -43,25 +43,14 @@ export class DraggableEvent {
     }
 
     getRelativeCoordinates(container: HTMLElement): {x: number, y: number} {
-        let offset;
-        let ref;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft;
 
-        offset = {left: 0, top: 0};
-        ref = container.offsetParent;
-
-        offset.left = container.offsetLeft;
-        offset.top = container.offsetTop;
-
-        while (ref) {
-            offset.left += ref.offsetLeft;
-            offset.top += ref.offsetTop;
-
-            ref = ref.offsetParent;
-        }
+        const rect = container.getBoundingClientRect();
 
         return {
-            x: this.pageX - offset.left,
-            y: this.pageY - offset.top,
+            x: this.pageX - rect.left - scrollLeft,
+            y: this.pageY - rect.top - scrollTop,
         };
     }
 
