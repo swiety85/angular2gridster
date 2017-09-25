@@ -75,7 +75,7 @@ gridsterOptions = {
   direction: 'vertical', // items floating direction: vertical/horizontal
   dragAndDrop: false, // possible to change items position by drag n drop
   resizable: false, // possible to resize items by drag n drop by item edge/corner
-  useCSSTransforms: true, // improves rendering performance by using CSS transform in place of left/top
+  useCSSTransforms: true, // Uses CSS3 translate() instead of position top/left - significant performance boost.
   // ResponsiveOptions can overwrite default configuration with any option available for specific breakpoint.
   responsiveOptions: [
         {
