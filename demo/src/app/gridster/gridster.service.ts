@@ -290,17 +290,27 @@ export class GridsterService {
 
     calculateCellSize () {
         if (this.options.direction === 'horizontal') {
-            // TODO: get rid of window.getComputedStyle
-            this.cellHeight = Math.floor(parseFloat(window.getComputedStyle(this.gridsterComponent.$element).height) / this.options.lanes);
-            this.cellWidth = this.cellHeight * this.options.widthHeightRatio;
+            this.cellHeight = this.calculateCellHeight();
+            this.cellWidth = this.options.cellWidth || this.cellHeight * this.options.widthHeightRatio;
         } else {
-            // TODO: get rid of window.getComputedStyle
-            this.cellWidth = Math.floor(parseFloat(window.getComputedStyle(this.gridsterComponent.$element).width) / this.options.lanes);
-            this.cellHeight = this.cellWidth / this.options.widthHeightRatio;
+            this.cellWidth = this.calculateCellWidth();
+            this.cellHeight = this.options.cellHeight || this.cellWidth / this.options.widthHeightRatio;
         }
         if (this.options.heightToFontSizeRatio) {
             this._fontSize = this.cellHeight * this.options.heightToFontSizeRatio;
         }
+    }
+
+    private calculateCellWidth() {
+        const gridsterWidth = parseFloat(window.getComputedStyle(this.gridsterComponent.$element).width);
+
+        return Math.floor( gridsterWidth / this.options.lanes);
+    }
+
+    private calculateCellHeight() {
+        const gridsterHeight = parseFloat(window.getComputedStyle(this.gridsterComponent.$element).height);
+
+        return Math.floor( gridsterHeight / this.options.lanes);
     }
 
     private applySizeToItems () {
