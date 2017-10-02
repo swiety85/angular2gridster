@@ -101,6 +101,7 @@ export class GridsterService {
             this.fixItemsPositions();
 
             this.reflow();
+            this.gridsterComponent.setReady();
         });
     }
 

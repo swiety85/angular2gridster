@@ -33,15 +33,20 @@ import {utils} from '../utils/utils';
         top: 0;
         left: 0;
         z-index: 1;
+        -webkit-transition: none;
+        transition: none;
+    }
+
+    :host-context(.gridster--ready) {
         transition: all 200ms ease;
         transition-property: left, top;
     }
 
-    :host-context(.css-transform)  {
+    :host-context(.gridster--ready.css-transform)  {
         transition-property: transform;
     }
 
-    :host.is-dragging, :host.is-resizing {
+    :host-context(.gridster--ready).is-dragging, :host-context(.gridster--ready).is-resizing {
         -webkit-transition: none;
         transition: none;
         z-index: 9999;
