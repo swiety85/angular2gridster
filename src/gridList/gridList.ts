@@ -54,7 +54,7 @@ export class GridList {
     }
 
     /**
-     * Illustates grid as text-based table, using a number identifier for each
+     * Illustrates grid as text-based table, using a number identifier for each
      * item. E.g.
      *
      *  #|  0  1  2  3  4  5  6  7  8  9 10 11 12 13
@@ -654,7 +654,7 @@ export class GridList {
     }
 
     /**
-     * Attempt to resolve the collisions after moving a an item over one or more
+     * Attempt to resolve the collisions after moving an item over one or more
      * other items within the grid, by shifting the position of the colliding
      * items around the moving one. This might result in subsequent collisions,
      * in which case we will revert all position permutations. To be able to
@@ -713,7 +713,7 @@ export class GridList {
         }
         // If we reached this point it means we managed to resolve the collisions
         // from one single iteration, just by moving the colliding items around. So
-        // we accept this scenario and marge the brached-out grid instance into the
+        // we accept this scenario and merge the branched-out grid instance into the
         // original one
 
         this.items.forEach((itm: GridListItem, idx: number) => {
