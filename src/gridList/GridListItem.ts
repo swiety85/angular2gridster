@@ -1,6 +1,6 @@
-import {GridsterItemComponent} from '../gridster-item/gridster-item.component';
-import {GridsterItemPrototypeDirective} from '../gridster-prototype/gridster-item-prototype.directive';
-import {GridsterService} from '../gridster.service';
+import { GridsterItemComponent } from '../gridster-item/gridster-item.component';
+import { GridsterItemPrototypeDirective } from '../gridster-prototype/gridster-item-prototype.directive';
+import { GridsterService } from '../gridster.service';
 
 export class GridListItem {
     static BREAKPOINTS: Array<string> = ['sm', 'md', 'lg', 'xl'];

@@ -8,12 +8,12 @@ import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/observable/fromEvent';
 
 import { GridsterService } from './gridster.service';
-import {IGridsterOptions} from './IGridsterOptions';
-import {IGridsterDraggableOptions} from './IGridsterDraggableOptions';
-import {GridsterPrototypeService} from './gridster-prototype/gridster-prototype.service';
-import {GridsterItemPrototypeDirective} from './gridster-prototype/gridster-item-prototype.directive';
-import {GridListItem} from './gridList/GridListItem';
-import {GridsterOptions} from './GridsterOptions';
+import { IGridsterOptions } from './IGridsterOptions';
+import { IGridsterDraggableOptions } from './IGridsterDraggableOptions';
+import { GridsterPrototypeService } from './gridster-prototype/gridster-prototype.service';
+import { GridsterItemPrototypeDirective } from './gridster-prototype/gridster-item-prototype.directive';
+import { GridListItem } from './gridList/GridListItem';
+import { GridsterOptions } from './GridsterOptions';
 
 
 @Component({
