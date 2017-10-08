@@ -10,11 +10,11 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/takeUntil';
 
 import { GridsterPrototypeService } from './gridster-prototype.service';
-import {GridListItem} from '../gridList/GridListItem';
-import {GridsterService} from '../gridster.service';
-import {DraggableEvent} from '../utils/DraggableEvent';
-import {Draggable} from '../utils/draggable';
-import {utils} from '../utils/utils';
+import { GridListItem } from '../gridList/GridListItem';
+import { GridsterService } from '../gridster.service';
+import { DraggableEvent } from '../utils/DraggableEvent';
+import { Draggable } from '../utils/draggable';
+import { utils } from '../utils/utils';
 
 @Directive({
     selector: '[gridsterItemPrototype]'
