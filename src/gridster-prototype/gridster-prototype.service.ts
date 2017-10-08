@@ -182,7 +182,7 @@ export class GridsterPrototypeService {
     }
 
     /**
-     * Checks wheter "element" position fits inside "containerEl" position.
+     * Checks whether "element" position fits inside "containerEl" position.
      * It checks if "element" is totally covered by "containerEl" area.
      * @param element Dragged element
      * @param containerEl Element above which "element" is dragged
