@@ -1,7 +1,8 @@
 import { EventEmitter } from '@angular/core';
-import {GridListItem} from './GridListItem';
-import {IGridsterOptions} from '../IGridsterOptions';
-import {GridsterOptions} from '../GridsterOptions';
+
+import { GridListItem } from './GridListItem';
+import { IGridsterOptions } from '../IGridsterOptions';
+import { GridsterOptions } from '../GridsterOptions';
 
 const GridCol = function (lanes) {
     for (let i = 0; i < lanes; i++) {

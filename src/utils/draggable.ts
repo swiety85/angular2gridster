@@ -6,8 +6,8 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/merge';
 import 'rxjs/add/operator/map';
 
-import {DraggableEvent} from './DraggableEvent';
-import {utils} from './utils';
+import { DraggableEvent } from './DraggableEvent';
+import { utils } from './utils';
 
 export class Draggable {
     element: Element;
