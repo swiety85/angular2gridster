@@ -21,7 +21,8 @@ export class GridsterOptions {
         responsiveView: true,
         dragAndDrop: true,
         resizable: false,
-        useCSSTransforms: false
+        useCSSTransforms: false,
+        floating: true
     };
 
     change: Observable<IGridsterOptions>;

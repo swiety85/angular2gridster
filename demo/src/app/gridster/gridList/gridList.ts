@@ -282,6 +282,9 @@ export class GridList {
      * rest of the items will be layed around it.
      */
     pullItemsToLeft(fixedItem?) {
+        if (this.options.direction === 'none') {
+            return ;
+        }
 
         // Start a fresh grid with the fixed item already placed inside
         this.sortItemsByPosition();
@@ -291,6 +294,8 @@ export class GridList {
         if (fixedItem) {
             const fixedPosition = this.getItemPosition(fixedItem);
             this.updateItemPosition(fixedItem, [fixedPosition.x, fixedPosition.y]);
+        } else if (!this.options.floating) {
+            return ;
         }
 
         this.items
@@ -335,6 +340,29 @@ export class GridList {
             }
         }
         return false;
+    }
+
+    checkItemAboveEmptyArea(item: GridListItem, newPosition: {x: number, y: number}) {
+        let itemData = {
+            x: newPosition.x,
+            y: newPosition.y,
+            w: item.w,
+            h: item.h
+        };
+        if (item.x === newPosition.x && item.y === newPosition.y) {
+            return true;
+        }
+
+        if (this.options.direction === 'horizontal') {
+            itemData = {x: newPosition.y, y: newPosition.x, w: itemData.h, h: itemData.w};
+        }
+        return !this.checkItemsInArea(
+            itemData.y,
+            itemData.y + itemData.h - 1,
+            itemData.x,
+            itemData.x + itemData.w - 1,
+            item
+        );
     }
 
     fixItemsPositions(options: IGridsterOptions) {
@@ -438,10 +466,10 @@ export class GridList {
         return [ 0 , this.grid.length];
     }
 
-    private checkItemsInArea(rowStart: number, rowEnd: number, colStart: number, colEnd: number) {
+    private checkItemsInArea(rowStart: number, rowEnd: number, colStart: number, colEnd: number, item?: GridListItem) {
         for (let i = rowStart; i <= rowEnd; i++) {
             for (let j = colStart; j <= colEnd; j++) {
-                if (this.grid[i] && this.grid[i][j]) {
+                if (this.grid[i] && this.grid[i][j] && (item ? this.grid[i][j] !== item : true)) {
                     return true;
                 }
             }

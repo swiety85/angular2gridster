@@ -201,7 +201,13 @@ export class GridsterService {
         const newPosition = this.snapItemPositionToGrid(item);
 
         if (this.dragPositionChanged(newPosition)) {
+
             this.previousDragPosition = newPosition;
+            if ((this.options.direction === 'none' || !this.options.floating) && !item.itemPrototype) {
+                if (!this.gridList.checkItemAboveEmptyArea(item, {x: newPosition[0], y: newPosition[1]})) {
+                    return ;
+                }
+            }
 
             // Regenerate the grid with the positions from when the drag started
             this.restoreCachedItems();
@@ -219,6 +225,7 @@ export class GridsterService {
 
     onDragOut (item: GridListItem) {
 
+        this.restoreCachedItems();
         this.previousDragPosition = null;
         this.updateMaxItemSize();
         this.applyPositionToItems();
@@ -333,7 +340,7 @@ export class GridsterService {
             const increaseWidthWith = (increaseGridsterSize) ? this.maxItemWidth : 0;
             child.style.height = (this.options.lanes * this.cellHeight) + 'px';
 
-        } else {
+        } else if (this.gridList.grid.length) {
             const increaseHeightWith = (increaseGridsterSize) ? this.maxItemHeight : 0;
             child.style.height = ((this.gridList.grid.length + increaseHeightWith) * this.cellHeight) + 'px';
         }

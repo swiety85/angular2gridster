@@ -19,8 +19,15 @@
 
     <input type="checkbox" [(ngModel)]="gridsterOptions.resizable" value="true" id="resizable"
                      (change)="gridster.setOption('resizable', gridsterOptions.resizable)"><label for="resizable">Resizable</label>
+
+    <input type="checkbox" [(ngModel)]="gridsterOptions.floating" value="true" id="floating"
+           (change)="gridster.setOption('floating', gridsterOptions.floating)"><label for="floating">Floating</label>
     <br>
     Direction
+    <label>
+        <input type="radio" [(ngModel)]="gridsterOptions.direction" value="none"
+               (change)="gridster.setOption('direction', 'none').reload()">None
+    </label>
     <label>
         <input type="radio" [(ngModel)]="gridsterOptions.direction" value="horizontal"
                (change)="gridster.setOption('direction', 'horizontal').reload()">Horizontal

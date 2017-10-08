@@ -7,6 +7,7 @@ export interface IGridsterOptions {
     itemSelector?: string;
     resizable?: boolean;
     shrink?: boolean;
+    floating?: boolean;
     responsiveView?: boolean;
     responsiveDebounce?: number;
     breakpoint?: string;
