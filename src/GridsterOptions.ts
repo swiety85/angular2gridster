@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 
-import {IGridsterOptions} from './IGridsterOptions';
+import { IGridsterOptions } from './IGridsterOptions';
 
 export class GridsterOptions {
     direction: string;
