@@ -1,6 +1,7 @@
 :host {
     position: absolute;
     display: flex;
+    display: -webkit-inline-box;
     flex-direction: column;
     height: 100%;
     width: calc(100% - 40px);
