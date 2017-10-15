@@ -19,8 +19,15 @@
 
     <input type="checkbox" [(ngModel)]="gridsterOptions.resizable" value="true" id="resizable"
                      (change)="gridster.setOption('resizable', gridsterOptions.resizable)"><label for="resizable">Resizable</label>
+
+    <input type="checkbox" [(ngModel)]="gridsterOptions.floating" value="true" id="floating"
+           (change)="gridster.setOption('floating', gridsterOptions.floating)"><label for="floating">Floating</label>
     <br>
     Direction
+    <label>
+        <input type="radio" [(ngModel)]="gridsterOptions.direction" value="none"
+               (change)="gridster.setOption('direction', 'none').reload()">None
+    </label>
     <label>
         <input type="radio" [(ngModel)]="gridsterOptions.direction" value="horizontal"
                (change)="gridster.setOption('direction', 'horizontal').reload()">Horizontal
@@ -78,7 +85,7 @@
 <div class="main-content">
 
     <gridster [options]="gridsterOptions" [draggableOptions]="gridsterDraggableOptions"
-              (optionsChange)="optionsChange($event)" #gridster1 style="min-height: 500px;">
+              (optionsChange)="optionsChange($event)" #gridster1 class="dashboard">
 
         <gridster-item *ngFor="let widget of widgets; let indx = index" #itemComp
                        [options]="itemOptions"
