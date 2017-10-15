@@ -349,7 +349,7 @@ export class GridList {
             w: item.w,
             h: item.h
         };
-        if (item.x === newPosition.x && item.y === newPosition.y) {
+        if (!item.itemPrototype && item.x === newPosition.x && item.y === newPosition.y) {
             return true;
         }
 
@@ -694,16 +694,14 @@ export class GridList {
             return true;
         }
 
-        const _gridList = new GridList([], this.options);
+        const _gridList = new GridList(this.items.map(itm => {
+            return itm.copy();
+        }), this.options);
+
         let leftOfItem;
         let rightOfItem;
         let aboveOfItem;
         let belowOfItem;
-
-        _gridList.items = this.items.map(itm => {
-            return itm.copy();
-        });
-        _gridList.generateGrid();
 
         for (let i = 0; i < collidingItems.length; i++) {
             const collidingItem = _gridList.items[collidingItems[i]],
