@@ -1,4 +1,16 @@
+:host {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: calc(100% - 40px);
+    padding: 10px 20px;
+    overflow: auto;
+}
+
 h1 {
+    position: relative;
+    flex: 0;
     font-size: 22px;
     padding: 0 20px;
     height: 50px;
@@ -7,21 +19,26 @@ h1 {
 
 .toolbar {
     position: relative;
-    padding: 0 20px;
+    flex: 0;
+    width: 100%;
 }
 
 .widgetbar {
-    width: 100%;
+    flex: 0;
     position: relative;
-    height: 100px;
+    width: 100%;
     padding: 10px 0;
 }
 
 .main-content {
-    position: absolute;
-    top: 200px;
-    left: 0;
     width: 100%;
+    flex: 1 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard {
+    flex: 1;
 }
 
 .panel-heading {
