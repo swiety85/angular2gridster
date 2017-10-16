@@ -439,8 +439,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
             const dragSub = draggable.dragMove
                 .subscribe((event: DraggableEvent) => {
-                    const scrollData = this.gridster.gridsterScrollData;
-                    console.log(event.clientY, cursorToElementPosition.y, scrollData.scrollTop, this.gridster.gridsterRect.top);
+
                     this.positionY = (event.clientY - cursorToElementPosition.y -
                         this.gridster.gridsterRect.top);
                     this.positionX = (event.clientX - cursorToElementPosition.x -

@@ -73,7 +73,8 @@ System.config({
 widgets: Array<any> = [...];
 gridsterOptions = {
   lanes: 2, // how many lines (grid cells) dashboard has
-  direction: 'vertical', // items floating direction: vertical/horizontal
+  direction: 'vertical', // items floating direction: vertical/horizontal/none
+  floating: false, // default=true - prevents items to float according to the direction (gravity)
   dragAndDrop: false, // possible to change items position by drag n drop
   resizable: false, // possible to resize items by drag n drop by item edge/corner
   useCSSTransforms: true, // Uses CSS3 translate() instead of position top/left - significant performance boost.

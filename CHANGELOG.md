@@ -1,3 +1,19 @@
+<a name="0.6.8"></a>
+# [0.6.8]((https://github.com/swiety85/angular2gridster/compare/0.6.7...0.6.8)) (2017-10-16)
+
+
+### Bug Fixes
+
+* **drag:** Fix problem with scrolling on touch devices. Issue #111
+* **drag** Fix drag position bug in scrolled container. Issue #114
+
+### Features
+
+* **drag** Options: direction: "none" and floating: false. Issue #109
+* **performance** Disable initial animation. Issue #104
+* **config** Provide option to set fixed cellWidth/cellHeight. Issue #91
+
+
 <a name="0.6.7"></a>
 # [0.6.7]((https://github.com/swiety85/angular2gridster/compare/0.6.6...0.6.7)) (2017-09-25)
 
