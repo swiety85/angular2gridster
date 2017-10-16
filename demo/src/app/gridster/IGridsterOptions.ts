@@ -13,5 +13,7 @@ export interface IGridsterOptions {
     breakpoint?: string;
     minWidth?: number;
     useCSSTransforms?: boolean;
+    cellHeight?: number;
+    cellWidth?: number;
     responsiveOptions?: Array<IGridsterOptions>;
 }
