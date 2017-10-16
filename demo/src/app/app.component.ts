@@ -18,7 +18,7 @@ export class AppComponent {
         // core configuration is default one - for smallest view. It has hidden minWidth: 0.
         lanes: 2, // amount of lanes (cells) in the grid
         direction: 'vertical', // floating top - vertical, left - horizontal
-        floating: false,
+        floating: true,
         dragAndDrop: true, // enable/disable drag and drop for all items in grid
         resizable: true, // enable/disable resizing by drag and drop for all items in grid
         widthHeightRatio: 1, // proportion between item width and height
