@@ -1,6 +1,6 @@
 import {
-    Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild, NgZone,
-    Input, Output, EventEmitter, ChangeDetectionStrategy, HostListener, HostBinding
+    Component, OnInit, AfterContentInit, OnDestroy, ElementRef, ViewChild, NgZone,
+    Input, Output, EventEmitter, ChangeDetectionStrategy, HostBinding
 } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -57,17 +57,20 @@ import { GridsterOptions } from './GridsterOptions';
     providers: [GridsterService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
+export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
     @Input() options: IGridsterOptions;
     @Output() optionsChange = new EventEmitter<any>();
+    @Output() ready = new EventEmitter<any>();
     @Input() draggableOptions: IGridsterDraggableOptions;
     @ViewChild('positionHighlight') $positionHighlight;
 
     @HostBinding('class.gridster--dragging') isDragging = false;
     @HostBinding('class.gridster--resizing') isResizing = false;
+    @HostBinding('class.gridster--ready') isReady = false;
 
     gridster: GridsterService;
     $element: HTMLElement;
+
 
     gridsterOptions: GridsterOptions;
     private subscribtions: Array<Subscription> = [];
@@ -116,7 +119,7 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
         });
     }
 
-    ngAfterViewInit() {
+    ngAfterContentInit() {
         this.gridster.start();
 
         this.updateGridsterElementData();
@@ -186,6 +189,11 @@ export class GridsterComponent implements OnInit, AfterViewInit, OnDestroy {
     updateGridsterElementData() {
         this.gridster.gridsterScrollData = this.getScrollPositionFromParents(this.$element);
         this.gridster.gridsterRect = this.$element.getBoundingClientRect();
+    }
+
+    setReady() {
+        setTimeout(() => this.isReady = true);
+        this.ready.emit();
     }
 
     private getScrollPositionFromParents(element: Element, data = {scrollTop: 0, scrollLeft: 0}): {scrollTop: number, scrollLeft: number} {
