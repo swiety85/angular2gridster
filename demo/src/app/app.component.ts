@@ -24,8 +24,8 @@ export class AppComponent {
         widthHeightRatio: 1, // proportion between item width and height
         shrink: true,
         useCSSTransforms: true,
-        responsiveView: true, // turn on adopting items sizes on window resize and enable responsiveOptions
-        responsiveDebounce: 500, // window resize debounce time
+        // responsiveView: true, // turn on adopting items sizes on window resize and enable responsiveOptions
+        // responsiveDebounce: 500, // window resize debounce time
         // List of different gridster configurations for different breakpoints.
         // Each breakpoint is defined by name stored in "breakpoint" property. There is fixed set of breakpoints
         // available to use with default minWidth assign to each.
@@ -35,28 +35,28 @@ export class AppComponent {
         // - xl: 1200 - Extra large
         // MinWidth for each breakpoint can be overwritten like it's visible below.
         // ResponsiveOptions can overwrite default configuration with any option available.
-        responsiveOptions: [
-            {
-                breakpoint: 'sm',
-                // minWidth: 480,
-                lanes: 3
-            },
-            {
-                breakpoint: 'md',
-                minWidth: 768,
-                lanes: 4
-            },
-            {
-                breakpoint: 'lg',
-                minWidth: 1250,
-                lanes: 6
-            },
-            {
-                breakpoint: 'xl',
-                minWidth: 1800,
-                lanes: 8
-            }
-        ]
+        // responsiveOptions: [
+        //     {
+        //         breakpoint: 'sm',
+        //         // minWidth: 480,
+        //         lanes: 3
+        //     },
+        //     {
+        //         breakpoint: 'md',
+        //         minWidth: 768,
+        //         lanes: 4
+        //     },
+        //     {
+        //         breakpoint: 'lg',
+        //         minWidth: 1250,
+        //         lanes: 6
+        //     },
+        //     {
+        //         breakpoint: 'xl',
+        //         minWidth: 1800,
+        //         lanes: 8
+        //     }
+        // ]
     };
     gridsterDraggableOptions: IGridsterDraggableOptions = {
         handlerClass: 'panel-heading'
@@ -65,31 +65,31 @@ export class AppComponent {
     widgets: Array<any> = [
         {
             x: 0, y: 0,
-            w: 1, h: 2,
+            w: 1, h: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 1'
         },
         {
-            x: 1, y: 0, w: 3, h: 1,
+            x: 1, y: 0, w: 1, h: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 2'
         },
         {
-            x: 1, y: 1, w: 2, h: 1,
+            x: 0, y: 1, w: 1, h: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 3'
         },
         {
-            x: 3, y: 1, w: 1, h: 2,
+            x: 1, y: 1, w: 1, h: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 4'
         },
         {
-            w: 1, h: 2,
+            w: 1, h: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs x'

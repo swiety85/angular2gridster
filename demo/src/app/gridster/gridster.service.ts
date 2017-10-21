@@ -130,6 +130,21 @@ export class GridsterService {
         });
     }
 
+    removeItem(item: GridListItem) {
+        this.items = this.items
+            .filter(cachedItem => cachedItem.$element !== item.$element);
+        this.gridList.items = this.gridList.items
+            .filter(cachedItem => cachedItem.$element !== item.$element);
+
+        this.gridList.deleteItemPositionFromGrid(item);
+        this.removeItemFromCache(item);
+
+        this.gridList.pullItemsToLeft();
+        this.render();
+
+        this.updateCachedItems();
+    }
+
     onResizeStart(item: GridListItem) {
         this.currentElement = item.$element;
 
@@ -248,6 +263,17 @@ export class GridsterService {
         this.gridList.pullItemsToLeft();
 
         this.gridsterComponent.isDragging = false;
+    }
+
+    private removeItemFromCache(item: GridListItem) {
+        this._items = this._items
+            .filter(cachedItem => cachedItem.$element !== item.$element);
+
+        Object.keys(this._itemsMap)
+            .forEach((breakpoint: string) => {
+                this._itemsMap[breakpoint] = this._itemsMap[breakpoint]
+                    .filter(cachedItem => cachedItem.$element !== item.$element);
+            });
     }
 
     private copyItems (): void {
