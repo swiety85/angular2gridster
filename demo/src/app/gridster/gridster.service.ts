@@ -128,6 +128,7 @@ export class GridsterService {
         this.gridsterOptions.responsiveOptions.forEach((options: IGridsterOptions) => {
             this.gridList.fixItemsPositions(options);
         });
+        this.updateCachedItems();
     }
 
     removeItem(item: GridListItem) {
