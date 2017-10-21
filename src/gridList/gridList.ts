@@ -625,7 +625,7 @@ export class GridList {
         }
     }
 
-    private deleteItemPositionFromGrid(item: GridListItem) {
+    deleteItemPositionFromGrid(item: GridListItem) {
         const position = this.getItemPosition(item);
         let x, y;
 
