@@ -132,18 +132,10 @@ export class GridsterService {
     }
 
     removeItem(item: GridListItem) {
-        this.items = this.items
-            .filter(cachedItem => cachedItem.$element !== item.$element);
-        this.gridList.items = this.gridList.items
-            .filter(cachedItem => cachedItem.$element !== item.$element);
+        this.items.splice(this.items.indexOf(item), 1);
 
         this.gridList.deleteItemPositionFromGrid(item);
         this.removeItemFromCache(item);
-
-        this.gridList.pullItemsToLeft();
-        this.render();
-
-        this.updateCachedItems();
     }
 
     onResizeStart(item: GridListItem) {
