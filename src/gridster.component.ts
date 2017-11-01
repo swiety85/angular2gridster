@@ -255,8 +255,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
                 }
                 this.gridster.onStop(prototype.item);
 
-                const idx = this.gridster.items.indexOf(prototype.item);
-                this.gridster.items.splice(idx, 1);
+                this.gridster.removeItem(prototype.item);
 
                 isEntered = false;
             });
