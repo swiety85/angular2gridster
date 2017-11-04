@@ -96,6 +96,10 @@ export class AppComponent {
         }
     ];
 
+    onReflow(event) {
+        console.log('onReflow', event);
+    }
+
     removeLine(gridster: GridsterComponent) {
         gridster.setOption('lanes', --this.gridsterOptions.lanes)
             .reload();

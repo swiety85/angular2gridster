@@ -100,7 +100,7 @@ export class GridsterService {
             this.copyItems();
             this.fixItemsPositions();
 
-            this.reflow();
+            this.gridsterComponent.reflowGridster(true);
             this.gridsterComponent.setReady();
         });
     }
@@ -363,7 +363,6 @@ export class GridsterService {
         // right to allow dragging items to the end of the grid.
         if (this.options.direction === 'horizontal') {
             const increaseWidthWith = (increaseGridsterSize) ? this.maxItemWidth : 0;
-
             child.style.height = '';
             child.style.width = ((this.gridList.grid.length + increaseWidthWith) * this.cellWidth) + 'px';
 
