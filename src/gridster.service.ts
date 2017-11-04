@@ -128,6 +128,14 @@ export class GridsterService {
         this.gridsterOptions.responsiveOptions.forEach((options: IGridsterOptions) => {
             this.gridList.fixItemsPositions(options);
         });
+        this.updateCachedItems();
+    }
+
+    removeItem(item: GridListItem) {
+        this.items.splice(this.items.indexOf(item), 1);
+
+        this.gridList.deleteItemPositionFromGrid(item);
+        this.removeItemFromCache(item);
     }
 
     onResizeStart(item: GridListItem) {
@@ -250,6 +258,17 @@ export class GridsterService {
         this.gridsterComponent.isDragging = false;
     }
 
+    private removeItemFromCache(item: GridListItem) {
+        this._items = this._items
+            .filter(cachedItem => cachedItem.$element !== item.$element);
+
+        Object.keys(this._itemsMap)
+            .forEach((breakpoint: string) => {
+                this._itemsMap[breakpoint] = this._itemsMap[breakpoint]
+                    .filter(cachedItem => cachedItem.$element !== item.$element);
+            });
+    }
+
     private copyItems (): void {
         this._items = this.items
             .filter(item => this.isValidGridItem(item))
@@ -363,7 +382,6 @@ export class GridsterService {
         // right to allow dragging items to the end of the grid.
         if (this.options.direction === 'horizontal') {
             const increaseWidthWith = (increaseGridsterSize) ? this.maxItemWidth : 0;
-
             child.style.height = '';
             child.style.width = ((this.gridList.grid.length + increaseWidthWith) * this.cellWidth) + 'px';
 
