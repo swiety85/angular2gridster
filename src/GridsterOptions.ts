@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs/Observable';
-
+import 'rxjs/add/operator/distinctUntilChanged';
 import { IGridsterOptions } from './IGridsterOptions';
 
 export class GridsterOptions {

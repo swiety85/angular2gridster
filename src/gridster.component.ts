@@ -6,6 +6,11 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/publish';
+
+
 
 import { GridsterService } from './gridster.service';
 import { IGridsterOptions } from './IGridsterOptions';
