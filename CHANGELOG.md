@@ -1,3 +1,18 @@
+<a name="0.6.9"></a>
+# [0.6.9]((https://github.com/swiety85/angular2gridster/compare/0.6.8...0.6.9)) (2017-11-04)
+
+
+### Bug Fixes
+
+* **api:** No binding update on item remove. Issue #120
+* **performance** Remove unnecessary import of entirety of Rxjs
+
+### Features
+
+* **api** Add events when reflowing grid items. Issue #115
+
+
+
 <a name="0.6.8"></a>
 # [0.6.8]((https://github.com/swiety85/angular2gridster/compare/0.6.7...0.6.8)) (2017-10-16)
 
