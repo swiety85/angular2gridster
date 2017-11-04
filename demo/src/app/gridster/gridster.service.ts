@@ -100,7 +100,7 @@ export class GridsterService {
             this.copyItems();
             this.fixItemsPositions();
 
-            this.reflow();
+            this.gridsterComponent.reflowGridster(true);
             this.gridsterComponent.setReady();
         });
     }

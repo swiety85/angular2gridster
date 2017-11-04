@@ -61,6 +61,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
     @Input() options: IGridsterOptions;
     @Output() optionsChange = new EventEmitter<any>();
     @Output() ready = new EventEmitter<any>();
+    @Output() reflow = new EventEmitter<any>();
     @Input() draggableOptions: IGridsterDraggableOptions;
     @ViewChild('positionHighlight') $positionHighlight;
 
@@ -160,7 +161,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
             this.gridster.options.lanes = value;
 
             this.gridster.gridList.fixItemsPositions(this.gridster.options);
-            this.gridster.reflow();
+            this.reflowGridster();
         }
         if (name === 'direction') {
             this.gridster.options.direction = value;
@@ -180,10 +181,18 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
     reload() {
         setTimeout(() => {
             this.gridster.fixItemsPositions();
-            this.gridster.reflow();
+            this.reflowGridster();
         });
 
         return this;
+    }
+
+    reflowGridster(isInit = false) {
+        this.gridster.reflow();
+        this.reflow.emit({
+            isInit: isInit,
+            gridsterComponent: this
+        });
     }
 
     updateGridsterElementData() {

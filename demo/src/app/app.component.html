@@ -84,7 +84,7 @@
 </div>
 <div class="main-content">
 
-    <gridster [options]="gridsterOptions" [draggableOptions]="gridsterDraggableOptions"
+    <gridster [options]="gridsterOptions" [draggableOptions]="gridsterDraggableOptions" (reflow)="onReflow($event)"
               (optionsChange)="optionsChange($event)" #gridster1 class="dashboard">
 
         <gridster-item *ngFor="let widget of widgets; let indx = index" #itemComp
