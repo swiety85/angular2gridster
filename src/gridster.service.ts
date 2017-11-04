@@ -1,14 +1,10 @@
-import { EventEmitter, Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/filter';
 
 
 import { GridList } from './gridList/gridList';
-import { GridsterItemComponent } from './gridster-item/gridster-item.component';
 import { IGridsterOptions } from './IGridsterOptions';
 import { IGridsterDraggableOptions } from './IGridsterDraggableOptions';
-import { GridsterPrototypeService } from './gridster-prototype/gridster-prototype.service';
-import { GridsterItemPrototypeDirective } from './gridster-prototype/gridster-item-prototype.directive';
 import { GridListItem } from './gridList/GridListItem';
 import { GridsterComponent } from './gridster.component';
 import {GridsterOptions} from './GridsterOptions';

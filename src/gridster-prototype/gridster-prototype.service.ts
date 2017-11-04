@@ -10,7 +10,6 @@ import 'rxjs/add/operator/filter';
 
 import { GridsterService } from '../gridster.service';
 import { GridsterItemPrototypeDirective } from './gridster-item-prototype.directive';
-import { GridListItem } from '../gridList/GridListItem';
 
 @Injectable()
 export class GridsterPrototypeService {
