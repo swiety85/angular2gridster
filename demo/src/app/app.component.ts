@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { GridsterComponent } from './gridster/gridster.component';
 import { IGridsterOptions } from './gridster/IGridsterOptions';
 import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions';
@@ -12,7 +12,7 @@ export class AppComponent {
     @ViewChild(GridsterComponent) gridster: GridsterComponent;
     itemOptions = {
         maxWidth: 3,
-        maxHeight: 3
+        maxHeight: 4
     };
     gridsterOptions: IGridsterOptions = {
         // core configuration is default one - for smallest view. It has hidden minWidth: 0.
@@ -98,6 +98,7 @@ export class AppComponent {
 
     onReflow(event) {
         console.log('onReflow', event);
+        this.adjustItemsSize();
     }
 
     removeLine(gridster: GridsterComponent) {
@@ -212,5 +213,9 @@ export class AppComponent {
 
     itemChange($event: any, gridster) {
         console.log('item change', $event);
+    }
+
+    private adjustItemsSize() {
+        setTimeout(() => this.gridster.adjustItemsHeightToContent('.panel-body'));
     }
 }
