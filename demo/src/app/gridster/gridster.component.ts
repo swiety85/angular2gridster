@@ -210,17 +210,14 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         this.ready.emit();
     }
 
-    adjustItemsHeightToContent(scrollableItemElementSelector?: string) {
+    adjustItemsHeightToContent(scrollableItemElementSelector: string = '.gridster-item-inner') {
         this.gridster.items
         // convert each item to object with information about content height and scroll height
             .map((item: GridListItem) => {
-                let itemScrollableEl = item.$element;
-                let itemScrollableElCoords = { top: 0, left: 0 };
+                const itemScrollableEl = item.$element.querySelector(scrollableItemElementSelector);
+                const itemScrollableElCoords = utils.getRelativeCoordinates(itemScrollableEl, item.$element);
 
-                if (scrollableItemElementSelector) {
-                    itemScrollableEl = item.$element.querySelector(scrollableItemElementSelector);
-                    itemScrollableElCoords = utils.getRelativeCoordinates(itemScrollableEl, item.$element);
-                }
+                console.log(itemScrollableEl.tagName);
 
                 return {
                     item,

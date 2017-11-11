@@ -28,11 +28,20 @@ export const utils = {
         $element.style['msTransform'] = '';
         $element.style['OTransform'] = '';
     },
-    clearSelection: function clearSelection() {
+    clearSelection: () => {
         if (document['selection']) {
             document['selection'].empty();
         } else if (window.getSelection) {
             window.getSelection().removeAllRanges();
         }
+    },
+    getRelativeCoordinates: (element, parentElement): {top: number, left: number} => {
+        const parentElementRect = parentElement.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+
+        return {
+            top: elementRect.top - parentElementRect.top,
+            left: elementRect.left - parentElementRect.left,
+        };
     }
 };

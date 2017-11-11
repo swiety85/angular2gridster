@@ -11,7 +11,7 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/publish';
 
 
-
+import { utils } from './utils/utils';
 import { GridsterService } from './gridster.service';
 import { IGridsterOptions } from './IGridsterOptions';
 import { IGridsterDraggableOptions } from './IGridsterDraggableOptions';
@@ -208,6 +208,32 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
     setReady() {
         setTimeout(() => this.isReady = true);
         this.ready.emit();
+    }
+
+    adjustItemsHeightToContent(scrollableItemElementSelector: string = '.gridster-item-inner') {
+        this.gridster.items
+        // convert each item to object with information about content height and scroll height
+            .map((item: GridListItem) => {
+                const itemScrollableEl = item.$element.querySelector(scrollableItemElementSelector);
+                const itemScrollableElCoords = utils.getRelativeCoordinates(itemScrollableEl, item.$element);
+
+                console.log(itemScrollableEl.tagName);
+
+                return {
+                    item,
+                    itemScrollableElCoords,
+                    innerHeight: parseInt(itemScrollableEl.children[0].clientHeight, 10)
+                };
+            })
+            // calculate required height in lanes amount and update item "h"
+            .forEach((data) => {
+                data.item.h = Math.ceil(
+                    <any>((data.innerHeight + data.itemScrollableElCoords.top) / this.gridster.cellHeight)
+                );
+            });
+
+        this.gridster.fixItemsPositions();
+        this.gridster.reflow();
     }
 
     private getScrollPositionFromParents(element: Element, data = {scrollTop: 0, scrollLeft: 0}): {scrollTop: number, scrollLeft: number} {
