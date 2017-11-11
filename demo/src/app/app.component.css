@@ -55,8 +55,7 @@ h1 {
 }
 
 .panel-body {
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: auto;
     padding: 0 10px 10px;
     position: absolute;
     top: 37px;
