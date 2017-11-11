@@ -212,7 +212,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
 
     private getScrollPositionFromParents(element: Element, data = {scrollTop: 0, scrollLeft: 0}): {scrollTop: number, scrollLeft: number} {
 
-        if (element.parentElement !== document.body) {
+        if (element.parentElement && element.parentElement !== document.body) {
             data.scrollTop += element.parentElement.scrollTop;
             data.scrollLeft += element.parentElement.scrollLeft;
 
