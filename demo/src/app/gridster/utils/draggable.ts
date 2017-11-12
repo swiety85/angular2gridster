@@ -14,14 +14,15 @@ import { utils } from './utils';
 import { IGridsterDraggableOptions } from '../IGridsterDraggableOptions';
 
 export class Draggable {
+    static SCROLL_SPEED = 20;
     element: Element;
 
     dragStart: Observable<DraggableEvent>;
     dragMove: Observable<DraggableEvent>;
     dragStop: Observable<DraggableEvent>;
     // A simple requestAnimationFrame polyfill
-    private raf: Function;
-    private caf: Function;
+    private requestAnimationFrame: Function;
+    private cancelAnimationFrame: Function;
     private mousemove: Observable<{} | Event> = Observable.merge(
         Observable.fromEvent(document, 'mousemove'),
         Observable.fromEvent(document, 'touchmove', {passive: true})
@@ -47,8 +48,7 @@ export class Draggable {
             Observable.fromEvent(element, 'touchstart')
         ).share();
 
-
-        this.config = (<any>Object).assign({}, this.config, config);
+        this.config = { ...this.config, ...config };
 
         this.dragStart = this.createDragStartObservable().share();
         this.dragMove = this.createDragMoveObservable(this.dragStart);
@@ -56,8 +56,8 @@ export class Draggable {
 
         this.fixProblemWithDnDForIE(element);
 
-        this.raf = window.requestAnimationFrame || (callback => setTimeout(callback, 1000 / 60));
-        this.caf = window.cancelAnimationFrame || (cafID => clearTimeout(cafID));
+        this.requestAnimationFrame = window.requestAnimationFrame || (callback => setTimeout(callback, 1000 / 60));
+        this.cancelAnimationFrame = window.cancelAnimationFrame || (cafID => clearTimeout(cafID));
     }
 
     private createDragStartObservable(): Observable<DraggableEvent> {
@@ -103,78 +103,70 @@ export class Draggable {
                 return this.mouseup.take(1);
             })
             .do(() => {
-                this.caf(this.autoScrollingInterval);
+                this.cancelAnimationFrame(this.autoScrollingInterval);
             });
     }
 
     private startScroll(item: Element, event: DraggableEvent) {
-        let scrollingElement = null;
-        const pageX = event.pageX;
-        const pageY = event.pageY;
-        const scrollEdge = this.config.scrollEdge;
-        const scrollSpeed = 20;
         const scrollContainer = this.getScrollContainer(item);
 
-        this.caf(this.autoScrollingInterval);
+        this.cancelAnimationFrame(this.autoScrollingInterval);
 
-        // If a container contains the list that is scrollable
         if (scrollContainer) {
-
-            // Scrolling vertically
-            if (pageY - this.getOffset(scrollContainer).top < scrollEdge) {
-                this.startAutoScrolling(scrollContainer, -scrollSpeed, 'scrollTop');
-            } else if ((this.getOffset(scrollContainer).top + scrollContainer.getBoundingClientRect().height) -
-                pageY < scrollEdge) {
-
-                this.startAutoScrolling(scrollContainer, scrollSpeed, 'scrollTop');
-            }
-
-            // Scrolling horizontally
-            if (pageX - scrollContainer.getBoundingClientRect().left < scrollEdge) {
-                this.startAutoScrolling(scrollContainer, -scrollSpeed, 'scrollLeft');
-            } else if ((this.getOffset(scrollContainer).left + scrollContainer.getBoundingClientRect().width) -
-                pageX < scrollEdge) {
-
-                this.startAutoScrolling(scrollContainer, scrollSpeed, 'scrollLeft');
-            }
-
-            // If the window contains the list
+            this.startScrollForContainer(event, scrollContainer);
         } else {
-            scrollingElement = document.scrollingElement || document.documentElement || document.body;
-
-            // Scrolling vertically
-            // NOTE: Using `window.pageYOffset` here because IE doesn't have `window.scrollY`.
-            if ((pageY - window.pageYOffset) < scrollEdge) {
-                this.startAutoScrolling(scrollingElement, -scrollSpeed, 'scrollTop');
-            } else if ((window.innerHeight - (pageY - window.pageYOffset)) < scrollEdge) {
-                this.startAutoScrolling(scrollingElement, scrollSpeed, 'scrollTop');
-            }
-
-            // Scrolling horizontally
-            // NOTE: Using `window.pageXOffset` here because IE doesn't have `window.scrollX`.
-            if ((pageX - window.pageXOffset) < scrollEdge) {
-                this.startAutoScrolling(scrollingElement, -scrollSpeed, 'scrollLeft');
-            } else if ((window.innerWidth - (pageX - window.pageXOffset)) < scrollEdge) {
-                this.startAutoScrolling(scrollingElement, scrollSpeed, 'scrollLeft');
-            }
+            this.startScrollForWindow(event);
         }
     }
 
-    private getScrollContainer(node) {
-        if (node === null) { return null; }
-        // NOTE: Manually calculating height because IE's `clientHeight` isn't always
-        // reliable.
-        const nodeOuterHeight = parseFloat(window.getComputedStyle(node).getPropertyValue('height')) +
-            parseFloat(window.getComputedStyle(node).getPropertyValue('padding-top')) +
-            parseFloat(window.getComputedStyle(node).getPropertyValue('padding-bottom'));
+    private startScrollForContainer(event: DraggableEvent, scrollContainer: HTMLElement): void {
+        // Scrolling vertically
+        if (event.pageY - this.getOffset(scrollContainer).top < this.config.scrollEdge) {
+            this.startAutoScrolling(scrollContainer, -Draggable.SCROLL_SPEED, 'scrollTop');
+        } else if ((this.getOffset(scrollContainer).top + scrollContainer.getBoundingClientRect().height) -
+            event.pageY < this.config.scrollEdge) {
+
+            this.startAutoScrolling(scrollContainer, Draggable.SCROLL_SPEED, 'scrollTop');
+        }
+
+        // Scrolling horizontally
+        if (event.pageX - scrollContainer.getBoundingClientRect().left < this.config.scrollEdge) {
+            this.startAutoScrolling(scrollContainer, -Draggable.SCROLL_SPEED, 'scrollLeft');
+        } else if ((this.getOffset(scrollContainer).left + scrollContainer.getBoundingClientRect().width) -
+            event.pageX < this.config.scrollEdge) {
+
+            this.startAutoScrolling(scrollContainer, Draggable.SCROLL_SPEED, 'scrollLeft');
+        }
+    }
+
+    private startScrollForWindow(event) {
+        const scrollingElement = document.scrollingElement || document.documentElement || document.body;
+
+        // Scrolling vertically
+        // NOTE: Using `window.pageYOffset` here because IE doesn't have `window.scrollY`.
+        if ((event.pageY - window.pageYOffset) < this.config.scrollEdge) {
+            this.startAutoScrolling(scrollingElement, -Draggable.SCROLL_SPEED, 'scrollTop');
+        } else if ((window.innerHeight - (event.pageY - window.pageYOffset)) < this.config.scrollEdge) {
+            this.startAutoScrolling(scrollingElement, Draggable.SCROLL_SPEED, 'scrollTop');
+        }
+
+        // Scrolling horizontally
+        // NOTE: Using `window.pageXOffset` here because IE doesn't have `window.scrollX`.
+        if ((event.pageX - window.pageXOffset) < this.config.scrollEdge) {
+            this.startAutoScrolling(scrollingElement, -Draggable.SCROLL_SPEED, 'scrollLeft');
+        } else if ((window.innerWidth - (event.pageX - window.pageXOffset)) < this.config.scrollEdge) {
+            this.startAutoScrolling(scrollingElement, Draggable.SCROLL_SPEED, 'scrollLeft');
+        }
+    }
+
+    private getScrollContainer(node): HTMLElement {
+        const nodeOuterHeight = utils.getElementOuterHeight(node);
 
         if (node.scrollHeight > Math.ceil(nodeOuterHeight)) {
             return node;
         }
 
-        const REGEX_BODY_HTML = new RegExp('(body|html)', 'i');
-
-        if (!REGEX_BODY_HTML.test(node.parentNode.tagName)) {
+        if (!(new RegExp('(body|html)', 'i')).test(node.parentNode.tagName)) {
             return this.getScrollContainer(node.parentNode);
         }
 
@@ -182,7 +174,7 @@ export class Draggable {
     }
 
     private startAutoScrolling(node, amount, direction) {
-        this.autoScrollingInterval = this.raf(function() {
+        this.autoScrollingInterval = this.requestAnimationFrame(function() {
             this.startAutoScrolling(node, amount, direction);
         }.bind(this));
 
