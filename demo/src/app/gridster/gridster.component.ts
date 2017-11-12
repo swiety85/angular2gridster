@@ -217,8 +217,6 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
                 const itemScrollableEl = item.$element.querySelector(scrollableItemElementSelector);
                 const itemScrollableElCoords = utils.getRelativeCoordinates(itemScrollableEl, item.$element);
 
-                console.log(itemScrollableEl.tagName);
-
                 return {
                     item,
                     itemScrollableElCoords,
