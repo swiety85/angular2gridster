@@ -6,7 +6,6 @@
     height: calc(100% - 20px);
     width: calc(100% - 40px);
     padding: 10px 20px;
-    overflow: auto;
 }
 
 h1 {
@@ -18,17 +17,24 @@ h1 {
     margin: 0;
 }
 
-.toolbar {
+.omnibar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     position: relative;
     flex: 0;
     width: 100%;
 }
 
-.widgetbar {
-    flex: 0;
+.toolbar {
     position: relative;
-    width: 100%;
+    padding-left: 10px;
+}
+
+.widgetbar {
+    position: relative;
     padding: 10px 0;
+    width: 275px;
 }
 
 .main-content {
@@ -36,6 +42,7 @@ h1 {
     flex: 1 0px;
     display: flex;
     flex-direction: column;
+    overflow: auto;
 }
 
 .dashboard {

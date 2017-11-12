@@ -22,11 +22,6 @@ export class GridsterService {
 
     options: IGridsterOptions;
     draggableOptions: IGridsterDraggableOptions;
-    draggableDefaults: IGridsterDraggableOptions = {
-        zIndex: 2,
-        scroll: false,
-        containment: 'parent'
-    };
 
     gridsterRect: ClientRect;
     gridsterScrollData: {scrollTop: number, scrollLeft: number};
@@ -73,8 +68,7 @@ export class GridsterService {
 
         this.gridsterComponent = gridsterComponent;
 
-        this.draggableOptions = (<any>Object).assign(
-            {}, this.draggableDefaults, draggableOptions);
+        this.draggableOptions = draggableOptions;
 
         this.gridsterOptions = gridsterComponent.gridsterOptions;
     }

@@ -11,6 +11,7 @@ import 'rxjs/add/operator/skip';
 
 import { DraggableEvent } from './DraggableEvent';
 import { utils } from './utils';
+import { IGridsterDraggableOptions } from '../IGridsterDraggableOptions';
 
 export class Draggable {
     element: Element;
@@ -18,38 +19,45 @@ export class Draggable {
     dragStart: Observable<DraggableEvent>;
     dragMove: Observable<DraggableEvent>;
     dragStop: Observable<DraggableEvent>;
-
+    // A simple requestAnimationFrame polyfill
+    private raf: Function;
+    private caf: Function;
     private mousemove: Observable<{} | Event> = Observable.merge(
         Observable.fromEvent(document, 'mousemove'),
         Observable.fromEvent(document, 'touchmove', {passive: true})
     ).share();
-
     private mouseup: Observable<{} | Event> = Observable.merge(
         Observable.fromEvent(document, 'mouseup'),
         Observable.fromEvent(document, 'touchend'),
         Observable.fromEvent(document, 'touchcancel')
     ).share();
-
     private mousedown: Observable<{} | Event>;
-
-    private config = {
-        handlerClass: null
+    private config: IGridsterDraggableOptions = {
+        handlerClass: null,
+        scroll: true,
+        scrollEdge: 36
     };
+    // reference to auto scrolling
+    private autoScrollingInterval;
 
-    constructor(element: Element, config: {handlerClass?: string} = {}) {
+    constructor(element: Element, config: IGridsterDraggableOptions = {}) {
         this.element = element;
         this.mousedown = Observable.merge(
             Observable.fromEvent(element, 'mousedown'),
             Observable.fromEvent(element, 'touchstart')
         ).share();
 
-        this.config.handlerClass = config.handlerClass;
+
+        this.config = (<any>Object).assign({}, this.config, config);
 
         this.dragStart = this.createDragStartObservable().share();
         this.dragMove = this.createDragMoveObservable(this.dragStart);
         this.dragStop = this.createDragStopObservable(this.dragStart);
 
         this.fixProblemWithDnDForIE(element);
+
+        this.raf = window.requestAnimationFrame || (callback => setTimeout(callback, 1000 / 60));
+        this.caf = window.cancelAnimationFrame || (cafID => clearTimeout(cafID));
     }
 
     private createDragStartObservable(): Observable<DraggableEvent> {
@@ -81,14 +89,122 @@ export class Draggable {
                     .map(mm => new DraggableEvent(mm))
                     .takeUntil(this.mouseup);
             })
-            .filter(val => !!val);
+            .filter(val => !!val)
+            .do((event: DraggableEvent) => {
+                if (this.config.scroll) {
+                    this.startScroll(this.element, event);
+                }
+            });
     }
 
     private createDragStopObservable(dragStart: Observable<DraggableEvent>): Observable<any> {
         return dragStart
             .switchMap(() => {
                 return this.mouseup.take(1);
+            })
+            .do(() => {
+                this.caf(this.autoScrollingInterval);
             });
+    }
+
+    private startScroll(item: Element, event: DraggableEvent) {
+        let scrollingElement = null;
+        const pageX = event.pageX;
+        const pageY = event.pageY;
+        const scrollEdge = this.config.scrollEdge;
+        const scrollSpeed = 20;
+        const scrollContainer = this.getScrollContainer(item);
+
+        this.caf(this.autoScrollingInterval);
+
+        // If a container contains the list that is scrollable
+        if (scrollContainer) {
+
+            // Scrolling vertically
+            if (pageY - this.getOffset(scrollContainer).top < scrollEdge) {
+                this.startAutoScrolling(scrollContainer, -scrollSpeed, 'scrollTop');
+            } else if ((this.getOffset(scrollContainer).top + scrollContainer.getBoundingClientRect().height) -
+                pageY < scrollEdge) {
+
+                this.startAutoScrolling(scrollContainer, scrollSpeed, 'scrollTop');
+            }
+
+            // Scrolling horizontally
+            if (pageX - scrollContainer.getBoundingClientRect().left < scrollEdge) {
+                this.startAutoScrolling(scrollContainer, -scrollSpeed, 'scrollLeft');
+            } else if ((this.getOffset(scrollContainer).left + scrollContainer.getBoundingClientRect().width) -
+                pageX < scrollEdge) {
+
+                this.startAutoScrolling(scrollContainer, scrollSpeed, 'scrollLeft');
+            }
+
+            // If the window contains the list
+        } else {
+            scrollingElement = document.scrollingElement || document.documentElement || document.body;
+
+            // Scrolling vertically
+            // NOTE: Using `window.pageYOffset` here because IE doesn't have `window.scrollY`.
+            if ((pageY - window.pageYOffset) < scrollEdge) {
+                this.startAutoScrolling(scrollingElement, -scrollSpeed, 'scrollTop');
+            } else if ((window.innerHeight - (pageY - window.pageYOffset)) < scrollEdge) {
+                this.startAutoScrolling(scrollingElement, scrollSpeed, 'scrollTop');
+            }
+
+            // Scrolling horizontally
+            // NOTE: Using `window.pageXOffset` here because IE doesn't have `window.scrollX`.
+            if ((pageX - window.pageXOffset) < scrollEdge) {
+                this.startAutoScrolling(scrollingElement, -scrollSpeed, 'scrollLeft');
+            } else if ((window.innerWidth - (pageX - window.pageXOffset)) < scrollEdge) {
+                this.startAutoScrolling(scrollingElement, scrollSpeed, 'scrollLeft');
+            }
+        }
+    }
+
+    private getScrollContainer(node) {
+        if (node === null) { return null; }
+        // NOTE: Manually calculating height because IE's `clientHeight` isn't always
+        // reliable.
+        const nodeOuterHeight = parseFloat(window.getComputedStyle(node).getPropertyValue('height')) +
+            parseFloat(window.getComputedStyle(node).getPropertyValue('padding-top')) +
+            parseFloat(window.getComputedStyle(node).getPropertyValue('padding-bottom'));
+
+        if (node.scrollHeight > Math.ceil(nodeOuterHeight)) {
+            return node;
+        }
+
+        const REGEX_BODY_HTML = new RegExp('(body|html)', 'i');
+
+        if (!REGEX_BODY_HTML.test(node.parentNode.tagName)) {
+            return this.getScrollContainer(node.parentNode);
+        }
+
+        return null;
+    }
+
+    private startAutoScrolling(node, amount, direction) {
+        this.autoScrollingInterval = this.raf(function() {
+            this.startAutoScrolling(node, amount, direction);
+        }.bind(this));
+
+        return node[direction] += (amount * 0.25);
+    }
+
+    private getOffset (el) {
+        const rect = el.getBoundingClientRect();
+        return {
+            left: rect.left + this.getScroll('scrollLeft', 'pageXOffset'),
+            top: rect.top + this.getScroll('scrollTop', 'pageYOffset')
+        };
+    }
+
+    private getScroll (scrollProp, offsetProp) {
+        if (typeof window[offsetProp] !== 'undefined') {
+            return window[offsetProp];
+        }
+        if (document.documentElement.clientHeight) {
+            return document.documentElement[scrollProp];
+        }
+        return document.body[scrollProp];
     }
 
     private isDragingByHandler(event: DraggableEvent): boolean {
