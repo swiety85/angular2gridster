@@ -15,5 +15,6 @@ export interface IGridsterOptions {
     useCSSTransforms?: boolean;
     cellHeight?: number;
     cellWidth?: number;
+    tolerance?: string;
     responsiveOptions?: Array<IGridsterOptions>;
 }

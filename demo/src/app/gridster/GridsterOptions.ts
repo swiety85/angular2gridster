@@ -23,7 +23,8 @@ export class GridsterOptions {
         dragAndDrop: true,
         resizable: false,
         useCSSTransforms: false,
-        floating: true
+        floating: true,
+        tolerance: 'pointer'
     };
 
     change: Observable<IGridsterOptions>;
