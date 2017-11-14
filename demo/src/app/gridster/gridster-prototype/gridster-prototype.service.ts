@@ -208,7 +208,7 @@ export class GridsterPrototypeService {
         if (tolerance === 'touch') {
             return utils.isElementTouchContainer(el, elContainer);
         }
-        console.log('xoox', event.pageX, event.pageY);
+
         return utils.isCursorAboveElement(event, elContainer);
     }
 }
