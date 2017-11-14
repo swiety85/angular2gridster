@@ -237,7 +237,9 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         const dropOverObservable = this.gridsterPrototype.observeDropOver(this.gridster)
             .publish();
 
-        this.gridsterPrototype.observeDragOver(this.gridster).dragOver
+        const dragObservable = this.gridsterPrototype.observeDragOver(this.gridster);
+
+        dragObservable.dragOver
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
                 if (!isEntered) {
                     return;
@@ -245,7 +247,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
                 this.gridster.onDrag(prototype.item);
             });
 
-        this.gridsterPrototype.observeDragOver(this.gridster).dragEnter
+        dragObservable.dragEnter
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
                 isEntered = true;
 
@@ -253,7 +255,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
                 this.gridster.onStart(prototype.item);
             });
 
-        this.gridsterPrototype.observeDragOver(this.gridster).dragOut
+        dragObservable.dragOut
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
                 if (!isEntered) {
                     return;

@@ -94,7 +94,7 @@ export class GridsterPrototypeService {
             })
             .filter((data: any) => {
                 return !data.isDrop;
-            });
+            }).share();
 
         const dragEnter = this.createDragEnterObservable(dragExt, gridster);
         const dragOut = this.createDragOutObservable(dragExt, gridster);
@@ -208,7 +208,7 @@ export class GridsterPrototypeService {
         if (tolerance === 'touch') {
             return utils.isElementTouchContainer(el, elContainer);
         }
-
+        console.log('xoox', event.pageX, event.pageY);
         return utils.isCursorAboveElement(event, elContainer);
     }
 }
