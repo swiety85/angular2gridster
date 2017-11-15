@@ -265,13 +265,13 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
             });
 
         dropOverObservable
-            .subscribe((prototype: GridsterItemPrototypeDirective) => {
+            .subscribe((data) => {
                 if (!isEntered) {
                     return;
                 }
-                this.gridster.onStop(prototype.item);
+                this.gridster.onStop(data.item.item);
 
-                this.gridster.removeItem(prototype.item);
+                this.gridster.removeItem(data.item.item);
 
                 isEntered = false;
             });
