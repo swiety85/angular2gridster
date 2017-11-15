@@ -166,6 +166,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     @Output() hChange = new EventEmitter<number>();
 
     @Output() change = new EventEmitter<any>();
+    @Output() start = new EventEmitter<any>();
+    @Output() end = new EventEmitter<any>();
 
     @Input() dragAndDrop = true;
     @Input() resizable = true;
@@ -361,6 +363,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                             cursorToElementPosition = event.getRelativeCoordinates(this.$element);
 
                             this.gridster.onResizeStart(this.item);
+                            this.onStart();
                         });
                     });
 
@@ -390,6 +393,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                             this.isResizing = false;
 
                             this.gridster.onResizeStop(this.item);
+                            this.onEnd();
                         });
                     });
 
@@ -426,6 +430,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                     this.zone.run(() => {
                         this.gridster.onStart(this.item);
                         this.isDragging = true;
+                        this.onStart();
 
                         cursorToElementPosition = event.getRelativeCoordinates(this.$element);
                     });
@@ -449,6 +454,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                         this.gridster.onStop(this.item);
                         this.gridster.render();
                         this.isDragging = false;
+                        this.onEnd();
                     });
                 });
 
@@ -519,6 +525,14 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             scrollLeft: scrollData.scrollLeft,
             scrollTop: scrollData.scrollTop
         };
+    }
+
+    private onEnd(): void {
+        this.end.emit({item: this.item});
+    }
+
+    private onStart(): void {
+        this.start.emit({item: this.item});
     }
 
     /**
