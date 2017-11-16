@@ -363,7 +363,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                             cursorToElementPosition = event.getRelativeCoordinates(this.$element);
 
                             this.gridster.onResizeStart(this.item);
-                            this.onStart();
+                            this.onStart('resize');
                         });
                     });
 
@@ -393,7 +393,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                             this.isResizing = false;
 
                             this.gridster.onResizeStop(this.item);
-                            this.onEnd();
+                            this.onEnd('resize');
                         });
                     });
 
@@ -430,7 +430,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                     this.zone.run(() => {
                         this.gridster.onStart(this.item);
                         this.isDragging = true;
-                        this.onStart();
+                        this.onStart('drag');
 
                         cursorToElementPosition = event.getRelativeCoordinates(this.$element);
                     });
@@ -454,7 +454,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                         this.gridster.onStop(this.item);
                         this.gridster.render();
                         this.isDragging = false;
-                        this.onEnd();
+                        this.onEnd('drag');
                     });
                 });
 
@@ -527,12 +527,12 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         };
     }
 
-    private onEnd(): void {
-        this.end.emit({item: this.item});
+    private onEnd(actionType: string): void {
+        this.end.emit({action: actionType, item: this.item});
     }
 
-    private onStart(): void {
-        this.start.emit({item: this.item});
+    private onStart(actionType: string): void {
+        this.start.emit({action: actionType, item: this.item});
     }
 
     /**
