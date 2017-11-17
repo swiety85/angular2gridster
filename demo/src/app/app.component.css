@@ -3,9 +3,9 @@
     display: flex;
     display: -webkit-inline-box;
     flex-direction: column;
-    height: calc(100% - 20px);
-    width: calc(100% - 40px);
-    padding: 10px 20px;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
 }
 
 h1 {
@@ -24,6 +24,7 @@ h1 {
     position: relative;
     flex: 0;
     width: 100%;
+    overflow: hidden;
 }
 
 .toolbar {
