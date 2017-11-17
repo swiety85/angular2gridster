@@ -38,8 +38,8 @@ export class Draggable {
         scroll: true,
         scrollEdge: 36
     };
-    // reference to auto scrolling
-    private autoScrollingInterval;
+    // reference to auto scrolling listeners
+    private autoScrollingInterval = [];
 
     constructor(element: Element, config: IGridsterDraggableOptions = {}) {
         this.element = element;
@@ -103,14 +103,13 @@ export class Draggable {
                 return this.mouseup.take(1);
             })
             .do(() => {
-                this.cancelAnimationFrame(this.autoScrollingInterval);
+                this.autoScrollingInterval.forEach(raf => this.cancelAnimationFrame(raf));
             });
     }
 
     private startScroll(item: Element, event: DraggableEvent) {
         const scrollContainer = this.getScrollContainer(item);
-
-        this.cancelAnimationFrame(this.autoScrollingInterval);
+        this.autoScrollingInterval.forEach(raf => this.cancelAnimationFrame(raf));
 
         if (scrollContainer) {
             this.startScrollForContainer(event, scrollContainer);
@@ -174,9 +173,9 @@ export class Draggable {
     }
 
     private startAutoScrolling(node, amount, direction) {
-        this.autoScrollingInterval = this.requestAnimationFrame(function() {
+        this.autoScrollingInterval.push(this.requestAnimationFrame(function() {
             this.startAutoScrolling(node, amount, direction);
-        }.bind(this));
+        }.bind(this)));
 
         return node[direction] += (amount * 0.25);
     }
