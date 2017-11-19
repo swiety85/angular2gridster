@@ -11,7 +11,7 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/publish';
 
 
-
+import { utils } from './utils/utils';
 import { GridsterService } from './gridster.service';
 import { IGridsterOptions } from './IGridsterOptions';
 import { IGridsterDraggableOptions } from './IGridsterDraggableOptions';
@@ -210,9 +210,36 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         this.ready.emit();
     }
 
+    adjustItemsHeightToContent(scrollableItemElementSelector: string = '.gridster-item-inner') {
+        this.gridster.items
+        // convert each item to object with information about content height and scroll height
+            .map((item: GridListItem) => {
+                const scrollEl = item.$element.querySelector(scrollableItemElementSelector);
+                const contentEl = scrollEl.lastElementChild;
+                const scrollElDistance = utils.getRelativeCoordinates(scrollEl, item.$element);
+                const scrollElRect = scrollEl.getBoundingClientRect();
+                const contentRect = contentEl.getBoundingClientRect();
+
+                return {
+                    item,
+                    contentHeight: contentRect.bottom - scrollElRect.top,
+                    scrollElDistance
+                };
+            })
+            // calculate required height in lanes amount and update item "h"
+            .forEach((data) => {
+                data.item.h = Math.ceil(
+                    <any>((data.contentHeight) / (this.gridster.cellHeight - data.scrollElDistance.top))
+                );
+            });
+
+        this.gridster.fixItemsPositions();
+        this.gridster.reflow();
+    }
+
     private getScrollPositionFromParents(element: Element, data = {scrollTop: 0, scrollLeft: 0}): {scrollTop: number, scrollLeft: number} {
 
-        if (element.parentElement !== document.body) {
+        if (element.parentElement && element.parentElement !== document.body) {
             data.scrollTop += element.parentElement.scrollTop;
             data.scrollLeft += element.parentElement.scrollLeft;
 

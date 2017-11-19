@@ -3,6 +3,10 @@
 @include box-sizing(border-box);
 }
 
+html {
+    overflow: hidden;
+}
+
 body {
     font-family: Roboto,Helvetica Neue,Helvetica,Arial,sans-serif;
     font-size: 13px;
@@ -11,6 +15,7 @@ body {
     background-color: #eeeded;
     margin: 0;
     height: 100%;
+    overflow: hidden;
 }
 
 div {
@@ -19,6 +24,11 @@ div {
 
 a {
     text-decoration: none;
+}
+
+p {
+    display: inline-block;
+    width: 100%;
 }
 
 .position-highlight .inner {

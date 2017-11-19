@@ -166,6 +166,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     @Output() hChange = new EventEmitter<number>();
 
     @Output() change = new EventEmitter<any>();
+    @Output() start = new EventEmitter<any>();
+    @Output() end = new EventEmitter<any>();
 
     @Input() dragAndDrop = true;
     @Input() resizable = true;
@@ -343,7 +345,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.zone.runOutsideAngular(() => {
             [].forEach.call(this.$element.querySelectorAll('.gridster-item-resizable-handler'), (handler) => {
                 handler.style.display = 'block';
-                const draggable = new Draggable(handler);
+                const draggable = new Draggable(handler, { scroll: true });
 
                 let direction;
                 let startEvent;
@@ -361,6 +363,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                             cursorToElementPosition = event.getRelativeCoordinates(this.$element);
 
                             this.gridster.onResizeStart(this.item);
+                            this.onStart('resize');
                         });
                     });
 
@@ -390,6 +393,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                             this.isResizing = false;
 
                             this.gridster.onResizeStop(this.item);
+                            this.onEnd('resize');
                         });
                     });
 
@@ -417,15 +421,14 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.zone.runOutsideAngular(() => {
             let cursorToElementPosition;
 
-            const draggable = new Draggable(this.$element, {
-                handlerClass: this.gridster.draggableOptions.handlerClass
-            });
+            const draggable = new Draggable(this.$element, this.gridster.draggableOptions);
 
             const dragStartSub = draggable.dragStart
                 .subscribe((event: DraggableEvent) => {
                     this.zone.run(() => {
                         this.gridster.onStart(this.item);
                         this.isDragging = true;
+                        this.onStart('drag');
 
                         cursorToElementPosition = event.getRelativeCoordinates(this.$element);
                     });
@@ -449,6 +452,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                         this.gridster.onStop(this.item);
                         this.gridster.render();
                         this.isDragging = false;
+                        this.onEnd('drag');
                     });
                 });
 
@@ -519,6 +523,14 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             scrollLeft: scrollData.scrollLeft,
             scrollTop: scrollData.scrollTop
         };
+    }
+
+    private onEnd(actionType: string): void {
+        this.end.emit({action: actionType, item: this.item});
+    }
+
+    private onStart(actionType: string): void {
+        this.start.emit({action: actionType, item: this.item});
     }
 
     /**

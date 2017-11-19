@@ -417,6 +417,30 @@ export class GridList {
         return this.findDefaultPositionVertical(width, height);
     }
 
+    deleteItemPositionFromGrid(item: GridListItem) {
+        const position = this.getItemPosition(item);
+        let x, y;
+
+        for (x = position.x; x < position.x + position.w; x++) {
+            // It can happen to try to remove an item from a position not generated
+            // in the grid, probably when loading a persisted grid of items. No need
+            // to create a column to be able to remove something from it, though
+            if (!this.grid[x]) {
+                continue;
+            }
+
+            for (y = position.y; y < position.y + position.h; y++) {
+                // Don't clear the cell if it's been occupied by a different widget in
+                // the meantime (e.g. when an item has been moved over this one, and
+                // thus by continuing to clear this item's previous position you would
+                // cancel the first item's move, leaving it without any position even)
+                if (this.grid[x][y] === item) {
+                    this.grid[x][y] = null;
+                }
+            }
+        }
+    }
+
     private isItemValidForGrid(item: GridListItem, options: IGridsterOptions) {
         const itemData = options.direction === 'horizontal' ? {
             x: item.getValueY(options.breakpoint),
@@ -618,30 +642,6 @@ export class GridList {
         for (x = position.x; x < position.x + position.w; x++) {
             for (y = position.y; y < position.y + position.h; y++) {
                 this.grid[x][y] = item;
-            }
-        }
-    }
-
-    deleteItemPositionFromGrid(item: GridListItem) {
-        const position = this.getItemPosition(item);
-        let x, y;
-
-        for (x = position.x; x < position.x + position.w; x++) {
-            // It can happen to try to remove an item from a position not generated
-            // in the grid, probably when loading a persisted grid of items. No need
-            // to create a column to be able to remove something from it, though
-            if (!this.grid[x]) {
-                continue;
-            }
-
-            for (y = position.y; y < position.y + position.h; y++) {
-                // Don't clear the cell if it's been occupied by a different widget in
-                // the meantime (e.g. when an item has been moved over this one, and
-                // thus by continuing to clear this item's previous position you would
-                // cancel the first item's move, leaving it without any position even)
-                if (this.grid[x][y] === item) {
-                    this.grid[x][y] = null;
-                }
             }
         }
     }
