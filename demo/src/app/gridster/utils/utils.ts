@@ -41,7 +41,7 @@ export const utils = {
 
         return {
             top: elementRect.top - parentElementRect.top,
-            left: elementRect.left - parentElementRect.left,
+            left: elementRect.left - parentElementRect.left
         };
     }
 };

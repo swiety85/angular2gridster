@@ -214,19 +214,22 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         this.gridster.items
         // convert each item to object with information about content height and scroll height
             .map((item: GridListItem) => {
-                const itemScrollableEl = item.$element.querySelector(scrollableItemElementSelector);
-                const itemScrollableElCoords = utils.getRelativeCoordinates(itemScrollableEl, item.$element);
+                const scrollEl = item.$element.querySelector(scrollableItemElementSelector);
+                const contentEl = scrollEl.lastElementChild;
+                const scrollElDistance = utils.getRelativeCoordinates(scrollEl, item.$element);
+                const scrollElRect = scrollEl.getBoundingClientRect();
+                const contentRect = contentEl.getBoundingClientRect();
 
                 return {
                     item,
-                    itemScrollableElCoords,
-                    innerHeight: parseInt(itemScrollableEl.children[0].clientHeight, 10)
+                    contentHeight: contentRect.bottom - scrollElRect.top,
+                    scrollElDistance
                 };
             })
             // calculate required height in lanes amount and update item "h"
             .forEach((data) => {
                 data.item.h = Math.ceil(
-                    <any>((data.innerHeight + data.itemScrollableElCoords.top) / this.gridster.cellHeight)
+                    <any>((data.contentHeight) / (this.gridster.cellHeight - data.scrollElDistance.top))
                 );
             });
 
