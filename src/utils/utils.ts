@@ -28,7 +28,7 @@ export const utils = {
         $element.style['msTransform'] = '';
         $element.style['OTransform'] = '';
     },
-    clearSelection: function clearSelection() {
+    clearSelection: () => {
         if (document['selection']) {
             document['selection'].empty();
         } else if (window.getSelection) {
@@ -42,5 +42,14 @@ export const utils = {
         return parseFloat(styleObj.getPropertyValue('height')) +
             parseFloat(styleObj.getPropertyValue('padding-top')) +
             parseFloat(styleObj.getPropertyValue('padding-bottom'));
+    },
+    getRelativeCoordinates: (element, parentElement): {top: number, left: number} => {
+        const parentElementRect = parentElement.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+
+        return {
+            top: elementRect.top - parentElementRect.top,
+            left: elementRect.left - parentElementRect.left
+        };
     }
 };
