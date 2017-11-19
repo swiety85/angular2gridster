@@ -58,7 +58,9 @@ export class Draggable {
             .filter((event: DraggableEvent) => this.isDragingByHandler(event))
             .do(e => {
                 e.pauseEvent();
-                (<any>document.activeElement).blur();
+                if (document.activeElement) {
+                    (<any>document.activeElement).blur();
+                }
                 // prevents rendering performance issues while dragging item with selection inside
                 utils.clearSelection();
             })
