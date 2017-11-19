@@ -35,6 +35,14 @@ export const utils = {
             window.getSelection().removeAllRanges();
         }
     },
+    getElementOuterHeight: function ($element: HTMLElement) {
+        const styleObj = window.getComputedStyle($element);
+        // NOTE: Manually calculating height because IE's `clientHeight` isn't always
+        // reliable.
+        return parseFloat(styleObj.getPropertyValue('height')) +
+            parseFloat(styleObj.getPropertyValue('padding-top')) +
+            parseFloat(styleObj.getPropertyValue('padding-bottom'));
+    },
     getRelativeCoordinates: (element, parentElement): {top: number, left: number} => {
         const parentElementRect = parentElement.getBoundingClientRect();
         const elementRect = element.getBoundingClientRect();

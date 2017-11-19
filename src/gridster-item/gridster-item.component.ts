@@ -345,7 +345,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.zone.runOutsideAngular(() => {
             [].forEach.call(this.$element.querySelectorAll('.gridster-item-resizable-handler'), (handler) => {
                 handler.style.display = 'block';
-                const draggable = new Draggable(handler);
+                const draggable = new Draggable(handler, { scroll: true });
 
                 let direction;
                 let startEvent;
@@ -421,9 +421,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.zone.runOutsideAngular(() => {
             let cursorToElementPosition;
 
-            const draggable = new Draggable(this.$element, {
-                handlerClass: this.gridster.draggableOptions.handlerClass
-            });
+            const draggable = new Draggable(this.$element, this.gridster.draggableOptions);
 
             const dragStartSub = draggable.dragStart
                 .subscribe((event: DraggableEvent) => {

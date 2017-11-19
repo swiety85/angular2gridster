@@ -3,10 +3,9 @@
     display: flex;
     display: -webkit-inline-box;
     flex-direction: column;
-    height: calc(100% - 20px);
-    width: calc(100% - 40px);
-    padding: 10px 20px;
-    overflow: auto;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
 }
 
 h1 {
@@ -18,17 +17,25 @@ h1 {
     margin: 0;
 }
 
-.toolbar {
+.omnibar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     position: relative;
     flex: 0;
     width: 100%;
+    overflow: hidden;
+}
+
+.toolbar {
+    position: relative;
+    padding-left: 10px;
 }
 
 .widgetbar {
-    flex: 0;
     position: relative;
-    width: 100%;
     padding: 10px 0;
+    width: 275px;
 }
 
 .main-content {
@@ -36,6 +43,7 @@ h1 {
     flex: 1 0px;
     display: flex;
     flex-direction: column;
+    overflow: auto;
 }
 
 .dashboard {
