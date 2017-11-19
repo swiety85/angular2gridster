@@ -1,3 +1,20 @@
+<a name="1.0.0-alfa"></a>
+# [1.0.0-alfa]((https://github.com/swiety85/angular2gridster/compare/0.6.9...1.0.0-alfa)) (2017-11-19)
+
+
+### Bug Fixes
+
+* **drag:** Fix problem with focused el when dragging in IE. Issue #128
+
+### Features
+
+* **drag:** Provide tolerance for gridster config. Issue #71
+* **drag:** Scroll container while dragging. Issue #27
+* **drag:** Output bindings in gridster item on drag/resize start and end
+* **resize:** Auto height for item. Issue #78
+
+
+
 <a name="0.6.9"></a>
 # [0.6.9]((https://github.com/swiety85/angular2gridster/compare/0.6.8...0.6.9)) (2017-11-04)
 

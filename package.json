@@ -1,6 +1,6 @@
 {
   "name": "angular2gridster",
-  "version": "0.6.9",
+  "version": "1.0.0-alfa",
   "license": "MIT",
   "main": "./dist/index.js",
   "scripts": {
@@ -18,10 +18,13 @@
   },
   "keywords": [
     "gridster",
-    "angular",
     "grid",
+    "angular",
+    "angular2",
     "dashboard",
-    "ngx"
+    "ngx",
+    "drag&drop",
+    "widgets"
   ],
   "bugs": {
     "url": "https://github.com/swiety85/angular2gridster/issues"
