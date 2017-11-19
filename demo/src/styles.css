@@ -21,6 +21,11 @@ a {
     text-decoration: none;
 }
 
+p {
+    display: inline-block;
+    width: 100%;
+}
+
 .position-highlight .inner {
     position: absolute;
     top: 5px;

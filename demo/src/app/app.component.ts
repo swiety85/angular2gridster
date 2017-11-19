@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { GridsterComponent } from './gridster/gridster.component';
 import { IGridsterOptions } from './gridster/IGridsterOptions';
 import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions';
@@ -12,7 +12,7 @@ export class AppComponent {
     @ViewChild(GridsterComponent) gridster: GridsterComponent;
     itemOptions = {
         maxWidth: 3,
-        maxHeight: 3
+        maxHeight: 4
     };
     gridsterOptions: IGridsterOptions = {
         // core configuration is default one - for smallest view. It has hidden minWidth: 0.
