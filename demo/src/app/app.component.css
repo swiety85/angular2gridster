@@ -24,7 +24,7 @@ h1 {
     position: relative;
     flex: 0;
     width: 100%;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 .toolbar {
