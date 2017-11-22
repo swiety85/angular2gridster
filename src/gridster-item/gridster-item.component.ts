@@ -345,7 +345,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.zone.runOutsideAngular(() => {
             [].forEach.call(this.$element.querySelectorAll('.gridster-item-resizable-handler'), (handler) => {
                 handler.style.display = 'block';
-                const draggable = new Draggable(handler, { scroll: true });
+                const draggable = new Draggable(handler, this.getResizableOptions());
 
                 let direction;
                 let startEvent;
@@ -465,6 +465,17 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             sub.unsubscribe();
         });
         this.dragSubscriptions = [];
+    }
+
+    private getResizableOptions() {
+        const resizableOptions: any = {};
+
+        if (this.gridster.draggableOptions.scroll) {
+            resizableOptions.scroll = this.gridster.draggableOptions.scroll;
+            resizableOptions.scrollEdge = this.gridster.draggableOptions.scrollEdge;
+        }
+
+        return resizableOptions;
     }
 
     private setPositionsForGrid(options) {
