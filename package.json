@@ -4,6 +4,8 @@
   "license": "MIT",
   "main": "./dist/index.js",
   "scripts": {
+    "install-demo": "npm install --prefix ./demo",
+    "serve-demo": "npm start --prefix ./demo",
     "lint": "tslint src/**/*.ts",
     "test": "karma start",
     "build": "echo 'Building...' && ./node_modules/.bin/ngc -p tsconfig.json"
@@ -31,9 +33,7 @@
   },
   "homepage": "https://github.com/swiety85/angular2gridster#readme",
   "typings": "./dist/index.d.ts",
-  "dependencies": {},
   "devDependencies": {
-    "@angular/cli": "1.2.1",
     "@angular/common": "^2.4.8 || ^4.0.0",
     "@angular/compiler": "^4.2.6",
     "@angular/compiler-cli": "^4.2.6",
@@ -48,8 +48,5 @@
     "tslint": "~5.3.2",
     "typescript": "~2.3.3",
     "zone.js": "~0.7.2 || ~0.8.5"
-  },
-  "engines": {
-    "node": ">=0.8.0"
   }
 }
