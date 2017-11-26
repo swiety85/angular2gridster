@@ -31,9 +31,6 @@ demo/dist
 demo/tmp
 demo/out-tsc
 
-#symlink library
-demo/src/app/gridster
-
 # dependencies
 demo/node_modules
 

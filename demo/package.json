@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --preserve-symlink",
+    "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -27,7 +27,7 @@
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
-    "@angular/cli": "1.4.9",
+    "@angular/cli": "1.2.1",
     "@angular/compiler-cli": "^4.2.6",
     "@angular/language-service": "^4.2.6",
     "@types/jasmine": "~2.5.53",
