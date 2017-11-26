@@ -112,29 +112,10 @@ gridsterOptions = {
 
 Clone or download this repository. Demo folder is dedicated nester project build on Angular CLI. To run:
 
-Create symlink from library `src` directory to `demo/src/app/gridster` use absolute path for that:
-
-linux, macos:
 ```shell
-cd angular2gridster
-ln -s $PWD/src/ $PWD/demo/src/app/gridster
-```
-
-After that, linked directory should appear
-```
-angular2gridster
-├─ demo
-│  └─ src
-│     └─ app
-│        └─ gridster //symlink
-└─ src
-```
-
-Lunch demo app:
-
-```shell
-    npm run install-demo
-    npm run serve-demo
+    cd demo
+    npm install
+    ng serve
 ```
 
 Go to: http://localhost:4200/
