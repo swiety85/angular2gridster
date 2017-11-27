@@ -344,10 +344,13 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
         this.zone.runOutsideAngular(() => {
             [].forEach.call(this.$element.querySelectorAll('.gridster-item-resizable-handler'), (handler) => {
-                handler.style.display = 'block';
+                const direction = this.getResizeDirection(handler);
+
+                if (this.hasResizableHandle(direction)) {
+                    handler.style.display = 'block';
+                }
                 const draggable = new Draggable(handler, { scroll: true });
 
-                let direction;
                 let startEvent;
                 let startData;
                 let cursorToElementPosition;
@@ -358,7 +361,6 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                             this.isResizing = true;
 
                             startEvent = event;
-                            direction = this.getResizeDirection(handler);
                             startData = this.createResizeStartObject(direction);
                             cursorToElementPosition = event.getRelativeCoordinates(this.$element);
 
@@ -465,6 +467,13 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             sub.unsubscribe();
         });
         this.dragSubscriptions = [];
+    }
+
+    private hasResizableHandle(direction: string): boolean {
+        const isItemResizable = this.gridster.options.resizable && this.item.resizable;
+        const resizeHandles = this.gridster.options.resizeHandles;
+
+        return isItemResizable && (!resizeHandles || (resizeHandles && !!resizeHandles[direction]));
     }
 
     private setPositionsForGrid(options) {
