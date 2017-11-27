@@ -418,7 +418,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.zone.runOutsideAngular(() => {
             let cursorToElementPosition;
 
-            const draggable = new Draggable(this.$element, this.gridster.draggableOptions);
+            const draggable = new Draggable(this.$element, this.getDraggableOptions());
 
             const dragStartSub = draggable.dragStart
                 .subscribe((event: DraggableEvent) => {
@@ -464,6 +464,10 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.dragSubscriptions = [];
     }
 
+    private getDraggableOptions() {
+        return { scrollDirection: this.gridster.options.direction, ...this.gridster.draggableOptions };
+    }
+
     private getResizableOptions() {
         const resizableOptions: any = {};
 
@@ -473,6 +477,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         if (this.gridster.draggableOptions.scrollEdge) {
             resizableOptions.scrollEdge = this.gridster.draggableOptions.scrollEdge;
         }
+
+        resizableOptions.scrollDirection = this.gridster.options.direction;
 
         return resizableOptions;
     }
