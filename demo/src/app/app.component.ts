@@ -21,6 +21,11 @@ export class AppComponent {
         floating: true,
         dragAndDrop: true, // enable/disable drag and drop for all items in grid
         resizable: true, // enable/disable resizing by drag and drop for all items in grid
+        resizeHandles: {
+            s: true,
+            e: true,
+            se: true
+        },
         widthHeightRatio: 1, // proportion between item width and height
         shrink: true,
         useCSSTransforms: true,
