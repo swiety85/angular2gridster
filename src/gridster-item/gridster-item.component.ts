@@ -349,7 +349,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                 if (this.hasResizableHandle(direction)) {
                     handler.style.display = 'block';
                 }
-                const draggable = new Draggable(handler, { scroll: true });
+
+                const draggable = new Draggable(handler, this.getResizableOptions());
 
                 let startEvent;
                 let startData;
@@ -467,6 +468,19 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             sub.unsubscribe();
         });
         this.dragSubscriptions = [];
+    }
+
+    private getResizableOptions() {
+        const resizableOptions: any = {};
+
+        if (this.gridster.draggableOptions.scroll || this.gridster.draggableOptions.scroll === false) {
+            resizableOptions.scroll = this.gridster.draggableOptions.scroll;
+        }
+        if (this.gridster.draggableOptions.scrollEdge) {
+            resizableOptions.scrollEdge = this.gridster.draggableOptions.scrollEdge;
+        }
+
+        return resizableOptions;
     }
 
     private hasResizableHandle(direction: string): boolean {
