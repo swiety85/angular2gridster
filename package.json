@@ -1,6 +1,6 @@
 {
   "name": "angular2gridster",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "main": "./dist/index.js",
   "scripts": {
@@ -11,7 +11,8 @@
     "build": "echo 'Building...' && ./node_modules/.bin/ngc -p tsconfig.json",
     "release-major": "standard-version -- -r major",
     "release-minor": "standard-version -- -r minor",
-    "release-fix": "standard-version -- -r patch"
+    "release-fix": "standard-version -- -r patch",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
