@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "update-demo": "ng build --prod --bh /angular2gridster/ && $(npm bin)/gh-pages -d ./dist"
+    "update-demo": "ng build --prod --preserve-symlink --bh /angular2gridster/ && $(npm bin)/gh-pages -d ./dist"
   },
   "private": true,
   "dependencies": {
