@@ -11,7 +11,6 @@ import 'rxjs/add/operator/skip';
 
 import { DraggableEvent } from './DraggableEvent';
 import { utils } from './utils';
-import { IGridsterDraggableOptions } from '../IGridsterDraggableOptions';
 
 export class Draggable {
     static SCROLL_SPEED = 20;
@@ -33,15 +32,16 @@ export class Draggable {
         Observable.fromEvent(document, 'touchcancel')
     ).share();
     private mousedown: Observable<{} | Event>;
-    private config: IGridsterDraggableOptions = {
+    private config = {
         handlerClass: null,
         scroll: true,
-        scrollEdge: 36
+        scrollEdge: 36,
+        scrollDirection: null
     };
     // reference to auto scrolling listeners
     private autoScrollingInterval = [];
 
-    constructor(element: Element, config: IGridsterDraggableOptions = {}) {
+    constructor(element: Element, config = {}) {
         this.element = element;
         this.mousedown = Observable.merge(
             Observable.fromEvent(element, 'mousedown'),
@@ -121,7 +121,17 @@ export class Draggable {
     }
 
     private startScrollForContainer(event: DraggableEvent, scrollContainer: HTMLElement): void {
-        // Scrolling vertically
+
+        if (!this.config.scrollDirection || this.config.scrollDirection === 'vertical') {
+            this.startScrollVerticallyForContainer(event, scrollContainer);
+        }
+
+        if (!this.config.scrollDirection || this.config.scrollDirection === 'horizontal') {
+            this.startScrollHorizontallyForContainer(event, scrollContainer);
+        }
+    }
+
+    private startScrollVerticallyForContainer(event: DraggableEvent, scrollContainer: HTMLElement): void {
         if (event.pageY - this.getOffset(scrollContainer).top < this.config.scrollEdge) {
             this.startAutoScrolling(scrollContainer, -Draggable.SCROLL_SPEED, 'scrollTop');
         } else if ((this.getOffset(scrollContainer).top + scrollContainer.getBoundingClientRect().height) -
@@ -129,8 +139,9 @@ export class Draggable {
 
             this.startAutoScrolling(scrollContainer, Draggable.SCROLL_SPEED, 'scrollTop');
         }
+    }
 
-        // Scrolling horizontally
+    private startScrollHorizontallyForContainer(event: DraggableEvent, scrollContainer: HTMLElement): void {
         if (event.pageX - scrollContainer.getBoundingClientRect().left < this.config.scrollEdge) {
             this.startAutoScrolling(scrollContainer, -Draggable.SCROLL_SPEED, 'scrollLeft');
         } else if ((this.getOffset(scrollContainer).left + scrollContainer.getBoundingClientRect().width) -
@@ -141,17 +152,30 @@ export class Draggable {
     }
 
     private startScrollForWindow(event) {
+
+        if (!this.config.scrollDirection || this.config.scrollDirection === 'vertical') {
+            this.startScrollVerticallyForWindow(event);
+        }
+
+        if (!this.config.scrollDirection || this.config.scrollDirection === 'horizontal') {
+            this.startScrollHorizontallyForWindow(event);
+        }
+    }
+
+    private startScrollVerticallyForWindow(event: DraggableEvent): void {
         const scrollingElement = document.scrollingElement || document.documentElement || document.body;
 
-        // Scrolling vertically
         // NOTE: Using `window.pageYOffset` here because IE doesn't have `window.scrollY`.
         if ((event.pageY - window.pageYOffset) < this.config.scrollEdge) {
             this.startAutoScrolling(scrollingElement, -Draggable.SCROLL_SPEED, 'scrollTop');
         } else if ((window.innerHeight - (event.pageY - window.pageYOffset)) < this.config.scrollEdge) {
             this.startAutoScrolling(scrollingElement, Draggable.SCROLL_SPEED, 'scrollTop');
         }
+    }
 
-        // Scrolling horizontally
+    private startScrollHorizontallyForWindow(event: DraggableEvent): void {
+        const scrollingElement = document.scrollingElement || document.documentElement || document.body;
+
         // NOTE: Using `window.pageXOffset` here because IE doesn't have `window.scrollX`.
         if ((event.pageX - window.pageXOffset) < this.config.scrollEdge) {
             this.startAutoScrolling(scrollingElement, -Draggable.SCROLL_SPEED, 'scrollLeft');
