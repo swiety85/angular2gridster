@@ -10,9 +10,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 * **responsive:** Use responsive position properties for items added after gridster init ([20ddfe3](https://github.com/swiety85/angular2gridster/commit/20ddfe3)), closes [#116](https://github.com/swiety85/angular2gridster/issues/116)
 * **scroll:** Use draggable options to enable/disable scroll on resize ([7345024](https://github.com/swiety85/angular2gridster/commit/7345024))
-* remove directory demo/src/app/gridster/, add symlink ([06cc048](https://github.com/swiety85/angular2gridster/commit/06cc048))
-* remove directory demo/src/app/gridster/, add symlink ([8b3633a](https://github.com/swiety85/angular2gridster/commit/8b3633a))
-* remove directory demo/src/app/gridster/, add symlink ([301a873](https://github.com/swiety85/angular2gridster/commit/301a873))
+* **demo:** Remove directory demo/src/app/gridster/, add symlink ([06cc048](https://github.com/swiety85/angular2gridster/commit/06cc048))
 
 
 ### Features
