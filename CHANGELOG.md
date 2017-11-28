@@ -1,3 +1,27 @@
+# Change Log
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+<a name="1.0.0"></a>
+# [1.0.0](https://github.com/swiety85/angular2gridster/compare/v1.0.0-alfa...v1.0.0) (2017-11-28)
+
+
+### Bug Fixes
+
+* **responsive:** Use responsive position properties for items added after gridster init ([20ddfe3](https://github.com/swiety85/angular2gridster/commit/20ddfe3)), closes [#116](https://github.com/swiety85/angular2gridster/issues/116)
+* **scroll:** Use draggable options to enable/disable scroll on resize ([7345024](https://github.com/swiety85/angular2gridster/commit/7345024))
+* remove directory demo/src/app/gridster/, add symlink ([06cc048](https://github.com/swiety85/angular2gridster/commit/06cc048))
+* remove directory demo/src/app/gridster/, add symlink ([8b3633a](https://github.com/swiety85/angular2gridster/commit/8b3633a))
+* remove directory demo/src/app/gridster/, add symlink ([301a873](https://github.com/swiety85/angular2gridster/commit/301a873))
+
+
+### Features
+
+* **resize:** configurable resize handlers ([f7f83b5](https://github.com/swiety85/angular2gridster/commit/f7f83b5)), closes [#135](https://github.com/swiety85/angular2gridster/issues/135)
+* **scroll:** restrict scroll direction to gridster direction ([dabcf1a](https://github.com/swiety85/angular2gridster/commit/dabcf1a)), closes [#143](https://github.com/swiety85/angular2gridster/issues/143)
+
+
+
 <a name="1.0.0-alfa"></a>
 # [1.0.0-alfa]((https://github.com/swiety85/angular2gridster/compare/0.6.9...1.0.0-alfa)) (2017-11-19)
 

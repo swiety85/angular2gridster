@@ -1,6 +1,6 @@
 {
   "name": "angular2gridster",
-  "version": "1.0.0-alfa",
+  "version": "1.0.0",
   "license": "MIT",
   "main": "./dist/index.js",
   "scripts": {
@@ -8,7 +8,10 @@
     "serve-demo": "npm start --prefix ./demo",
     "lint": "tslint src/**/*.ts",
     "test": "karma start",
-    "build": "echo 'Building...' && ./node_modules/.bin/ngc -p tsconfig.json"
+    "build": "echo 'Building...' && ./node_modules/.bin/ngc -p tsconfig.json",
+    "release-major": "standard-version -- -r major",
+    "release-minor": "standard-version -- -r minor",
+    "release-fix": "standard-version -- -r patch"
   },
   "repository": {
     "type": "git",
@@ -43,10 +46,11 @@
     "codelyzer": "^3.0.1",
     "reflect-metadata": "~0.1.9",
     "rxjs": "^5.1.0",
+    "standard-version": "^4.2.0",
     "ts-loader": "^2.0.1",
     "ts-node": "~3.0.4",
     "tslint": "~5.3.2",
     "typescript": "~2.3.3",
     "zone.js": "~0.7.2 || ~0.8.5"
-  } 
+  }
 }
