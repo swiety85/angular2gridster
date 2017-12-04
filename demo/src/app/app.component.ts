@@ -9,6 +9,20 @@ import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions'
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+    static X_PROPERTY_MAP: any = {
+        sm: 'xSm',
+        md: 'xMd',
+        lg: 'xLg',
+        xl: 'xXl'
+    };
+
+    static Y_PROPERTY_MAP: any = {
+        sm: 'ySm',
+        md: 'yMd',
+        lg: 'yLg',
+        xl: 'yXl'
+    };
+
     @ViewChild(GridsterComponent) gridster: GridsterComponent;
     itemOptions = {
         maxWidth: 3,
@@ -157,12 +171,18 @@ export class AppComponent {
 
     addWidgetFromDrag(gridster: GridsterComponent, event: any) {
         const item = event.item;
-        this.widgets.push({
-            x: item.x, y: item.y, w: item.w, h: item.h,
+        const breakpoint = gridster.options.breakpoint;
+        const widget = {
+            w: item.w, h: item.h,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 5'
-        });
+            title: 'New widget'
+        };
+
+        widget[AppComponent.X_PROPERTY_MAP[breakpoint]] = item.x;
+        widget[AppComponent.Y_PROPERTY_MAP[breakpoint]] = item.y;
+
+        this.widgets.push(widget);
 
         console.log('add widget from drag to:', gridster);
     }
