@@ -235,6 +235,10 @@ export class AppComponent {
         console.log('widget remove', index);
     }
 
+    removeAllWidgets() {
+        this.widgets = [];
+    }
+
     itemChange($event: any, gridster) {
         console.log('item change', $event);
     }
