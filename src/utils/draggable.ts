@@ -104,6 +104,7 @@ export class Draggable {
             .switchMap(() => {
                 return this.mouseup.take(1);
             })
+            .map(e => new DraggableEvent(e))
             .do(() => {
                 this.autoScrollingInterval.forEach(raf => this.cancelAnimationFrame(raf));
             });

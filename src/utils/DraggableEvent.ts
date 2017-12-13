@@ -63,11 +63,13 @@ export class DraggableEvent {
     }
 
     private setDataFromTouchEvent(event: TouchEvent): void {
+        const touch = event.touches[0] || event.changedTouches[0];
+
         this.target = event.target;
-        this.clientX = event.touches[0].clientX;
-        this.clientY = event.touches[0].clientY;
-        this.pageX = event.touches[0].pageX;
-        this.pageY = event.touches[0].pageY;
+        this.clientX = touch.clientX;
+        this.clientY = touch.clientY;
+        this.pageX = touch.pageX;
+        this.pageY = touch.pageY;
 
     }
 }

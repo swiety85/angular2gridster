@@ -236,13 +236,16 @@ export class GridList {
      * and list of changed properties.
      */
     getChangedItems(initialItems: Array<GridListItem>, breakpoint?): Array<{
-        item: GridListItem, changes: Array<string>
+        item: GridListItem, changes: Array<string>, isNew: boolean
     }> {
 
-        return initialItems
-            .map((initItem: GridListItem) => {
+        return this.items.map((item: GridListItem) => {
                 const changes = [];
-                const item = this.getItemByAttribute('$element', initItem.$element);
+                const initItem = initialItems.find(initItem => initItem.$element === item.$element);
+
+                if (!initItem) {
+                    return { item, changes: ['x', 'y', 'w', 'h'], isNew: true };
+                }
 
                 if (item.getValueX(breakpoint) !== initItem.getValueX(breakpoint)) {
                     changes.push('x');
@@ -257,7 +260,7 @@ export class GridList {
                     changes.push('h');
                 }
 
-                return {item, changes};
+                return { item, changes, isNew: false };
             })
             .filter((itemChange: {item: GridListItem, changes: Array<string>}) => {
                 return itemChange.changes.length;

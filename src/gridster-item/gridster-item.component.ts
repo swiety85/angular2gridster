@@ -135,39 +135,39 @@ import {utils} from '../utils/utils';
 })
 export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     @Input() x: number;
-    @Output() xChange = new EventEmitter<number>();
+    @Output() xChange = new EventEmitter<number>(true);
     @Input() y: number;
-    @Output() yChange = new EventEmitter<number>();
+    @Output() yChange = new EventEmitter<number>(true);
 
     @Input() xSm: number;
-    @Output() xSmChange = new EventEmitter<number>();
+    @Output() xSmChange = new EventEmitter<number>(true);
     @Input() ySm: number;
-    @Output() ySmChange = new EventEmitter<number>();
+    @Output() ySmChange = new EventEmitter<number>(true);
 
     @Input() xMd: number;
-    @Output() xMdChange = new EventEmitter<number>();
+    @Output() xMdChange = new EventEmitter<number>(true);
     @Input() yMd: number;
-    @Output() yMdChange = new EventEmitter<number>();
+    @Output() yMdChange = new EventEmitter<number>(true);
 
     @Input() xLg: number;
-    @Output() xLgChange = new EventEmitter<number>();
+    @Output() xLgChange = new EventEmitter<number>(true);
     @Input() yLg: number;
-    @Output() yLgChange = new EventEmitter<number>();
+    @Output() yLgChange = new EventEmitter<number>(true);
 
     @Input() xXl: number;
-    @Output() xXlChange = new EventEmitter<number>();
+    @Output() xXlChange = new EventEmitter<number>(true);
     @Input() yXl: number;
-    @Output() yXlChange = new EventEmitter<number>();
+    @Output() yXlChange = new EventEmitter<number>(true);
 
 
     @Input() w: number;
-    @Output() wChange = new EventEmitter<number>();
+    @Output() wChange = new EventEmitter<number>(true);
     @Input() h: number;
-    @Output() hChange = new EventEmitter<number>();
+    @Output() hChange = new EventEmitter<number>(true);
 
-    @Output() change = new EventEmitter<any>();
-    @Output() start = new EventEmitter<any>();
-    @Output() end = new EventEmitter<any>();
+    @Output() change = new EventEmitter<any>(true);
+    @Output() start = new EventEmitter<any>(true);
+    @Output() end = new EventEmitter<any>(true);
 
     @Input() dragAndDrop = true;
     @Input() resizable = true;
@@ -253,6 +253,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
         if (this.gridster.isInitialized()) {
             this.gridster.render();
+            this.gridster.updateCachedItems();
         }
     }
 
