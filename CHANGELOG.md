@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/swiety85/angular2gridster/compare/v1.0.1...v1.1.0) (2017-12-13)
+
+
+### Bug Fixes
+
+* **demo:** fix wrong item position on prototype drop ([dde685c](https://github.com/swiety85/angular2gridster/commit/dde685c))
+* **drag:** Fix exceptions when dropping item prototype with touch devices ([8053e01](https://github.com/swiety85/angular2gridster/commit/8053e01))
+* **resize:** Fix initial bindings, when new item without data is added. ([7e0d0db](https://github.com/swiety85/angular2gridster/commit/7e0d0db)), closes [#158](https://github.com/swiety85/angular2gridster/issues/158)
+
+
+### Features
+
+* **demo:** Add "Remove all widgets" button to demo page ([aad2c09](https://github.com/swiety85/angular2gridster/commit/aad2c09))
+
+
+
 <a name="1.0.1"></a>
 # [1.0.1](https://github.com/swiety85/angular2gridster/compare/v1.0.0...v1.0.1) (2017-11-28)
 
