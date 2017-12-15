@@ -9,6 +9,7 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/publish';
+import 'rxjs/add/operator/filter';
 
 
 import { utils } from './utils/utils';
@@ -79,7 +80,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
 
 
     gridsterOptions: GridsterOptions;
-    private subscribtions: Array<Subscription> = [];
+    private subscription = new Subscription();
 
     constructor(private zone: NgZone,
                 elementRef: ElementRef, gridster: GridsterService,
@@ -96,7 +97,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
             this.$element.classList.add('css-transform');
         }
 
-        this.gridsterOptions.change
+        const changeSub = this.gridsterOptions.change
             .do((options) => {
                 this.gridster.options = options;
                 if (this.gridster.gridList) {
@@ -107,21 +108,22 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
                 this.optionsChange.emit(options);
             })
             .subscribe();
+        this.subscription.add(changeSub);
 
         this.gridster.init(this.gridster.options, this.draggableOptions, this);
 
-        Observable.fromEvent(window, 'resize')
+        const resizeSub = Observable.fromEvent(window, 'resize')
             .debounceTime(this.gridster.options.responsiveDebounce || 0)
+            .filter(() => this.gridster.options.responsiveView)
             .subscribe(() => {
-                if (this.gridster.options.responsiveView) {
-                    this.reload();
-                }
+                this.reload();
             });
+        this.subscription.add(resizeSub);
 
         this.zone.runOutsideAngular(() => {
             const scrollSub = Observable.fromEvent(document, 'scroll', true)
                 .subscribe(() => this.updateGridsterElementData());
-            this.subscribtions.push(scrollSub);
+            this.subscription.add(scrollSub);
         });
     }
 
@@ -136,9 +138,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.subscribtions.forEach((sub: Subscription) => {
-            sub.unsubscribe();
-        });
+        this.subscription.unsubscribe();
     }
 
     /**
@@ -212,7 +212,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
 
     adjustItemsHeightToContent(scrollableItemElementSelector: string = '.gridster-item-inner') {
         this.gridster.items
-        // convert each item to object with information about content height and scroll height
+            // convert each item to object with information about content height and scroll height
             .map((item: GridListItem) => {
                 const scrollEl = item.$element.querySelector(scrollableItemElementSelector);
                 const contentEl = scrollEl.lastElementChild;
@@ -237,7 +237,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         this.gridster.reflow();
     }
 
-    private getScrollPositionFromParents(element: Element, data = {scrollTop: 0, scrollLeft: 0}): {scrollTop: number, scrollLeft: number} {
+    private getScrollPositionFromParents(element: Element, data = { scrollTop: 0, scrollLeft: 0 }): { scrollTop: number, scrollLeft: number } {
 
         if (element.parentElement && element.parentElement !== document.body) {
             data.scrollTop += element.parentElement.scrollTop;
