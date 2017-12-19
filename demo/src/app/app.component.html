@@ -86,7 +86,7 @@
     <gridster [options]="gridsterOptions" [draggableOptions]="gridsterDraggableOptions" (reflow)="onReflow($event)"
               (optionsChange)="optionsChange($event)" #gridster1 class="dashboard">
 
-        <gridster-item *ngFor="let widget of widgets; let indx = index" #itemComp
+        <gridster-item *ngFor="let widget of widgets | async; let indx = index" #itemComp
                        [options]="itemOptions"
                        [dragAndDrop]="widget.dragAndDrop" [resizable]="widget.resizable"
                        [(x)]="widget.x" [(y)]="widget.y"
@@ -95,7 +95,7 @@
                        [(xLg)]="widget.xLg" [(yLg)]="widget.yLg"
                        [(xXl)]="widget.xXl" [(yXl)]="widget.yXl"
                        [(w)]="widget.w" [(h)]="widget.h"
-                       (change)="itemChange($event, gridster1)">
+                       (change)="itemChange($event, widget, gridster1)">
 
             <div class="panel-heading">
                 <h5 class="panel-title">{{ widget.title }}</h5>

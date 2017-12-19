@@ -1,4 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+import { ADD_WIDGET, REMOVE_WIDGET, UPDATE_WIDGET } from './widgets';
+
 import { GridsterComponent } from './gridster/gridster.component';
 import { IGridsterOptions } from './gridster/IGridsterOptions';
 import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions';
@@ -35,11 +39,6 @@ export class AppComponent {
         floating: true,
         dragAndDrop: true, // enable/disable drag and drop for all items in grid
         resizable: true, // enable/disable resizing by drag and drop for all items in grid
-        resizeHandles: {
-            s: true,
-            e: true,
-            se: true
-        },
         widthHeightRatio: 1, // proportion between item width and height
         shrink: true,
         useCSSTransforms: true,
@@ -81,39 +80,45 @@ export class AppComponent {
         handlerClass: 'panel-heading'
     };
     title = 'Angular2Gridster';
-    widgets: Array<any> = [
-        {
-            x: 0, y: 0,
-            w: 1, h: 2,
-            dragAndDrop: true,
-            resizable: true,
-            title: 'Basic form inputs 1'
-        },
-        {
-            x: 1, y: 0, w: 3, h: 1,
-            dragAndDrop: true,
-            resizable: true,
-            title: 'Basic form inputs 2'
-        },
-        {
-            x: 1, y: 1, w: 2, h: 1,
-            dragAndDrop: true,
-            resizable: true,
-            title: 'Basic form inputs 3'
-        },
-        {
-            x: 3, y: 1, w: 1, h: 2,
-            dragAndDrop: true,
-            resizable: true,
-            title: 'Basic form inputs 4'
-        },
-        {
-            w: 1, h: 2,
-            dragAndDrop: true,
-            resizable: true,
-            title: 'Basic form inputs x'
-        }
-    ];
+    // widgets: Array<any> = [
+    //     {
+    //         x: 0, y: 0,
+    //         w: 1, h: 2,
+    //         dragAndDrop: true,
+    //         resizable: true,
+    //         title: 'Basic form inputs 1'
+    //     },
+    //     {
+    //         x: 1, y: 0, w: 3, h: 1,
+    //         dragAndDrop: true,
+    //         resizable: true,
+    //         title: 'Basic form inputs 2'
+    //     },
+    //     {
+    //         x: 1, y: 1, w: 2, h: 1,
+    //         dragAndDrop: true,
+    //         resizable: true,
+    //         title: 'Basic form inputs 3'
+    //     },
+    //     {
+    //         x: 3, y: 1, w: 1, h: 2,
+    //         dragAndDrop: true,
+    //         resizable: true,
+    //         title: 'Basic form inputs 4'
+    //     },
+    //     {
+    //         w: 1, h: 2,
+    //         dragAndDrop: true,
+    //         resizable: true,
+    //         title: 'Basic form inputs x'
+    //     }
+    // ];
+    widgets: Observable<Array<any>>;
+
+    constructor(private store: Store<any>) {
+        this.widgets = store.select('widgets')
+            .do(console.log);
+    }
 
     onReflow(event) {
         console.log('onReflow', event);
@@ -182,7 +187,8 @@ export class AppComponent {
         widget[AppComponent.X_PROPERTY_MAP[breakpoint]] = item.x;
         widget[AppComponent.Y_PROPERTY_MAP[breakpoint]] = item.y;
 
-        this.widgets.push(widget);
+        this.store.dispatch({ type: ADD_WIDGET, payload: widget });
+        // this.widgets.push(widget);
 
         console.log('add widget from drag to:', gridster);
     }
@@ -202,7 +208,7 @@ export class AppComponent {
     }
 
     addWidgetWithoutData() {
-        this.widgets.push({
+        this.store.dispatch({ type: ADD_WIDGET, payload: {
             title: 'Basic form inputs X',
             dragAndDrop: true,
             resizable: true,
@@ -211,31 +217,18 @@ export class AppComponent {
             'commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla ' +
             'pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est ' +
             'laborum.'
-        });
-    }
-
-    addWidget(gridster: GridsterComponent) {
-        this.widgets.push({
-            x: 4, y: 0, w: 1, h: 1,
-            dragAndDrop: true,
-            resizable: true,
-            title: 'Basic form inputs 5',
-            content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
-            'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
-            'commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla ' +
-            'pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est ' +
-            'laborum.'
-        });
-        console.log('widget push', this.widgets[this.widgets.length - 1]);
+        } });
     }
 
     remove($event, index: number, gridster: GridsterComponent) {
         $event.preventDefault();
-        this.widgets.splice(index, 1);
+        // this.widgets.splice(index, 1);
+        this.store.dispatch({ type: REMOVE_WIDGET, payload: index });
         console.log('widget remove', index);
     }
 
-    itemChange($event: any, gridster) {
+    itemChange($event: any, widget) {
+        this.store.dispatch({ type: UPDATE_WIDGET, payload: widget });
         console.log('item change', $event);
     }
 }
