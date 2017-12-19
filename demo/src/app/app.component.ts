@@ -1,7 +1,7 @@
-import { Component, ViewChild } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { ADD_WIDGET, REMOVE_WIDGET, UPDATE_WIDGET } from './widgets';
+import { ADD_WIDGET, REMOVE_WIDGET, UPDATE_WIDGET, RESET } from './widgets';
 
 import { GridsterComponent } from './gridster/gridster.component';
 import { IGridsterOptions } from './gridster/IGridsterOptions';
@@ -12,7 +12,7 @@ import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions'
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     static X_PROPERTY_MAP: any = {
         sm: 'xSm',
         md: 'xMd',
@@ -117,7 +117,11 @@ export class AppComponent {
 
     constructor(private store: Store<any>) {
         this.widgets = store.select('widgets')
-            .do(console.log);
+            .do((data) => this.storeWidgets(data));
+    }
+
+    ngOnInit() {
+        this.restoreWidgets();
     }
 
     onReflow(event) {
@@ -231,8 +235,20 @@ export class AppComponent {
         this.store.dispatch({type: UPDATE_WIDGET, payload: widget});
     }
 
-    removeAllWidgets() {
-        this.widgets = [];
+    storeWidgets(data) {
+        window.localStorage
+            .setItem('widgets', JSON.stringify(data));
+    }
+
+    restoreWidgets() {
+        let widgets;
+        try {
+            widgets = JSON.parse(window.localStorage.getItem('widgets')) || [];
+        } catch (e) {
+            widgets = [];
+        }
+
+        this.store.dispatch({type: RESET, payload: widgets});
     }
 
 }
