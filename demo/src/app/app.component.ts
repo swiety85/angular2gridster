@@ -228,7 +228,11 @@ export class AppComponent {
     }
 
     itemChange($event: any, widget) {
-        this.store.dispatch({ type: UPDATE_WIDGET, payload: widget });
-        console.log('item change', $event);
+        this.store.dispatch({type: UPDATE_WIDGET, payload: widget});
     }
+
+    removeAllWidgets() {
+        this.widgets = [];
+    }
+
 }
