@@ -310,7 +310,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         this.gridster.options.dragAndDrop = true;
 
         this.gridster.items
-            .filter(item => item.itemComponent)
+            .filter(item => item.itemComponent && item.itemComponent.dragAndDrop)
             .forEach((item: GridListItem) => item.itemComponent.enableDragDrop());
     }
 
@@ -325,7 +325,9 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
     private enableResizable() {
         this.gridster.options.resizable = true;
 
-        this.gridster.items.forEach((item: GridListItem) => item.itemComponent.enableResizable());
+        this.gridster.items
+            .filter(item => item.itemComponent && item.itemComponent.resizable)
+            .forEach((item: GridListItem) => item.itemComponent.enableResizable());
     }
 
     private disableResizable() {

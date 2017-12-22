@@ -247,7 +247,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.item.applySize();
         this.item.applyPosition();
 
-        if (this.dragAndDrop) {
+        if (this.gridster.options.dragAndDrop && this.dragAndDrop) {
             this.enableDragDrop();
         }
 
@@ -276,7 +276,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             }
         }
         if (changes['resizable'] && !changes['resizable'].isFirstChange()) {
-            if (changes['resizable'].currentValue) {
+            if (changes['resizable'].currentValue && this.gridster.options.resizable) {
                 this.enableResizable();
             } else {
                 this.disableResizable();
@@ -333,7 +333,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     }
 
     public enableResizable() {
-        if (this.resizeSubscriptions.length || !this.resizable) {
+        if (this.resizeSubscriptions.length) {
             return;
         }
 
