@@ -3,6 +3,7 @@ node_modules
 /examples
 /index.html
 /demos/**/dist
+/demo/src/app/gridster
 old-RC4/demos/tmp
 old-RC4/demos/**/dist
 old-RC4/**/typings

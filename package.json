@@ -14,7 +14,8 @@
     "prepublishOnly": "npm run build",
     "e2e": "cypress run",
     "e2e:ci": "cypress run --record --key 9344bee0-1946-44dc-b165-4b012465a93e",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "copy:gridster": "mkdirp demo/src/app/gridster && cpx \"src/**/*\" demo/src/app/gridster"
   },
   "repository": {
     "type": "git",
@@ -47,7 +48,9 @@
     "@angular/language-service": "^4.2.6",
     "@types/node": "~6.0.60",
     "codelyzer": "^3.0.1",
+    "cpx": "^1.5.0",
     "cypress": "^1.4.0",
+    "mkdirp": "^0.5.1",
     "reflect-metadata": "~0.1.9",
     "rxjs": "^5.1.0",
     "standard-version": "^4.2.0",
