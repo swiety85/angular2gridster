@@ -13,8 +13,7 @@
     "release-fix": "standard-version -- -r patch",
     "prepublishOnly": "npm run build",
     "e2e": "cypress run",
-    "e2e:chrome": "cypress run --browser chrome",
-    "e2e:record": "cypress run --record",
+    "e2e:ci": "cypress run --record --key 9344bee0-1946-44dc-b165-4b012465a93e",
     "cypress:open": "cypress open"
   },
   "repository": {
