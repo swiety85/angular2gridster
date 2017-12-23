@@ -7,12 +7,15 @@
     "install-demo": "npm install --prefix ./demo",
     "serve-demo": "npm start --prefix ./demo",
     "lint": "tslint src/**/*.ts",
-    "test": "karma start",
     "build": "echo 'Building...' && ./node_modules/.bin/ngc -p tsconfig.json",
     "release-major": "standard-version -- -r major",
     "release-minor": "standard-version -- -r minor",
     "release-fix": "standard-version -- -r patch",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "e2e": "cypress run",
+    "e2e:chrome": "cypress run --browser chrome",
+    "e2e:record": "cypress run --record",
+    "cypress:open": "cypress open"
   },
   "repository": {
     "type": "git",
@@ -45,6 +48,7 @@
     "@angular/language-service": "^4.2.6",
     "@types/node": "~6.0.60",
     "codelyzer": "^3.0.1",
+    "cypress": "^1.4.0",
     "reflect-metadata": "~0.1.9",
     "rxjs": "^5.1.0",
     "standard-version": "^4.2.0",
