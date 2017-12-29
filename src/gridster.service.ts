@@ -106,6 +106,7 @@ export class GridsterService {
         this.gridList.generateGrid();
         this.applySizeToItems();
         this.applyPositionToItems();
+        this.refreshLines();
     }
 
     reflow () {
@@ -158,6 +159,7 @@ export class GridsterService {
 
             // Visually update item positions and highlight shape
             this.applyPositionToItems(true);
+            this.refreshLines();
             this.highlightPositionForItem(item);
         }
     }
@@ -169,10 +171,11 @@ export class GridsterService {
 
         this.removePositionHighlight();
 
+        this.gridsterComponent.isResizing = false;
+
         this.gridList.pullItemsToLeft();
         this.render();
 
-        this.gridsterComponent.isResizing = false;
 
         this.fixItemsPositions();
     }
@@ -216,6 +219,7 @@ export class GridsterService {
 
             // Visually update item positions and highlight shape
             this.applyPositionToItems(true);
+            this.refreshLines();
             this.highlightPositionForItem(item);
         }
     }
@@ -379,6 +383,28 @@ export class GridsterService {
             const increaseHeightWith = (increaseGridsterSize) ? this.maxItemHeight : 0;
             child.style.height = ((this.gridList.grid.length + increaseHeightWith) * this.cellHeight) + 'px';
             child.style.width = '';
+        }
+    }
+
+    private refreshLines () {
+        const gridsterContainer = <HTMLElement>this.gridsterComponent.$element.firstChild;
+
+        if (this.options.lines && this.options.lines.visible &&
+            (this.gridsterComponent.isDragging || this.gridsterComponent.isResizing)) {
+            const linesColor = this.options.lines.color || '#d8d8d8';
+            const linesWidth = this.options.lines.width || 1;
+            const bgPosition = linesWidth / 2;
+
+            gridsterContainer.style.backgroundSize = `${this.cellWidth}px ${this.cellHeight}px`;
+            gridsterContainer.style.backgroundPosition = `-${bgPosition}px -${bgPosition}px`;
+            gridsterContainer.style.backgroundImage = `
+                linear-gradient(to right, ${linesColor} ${linesWidth}px, transparent ${linesWidth}px),
+                linear-gradient(to bottom, ${linesColor} ${linesWidth}px, transparent ${linesWidth}px)
+            `;
+        } else {
+            gridsterContainer.style.backgroundSize = '';
+            gridsterContainer.style.backgroundPosition = '';
+            gridsterContainer.style.backgroundImage = '';
         }
     }
 
