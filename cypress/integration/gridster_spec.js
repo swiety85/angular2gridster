@@ -1,35 +1,33 @@
 describe('Gridster', function () {
+    var girdsterConfig = {
+        dragHandler: '.panel-heading',
+        lanes: 4
+    };
+
     beforeEach(function () {
+        cy.viewport(1000, 600);
         cy.visit('http://localhost:4200/');
     });
 
-    it('should exist', function () {
-
-        // https://on.cypress.io/should
-        // https://on.cypress.io/and
-
-        cy.get('gridster').should('exist');
-    });
-
-    it('should contain 5 items', function () {
-        cy.get('gridster').find('gridster-item').should('have.length', 5);
-    });
-
-    it('should drag item', function () {
+    it('should make space for dragged item', function () {
         cy
-            .wait(500)
-            .get('gridster-item:eq(0)')
-            .find('.panel-heading')
-            .trigger('mousedown')
-            // .trigger('mousemove', {clientX: 1, clientY: 1})
-            .trigger('mousemove', {clientX: 50, clientY: 50})
-            .trigger('mousemove', {clientX: 350, clientY: 130})
-            .trigger('mousemove', {clientX: 351, clientY: 131})
-            .trigger('mouseup')
-            .should(function (response) {
-                expect(response.parent().parent())
-                    .to.have.css('transform', 'matrix(1, 0, 0, 1, 250, 0)');
-            });
+            .get('gridster')
+            .moveGridsterItem(0, [1, 0], girdsterConfig);
+
+        cy.get('gridster gridster-item').eq(0)
+            .should('to.have.css', 'transform', 'matrix(1, 0, 0, 1, 250, 0)');
+
+        cy.get('gridster gridster-item').eq(1)
+            .should('to.have.css', 'transform', 'matrix(1, 0, 0, 1, 250, 500)');
+
+        cy.get('gridster gridster-item').eq(2)
+            .should('to.have.css', 'transform', 'matrix(1, 0, 0, 1, 250, 750)');
+
+        cy.get('gridster gridster-item').eq(3)
+            .should('to.have.css', 'transform', 'matrix(1, 0, 0, 1, 750, 750)');
+
+        cy.get('gridster gridster-item').eq(4)
+            .should('to.have.css', 'transform', 'matrix(1, 0, 0, 1, 0, 0)');
     });
 
 
