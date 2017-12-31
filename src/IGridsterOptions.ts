@@ -20,6 +20,11 @@ export interface IGridsterOptions {
     floating?: boolean;
     responsiveView?: boolean;
     responsiveDebounce?: number;
+    lines?: {
+        visible?: boolean,
+        color?: string,
+        width?: number
+    };
     breakpoint?: string;
     minWidth?: number;
     useCSSTransforms?: boolean;

@@ -41,6 +41,11 @@ export class AppComponent {
             se: true
         },
         widthHeightRatio: 1, // proportion between item width and height
+        lines: {
+          visible: true,
+          color: '#afafaf',
+          width: 2
+        },
         shrink: true,
         useCSSTransforms: true,
         responsiveView: true, // turn on adopting items sizes on window resize and enable responsiveOptions
