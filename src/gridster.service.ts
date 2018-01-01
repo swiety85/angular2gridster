@@ -525,7 +525,7 @@ export class GridsterService {
 
     private triggerOnChange (breakpoint?) {
         const items = breakpoint ? this._itemsMap[breakpoint] : this._items;
-        const changeItems = this.gridList.getChangedItems(items, breakpoint);
+        const changeItems = this.gridList.getChangedItems(items || [], breakpoint);
 
         changeItems
             .filter((itemChange: any) => {
