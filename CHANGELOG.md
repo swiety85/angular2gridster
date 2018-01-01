@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.2.0"></a>
+# [1.2.0](https://github.com/swiety85/angular2gridster/compare/v1.1.0...v1.2.0) (2018-01-01)
+
+
+### Bug Fixes
+
+* **config:** correct applying dragAndDrop and resizable options on init ([acfbd58](https://github.com/swiety85/angular2gridster/commit/acfbd58)), closes [#163](https://github.com/swiety85/angular2gridster/issues/163)
+* **gridster:** add missing unsubscribe ([6083508](https://github.com/swiety85/angular2gridster/commit/6083508))
+* error when lazy loading widgets ([611e56f](https://github.com/swiety85/angular2gridster/commit/611e56f)), closes [#165](https://github.com/swiety85/angular2gridster/issues/165)
+* Fix lint errors and extend lint script ([f61d42a](https://github.com/swiety85/angular2gridster/commit/f61d42a))
+
+
+### Features
+
+* display grid lines on drag and resize ([d9440bb](https://github.com/swiety85/angular2gridster/commit/d9440bb))
+
+
+
 <a name="1.1.0"></a>
 # [1.1.0](https://github.com/swiety85/angular2gridster/compare/v1.0.1...v1.1.0) (2017-12-13)
 
