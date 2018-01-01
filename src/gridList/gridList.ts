@@ -241,7 +241,7 @@ export class GridList {
 
         return this.items.map((item: GridListItem) => {
                 const changes = [];
-                const initItem = initialItems.find(initItem => initItem.$element === item.$element);
+                const initItem = initialItems.find(initItm => initItm.$element === item.$element);
 
                 if (!initItem) {
                     return { item, changes: ['x', 'y', 'w', 'h'], isNew: true };

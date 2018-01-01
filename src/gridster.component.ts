@@ -237,7 +237,8 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         this.gridster.reflow();
     }
 
-    private getScrollPositionFromParents(element: Element, data = { scrollTop: 0, scrollLeft: 0 }): { scrollTop: number, scrollLeft: number } {
+    private getScrollPositionFromParents(element: Element, data = { scrollTop: 0, scrollLeft: 0 })
+        : { scrollTop: number, scrollLeft: number } {
 
         if (element.parentElement && element.parentElement !== document.body) {
             data.scrollTop += element.parentElement.scrollTop;
