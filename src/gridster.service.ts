@@ -392,14 +392,15 @@ export class GridsterService {
         if (this.options.lines && this.options.lines.visible &&
             (this.gridsterComponent.isDragging || this.gridsterComponent.isResizing)) {
             const linesColor = this.options.lines.color || '#d8d8d8';
+            const linesBgColor = this.options.lines.backgroundColor || 'transparent';
             const linesWidth = this.options.lines.width || 1;
             const bgPosition = linesWidth / 2;
 
             gridsterContainer.style.backgroundSize = `${this.cellWidth}px ${this.cellHeight}px`;
             gridsterContainer.style.backgroundPosition = `-${bgPosition}px -${bgPosition}px`;
             gridsterContainer.style.backgroundImage = `
-                linear-gradient(to right, ${linesColor} ${linesWidth}px, transparent ${linesWidth}px),
-                linear-gradient(to bottom, ${linesColor} ${linesWidth}px, transparent ${linesWidth}px)
+                linear-gradient(to right, ${linesColor} ${linesWidth}px, ${linesBgColor} ${linesWidth}px),
+                linear-gradient(to bottom, ${linesColor} ${linesWidth}px, ${linesBgColor} ${linesWidth}px)
             `;
         } else {
             gridsterContainer.style.backgroundSize = '';

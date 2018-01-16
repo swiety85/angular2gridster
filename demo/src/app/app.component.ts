@@ -44,6 +44,7 @@ export class AppComponent {
         lines: {
           visible: true,
           color: '#afafaf',
+          backgroundColor: 'rgba(0, 0, 0, 0.15)',
           width: 2
         },
         shrink: true,
