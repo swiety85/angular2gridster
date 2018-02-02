@@ -8,7 +8,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
-* Update demo with info about coords with responsiveOptions set ([b8f2227](https://github.com/swiety85/angular2gridster/commit/b8f2227))
+* Define _items initially ([400c4b9](https://github.com/swiety85/angular2gridster/commit/400c4b9)), closes [#187](https://github.com/swiety85/angular2gridster/issues/187)
+* Update readme.md with info about coords with responsiveOptions set ([b8f2227](https://github.com/swiety85/angular2gridster/commit/b8f2227))
 
 
 
