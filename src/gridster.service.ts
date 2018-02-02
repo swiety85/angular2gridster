@@ -16,7 +16,7 @@ export class GridsterService {
     gridList: GridList;
 
     items: Array<GridListItem> = [];
-    _items: Array<GridListItem>;
+    _items: Array<GridListItem> = [];
     _itemsMap: {[breakpoint: string]: Array<GridListItem>} = {};
     disabledItems: Array<GridListItem> = [];
 
