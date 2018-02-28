@@ -6,6 +6,7 @@
   "scripts": {
     "install-demo": "npm install --prefix ./demo",
     "serve-demo": "npm start --prefix ./demo",
+    "start": "npm start --prefix ./demo",
     "lint": "tslint src/**/*.ts && npm run lint --prefix ./demo",
     "test": "karma start",
     "build": "echo 'Building...' && ./node_modules/.bin/ngc -p tsconfig.json",
