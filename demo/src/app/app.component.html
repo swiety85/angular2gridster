@@ -12,6 +12,11 @@
         <button (click)="removeAllWidgets()">
             Remove all widgets
         </button>
+
+        <button (click)="resetWidgets()">
+            Reset widgets
+        </button>
+
         <br>
         <label for="ratio">Ratio</label><input type="number" id="ratio" [(ngModel)]="gridsterOptions.widthHeightRatio" min="0.1"
                                                (change)="gridster.setOption('widthHeightRatio', gridsterOptions.widthHeightRatio).reload()">
