@@ -23,6 +23,7 @@ export interface IGridsterOptions {
     lines?: {
         visible?: boolean,
         color?: string,
+        backgroundColor?: string;
         width?: number
     };
     breakpoint?: string;
