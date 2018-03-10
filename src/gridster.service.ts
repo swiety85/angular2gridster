@@ -399,7 +399,7 @@ export class GridsterService {
 
     private refreshLines() {
         const gridsterContainer = <HTMLElement>this.gridsterComponent.$element.firstChild;
-        console.log('refresh');
+
         if (this.options.lines && this.options.lines.visible &&
             (this.gridsterComponent.isDragging || this.gridsterComponent.isResizing)) {
             const linesColor = this.options.lines.color || '#d8d8d8';

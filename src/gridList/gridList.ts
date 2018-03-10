@@ -470,7 +470,7 @@ export class GridList {
         }
         const rowBelowItem = this.grid[position.x - 1];
 
-        return rowBelowItem
+        return (rowBelowItem || [])
             .slice(position.y, position.y + position.h)
             .reduce((isFloating, cellItem) => {
                 return isFloating && !!cellItem;
