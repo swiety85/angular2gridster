@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.0"></a>
+# [1.3.0](https://github.com/swiety85/angular2gridster/compare/v1.2.1...v1.3.0) (2018-03-10)
+
+
+### Bug Fixes
+
+* **deeps:** Add missing RxJs dependencies ([f675e66](https://github.com/swiety85/angular2gridster/commit/f675e66))
+* Hide grid lines on item drag out ([49294c2](https://github.com/swiety85/angular2gridster/commit/49294c2)), closes [#173](https://github.com/swiety85/angular2gridster/issues/173)
+* **drag:** Fix overlapping in different breakpoints after item resize with floating on false ([09b7e94](https://github.com/swiety85/angular2gridster/commit/09b7e94)), closes [#194](https://github.com/swiety85/angular2gridster/issues/194)
+* **drag:** Fix overlapping in different breakpoints after item resize with floating on false ([0258d5d](https://github.com/swiety85/angular2gridster/commit/0258d5d))
+* **drag:** Prevent moving item to negative position ([0265244](https://github.com/swiety85/angular2gridster/commit/0265244)), closes [#174](https://github.com/swiety85/angular2gridster/issues/174)
+* **drag:** Solve problem with dropping items in single lane ([624a9fe](https://github.com/swiety85/angular2gridster/commit/624a9fe)), closes [#183](https://github.com/swiety85/angular2gridster/issues/183)
+
+
+### Features
+
+* **demo:** Add reset widgets button ([0338921](https://github.com/swiety85/angular2gridster/commit/0338921))
+
+
+
 <a name="1.2.1"></a>
 ## [1.2.1](https://github.com/swiety85/angular2gridster/compare/v1.2.0...v1.2.1) (2018-02-02)
 
