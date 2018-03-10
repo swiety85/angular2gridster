@@ -414,6 +414,7 @@ export class GridList {
             gridList.markItemPositionToGrid(itemCopy);
         });
 
+        gridList.pullItemsToLeft();
         gridList.pushCollidingItems();
 
         this.items.forEach((itm: GridListItem) => {
