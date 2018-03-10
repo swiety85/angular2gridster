@@ -330,7 +330,7 @@ export class GridList {
             // The fixed item keeps its exact position
             if (fixedItem && item === fixedItem ||
                 !item.dragAndDrop ||
-                (!this.options.floating && !this.isItemFloating(item))) {
+                (!this.options.floating && this.isItemFloating(item))) {
                 continue;
             }
 
