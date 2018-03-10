@@ -575,7 +575,7 @@ export class GridList {
         }
 
         // Make sure the item isn't larger than the entire grid
-        if (newPosition[1] + position.h > this.options.lanes) {
+        if (newPosition[1] + Math.min(position.h, this.options.lanes) > this.options.lanes) {
             return false;
         }
 
