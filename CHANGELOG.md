@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file. See [standa
 ### Features
 
 * **demo:** Add reset widgets button ([0338921](https://github.com/swiety85/angular2gridster/commit/0338921))
+* Add new option `gristerOptions.lines.backgroundColor`
 
 
 
