@@ -7,7 +7,7 @@ import { IGridsterOptions } from './IGridsterOptions';
 import { IGridsterDraggableOptions } from './IGridsterDraggableOptions';
 import { GridListItem } from './gridList/GridListItem';
 import { GridsterComponent } from './gridster.component';
-import {GridsterOptions} from './GridsterOptions';
+import { GridsterOptions } from './GridsterOptions';
 
 @Injectable()
 export class GridsterService {
@@ -468,10 +468,10 @@ export class GridsterService {
 
         if (this.options.direction === 'horizontal') {
             col = Math.min(col, this._maxGridCols);
-            row = Math.min(row, this.options.lanes - item.h);
+            row = Math.min(row, Math.max(0, this.options.lanes - item.h));
 
         } else {
-            col = Math.min(col, this.options.lanes - item.w);
+            col = Math.min(col, Math.max(0, this.options.lanes - item.w));
             row = Math.min(row, this._maxGridCols);
         }
 
