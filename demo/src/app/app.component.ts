@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { GridsterComponent } from './gridster/gridster.component';
 import { IGridsterOptions } from './gridster/IGridsterOptions';
 import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions';
@@ -8,7 +8,7 @@ import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions'
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     static X_PROPERTY_MAP: any = {
         sm: 'xSm',
         md: 'xMd',
@@ -87,6 +87,7 @@ export class AppComponent {
         handlerClass: 'panel-heading'
     };
     title = 'Angular2Gridster';
+    widgetsCopy = [];
     widgets: Array<any> = [
         {
             x: 0, y: 0,
@@ -120,6 +121,10 @@ export class AppComponent {
             title: 'Basic form inputs x'
         }
     ];
+
+    ngOnInit() {
+        this.widgetsCopy = this.widgets.map(widget => ({...widget}));
+    }
 
     onReflow(event) {
         console.log('onReflow', event);
@@ -247,5 +252,9 @@ export class AppComponent {
 
     itemChange($event: any, gridster) {
         console.log('item change', $event);
+    }
+
+    resetWidgets() {
+        this.widgets = this.widgetsCopy.map(widget => ({...widget}));
     }
 }
