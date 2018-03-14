@@ -43,7 +43,6 @@
     </div>
     <div class="widgetbar">
         <div gridsterItemPrototype [config]="{helper: true}" [w]="1" [h]="1"
-             (drop)="addWidgetFromDrag(gridster, $event)"
              (enter)="over($event)"
              (out)="out($event)"
              class="gridster-item-prototype">
@@ -57,7 +56,6 @@
         </div>
 
         <div gridsterItemPrototype [config]="{helper: true}" [w]="1" [h]="2"
-             (drop)="addWidgetFromDrag(gridster, $event)"
              (enter)="over($event)"
              (out)="out($event)"
              class="gridster-item-prototype">
@@ -71,7 +69,6 @@
         </div>
 
         <div gridsterItemPrototype [config]="{helper: false}" [w]="2" [h]="1"
-             (drop)="addWidgetFromDrag(gridster, $event)"
              (enter)="over($event)"
              (out)="out($event)"
              class="gridster-item-prototype">
@@ -88,9 +85,11 @@
 <div class="main-content">
 
     <gridster [options]="gridsterOptions" [draggableOptions]="gridsterDraggableOptions" (reflow)="onReflow($event)"
-              (optionsChange)="optionsChange($event)" #gridster1 class="dashboard">
+              (optionsChange)="optionsChange($event)"
+              (prototypeDrop)="addWidgetToList($event, widgets, gridster1)"
+              #gridster1 class="dashboard" id="parent">
 
-        <gridster-item *ngFor="let widget of widgets; let indx = index" #itemComp
+        <gridster-item *ngFor="let widget of widgets; let parentIdx = index" #itemComp
                        [options]="itemOptions"
                        [dragAndDrop]="widget.dragAndDrop" [resizable]="widget.resizable"
                        [(x)]="widget.x" [(y)]="widget.y"
@@ -106,27 +105,54 @@
             </div>
 
             <div class="panel-body">
-                <app-test></app-test>
-                <p>
-                    <label>
-                        <input type="checkbox" [(ngModel)]="widget.dragAndDrop" value="true"> Draggable
-                    </label>
-                    <label>
-                        <input type="checkbox" [(ngModel)]="widget.resizable" value="true"> Resizable
-                    </label>
-                    <button (click)="setWidth(widget, widget.w+1, $event, gridster1)">width +</button>
-                    <button (click)="setWidth(widget, widget.w-1, $event, gridster1)">width -</button>
-                    <button (click)="setHeight(widget, widget.h+1, $event, gridster1)">height +</button>
-                    <button (click)="setHeight(widget, widget.h-1, $event, gridster1)">height -</button>
-                </p>
-                <p>
-                    <button (click)="remove($event, indx,gridster1)">remove</button>
-                </p>
-                <p>
-                    Position: {{itemComp?.item?.x}} x {{itemComp?.item?.y}}<br>
-                    Size: {{widget.w}} x {{widget.h}}
-                </p>
-                <pre>{{ widget | json }}</pre>
+                <gridster [options]="gridsterOptions" [draggableOptions]="gridsterDraggableOptions" (reflow)="onReflow($event)"
+                          (optionsChange)="optionsChange($event)"
+                          (prototypeDrop)="addWidgetToList($event, innerWidgets[parentIdx], gridsterChild)"
+                          [parent]="gridster1" #gridsterChild class="dashboard">
+
+                    <gridster-item *ngFor="let widget of innerWidgets[parentIdx]; let indx = index" #itemComp
+                                   [options]="itemOptions"
+                                   [dragAndDrop]="widget.dragAndDrop" [resizable]="widget.resizable"
+                                   [(x)]="widget.x" [(y)]="widget.y"
+                                   [(xSm)]="widget.xSm" [(ySm)]="widget.ySm"
+                                   [(xMd)]="widget.xMd" [(yMd)]="widget.yMd"
+                                   [(xLg)]="widget.xLg" [(yLg)]="widget.yLg"
+                                   [(xXl)]="widget.xXl" [(yXl)]="widget.yXl"
+                                   [(w)]="widget.w" [(h)]="widget.h"
+                                   (change)="itemChange($event, gridsterChild)">
+
+                        <div class="panel-heading">
+                            <h5 class="panel-title">{{ widget.title }}</h5>
+                        </div>
+
+                        <div class="panel-body">
+                            <app-test></app-test>
+                            <p>
+                                <label>
+                                    <input type="checkbox" [(ngModel)]="widget.dragAndDrop" value="true"> Draggable
+                                </label>
+                                <label>
+                                    <input type="checkbox" [(ngModel)]="widget.resizable" value="true"> Resizable
+                                </label>
+                                <button (click)="setWidth(widget, widget.w+1, $event, gridsterChild)">width +</button>
+                                <button (click)="setWidth(widget, widget.w-1, $event, gridsterChild)">width -</button>
+                                <button (click)="setHeight(widget, widget.h+1, $event, gridsterChild)">height +</button>
+                                <button (click)="setHeight(widget, widget.h-1, $event, gridsterChild)">height -</button>
+                            </p>
+                            <p>
+                                <button (click)="remove($event, indx, gridsterChild)">remove</button>
+                            </p>
+                            <p>
+                                Position: {{itemComp?.item?.x}} x {{itemComp?.item?.y}}<br>
+                                Size: {{widget.w}} x {{widget.h}}
+                            </p>
+                            <pre>{{ widget | json }}</pre>
+
+                        </div>
+
+                    </gridster-item>
+
+                </gridster>
 
             </div>
 

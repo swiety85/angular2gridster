@@ -32,7 +32,7 @@ export class AppComponent {
         // core configuration is default one - for smallest view. It has hidden minWidth: 0.
         lanes: 2, // amount of lanes (cells) in the grid
         direction: 'vertical', // floating top - vertical, left - horizontal
-        floating: true,
+        floating: false,
         dragAndDrop: true, // enable/disable drag and drop for all items in grid
         resizable: true, // enable/disable resizing by drag and drop for all items in grid
         resizeHandles: {
@@ -86,37 +86,40 @@ export class AppComponent {
         handlerClass: 'panel-heading'
     };
     title = 'Angular2Gridster';
+    innerWidgets: Array<any> = [
+        [
+            {
+                x: 0, y: 0,
+                w: 4, h: 3,
+                dragAndDrop: true,
+                resizable: true,
+                title: 'Basic form inputs 1'
+            }
+        ],
+        [
+            {
+                x: 0, y: 0,
+                w: 4, h: 3,
+                dragAndDrop: true,
+                resizable: true,
+                title: 'Basic form inputs 1'
+            }
+        ]
+    ];
     widgets: Array<any> = [
         {
             x: 0, y: 0,
-            w: 1, h: 2,
+            w: 3, h: 2,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 1'
         },
         {
-            x: 1, y: 0, w: 3, h: 1,
+            x: 5, y: 0,
+            w: 2, h: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 2'
-        },
-        {
-            x: 1, y: 1, w: 2, h: 1,
-            dragAndDrop: true,
-            resizable: true,
-            title: 'Basic form inputs 3'
-        },
-        {
-            x: 3, y: 1, w: 1, h: 2,
-            dragAndDrop: true,
-            resizable: true,
-            title: 'Basic form inputs 4'
-        },
-        {
-            w: 1, h: 2,
-            dragAndDrop: true,
-            resizable: true,
-            title: 'Basic form inputs x'
         }
     ];
 
@@ -190,6 +193,22 @@ export class AppComponent {
         this.widgets.push(widget);
 
         console.log('add widget from drag to:', gridster);
+    }
+
+    addWidgetToList(event, list, gridster) {
+        const item = event.item;
+        const breakpoint = gridster.options.breakpoint;
+        const widget = {
+            w: item.w, h: item.h,
+            dragAndDrop: true,
+            resizable: true,
+            title: 'New widget'
+        };
+
+        widget[AppComponent.X_PROPERTY_MAP[breakpoint]] = item.x;
+        widget[AppComponent.Y_PROPERTY_MAP[breakpoint]] = item.y;
+
+        list.push(widget);
     }
 
     over(event) {

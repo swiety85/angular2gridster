@@ -323,8 +323,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     }
 
     setPositionsOnItem() {
-        if (!this.item.hasPositions(null)) {
-            this.setPositionsForGrid(this.gridster.gridsterOptions.basicOptions);
+        if (!this.item.hasPositions(this.gridster.options.breakpoint)) {
+            this.setPositionsForGrid(this.gridster.options.breakpoint);
         }
 
         this.gridster.gridsterOptions.responsiveOptions

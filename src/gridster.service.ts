@@ -74,7 +74,6 @@ export class GridsterService {
     }
 
     start () {
-
         this.updateMaxItemSize();
 
         // Used to highlight a position an element will land on upon drop
@@ -195,6 +194,7 @@ export class GridsterService {
 
         this.gridsterComponent.isDragging = true;
         this.gridsterComponent.updateGridsterElementData();
+        console.log('onStart', this.gridsterComponent.$element.getAttribute('id'));
     }
 
     onDrag (item: GridListItem) {
@@ -224,17 +224,23 @@ export class GridsterService {
         }
     }
 
-    onDragOut (item: GridListItem) {
-
+    cancel() {
         this.restoreCachedItems();
         this.previousDragPosition = null;
         this.updateMaxItemSize();
         this.applyPositionToItems();
         this.removePositionHighlight();
         this.currentElement = undefined;
+    }
+
+    onDragOut (item: GridListItem) {
+
+        this.cancel();
 
         const idx = this.items.indexOf(item);
-        this.items.splice(idx, 1);
+        if (idx >= 0) {
+            this.items.splice(idx, 1);
+        }
 
         this.gridList.pullItemsToLeft();
         this.render();
@@ -250,6 +256,8 @@ export class GridsterService {
         this.gridList.pullItemsToLeft();
 
         this.gridsterComponent.isDragging = false;
+
+        console.log('onStop', this.gridsterComponent.$element.getAttribute('id'));
     }
 
     private removeItemFromCache(item: GridListItem) {
