@@ -108,6 +108,18 @@ gridsterOptions = {
 };
 ```
 
+**Warning**
+
+If you use `responsiveOptions`, then coords should be assigned to specific breakpoint attributes:
+
+- till `sm` (480px), it uses `x` and `y` attributes
+- `sm` (480px - 768px), it uses `xSm` and `ySm` attributes
+- `md` (768px - 1250px), it uses `xMd` and `yMd` attributes
+- `lg` (1250px - 1800px), it uses `xLg` and `yLg` attributes
+- from `xl` (1800px), it uses `xXl` and `yXl` attributes
+
+(widths in px are only example and works for `responsiveOptions in example above).
+
 ## Demo
 
 Clone or download this repository. Demo folder is dedicated nester project build on Angular CLI. To run:

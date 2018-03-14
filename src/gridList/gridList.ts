@@ -146,7 +146,7 @@ export class GridList {
      *
      * @returns {Array} x and y.
      */
-    findPositionForItem(item: GridListItem, start: {x: number, y: number}, fixedRow?: number): Array<number> {
+    findPositionForItem(item: GridListItem, start: { x: number, y: number }, fixedRow?: number): Array<number> {
         let x, y, position;
 
         // Start searching for a position from the horizontal position of the
@@ -181,7 +181,7 @@ export class GridList {
         return [newCol, newRow];
     }
 
-    moveAndResize(item: GridListItem, newPosition: Array<number>, size: {w: number, h: number}) {
+    moveAndResize(item: GridListItem, newPosition: Array<number>, size: { w: number, h: number }) {
         const position = this.getItemPosition({
             x: newPosition[0],
             y: newPosition[1],
@@ -218,7 +218,7 @@ export class GridList {
      * @param {number} [size.w=item.w] The new width.
      * @param {number} [size.h=item.h] The new height.
      */
-    resizeItem(item: GridListItem, size: {w: number, h: number}) {
+    resizeItem(item: GridListItem, size: { w: number, h: number }) {
         const width = size.w || item.w,
             height = size.h || item.h;
 
@@ -240,29 +240,29 @@ export class GridList {
     }> {
 
         return this.items.map((item: GridListItem) => {
-                const changes = [];
-                const initItem = initialItems.find(initItm => initItm.$element === item.$element);
+            const changes = [];
+            const initItem = initialItems.find(initItm => initItm.$element === item.$element);
 
-                if (!initItem) {
-                    return { item, changes: ['x', 'y', 'w', 'h'], isNew: true };
-                }
+            if (!initItem) {
+                return {item, changes: ['x', 'y', 'w', 'h'], isNew: true};
+            }
 
-                if (item.getValueX(breakpoint) !== initItem.getValueX(breakpoint)) {
-                    changes.push('x');
-                }
-                if (item.getValueY(breakpoint) !== initItem.getValueY(breakpoint)) {
-                    changes.push('y');
-                }
-                if (item.w !== initItem.w) {
-                    changes.push('w');
-                }
-                if (item.h !== initItem.h) {
-                    changes.push('h');
-                }
+            if (item.getValueX(breakpoint) !== initItem.getValueX(breakpoint)) {
+                changes.push('x');
+            }
+            if (item.getValueY(breakpoint) !== initItem.getValueY(breakpoint)) {
+                changes.push('y');
+            }
+            if (item.w !== initItem.w) {
+                changes.push('w');
+            }
+            if (item.h !== initItem.h) {
+                changes.push('h');
+            }
 
-                return { item, changes, isNew: false };
-            })
-            .filter((itemChange: {item: GridListItem, changes: Array<string>}) => {
+            return {item, changes, isNew: false};
+        })
+            .filter((itemChange: { item: GridListItem, changes: Array<string> }) => {
                 return itemChange.changes.length;
             });
     }
@@ -272,6 +272,21 @@ export class GridList {
             this.pullItemsToLeft(item);
         }
         this.pullItemsToLeft();
+    }
+
+    pushCollidingItems() {
+        // Start a fresh grid with the fixed item already placed inside
+        this.sortItemsByPosition();
+        this.resetGrid();
+        this.generateGrid();
+
+        this.items
+            .filter((item) => !this.isItemFloating(item))
+            .forEach((item) => {
+                if (!this.tryToResolveCollisionsLocally(item)) {
+                    this.pullItemsToLeft(item);
+                }
+            });
     }
 
     /**
@@ -284,7 +299,7 @@ export class GridList {
      */
     pullItemsToLeft(fixedItem?) {
         if (this.options.direction === 'none') {
-            return ;
+            return;
         }
 
         // Start a fresh grid with the fixed item already placed inside
@@ -296,7 +311,7 @@ export class GridList {
             const fixedPosition = this.getItemPosition(fixedItem);
             this.updateItemPosition(fixedItem, [fixedPosition.x, fixedPosition.y]);
         } else if (!this.options.floating) {
-            return ;
+            return;
         }
 
         this.items
@@ -313,7 +328,9 @@ export class GridList {
                 position = this.getItemPosition(item);
 
             // The fixed item keeps its exact position
-            if (fixedItem && item === fixedItem || !item.dragAndDrop) {
+            if (fixedItem && item === fixedItem ||
+                !item.dragAndDrop ||
+                (!this.options.floating && this.isItemFloating(item))) {
                 continue;
             }
 
@@ -343,7 +360,7 @@ export class GridList {
         return false;
     }
 
-    checkItemAboveEmptyArea(item: GridListItem, newPosition: {x: number, y: number}) {
+    checkItemAboveEmptyArea(item: GridListItem, newPosition: { x: number, y: number }) {
         let itemData = {
             x: newPosition.x,
             y: newPosition.y,
@@ -398,6 +415,7 @@ export class GridList {
         });
 
         gridList.pullItemsToLeft();
+        gridList.pushCollidingItems();
 
         this.items.forEach((itm: GridListItem) => {
             const cachedItem = gridList.items.filter(cachedItm => {
@@ -412,7 +430,7 @@ export class GridList {
         });
     }
 
-    public findDefaultPosition(width: number, height: number) {
+    findDefaultPosition(width: number, height: number) {
 
         if (this.options.direction === 'horizontal') {
             return this.findDefaultPositionHorizontal(width, height);
@@ -444,6 +462,21 @@ export class GridList {
         }
     }
 
+    private isItemFloating(item) {
+        const position = this.getItemPosition(item);
+
+        if (position.x === 0) {
+            return false;
+        }
+        const rowBelowItem = this.grid[position.x - 1];
+
+        return (rowBelowItem || [])
+            .slice(position.y, position.y + position.h)
+            .reduce((isFloating, cellItem) => {
+                return isFloating && !!cellItem;
+            }, true);
+    }
+
     private isItemValidForGrid(item: GridListItem, options: IGridsterOptions) {
         const itemData = options.direction === 'horizontal' ? {
             x: item.getValueY(options.breakpoint),
@@ -473,7 +506,7 @@ export class GridList {
                 rowIdx++;
             }
         }
-        return [ this.grid.length, 0 ];
+        return [this.grid.length, 0];
     }
 
     private findDefaultPositionVertical(width: number, height: number) {
@@ -488,7 +521,7 @@ export class GridList {
                 colIdx++;
             }
         }
-        return [ 0 , this.grid.length];
+        return [0, this.grid.length];
     }
 
     private checkItemsInArea(rowStart: number, rowEnd: number, colStart: number, colEnd: number, item?: GridListItem) {
@@ -575,7 +608,7 @@ export class GridList {
         }
 
         // Make sure the item isn't larger than the entire grid
-        if (newPosition[1] + position.h > this.options.lanes) {
+        if (newPosition[1] + Math.min(position.h, this.options.lanes) > this.options.lanes) {
             return false;
         }
 
@@ -676,9 +709,9 @@ export class GridList {
             position2 = this.getItemPosition(item2);
 
         return !(position2.x >= position1.x + position1.w ||
-        position2.x + position2.w <= position1.x ||
-        position2.y >= position1.y + position1.h ||
-        position2.y + position2.h <= position1.y);
+            position2.x + position2.w <= position1.x ||
+            position2.y >= position1.y + position1.h ||
+            position2.y + position2.h <= position1.y);
     }
 
     /**
