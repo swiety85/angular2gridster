@@ -271,17 +271,21 @@ export class GridList {
         if (!this.tryToResolveCollisionsLocally(item)) {
             this.pullItemsToLeft(item);
         }
-        this.pullItemsToLeft();
+        if (this.options.floating) {
+            this.pullItemsToLeft();
+        } else if (this.getItemsCollidingWithItem(item).length) {
+            this.pullItemsToLeft();
+        }
     }
 
-    pushCollidingItems() {
+    pushCollidingItems(fixedItem?: GridListItem) {
         // Start a fresh grid with the fixed item already placed inside
         this.sortItemsByPosition();
         this.resetGrid();
         this.generateGrid();
 
         this.items
-            .filter((item) => !this.isItemFloating(item))
+            .filter((item) => (!this.isItemFloating(item) && item !== fixedItem))
             .forEach((item) => {
                 if (!this.tryToResolveCollisionsLocally(item)) {
                     this.pullItemsToLeft(item);
@@ -310,8 +314,6 @@ export class GridList {
         if (fixedItem) {
             const fixedPosition = this.getItemPosition(fixedItem);
             this.updateItemPosition(fixedItem, [fixedPosition.x, fixedPosition.y]);
-        } else if (!this.options.floating) {
-            return;
         }
 
         this.items
@@ -330,7 +332,7 @@ export class GridList {
             // The fixed item keeps its exact position
             if (fixedItem && item === fixedItem ||
                 !item.dragAndDrop ||
-                (!this.options.floating && this.isItemFloating(item))) {
+                (!this.options.floating && this.isItemFloating(item) && !this.getItemsCollidingWithItem(item).length)) {
                 continue;
             }
 
@@ -463,6 +465,9 @@ export class GridList {
     }
 
     private isItemFloating(item) {
+        if (item.itemComponent && item.itemComponent.isDragging) {
+            return false;
+        }
         const position = this.getItemPosition(item);
 
         if (position.x === 0) {
@@ -473,7 +478,7 @@ export class GridList {
         return (rowBelowItem || [])
             .slice(position.y, position.y + position.h)
             .reduce((isFloating, cellItem) => {
-                return isFloating && !!cellItem;
+                return isFloating && !cellItem;
             }, true);
     }
 
@@ -693,7 +698,7 @@ export class GridList {
         }
     }
 
-    private getItemsCollidingWithItem(item: GridListItem) {
+    private getItemsCollidingWithItem(item: GridListItem): number[] {
         const collidingItems = [];
         for (let i = 0; i < this.items.length; i++) {
             if (item !== this.items[i] &&
