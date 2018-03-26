@@ -175,7 +175,7 @@ export class GridsterService {
 
         this.gridsterComponent.isResizing = false;
 
-        this.gridList.pullItemsToLeft();
+        this.gridList.pullItemsToLeft(item);
         this.render();
 
         this.refreshLines();
@@ -251,7 +251,7 @@ export class GridsterService {
 
         this.removePositionHighlight();
 
-        this.gridList.pullItemsToLeft();
+        this.gridList.pullItemsToLeft(item);
 
         this.gridsterComponent.isDragging = false;
 
