@@ -174,7 +174,7 @@ export class GridsterService {
 
         this.gridsterComponent.isResizing = false;
 
-        this.gridList.pullItemsToLeft();
+        this.gridList.pullItemsToLeft(item);
         this.render();
 
         this.refreshLines();
@@ -207,16 +207,15 @@ export class GridsterService {
 
         if (this.dragPositionChanged(newPosition)) {
 
-            this.previousDragPosition = newPosition;
-            if (this.options.direction === 'none' || (!this.options.floating && !item.itemPrototype)) {
-                if (!this.gridList.checkItemAboveEmptyArea(item, {x: newPosition[0], y: newPosition[1]})) {
-                    return;
-                }
-            }
-
             // Regenerate the grid with the positions from when the drag started
             this.restoreCachedItems();
             this.gridList.generateGrid();
+
+            this.previousDragPosition = newPosition;
+            if (this.options.direction === 'none' &&
+                !this.gridList.checkItemAboveEmptyArea(item, {x: newPosition[0], y: newPosition[1]})) {
+                return;
+            }
 
             // Since the items list is a deep copy, we need to fetch the item
             // corresponding to this drag action again
@@ -259,7 +258,7 @@ export class GridsterService {
 
         this.removePositionHighlight();
 
-        this.gridList.pullItemsToLeft();
+        this.gridList.pullItemsToLeft(item);
 
         this.gridsterComponent.isDragging = false;
 

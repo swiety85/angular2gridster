@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.4"></a>
+## [1.3.4](https://github.com/swiety85/angular2gridster/compare/v1.3.3...v1.3.4) (2018-03-26)
+
+
+### Bug Fixes
+
+* **drag:** Prevent gravity of dragged element on drop ([f32144e](https://github.com/swiety85/angular2gridster/commit/f32144e)), closes [#214](https://github.com/swiety85/angular2gridster/issues/214)
+
+
+
+<a name="1.3.3"></a>
+## [1.3.3](https://github.com/swiety85/angular2gridster/compare/v1.3.2...v1.3.3) (2018-03-24)
+
+
+### Bug Fixes
+
+* **drag:** Fix problem with resolving collision with gridster gravity on false ([8d8f6a4](https://github.com/swiety85/angular2gridster/commit/8d8f6a4)), closes [#209](https://github.com/swiety85/angular2gridster/issues/209)
+
+
+
 <a name="1.3.2"></a>
 ## [1.3.2](https://github.com/swiety85/angular2gridster/compare/v1.3.1...v1.3.2) (2018-03-10)
 
