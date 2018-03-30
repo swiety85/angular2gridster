@@ -106,6 +106,8 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
             })
             .do((options) => {
                 this.optionsChange.emit(options);
+                this.gridster.breakpoint.next(options.breakpoint);
+                console.warn('optionsChange rwddddddddddddddddddddddddddddddddd brakepoint', options.breakpoint);
             })
             .subscribe();
         this.subscription.add(changeSub);
@@ -272,7 +274,8 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
                 if (!isEntered) {
                     return;
                 }
-                this.gridster.onDrag(prototype.item);
+                console.log('prototype.item before onDrag()', prototype.item);
+                this.gridster.onDrag(prototype.item, 'jupijajej');
             });
 
         dragObservable.dragEnter

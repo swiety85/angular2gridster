@@ -113,6 +113,7 @@ export class GridsterPrototypeService {
 
     updatePrototypePosition(item: GridsterItemPrototypeDirective, event: DraggableEvent) {
         this.dragSubject.next({ item, event });
+        console.warn('updatePrototypePosition', item)
     }
 
     /**

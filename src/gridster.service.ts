@@ -8,6 +8,7 @@ import { IGridsterDraggableOptions } from './IGridsterDraggableOptions';
 import { GridListItem } from './gridList/GridListItem';
 import { GridsterComponent } from './gridster.component';
 import { GridsterOptions } from './GridsterOptions';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class GridsterService {
@@ -31,6 +32,8 @@ export class GridsterService {
     gridsterComponent: GridsterComponent;
 
     public $positionHighlight: HTMLElement;
+    public breakpoint = new BehaviorSubject(null);
+
 
     public maxItemWidth: number;
     public maxItemHeight: number;
@@ -80,7 +83,7 @@ export class GridsterService {
 
         // Used to highlight a position an element will land on upon drop
         if (this.$positionHighlight) {
-            this.$positionHighlight.style.display = 'none';
+            this.removePositionHighlight();
         }
 
         this.initGridList();
@@ -136,7 +139,7 @@ export class GridsterService {
 
         this._maxGridCols = this.gridList.grid.length;
 
-        this.highlightPositionForItem(item);
+        this.highlightPositionForItem(item, this.breakpoint.getValue());
 
         this.gridsterComponent.isResizing = true;
 
@@ -161,8 +164,7 @@ export class GridsterService {
 
             // Visually update item positions and highlight shape
             this.applyPositionToItems(true);
-            // this.refreshLines();
-            this.highlightPositionForItem(item);
+            this.highlightPositionForItem(item, this.breakpoint.getValue());
         }
     }
 
@@ -201,7 +203,9 @@ export class GridsterService {
         this.refreshLines();
     }
 
-    onDrag(item: GridListItem) {
+    onDrag(item: GridListItem, sss) {
+        console.warn('onDrag', 'sss', sss, 'item', item);
+        console.log('behaviour subject', this.breakpoint.getValue());
         const newPosition = this.snapItemPositionToGrid(item);
 
         if (this.dragPositionChanged(newPosition)) {
@@ -222,7 +226,7 @@ export class GridsterService {
 
             // Visually update item positions and highlight shape
             this.applyPositionToItems(true);
-            this.highlightPositionForItem(item);
+            this.highlightPositionForItem(item, this.breakpoint.getValue());
         }
     }
 
@@ -509,7 +513,10 @@ export class GridsterService {
             newPosition[1] !== this.previousDragPosition[1]);
     }
 
-    private highlightPositionForItem(item: GridListItem) {
+    private highlightPositionForItem(item, breakpoint) {
+        item.w = item.getValueW(breakpoint, item.itemPrototype); //todo getWalue from brekpoint
+        item.h = item.getValueH(breakpoint, item.itemPrototype); //todo getWalue from brekpoint
+
         const size = item.calculateSize(this);
         const position = item.calculatePosition(this);
 
@@ -550,12 +557,11 @@ export class GridsterService {
                 if (itemChange.changes.indexOf('y') >= 0) {
                     itemChange.item.triggerChangeY(breakpoint);
                 }
-                // size change should be called only once (not for each breakpoint)
-                if (!breakpoint && itemChange.changes.indexOf('w') >= 0) {
-                    itemChange.item.itemComponent.wChange.emit(itemChange.item.w);
+                if (itemChange.changes.indexOf('w') >= 0) {
+                    itemChange.item.triggerChangeW(breakpoint);
                 }
-                if (!breakpoint && itemChange.changes.indexOf('h') >= 0) {
-                    itemChange.item.itemComponent.hChange.emit(itemChange.item.h);
+                if (itemChange.changes.indexOf('h') >= 0) {
+                    itemChange.item.triggerChangeH(breakpoint);
                 }
                 // should be called only once (not for each breakpoint)
                 itemChange.item.itemComponent.change.emit({
