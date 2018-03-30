@@ -226,10 +226,10 @@ export class AppComponent implements OnInit {
         console.log('AppComponent.W_PROPERTY_MAP[breakpoint]', AppComponent.W_PROPERTY_MAP[breakpoint]);
         console.log('AppComponent.H_PROPERTY_MAP[breakpoint]', AppComponent.H_PROPERTY_MAP[breakpoint]);
 
-        widget[AppComponent.W_PROPERTY_MAP[breakpoint]] = item.itemPrototype[AppComponent.W_PROPERTY_MAP[breakpoint]];
-        widget[AppComponent.H_PROPERTY_MAP[breakpoint]] = item.itemPrototype[AppComponent.H_PROPERTY_MAP[breakpoint]];
-        widget[AppComponent.X_PROPERTY_MAP[breakpoint]] = item.x;
-        widget[AppComponent.Y_PROPERTY_MAP[breakpoint]] = item.y;
+        widget[AppComponent.W_PROPERTY_MAP[breakpoint] || 'w'] = item.w;
+        widget[AppComponent.H_PROPERTY_MAP[breakpoint] || 'h'] = item.h;
+        widget[AppComponent.X_PROPERTY_MAP[breakpoint] || 'x'] = item.x;
+        widget[AppComponent.Y_PROPERTY_MAP[breakpoint] || 'y'] = item.y;
 
         console.log(widget);
 
