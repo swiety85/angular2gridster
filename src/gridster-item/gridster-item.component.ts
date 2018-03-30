@@ -243,7 +243,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.elementRef = elementRef;
         this.$element = elementRef.nativeElement;
 
-        this.item = (new GridListItem(this.gridster)).setFromGridsterItem(this);
+        this.item = (new GridListItem()).setFromGridsterItem(this);
 
         // if gridster is initialized do not show animation on new grid-item construct
         if (this.gridster.isInitialized()) {
@@ -468,9 +468,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                     this.positionX = (event.clientX - cursorToElementPosition.x -
                         this.gridster.gridsterRect.left);
                     this.updateElemenetPosition();
-                    console.error('this.item before onDrag()', this.item);
 
-                    this.gridster.onDrag(this.item, 'inne');
+                    this.gridster.onDrag(this.item);
                 });
 
             const dragStopSub = draggable.dragStop

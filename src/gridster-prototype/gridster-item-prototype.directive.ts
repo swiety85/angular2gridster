@@ -32,15 +32,7 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
     public x = 0;
     public y = 0;
     @Input() w: number;
-    @Input() wSm: number;
-    @Input() wMd: number;
-    @Input() wLg: number;
-    @Input() wXl: number;
     @Input() h: number;
-    @Input() hSm: number;
-    @Input() hMd: number;
-    @Input() hLg: number;
-    @Input() hXl: number;
 
     positionX: number;
     positionY: number;
@@ -77,10 +69,9 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
 
     constructor(private zone: NgZone,
                 private elementRef: ElementRef,
-                private gridsterService: GridsterService,
                 private gridsterPrototype: GridsterPrototypeService) {
 
-        this.item = (new GridListItem(this.gridsterService)).setFromGridsterItemPrototype(this);
+        this.item = (new GridListItem()).setFromGridsterItemPrototype(this);
     }
 
     ngOnInit() {
@@ -213,7 +204,6 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
     }
 
     private onDrag (event: DraggableEvent): void {
-        console.error('arrrrrrrrrrrrrrrrrrrrr this as item at updatePrototypePosition(item)', this);
         this.gridsterPrototype.updatePrototypePosition(this, event);
     }
 

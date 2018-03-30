@@ -22,8 +22,7 @@ import { GridsterService } from './gridster.service';
         GridsterItemPrototypeDirective
     ],
     providers: [
-        GridsterPrototypeService,
-        GridsterService
+        GridsterPrototypeService
     ]
 })
 export class GridsterModule { }

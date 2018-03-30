@@ -36,18 +36,6 @@ export class GridListItem {
     itemComponent: GridsterItemComponent;
     itemPrototype: GridsterItemPrototypeDirective;
     itemObject: any;
-    currentBreakpoint: string;
-
-
-    constructor (private gridsterService: GridsterService) {
-        console.error('GridListItem constructor instant');
-        this.gridsterService.breakpoint
-            .subscribe({
-                next: (next) => {if (next) {console.error('GridListItem constructor', next); this.currentBreakpoint = next}},
-                error: (error) => {console.warn(error)}
-            });
-    }
-
 
     get $element () {
         return this.getItem().$element;
@@ -81,16 +69,11 @@ export class GridListItem {
 
     get w () {
         const item = this.getItem();
-        const breakpoint = item.gridster ? item.gridster.options.breakpoint : this.gridsterService.breakpoint.value;
-        // console.log('breakpoint', breakpoint, 'get w:', this.getValueW(breakpoint));
-        !breakpoint && console.log('get brekapoint from BehavoirSubject', this.gridsterService.breakpoint, this.gridsterService.breakpoint.value);
-        // this.selectedTheme = this.personalizedService.themeStream.value;
-        // !breakpoint && console.error('breakpoint', breakpoint, this.getValueW(breakpoint), 'item:', item);
+        const breakpoint = item.gridster ? item.gridster.options.breakpoint : null;
 
         return this.getValueW(breakpoint);
     }
     set w (value: number) {
-        console.warn('set w', value);
         const item = this.getItem();
         const breakpoint = item.gridster ? item.gridster.options.breakpoint : null;
 
@@ -99,9 +82,7 @@ export class GridListItem {
 
     get h () {
         const item = this.getItem();
-        const breakpoint = item.gridster ? item.gridster.options.breakpoint : this.gridsterService.breakpoint.value;
-        // console.log('breakpoint', breakpoint, 'get h:', this.getValueH(breakpoint));
-        !breakpoint && console.log('get brekapoint from BehavoirSubject', this.gridsterService.breakpoint, this.gridsterService.breakpoint.value);
+        const breakpoint = item.gridster ? item.gridster.options.breakpoint : null;
 
         return this.getValueH(breakpoint);
     }
@@ -156,7 +137,6 @@ export class GridListItem {
     }
 
     public setFromGridsterItemPrototype (item: GridsterItemPrototypeDirective): GridListItem {
-        console.error('setFromGridsterItemPrototype', item);
         if (this.isItemSet()) {
             throw new Error('GridListItem is already set.');
         }
@@ -173,7 +153,7 @@ export class GridListItem {
     }
 
     public copy() {
-        const itemCopy = new GridListItem(this.gridsterService);
+        const itemCopy = new GridListItem();
 
         return itemCopy.setFromObjectLiteral({
             $element: this.$element,
@@ -187,10 +167,8 @@ export class GridListItem {
         });
     }
 
-    public copyForBreakpoint(_breakpoint?) {
-        const breakpoint = _breakpoint || this.gridsterService.breakpoint.getValue();
-        const itemCopy = new GridListItem(this.gridsterService);
-        console.log('copyForBreakpoint breakpoint', breakpoint);
+    public copyForBreakpoint(breakpoint?) {
+        const itemCopy = new GridListItem();
 
         return itemCopy.setFromObjectLiteral({
             $element: this.$element,
@@ -200,8 +178,7 @@ export class GridListItem {
             h: this.getValueH(breakpoint),
             autoSize: this.autoSize,
             dragAndDrop: this.dragAndDrop,
-            resizable: this.resizable,
-            aaa: 123
+            resizable: this.resizable
         });
     }
 
@@ -217,15 +194,15 @@ export class GridListItem {
         return item[this.getYProperty(breakpoint)];
     }
 
-    public getValueW(breakpoint?, _item?) {
-        const item = _item || this.getItem();
-        _item && console.warn('getValueW', breakpoint, _item, 'wLg:', item.wLg, 'wXl:', item.wXl, 'return:', item[this.getWProperty(breakpoint)]);
+    public getValueW(breakpoint?) {
+        const item = this.getItem();
+
         return item[this.getWProperty(breakpoint)];
     }
 
-    public getValueH(breakpoint?, _item?) {
-        const item = _item || this.getItem();
-        _item && console.warn('getValueH', breakpoint, _item, 'hLg', item.hLg, 'hXl', item.hXl, 'return:', item[this.getHProperty(breakpoint)]);
+    public getValueH(breakpoint?) {
+        const item = this.getItem();
+
         return item[this.getHProperty(breakpoint)];
     }
 
@@ -243,14 +220,14 @@ export class GridListItem {
 
     public setValueW(value: number, breakpoint?) {
         const item = this.getItem();
-        console.warn('setValueW breakpoint', breakpoint, this.gridsterService.breakpoint.getValue());
-        item[this.getWProperty(breakpoint || this.gridsterService.breakpoint.getValue())] = value;
+
+        item[this.getWProperty(breakpoint)] = value;
     }
 
     public setValueH(value: number, breakpoint?) {
         const item = this.getItem();
-        console.warn('setValueH', breakpoint);
-        item[this.getHProperty(breakpoint || this.gridsterService.breakpoint.getValue())] = value;
+
+        item[this.getHProperty(breakpoint)] = value;
     }
 
     public triggerChangeX(breakpoint?) {
@@ -321,9 +298,8 @@ export class GridListItem {
         }
         gridster = gridster || this.itemComponent.gridster;
 
-
-        let width = this.w;
-        let height = this.h;
+        let width = this.getValueW(gridster.options.breakpoint);
+        let height = this.getValueH(gridster.options.breakpoint);
 
         if (gridster.options.direction === 'vertical') {
             width = Math.min(this.w, gridster.options.lanes);
@@ -357,34 +333,23 @@ export class GridListItem {
     }
 
     private getWProperty(breakpoint?: string) {
-        console.log('getWProperty', breakpoint, 'currentBreakpoint', this.currentBreakpoint, 'behaviourSubject', this.gridsterService.breakpoint.getValue());
-        (this.itemComponent || this.itemPrototype) && console.warn('this.itemComponent', this.itemComponent, ' this.itemPrototype',  this.itemPrototype);
-
-        if (breakpoint && (this.itemComponent || this.itemPrototype)) {
-            console.log('getWProperty return', GridListItem.W_PROPERTY_MAP[breakpoint]);
+        if (breakpoint && this.itemComponent) {
             return GridListItem.W_PROPERTY_MAP[breakpoint];
         } else {
-            console.log('no breakpoint return w');
             return 'w';
         }
     }
 
     private getHProperty(breakpoint?: string) {
 
-        if (breakpoint && (this.itemComponent || this.itemPrototype)) {
-            console.log('getHProperty return', GridListItem.H_PROPERTY_MAP[breakpoint]);
+        if (breakpoint && this.itemComponent) {
             return GridListItem.H_PROPERTY_MAP[breakpoint];
         } else {
-            console.log('no breakpoint return h');
             return 'h';
         }
     }
 
     private getItem(): any {
-        // console.log('this.itemComponent', this.itemComponent);
-        this.itemPrototype && console.log('this.itemPrototype', this.itemPrototype);
-        // console.log('this.itemObject', this.itemObject);
-        // console.log('===================================');
         const item = this.itemComponent || this.itemPrototype || this.itemObject;
 
         if (!item) {

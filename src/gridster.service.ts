@@ -8,7 +8,6 @@ import { IGridsterDraggableOptions } from './IGridsterDraggableOptions';
 import { GridListItem } from './gridList/GridListItem';
 import { GridsterComponent } from './gridster.component';
 import { GridsterOptions } from './GridsterOptions';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class GridsterService {
@@ -32,8 +31,6 @@ export class GridsterService {
     gridsterComponent: GridsterComponent;
 
     public $positionHighlight: HTMLElement;
-    public breakpoint = new BehaviorSubject(null);
-
 
     public maxItemWidth: number;
     public maxItemHeight: number;
@@ -139,7 +136,7 @@ export class GridsterService {
 
         this._maxGridCols = this.gridList.grid.length;
 
-        this.highlightPositionForItem(item, this.breakpoint.getValue());
+        this.highlightPositionForItem(item);
 
         this.gridsterComponent.isResizing = true;
 
@@ -164,7 +161,7 @@ export class GridsterService {
 
             // Visually update item positions and highlight shape
             this.applyPositionToItems(true);
-            this.highlightPositionForItem(item, this.breakpoint.getValue());
+            this.highlightPositionForItem(item);
         }
     }
 
@@ -203,9 +200,7 @@ export class GridsterService {
         this.refreshLines();
     }
 
-    onDrag(item: GridListItem, sss) {
-        console.warn('onDrag', 'sss', sss, 'item', item);
-        console.log('behaviour subject', this.breakpoint.getValue());
+    onDrag(item: GridListItem) {
         const newPosition = this.snapItemPositionToGrid(item);
 
         if (this.dragPositionChanged(newPosition)) {
@@ -226,7 +221,7 @@ export class GridsterService {
 
             // Visually update item positions and highlight shape
             this.applyPositionToItems(true);
-            this.highlightPositionForItem(item, this.breakpoint.getValue());
+            this.highlightPositionForItem(item);
         }
     }
 
@@ -513,9 +508,9 @@ export class GridsterService {
             newPosition[1] !== this.previousDragPosition[1]);
     }
 
-    private highlightPositionForItem(item, breakpoint) {
-        item.w = item.getValueW(breakpoint, item.itemPrototype); //todo getWalue from brekpoint
-        item.h = item.getValueH(breakpoint, item.itemPrototype); //todo getWalue from brekpoint
+    private highlightPositionForItem(item) {
+        // item.w = item.getValueW(breakpoint); //todo getWalue from brekpoint
+        // item.h = item.getValueH(breakpoint); //todo getWalue from brekpoint
 
         const size = item.calculateSize(this);
         const position = item.calculatePosition(this);

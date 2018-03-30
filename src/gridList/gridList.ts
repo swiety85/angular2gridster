@@ -487,11 +487,11 @@ export class GridList {
             x: item.getValueY(options.breakpoint),
             y: item.getValueX(options.breakpoint),
             w: item.getValueW(options.breakpoint),
-            h: Math.min(item.w, options.lanes)
+            h: Math.min(item.getValueW(this.options.breakpoint), options.lanes)
         } : {
             x: item.getValueX(options.breakpoint),
             y: item.getValueY(options.breakpoint),
-            w: Math.min(item.w, options.lanes),
+            w: Math.min(item.getValueW(this.options.breakpoint), options.lanes),
             h: item.getValueH(options.breakpoint)
         };
 
