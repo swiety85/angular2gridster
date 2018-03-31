@@ -9,6 +9,7 @@ export class GridsterOptions {
     widthHeightRatio: number;
     heightToFontSizeRatio: number;
     responsiveView: boolean;
+    responsiveSizes: boolean;
     dragAndDrop: boolean;
     resizable: boolean;
     shrink: boolean;
@@ -21,6 +22,7 @@ export class GridsterOptions {
         widthHeightRatio: 1,
         shrink: false,
         responsiveView: true,
+        responsiveSizes: false,
         dragAndDrop: true,
         resizable: false,
         useCSSTransforms: false,

@@ -165,6 +165,26 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     @Input() h: number;
     @Output() hChange = new EventEmitter<number>(true);
 
+    @Input() wSm: number;
+    @Output() wSmChange = new EventEmitter<number>(true);
+    @Input() hSm: number;
+    @Output() hSmChange = new EventEmitter<number>(true);
+
+    @Input() wMd: number;
+    @Output() wMdChange = new EventEmitter<number>(true);
+    @Input() hMd: number;
+    @Output() hMdChange = new EventEmitter<number>(true);
+
+    @Input() wLg: number;
+    @Output() wLgChange = new EventEmitter<number>(true);
+    @Input() hLg: number;
+    @Output() hLgChange = new EventEmitter<number>(true);
+
+    @Input() wXl: number;
+    @Output() wXlChange = new EventEmitter<number>(true);
+    @Input() hXl: number;
+    @Output() hXlChange = new EventEmitter<number>(true);
+
     @Output() change = new EventEmitter<any>(true);
     @Output() start = new EventEmitter<any>(true);
     @Output() end = new EventEmitter<any>(true);
@@ -236,6 +256,14 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
         this.w = this.w || this.options.defaultWidth;
         this.h = this.h || this.options.defaultHeight;
+        this.wSm = this.wSm || this.w;
+        this.hSm = this.hSm || this.h;
+        this.wMd = this.wMd || this.w;
+        this.hMd = this.hMd || this.h;
+        this.wLg = this.wLg || this.w;
+        this.hLg = this.hLg || this.h;
+        this.wXl = this.wXl || this.w;
+        this.hXl = this.hXl || this.h;
 
         if (this.gridster.isInitialized()) {
             this.setPositionsOnItem();

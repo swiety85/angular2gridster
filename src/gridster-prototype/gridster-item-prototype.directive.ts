@@ -32,7 +32,15 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
     public x = 0;
     public y = 0;
     @Input() w: number;
+    @Input() wSm: number;
+    @Input() wMd: number;
+    @Input() wLg: number;
+    @Input() wXl: number;
     @Input() h: number;
+    @Input() hSm: number;
+    @Input() hMd: number;
+    @Input() hLg: number;
+    @Input() hXl: number;
 
     positionX: number;
     positionY: number;
@@ -75,6 +83,14 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.wSm = this.wSm || this.w;
+        this.hSm = this.hSm || this.h;
+        this.wMd = this.wMd || this.w;
+        this.hMd = this.hMd || this.h;
+        this.wLg = this.wLg || this.w;
+        this.hLg = this.hLg || this.h;
+        this.wXl = this.wXl || this.w;
+        this.hXl = this.hXl || this.h;
         this.zone.runOutsideAngular(() => {
             this.enableDragDrop();
         });
