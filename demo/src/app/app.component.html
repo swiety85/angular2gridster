@@ -47,7 +47,12 @@
         Max item size: {{itemOptions.maxWidth}} x {{itemOptions.maxHeight}}
     </div>
     <div class="widgetbar">
-        <div gridsterItemPrototype [config]="{helper: true}" [w]="1" [h]="1"
+        <div gridsterItemPrototype [config]="{helper: true}"
+             [w]="1" [h]="1"
+             [wSm]="1" [hSm]="1"
+             [wMd]="2" [hMd]="1"
+             [wLg]="2" [hLg]="2"
+             [wXl]="3" [hXl]="2"
              (drop)="addWidgetFromDrag(gridster, $event)"
              (enter)="over($event)"
              (out)="out($event)"

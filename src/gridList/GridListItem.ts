@@ -197,13 +197,13 @@ export class GridListItem {
     public getValueW(breakpoint?) {
         const item = this.getItem();
 
-        return item[this.getWProperty(breakpoint)];
+        return item[this.getWProperty(breakpoint)] || 1;
     }
 
     public getValueH(breakpoint?) {
         const item = this.getItem();
 
-        return item[this.getHProperty(breakpoint)];
+        return item[this.getHProperty(breakpoint)] || 1;
     }
 
     public setValueX(value: number, breakpoint?) {
@@ -302,10 +302,10 @@ export class GridListItem {
         let height = this.getValueH(gridster.options.breakpoint);
 
         if (gridster.options.direction === 'vertical') {
-            width = Math.min(this.w, gridster.options.lanes);
+            width = Math.min(width, gridster.options.lanes);
         }
         if (gridster.options.direction === 'horizontal') {
-            height = Math.min(this.h, gridster.options.lanes);
+            height = Math.min(height, gridster.options.lanes);
         }
 
         return {
@@ -333,7 +333,7 @@ export class GridListItem {
     }
 
     private getWProperty(breakpoint?: string) {
-        if (breakpoint && this.itemComponent) {
+        if (breakpoint) {
             return GridListItem.W_PROPERTY_MAP[breakpoint];
         } else {
             return 'w';
@@ -341,8 +341,7 @@ export class GridListItem {
     }
 
     private getHProperty(breakpoint?: string) {
-
-        if (breakpoint && this.itemComponent) {
+        if (breakpoint) {
             return GridListItem.H_PROPERTY_MAP[breakpoint];
         } else {
             return 'h';
