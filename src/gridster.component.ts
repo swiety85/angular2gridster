@@ -243,8 +243,12 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
     }
 
     disable(item) {
+        const itemIdx = this.gridster.items.indexOf(item.itemComponent);
+
         this.isDisabled = true;
-        this.gridster.items = this.gridster.items.filter(item => item.itemComponent);
+        if (itemIdx >= 0) {
+            delete this.gridster.items[this.gridster.items.indexOf(item.itemComponent)];
+        }
         this.gridster.onDragOut(item);
         // this.gridster.onStop(item);
         console.log('disabled', this.$element.getAttribute('id'));
@@ -299,7 +303,9 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
                 isEntered = true;
 
-                this.gridster.items.push(prototype.item);
+                if (this.gridster.items.indexOf(prototype.item) >= 0) {
+                    this.gridster.items.push(prototype.item);
+                }
                 this.gridster.onStart(prototype.item);
                 if (this.parent) {
                     this.parent.disable(prototype.item);
@@ -318,7 +324,9 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
                 isEntered = false;
                 if (this.parent) {
                     this.parent.enable();
-                    this.parent.gridster.items.push(prototype.item);
+                    if (this.parent.gridster.items.indexOf(prototype.item) >= 0) {
+                        this.parent.gridster.items.push(prototype.item);
+                    }
                     this.parent.gridster.onStart(prototype.item);
                     this.parent.prototypeEnter.emit({item: prototype.item});
                 }
