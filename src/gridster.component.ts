@@ -300,7 +300,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
                 isEntered = true;
 
-                if (this.gridster.items.indexOf(prototype.item) >= 0) {
+                if (this.gridster.items.indexOf(prototype.item) < 0) {
                     this.gridster.items.push(prototype.item);
                 }
                 this.gridster.onStart(prototype.item);
@@ -323,7 +323,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
 
                 if (this.parent) {
                     this.parent.enable();
-                    if (this.parent.gridster.items.indexOf(prototype.item) >= 0) {
+                    if (this.parent.gridster.items.indexOf(prototype.item) < 0) {
                         this.parent.gridster.items.push(prototype.item);
                     }
                     this.parent.gridster.onStart(prototype.item);
