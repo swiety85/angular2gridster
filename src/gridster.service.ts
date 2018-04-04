@@ -122,7 +122,11 @@ export class GridsterService {
     }
 
     removeItem(item: GridListItem) {
-        this.items.splice(this.items.indexOf(item), 1);
+        const idx = this.items.indexOf(item);
+
+        if (idx >= 0) {
+            this.items.splice(this.items.indexOf(item), 1);
+        }
 
         this.gridList.deleteItemPositionFromGrid(item);
         this.removeItemFromCache(item);
