@@ -202,8 +202,6 @@ export class GridsterService {
         this.gridsterComponent.updateGridsterElementData();
 
         this.refreshLines();
-
-        console.log('onStart', this.gridsterComponent.$element.getAttribute('id'));
     }
 
     onDrag(item: GridListItem) {
@@ -267,8 +265,6 @@ export class GridsterService {
         this.gridsterComponent.isDragging = false;
 
         this.refreshLines();
-
-        console.log('onStop', this.gridsterComponent.$element.getAttribute('id'));
     }
 
     private removeItemFromCache(item: GridListItem) {

@@ -250,13 +250,10 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
             delete this.gridster.items[this.gridster.items.indexOf(item.itemComponent)];
         }
         this.gridster.onDragOut(item);
-        // this.gridster.onStop(item);
-        console.log('disabled', this.$element.getAttribute('id'));
     }
 
     enable() {
         this.isDisabled = false;
-        console.log('enabled', this.$element.getAttribute('id'));
     }
 
     private getScrollPositionFromParents(element: Element, data = { scrollTop: 0, scrollLeft: 0 })
@@ -311,7 +308,6 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
                     this.parent.disable(prototype.item);
                 }
                 this.prototypeEnter.emit({item: prototype.item});
-                console.log('drag enter', this.$element.getAttribute('id'));
             });
 
         dragObservable.dragOut
@@ -322,16 +318,21 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
                 }
                 this.gridster.onDragOut(prototype.item);
                 isEntered = false;
+
+                this.prototypeOut.emit({item: prototype.item});
+
                 if (this.parent) {
                     this.parent.enable();
                     if (this.parent.gridster.items.indexOf(prototype.item) >= 0) {
                         this.parent.gridster.items.push(prototype.item);
                     }
                     this.parent.gridster.onStart(prototype.item);
-                    this.parent.prototypeEnter.emit({item: prototype.item});
+                    // timeout is needed to be sure that "enter" event is fired after "out"
+                    setTimeout(() => {
+                        this.parent.prototypeEnter.emit({item: prototype.item});
+                        prototype.onEnter(this.parent.gridster);
+                    });
                 }
-                this.prototypeOut.emit({item: prototype.item});
-                console.log('drag out', this.$element.getAttribute('id'), this);
             });
 
         dropOverObservable
@@ -349,7 +350,6 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
                     this.parent.enable();
                 }
                 this.prototypeDrop.emit({item: data.item.item});
-                console.log('drop over', this.$element.getAttribute('id'));
             });
 
         dropOverObservable.connect();
