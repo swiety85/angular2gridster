@@ -84,6 +84,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
 
 
     gridsterOptions: GridsterOptions;
+    isPrototypeEntered = false;
     private isDisabled = false;
     private subscription = new Subscription();
 
@@ -276,8 +277,6 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
      * Connect gridster prototype item to gridster dragging hooks (onStart, onDrag, onStop).
      */
     private connectGridsterPrototype() {
-        let isEntered = false;
-
         this.gridsterPrototype.observeDropOut(this.gridster)
             .subscribe();
 
@@ -289,7 +288,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         dragObservable.dragOver
             .filter(() => !this.isDisabled)
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
-                if (!isEntered) {
+                if (!this.isPrototypeEntered) {
                     return;
                 }
                 this.gridster.onDrag(prototype.item);
@@ -298,7 +297,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         dragObservable.dragEnter
             .filter(() => !this.isDisabled)
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
-                isEntered = true;
+                this.isPrototypeEntered = true;
 
                 if (this.gridster.items.indexOf(prototype.item) < 0) {
                     this.gridster.items.push(prototype.item);
@@ -313,16 +312,18 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         dragObservable.dragOut
             .filter(() => !this.isDisabled)
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
-                if (!isEntered) {
+                if (!this.isPrototypeEntered) {
                     return;
                 }
                 this.gridster.onDragOut(prototype.item);
-                isEntered = false;
+                this.isPrototypeEntered = false;
 
                 this.prototypeOut.emit({item: prototype.item});
 
                 if (this.parent) {
                     this.parent.enable();
+
+                    this.parent.isPrototypeEntered = true;
                     if (this.parent.gridster.items.indexOf(prototype.item) < 0) {
                         this.parent.gridster.items.push(prototype.item);
                     }
@@ -338,14 +339,14 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         dropOverObservable
             .filter(() => !this.isDisabled)
             .subscribe((data) => {
-                if (!isEntered) {
+                if (!this.isPrototypeEntered) {
                     return;
                 }
 
                 this.gridster.onStop(data.item.item);
                 this.gridster.removeItem(data.item.item);
 
-                isEntered = false;
+                this.isPrototypeEntered = false;
                 if (this.parent) {
                     this.parent.enable();
                 }
