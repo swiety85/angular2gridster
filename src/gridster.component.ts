@@ -1,6 +1,6 @@
 import {
     Component, OnInit, AfterContentInit, OnDestroy, ElementRef, ViewChild, NgZone,
-    Input, Output, EventEmitter, ChangeDetectionStrategy, HostBinding
+    Input, Output, EventEmitter, ChangeDetectionStrategy, HostBinding, ViewEncapsulation
 } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -31,14 +31,14 @@ import { GridsterOptions } from './GridsterOptions';
       </div>
     </div>`,
     styles: [`
-    :host {
+    gridster {
         position: relative;
         display: block;
         left: 0;
         width: 100%;
     }
 
-    :host.gridster--dragging {
+    gridster.gridster--dragging {
         -moz-user-select: none;
         -khtml-user-select: none;
         -webkit-user-select: none;
@@ -46,7 +46,7 @@ import { GridsterOptions } from './GridsterOptions';
         user-select: none;
     }
 
-    .gridster-container {
+    gridster .gridster-container {
         position: relative;
         width: 100%;
         list-style: none;
@@ -54,14 +54,15 @@ import { GridsterOptions } from './GridsterOptions';
         transition: width 0.2s, height 0.2s;
     }
 
-    .position-highlight {
+    gridster .position-highlight {
         display: block;
         position: absolute;
         z-index: 1;
     }
     `],
     providers: [GridsterService],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None
 })
 export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
     @Input() options: IGridsterOptions;
