@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { GridsterComponent } from './gridster/gridster.component';
 import { IGridsterOptions } from './gridster/IGridsterOptions';
 import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions';
@@ -8,7 +8,7 @@ import { IGridsterDraggableOptions } from './gridster/IGridsterDraggableOptions'
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     static X_PROPERTY_MAP: any = {
         sm: 'xSm',
         md: 'xMd',
@@ -32,7 +32,7 @@ export class AppComponent {
         // core configuration is default one - for smallest view. It has hidden minWidth: 0.
         lanes: 2, // amount of lanes (cells) in the grid
         direction: 'vertical', // floating top - vertical, left - horizontal
-        floating: false,
+        floating: true,
         dragAndDrop: true, // enable/disable drag and drop for all items in grid
         resizable: true, // enable/disable resizing by drag and drop for all items in grid
         resizeHandles: {
@@ -42,9 +42,9 @@ export class AppComponent {
         },
         widthHeightRatio: 1, // proportion between item width and height
         lines: {
-          visible: true,
-          color: '#afafaf',
-          width: 2
+            visible: true,
+            color: '#afafaf',
+            width: 2
         },
         shrink: true,
         useCSSTransforms: true,
@@ -86,42 +86,44 @@ export class AppComponent {
         handlerClass: 'panel-heading'
     };
     title = 'Angular2Gridster';
-    innerWidgets: Array<any> = [
-        [
-            {
-                x: 0, y: 0,
-                w: 4, h: 3,
-                dragAndDrop: true,
-                resizable: true,
-                title: 'Basic form inputs 1'
-            }
-        ],
-        [
-            {
-                x: 0, y: 0,
-                w: 4, h: 3,
-                dragAndDrop: true,
-                resizable: true,
-                title: 'Basic form inputs 1'
-            }
-        ]
-    ];
+    widgetsCopy = [];
     widgets: Array<any> = [
         {
             x: 0, y: 0,
-            w: 3, h: 2,
+            w: 1, h: 2,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 1'
         },
         {
-            x: 5, y: 0,
-            w: 2, h: 1,
+            x: 1, y: 0, w: 3, h: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 2'
+        },
+        {
+            x: 1, y: 1, w: 2, h: 1,
+            dragAndDrop: true,
+            resizable: true,
+            title: 'Basic form inputs 3'
+        },
+        {
+            x: 3, y: 1, w: 1, h: 2,
+            dragAndDrop: true,
+            resizable: true,
+            title: 'Basic form inputs 4'
+        },
+        {
+            w: 1, h: 2,
+            dragAndDrop: true,
+            resizable: true,
+            title: 'Basic form inputs x'
         }
     ];
+
+    ngOnInit() {
+        this.widgetsCopy = this.widgets.map(widget => ({...widget}));
+    }
 
     onReflow(event) {
         console.log('onReflow', event);
@@ -195,22 +197,6 @@ export class AppComponent {
         console.log('add widget from drag to:', gridster);
     }
 
-    addWidgetToList(event, list, gridster) {
-        const item = event.item;
-        const breakpoint = gridster.options.breakpoint;
-        const widget = {
-            w: item.w, h: item.h,
-            dragAndDrop: true,
-            resizable: true,
-            title: 'New widget'
-        };
-
-        widget[AppComponent.X_PROPERTY_MAP[breakpoint]] = item.x;
-        widget[AppComponent.Y_PROPERTY_MAP[breakpoint]] = item.y;
-
-        list.push(widget);
-    }
-
     over(event) {
         const size = event.item.calculateSize(event.gridster);
 
@@ -265,5 +251,9 @@ export class AppComponent {
 
     itemChange($event: any, gridster) {
         console.log('item change', $event);
+    }
+
+    resetWidgets() {
+        this.widgets = this.widgetsCopy.map(widget => ({...widget}));
     }
 }
