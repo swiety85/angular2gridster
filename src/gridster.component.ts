@@ -111,6 +111,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         this.subscription.add(changeSub);
 
         this.gridster.init(this.gridster.options, this.draggableOptions, this);
+        this.gridsterPrototype.setGridsterOptions(this.gridster.options);
 
         const resizeSub = Observable.fromEvent(window, 'resize')
             .debounceTime(this.gridster.options.responsiveDebounce || 0)

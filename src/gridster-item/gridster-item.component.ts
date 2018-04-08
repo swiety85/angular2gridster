@@ -4,6 +4,8 @@ import { Component, OnInit, ElementRef, Inject, Host, Input, Output, ViewChild,
 import { Subscription } from 'rxjs/Subscription';
 
 import { GridsterService } from '../gridster.service';
+import { GridsterPrototypeService } from '../gridster-prototype/gridster-prototype.service';
+
 import { GridListItem } from '../gridList/GridListItem';
 import {DraggableEvent} from '../utils/DraggableEvent';
 import {Draggable} from '../utils/draggable';
@@ -195,6 +197,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     @Input() options: any = {};
 
     autoSize: boolean;
+    gridsterOptions: {};
 
     @HostBinding('class.is-dragging') isDragging = false;
     @HostBinding('class.is-resizing') isResizing = false;
@@ -236,6 +239,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     private resizeSubscriptions: Array<Subscription> = [];
 
     constructor(private zone: NgZone,
+                private gridsterPrototypeService: GridsterPrototypeService,
                 @Inject(ElementRef) elementRef: ElementRef,
                 @Host() gridster: GridsterService) {
 
@@ -253,6 +257,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
     ngOnInit() {
         this.options = Object.assign(this.defaultOptions, this.options);
+        this.gridsterOptions = this.gridsterPrototypeService.getGridsterOptions();
 
         this.w = this.w || this.options.defaultWidth;
         this.h = this.h || this.options.defaultHeight;

@@ -14,6 +14,7 @@ import { GridsterService } from '../gridster.service';
 import { GridsterItemPrototypeDirective } from './gridster-item-prototype.directive';
 import { utils } from '../utils/utils';
 import {DraggableEvent} from '../utils/DraggableEvent';
+import {IGridsterOptions} from '../IGridsterOptions';
 
 @Injectable()
 export class GridsterPrototypeService {
@@ -26,7 +27,17 @@ export class GridsterPrototypeService {
 
     private dragStopSubject = new Subject<any>();
 
+    GridsterOptions = {};
+
     constructor() {}
+
+    setGridsterOptions(options: IGridsterOptions) {
+        this.GridsterOptions = options;
+    }
+
+    getGridsterOptions() {
+        return this.GridsterOptions;
+    }
 
     observeDropOver (gridster: GridsterService) {
         return this.dragStopSubject.asObservable()

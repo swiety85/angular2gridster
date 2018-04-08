@@ -333,7 +333,7 @@ export class GridListItem {
 
     private getWProperty(breakpoint?: string) {
         const item = this.getItem();
-        const responsiveSizes = item.gridster && item.gridster.options && item.gridster.options.responsiveSizes;
+        const responsiveSizes = item.gridsterOptions && item.gridsterOptions.responsiveSizes;
 
         if (breakpoint && responsiveSizes) {
             return GridListItem.W_PROPERTY_MAP[breakpoint];
@@ -344,7 +344,7 @@ export class GridListItem {
 
     private getHProperty(breakpoint?: string) {
         const item = this.getItem();
-        const responsiveSizes = item.gridster && item.gridster.options && item.gridster.options.responsiveSizes;
+        const responsiveSizes = item.gridsterOptions && item.gridsterOptions.responsiveSizes;
 
         if (breakpoint && responsiveSizes) {
             return GridListItem.H_PROPERTY_MAP[breakpoint];

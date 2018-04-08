@@ -67,11 +67,11 @@
         </div>
 
         <div gridsterItemPrototype [config]="{helper: true}"
-             [w]="1" [h]="2"
+             [w]="2" [h]="2"
              [wSm]="2" [hSm]="2"
-             [wMd]="1" [hMd]="3"
-             [wLg]="1" [hLg]="1"
-             [wXl]="3" [hXl]="2"
+             [wMd]="2" [hMd]="2"
+             [wLg]="3" [hLg]="3"
+             [wXl]="4" [hXl]="4"
              (drop)="addWidgetFromDrag(gridster, $event)"
              (enter)="over($event)"
              (out)="out($event)"
@@ -87,6 +87,7 @@
 
         <div gridsterItemPrototype [config]="{helper: false}"
              [w]="2" [h]="1"
+             [wLg]="3" [hLg]="3"
              (drop)="addWidgetFromDrag(gridster, $event)"
              (enter)="over($event)"
              (out)="out($event)"

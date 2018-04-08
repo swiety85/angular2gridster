@@ -64,6 +64,7 @@ export class AppComponent implements OnInit {
         useCSSTransforms: true,
         responsiveView: true, // turn on adopting items sizes on window resize and enable responsiveOptions
         responsiveDebounce: 500, // window resize debounce time
+        responsiveSizes: true,
         // List of different gridster configurations for different breakpoints.
         // Each breakpoint is defined by name stored in "breakpoint" property. There is fixed set of breakpoints
         // available to use with default minWidth assign to each.
@@ -290,7 +291,7 @@ export class AppComponent implements OnInit {
     }
 
     itemChange($event: any, gridster) {
-        console.log('item change', $event);
+        // console.log('item change', $event);
     }
 
     resetWidgets() {
