@@ -1,8 +1,5 @@
 :host {
     position: absolute;
-    display: flex;
-    display: -webkit-inline-box;
-    flex-direction: column;
     height: 100%;
     width: 100%;
     overflow: hidden;
