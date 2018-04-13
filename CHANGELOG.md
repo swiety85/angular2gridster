@@ -10,13 +10,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 * **css:** use ViewEncapsultation.None in all components ([06cfa7b](https://github.com/swiety85/angular2gridster/commit/06cfa7b))
 * **drag:** Allow gridster inside gridster ([1fc10d6](https://github.com/swiety85/angular2gridster/commit/1fc10d6))
-* **drag:** Allow gridster inside gridster ([294d84b](https://github.com/swiety85/angular2gridster/commit/294d84b))
-* **drag:** Allow gridster inside gridster ([7985ac7](https://github.com/swiety85/angular2gridster/commit/7985ac7))
-* **drag:** Allow gridster inside gridster ([eb24576](https://github.com/swiety85/angular2gridster/commit/eb24576))
-* **drag:** Allow gridster inside gridster ([55bfaae](https://github.com/swiety85/angular2gridster/commit/55bfaae))
-* **drag:** Allow gridster inside gridster ([d49f170](https://github.com/swiety85/angular2gridster/commit/d49f170))
-* **drag:** Allow gridster inside gridster ([2ee8c99](https://github.com/swiety85/angular2gridster/commit/2ee8c99))
-* **drag:** Allow gridster inside gridster ([9472a82](https://github.com/swiety85/angular2gridster/commit/9472a82))
 
 
 
