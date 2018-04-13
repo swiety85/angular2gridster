@@ -43,9 +43,9 @@ export class AppComponent implements OnInit {
         },
         widthHeightRatio: 1, // proportion between item width and height
         lines: {
-          visible: true,
-          color: '#afafaf',
-          width: 2
+            visible: true,
+            color: '#afafaf',
+            width: 2
         },
         shrink: true,
         useCSSTransforms: true,

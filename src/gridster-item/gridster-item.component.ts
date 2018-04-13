@@ -325,8 +325,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     }
 
     setPositionsOnItem() {
-        if (!this.item.hasPositions(null)) {
-            this.setPositionsForGrid(this.gridster.gridsterOptions.basicOptions);
+        if (!this.item.hasPositions(this.gridster.options.breakpoint)) {
+            this.setPositionsForGrid(this.gridster.options.breakpoint);
         }
 
         this.gridster.gridsterOptions.responsiveOptions
@@ -340,7 +340,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         }
 
         this.zone.runOutsideAngular(() => {
-            [].forEach.call(this.$element.querySelectorAll('.gridster-item-resizable-handler'), (handler) => {
+            this.getResizeHandlers().forEach((handler) => {
                 const direction = this.getResizeDirection(handler);
 
                 if (this.hasResizableHandle(direction)) {
@@ -465,6 +465,13 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             sub.unsubscribe();
         });
         this.dragSubscriptions = [];
+    }
+
+    private getResizeHandlers(): HTMLElement[]  {
+        return [].filter.call(this.$element.children[0].children, (el) => {
+
+            return el.classList.contains('gridster-item-resizable-handler');
+        });
     }
 
     private getDraggableOptions() {
