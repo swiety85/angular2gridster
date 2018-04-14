@@ -432,14 +432,6 @@ export class GridList {
         });
     }
 
-    findDefaultPosition(width: number, height: number) {
-
-        if (this.options.direction === 'horizontal') {
-            return this.findDefaultPositionHorizontal(width, height);
-        }
-        return this.findDefaultPositionVertical(width, height);
-    }
-
     deleteItemPositionFromGrid(item: GridListItem) {
         const position = this.getItemPosition(item);
         let x, y;
