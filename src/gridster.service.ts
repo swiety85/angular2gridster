@@ -569,6 +569,8 @@ export class GridsterService {
                 // should be called only once (not for each breakpoint)
                 itemChange.item.itemComponent.change.emit({
                     item: itemChange.item,
+                    oldValues: itemChange.oldValues || {},
+                    isNew: itemChange.isNew,
                     changes: itemChange.changes,
                     breakpoint: breakpoint
                 });
