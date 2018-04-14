@@ -211,7 +211,9 @@ export class GridsterPrototypeService {
      */
     private isOverGridster(item: GridsterItemPrototypeDirective, gridsterEl: HTMLElement, event, options): boolean {
         const el = item.$element;
-        const parentItem = <HTMLElement>gridsterEl.parentElement.closest('gridster-item');
+        const parentItem = <HTMLElement>gridsterEl.parentElement &&
+            <HTMLElement>gridsterEl.parentElement.closest('gridster-item');
+
         if (parentItem) {
             return this.isOverGridster(item, parentItem, event, options);
         }
