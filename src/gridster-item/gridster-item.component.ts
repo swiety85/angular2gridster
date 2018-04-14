@@ -304,10 +304,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
     ngOnDestroy() {
         this.gridster.removeItem(this.item);
-        this.gridster.gridList.pullItemsToLeft();
-        this.gridster.render();
-
-        this.gridster.updateCachedItems();
+        this.gridster.itemRemoveSubject.next(this.item);
 
         this.subscriptions.forEach((sub: Subscription) => {
             sub.unsubscribe();
