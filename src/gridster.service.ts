@@ -106,6 +106,7 @@ export class GridsterService {
         this.gridList.generateGrid();
         this.applySizeToItems();
         this.applyPositionToItems();
+        this.refreshLines();
     }
 
     reflow() {
@@ -181,7 +182,6 @@ export class GridsterService {
         this.gridList.pullItemsToLeft(item);
         this.render();
 
-        this.refreshLines();
         this.fixItemsPositions();
     }
 
@@ -250,7 +250,6 @@ export class GridsterService {
 
         this.gridList.pullItemsToLeft();
         this.render();
-        this.refreshLines();
     }
 
     onStop(item: GridListItem) {
@@ -265,6 +264,70 @@ export class GridsterService {
         this.gridsterComponent.isDragging = false;
 
         this.refreshLines();
+    }
+
+    calculateCellSize() {
+        if (this.options.direction === 'horizontal') {
+            this.cellHeight = this.calculateCellHeight();
+            this.cellWidth = this.options.cellWidth || this.cellHeight * this.options.widthHeightRatio;
+        } else {
+            this.cellWidth = this.calculateCellWidth();
+            this.cellHeight = this.options.cellHeight || this.cellWidth / this.options.widthHeightRatio;
+        }
+        if (this.options.heightToFontSizeRatio) {
+            this._fontSize = this.cellHeight * this.options.heightToFontSizeRatio;
+        }
+    }
+
+    applyPositionToItems(increaseGridsterSize?) {
+        if (!this.options.shrink) {
+            increaseGridsterSize = true;
+        }
+        // TODO: Implement group separators
+        for (let i = 0; i < this.items.length; i++) {
+            // Don't interfere with the positions of the dragged items
+            if (this.isCurrentElement(this.items[i].$element)) {
+                continue;
+            }
+            this.items[i].applyPosition(this);
+        }
+
+        const child = <HTMLElement>this.gridsterComponent.$element.firstChild;
+        // Update the width of the entire grid container with enough room on the
+        // right to allow dragging items to the end of the grid.
+        if (this.options.direction === 'horizontal') {
+            const increaseWidthWith = (increaseGridsterSize) ? this.maxItemWidth : 0;
+            child.style.height = '';
+            child.style.width = ((this.gridList.grid.length + increaseWidthWith) * this.cellWidth) + 'px';
+
+        } else if (this.gridList.grid.length) {
+            const increaseHeightWith = (increaseGridsterSize) ? this.maxItemHeight : 0;
+            child.style.height = ((this.gridList.grid.length + increaseHeightWith) * this.cellHeight) + 'px';
+            child.style.width = '';
+        }
+    }
+
+    refreshLines() {
+        const gridsterContainer = <HTMLElement>this.gridsterComponent.$element.firstChild;
+
+        if (this.options.lines && this.options.lines.visible &&
+            (this.gridsterComponent.isDragging || this.gridsterComponent.isResizing || this.options.lines.always)) {
+            const linesColor = this.options.lines.color || '#d8d8d8';
+            const linesBgColor = this.options.lines.backgroundColor || 'transparent';
+            const linesWidth = this.options.lines.width || 1;
+            const bgPosition = linesWidth / 2;
+
+            gridsterContainer.style.backgroundSize = `${this.cellWidth}px ${this.cellHeight}px`;
+            gridsterContainer.style.backgroundPosition = `-${bgPosition}px -${bgPosition}px`;
+            gridsterContainer.style.backgroundImage = `
+                linear-gradient(to right, ${linesColor} ${linesWidth}px, ${linesBgColor} ${linesWidth}px),
+                linear-gradient(to bottom, ${linesColor} ${linesWidth}px, ${linesBgColor} ${linesWidth}px)
+            `;
+        } else {
+            gridsterContainer.style.backgroundSize = '';
+            gridsterContainer.style.backgroundPosition = '';
+            gridsterContainer.style.backgroundImage = '';
+        }
     }
 
     private removeItemFromCache(item: GridListItem) {
@@ -342,19 +405,6 @@ export class GridsterService {
         return true;
     }
 
-    calculateCellSize() {
-        if (this.options.direction === 'horizontal') {
-            this.cellHeight = this.calculateCellHeight();
-            this.cellWidth = this.options.cellWidth || this.cellHeight * this.options.widthHeightRatio;
-        } else {
-            this.cellWidth = this.calculateCellWidth();
-            this.cellHeight = this.options.cellHeight || this.cellWidth / this.options.widthHeightRatio;
-        }
-        if (this.options.heightToFontSizeRatio) {
-            this._fontSize = this.cellHeight * this.options.heightToFontSizeRatio;
-        }
-    }
-
     private calculateCellWidth() {
         const gridsterWidth = parseFloat(window.getComputedStyle(this.gridsterComponent.$element).width);
 
@@ -374,57 +424,6 @@ export class GridsterService {
             if (this.options.heightToFontSizeRatio) {
                 this.items[i].$element.style['font-size'] = this._fontSize;
             }
-        }
-    }
-
-    applyPositionToItems(increaseGridsterSize?) {
-        if (!this.options.shrink) {
-            increaseGridsterSize = true;
-        }
-        // TODO: Implement group separators
-        for (let i = 0; i < this.items.length; i++) {
-            // Don't interfere with the positions of the dragged items
-            if (this.isCurrentElement(this.items[i].$element)) {
-                continue;
-            }
-            this.items[i].applyPosition(this);
-        }
-
-        const child = <HTMLElement>this.gridsterComponent.$element.firstChild;
-        // Update the width of the entire grid container with enough room on the
-        // right to allow dragging items to the end of the grid.
-        if (this.options.direction === 'horizontal') {
-            const increaseWidthWith = (increaseGridsterSize) ? this.maxItemWidth : 0;
-            child.style.height = '';
-            child.style.width = ((this.gridList.grid.length + increaseWidthWith) * this.cellWidth) + 'px';
-
-        } else if (this.gridList.grid.length) {
-            const increaseHeightWith = (increaseGridsterSize) ? this.maxItemHeight : 0;
-            child.style.height = ((this.gridList.grid.length + increaseHeightWith) * this.cellHeight) + 'px';
-            child.style.width = '';
-        }
-    }
-
-    private refreshLines() {
-        const gridsterContainer = <HTMLElement>this.gridsterComponent.$element.firstChild;
-
-        if (this.options.lines && this.options.lines.visible &&
-            (this.gridsterComponent.isDragging || this.gridsterComponent.isResizing)) {
-            const linesColor = this.options.lines.color || '#d8d8d8';
-            const linesBgColor = this.options.lines.backgroundColor || 'transparent';
-            const linesWidth = this.options.lines.width || 1;
-            const bgPosition = linesWidth / 2;
-
-            gridsterContainer.style.backgroundSize = `${this.cellWidth}px ${this.cellHeight}px`;
-            gridsterContainer.style.backgroundPosition = `-${bgPosition}px -${bgPosition}px`;
-            gridsterContainer.style.backgroundImage = `
-                linear-gradient(to right, ${linesColor} ${linesWidth}px, ${linesBgColor} ${linesWidth}px),
-                linear-gradient(to bottom, ${linesColor} ${linesWidth}px, ${linesBgColor} ${linesWidth}px)
-            `;
-        } else {
-            gridsterContainer.style.backgroundSize = '';
-            gridsterContainer.style.backgroundPosition = '';
-            gridsterContainer.style.backgroundImage = '';
         }
     }
 
