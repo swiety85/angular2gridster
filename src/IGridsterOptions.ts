@@ -24,7 +24,8 @@ export interface IGridsterOptions {
         visible?: boolean,
         color?: string,
         backgroundColor?: string;
-        width?: number
+        width?: number,
+        always?: boolean
     };
     breakpoint?: string;
     minWidth?: number;
