@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/filter';
+import 'rxjs/operators/debounce';
+import { Subject } from 'rxjs/Subject';
 
 
 import { GridList } from './gridList/gridList';
@@ -37,6 +39,9 @@ export class GridsterService {
 
     public cellWidth: number;
     public cellHeight: number;
+
+    public itemRemoveSubject: Subject<GridListItem> = new Subject();
+
     private _fontSize: number;
 
     private previousDragPosition: Array<number>;
@@ -49,6 +54,12 @@ export class GridsterService {
     private isInit = false;
 
     constructor() {
+        this.itemRemoveSubject.debounceTime(0)
+            .subscribe(() => {
+                this.gridList.pullItemsToLeft();
+                this.render();
+                this.updateCachedItems();
+            });
     }
 
     isInitialized(): boolean {
