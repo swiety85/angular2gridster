@@ -497,11 +497,8 @@ export class GridsterService {
 
         if (this.options.direction === 'horizontal') {
             col = Math.min(col, this._maxGridCols);
-            row = Math.min(row, Math.max(0, this.options.lanes - item.h));
-
         } else {
             col = Math.min(col, Math.max(0, this.options.lanes - item.w));
-            row = Math.min(row, this._maxGridCols);
         }
 
         // check if element is pinned
