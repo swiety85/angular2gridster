@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.5.1"></a>
+## [1.5.1](https://github.com/swiety85/angular2gridster/compare/v1.5.0...v1.5.1) (2018-04-16)
+
+
+### Bug Fixes
+
+* Allow wrapping gridster-item component with other components ([e6a5b3f](https://github.com/swiety85/angular2gridster/commit/e6a5b3f))
+
+
+
 <a name="1.5.0"></a>
 # [1.5.0](https://github.com/swiety85/angular2gridster/compare/v1.4.0...v1.5.0) (2018-04-15)
 
