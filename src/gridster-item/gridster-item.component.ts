@@ -272,16 +272,21 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
         if (this.variableHeight) {
             let lastH: number;
+            let lastOffsetHeight: number;
             let observer = new MutationObserver((mutations) => {
                 let h = this.item.h;
+                let offsetHeight = this.contentWrapper.nativeElement.offsetHeight;
                 if (h !== lastH) {
                     this.gridster.gridList.resizeItem(this.item, { w: this.w, h: this.h });
                     this.gridster.applyPositionToItems();
+                    lastH = h;
                 }
-                lastH = h;
-                this.item.applySize(this.gridster);
+                if (offsetHeight !== lastOffsetHeight) {
+                    this.item.applySize();
+                    lastOffsetHeight = offsetHeight;
+                }
             });
-            observer.observe(this.$element, { childList: true, subtree: true });
+            observer.observe(this.$element, { childList: true, subtree: true, attributes: true });
         }
     }
 
