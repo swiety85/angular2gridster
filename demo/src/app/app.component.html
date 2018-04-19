@@ -104,13 +104,14 @@
                        [(xLg)]="widget.xLg" [(yLg)]="widget.yLg"
                        [(xXl)]="widget.xXl" [(yXl)]="widget.yXl"
                        [(w)]="widget.w" [(h)]="widget.h"
+                       [variableHeight]="widget.variableHeight"
                        (change)="itemChange($event, gridster1)">
 
             <div class="panel-heading">
                 <h5 class="panel-title">{{ widget.title }}</h5>
             </div>
 
-            <div class="panel-body">
+            <div class="panel-body" [ngStyle]="{'position': widget.variableHeight ? 'relative' : 'absolute'}">
                 <app-test></app-test>
                 <p>
                     <label>
@@ -118,6 +119,9 @@
                     </label>
                     <label>
                         <input type="checkbox" [(ngModel)]="widget.resizable" value="true"> Resizable
+                    </label>
+                    <label>
+                        <input type="checkbox" [(ngModel)]="widget.variableHeight" value="true"> Variable height
                     </label>
                     <button (click)="setWidth(widget, widget.w+1, $event, gridster1)">width +</button>
                     <button (click)="setWidth(widget, widget.w-1, $event, gridster1)">width -</button>
@@ -132,6 +136,13 @@
                     Size: {{widget.w}} x {{widget.h}}
                 </p>
                 <pre>{{ widget | json }}</pre>
+
+                    <button (click)="widget.contents.push('content')">Add content</button>
+                    <button (click)="widget.contents.pop()">Remove content</button>
+
+                <div *ngFor="let content of widget.contents">
+                    {{ content }}
+                </div>
 
             </div>
 

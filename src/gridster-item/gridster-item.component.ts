@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, Inject, Host, Input, Output,
     EventEmitter, SimpleChanges, OnChanges, OnDestroy, HostBinding,
-    ChangeDetectionStrategy, AfterViewInit, NgZone, ViewEncapsulation } from '@angular/core';
+    ChangeDetectionStrategy, AfterViewInit, NgZone, ViewEncapsulation, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { GridsterService } from '../gridster.service';
@@ -14,7 +14,9 @@ import {utils} from '../utils/utils';
 @Component({
     selector: 'gridster-item',
     template: `<div class="gridster-item-inner">
-      <ng-content></ng-content>
+      <span #contentWrapper class="gridster-content-wrapper">
+        <ng-content></ng-content>
+      </span>
       <div class="gridster-item-resizable-handler handle-s"></div>
       <div class="gridster-item-resizable-handler handle-e"></div>
       <div class="gridster-item-resizable-handler handle-n"></div>
@@ -176,6 +178,10 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
     @Input() options: any = {};
 
+    @Input() variableHeight: boolean = false;
+
+    @ViewChild('contentWrapper') contentWrapper: ElementRef;
+
     autoSize: boolean;
 
     @HostBinding('class.is-dragging') isDragging = false;
@@ -262,6 +268,20 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     ngAfterViewInit() {
         if (this.gridster.options.resizable && this.item.resizable) {
             this.enableResizable();
+        }
+
+        if (this.variableHeight) {
+            let lastH: number;
+            let observer = new MutationObserver((mutations) => {
+                let h = this.item.h;
+                if (h !== lastH) {
+                    this.gridster.gridList.resizeItem(this.item, { w: this.w, h: this.h });
+                    this.gridster.applyPositionToItems();
+                }
+                lastH = h;
+                this.item.applySize(this.gridster);
+            });
+            observer.observe(this.$element, { childList: true, subtree: true });
         }
     }
 

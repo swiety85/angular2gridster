@@ -150,8 +150,9 @@ Lunch demo app:
 ```
 
 Windows:
-In CMD run `MKLINK /D .\demo\src\app\gridster D:\Products\git\angular2gridster\src` (make sure the second path is the correct absolute for your environment)
-Then run the following
+In CMD run `MKLINK /D .\demo\src\app\gridster D:\Products\git\angular2gridster\src` (make sure the second path is the correct absolute for your environment).
+
+Then run the following:
 ```shell
     cd angular2gridster
     npm install

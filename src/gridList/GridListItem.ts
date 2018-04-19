@@ -62,9 +62,11 @@ export class GridListItem {
     }
 
     get h () {
-        const item = this.getItem();
-
-        return item.h;
+        if (!this.variableHeight) {
+            return this.getItem().h;
+        } else {
+            return Math.ceil(this.itemComponent.contentWrapper.nativeElement.offsetHeight / this.itemComponent.gridster.cellHeight);
+        }
     }
     set h (value: number) {
         this.getItem().h = value;
@@ -103,6 +105,16 @@ export class GridListItem {
         }
 
         return item.positionY;
+    }
+
+    get variableHeight(): boolean {
+        const item = this.itemComponent || this.itemPrototype;
+
+        if (!item) {
+            return undefined;
+        }
+
+        return item.variableHeight;
     }
 
     constructor () {}
@@ -250,9 +262,17 @@ export class GridListItem {
             height = Math.min(this.h, gridster.options.lanes);
         }
 
+        let pixelHeight;
+        if (this.variableHeight) {
+            pixelHeight = this.itemComponent.contentWrapper.nativeElement.offsetHeight;
+        } else {
+            pixelHeight = height * gridster.cellHeight;
+        }
+
         return {
             width: width * gridster.cellWidth,
-            height: height * gridster.cellHeight
+            // height: height * gridster.cellHeight
+            height: pixelHeight
         };
     }
 
