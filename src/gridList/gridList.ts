@@ -874,7 +874,6 @@ export class GridList {
      * transformations.
      */
     private getItemPosition(item: any) {
-
         if (this.options.direction === 'horizontal') {
             return item;
         } else {

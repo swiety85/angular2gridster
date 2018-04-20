@@ -62,10 +62,25 @@ export class GridListItem {
     }
 
     get h () {
-        if (!this.variableHeight) {
+        if (this.variableHeight && this.variableHeightContainToRow) {
+            return 1;
+        } else if (!this.variableHeight) {
             return this.getItem().h;
         } else {
-            return Math.ceil(this.itemComponent.contentWrapper.nativeElement.offsetHeight / this.itemComponent.gridster.cellHeight);
+            if (this.itemComponent.gridster.gridList) {
+                let rowHeights = this.itemComponent.gridster.getRowHeights();
+                let offsetHeight = this.itemComponent.contentWrapper.nativeElement.offsetHeight;
+                let h = 0;
+                let row = this.y;
+                while (offsetHeight > 0) {
+                    offsetHeight -= rowHeights[row];
+                    h++;
+                    row++;
+                }
+                return h;
+            } else {
+                return 1;
+            }
         }
     }
     set h (value: number) {
@@ -115,6 +130,16 @@ export class GridListItem {
         }
 
         return item.variableHeight;
+    }
+
+    get variableHeightContainToRow(): boolean {
+        const item = this.itemComponent || this.itemPrototype;
+
+        if (!item) {
+            return undefined;
+        }
+
+        return item.variableHeightContainToRow;
     }
 
     constructor () {}
@@ -233,9 +258,18 @@ export class GridListItem {
         }
         gridster = gridster || this.itemComponent.gridster;
 
+        let top;
+        if (gridster.gridList) {
+            let rowHeights = gridster.getRowHeights();
+            let rowTops = gridster.getRowTops(rowHeights);
+            top = rowTops[this.y];
+        } else {
+            top = this.y * gridster.cellHeight;
+        }
+
         return {
             left: this.x * gridster.cellWidth,
-            top: this.y * gridster.cellHeight
+            top: top
         };
     }
 
@@ -252,6 +286,12 @@ export class GridListItem {
         }
         gridster = gridster || this.itemComponent.gridster;
 
+        let rowHeights, rowTops;
+        if (gridster.gridList) {
+            rowHeights = gridster.getRowHeights();
+            rowTops = gridster.getRowTops(rowHeights);
+        }
+
         let width = this.w;
         let height = this.h;
 
@@ -266,12 +306,18 @@ export class GridListItem {
         if (this.variableHeight) {
             pixelHeight = this.itemComponent.contentWrapper.nativeElement.offsetHeight;
         } else {
-            pixelHeight = height * gridster.cellHeight;
+            if (rowHeights) {
+                pixelHeight = 0;
+                for (let i = this.y; i < this.y + height; i++) {
+                    pixelHeight += rowHeights[i];
+                }
+            } else {
+                pixelHeight = height * gridster.cellHeight;
+            }
         }
 
         return {
             width: width * gridster.cellWidth,
-            // height: height * gridster.cellHeight
             height: pixelHeight
         };
     }

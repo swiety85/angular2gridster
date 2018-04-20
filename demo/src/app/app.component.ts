@@ -111,6 +111,8 @@ export class AppComponent implements OnInit {
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 3',
+            variableHeight: true,
+            variableHeightContainToRow: true,
             contents: []
         },
         {

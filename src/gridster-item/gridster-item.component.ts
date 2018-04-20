@@ -179,6 +179,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     @Input() options: any = {};
 
     @Input() variableHeight: boolean = false;
+    @Input() variableHeightContainToRow: boolean = false;
 
     @ViewChild('contentWrapper') contentWrapper: ElementRef;
 
@@ -271,22 +272,42 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         }
 
         if (this.variableHeight) {
-            let lastH: number;
-            let lastOffsetHeight: number;
-            let observer = new MutationObserver((mutations) => {
-                let h = this.item.h;
-                let offsetHeight = this.contentWrapper.nativeElement.offsetHeight;
-                if (h !== lastH) {
-                    this.gridster.gridList.resizeItem(this.item, { w: this.w, h: this.h });
-                    this.gridster.applyPositionToItems();
-                    lastH = h;
-                }
-                if (offsetHeight !== lastOffsetHeight) {
-                    this.item.applySize();
+            if (this.variableHeightContainToRow) {
+                let readySubscription = this.gridster.gridsterComponent.ready.subscribe(() => {
+                    this.gridster.gridList.resizeItem(this.item, { w: this.w, h: 1 });
+                    readySubscription.unsubscribe();
+                });
+                let lastOffsetHeight: number;
+                let adjusting = false;
+                let observer = new MutationObserver((mutations) => {
+                    let offsetHeight = this.contentWrapper.nativeElement.offsetHeight;
+                    if (offsetHeight !== lastOffsetHeight) {
+                        for (let item of this.gridster.items) {
+                            item.applySize();
+                            item.applyPosition();
+                        }
+                    }
                     lastOffsetHeight = offsetHeight;
-                }
-            });
-            observer.observe(this.$element, { childList: true, subtree: true, attributes: true });
+                });
+                observer.observe(this.$element, { childList: true, subtree: true, attributes: true });
+            } else {
+                let lastH: number;
+                let lastOffsetHeight: number;
+                let observer = new MutationObserver((mutations) => {
+                    let h = this.item.h;
+                    let offsetHeight = this.contentWrapper.nativeElement.offsetHeight;
+                    if (h !== lastH) {
+                        this.gridster.gridList.resizeItem(this.item, { w: this.w, h: this.h });
+                        this.gridster.applyPositionToItems();
+                        lastH = h;
+                    }
+                    if (offsetHeight !== lastOffsetHeight) {
+                        this.item.applySize();
+                        lastOffsetHeight = offsetHeight;
+                    }
+                });
+                observer.observe(this.$element, { childList: true, subtree: true, attributes: true });
+            }
         }
     }
 

@@ -318,6 +318,36 @@ export class GridsterService {
         }
     }
 
+    getRowHeights(): number[] {
+        let result = [];
+        for (let row = 0; row < this.gridList.grid.length; row++) {
+            result.push(0);
+            for (let column = 0; column < this.gridList.grid[row].length; column++) {
+                let item = this.gridList.grid[row][column];
+                if (item) {
+                    let height = item.itemComponent.contentWrapper.nativeElement.offsetHeight;
+                    if (item.variableHeight && item.variableHeightContainToRow && height > result[row]) {
+                        result[row] = height;
+                    }
+                }
+            }
+            if (result[row] === 0) {
+                result[row] = this.cellHeight;
+            }
+        }
+        return result;
+    }
+
+    getRowTops(rowHeights: number[]): number[] {
+        let result = [];
+        let lastHeight = 0;
+        for (let rowHeight of rowHeights) {
+            result.push(lastHeight);
+            lastHeight += rowHeight;
+        }
+        return result;
+    }
+
     refreshLines() {
         const gridsterContainer = <HTMLElement>this.gridsterComponent.$element.firstChild;
 
