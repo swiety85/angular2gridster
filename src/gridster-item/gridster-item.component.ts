@@ -323,7 +323,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
     setPositionsOnItem() {
         if (!this.item.hasPositions(this.gridster.options.breakpoint)) {
-            this.setPositionsForGrid(this.gridster.options.breakpoint);
+            this.setPositionsForGrid(this.gridster.options);
         }
 
         this.gridster.gridsterOptions.responsiveOptions
@@ -497,7 +497,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         return isItemResizable && (!resizeHandles || (resizeHandles && !!resizeHandles[direction]));
     }
 
-    private setPositionsForGrid(options) {
+    private setPositionsForGrid(options: IGridsterOptions) {
         let x, y;
 
         const position = this.findPosition(options);
