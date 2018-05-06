@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.5.2"></a>
+## [1.5.2](https://github.com/swiety85/angular2gridster/compare/v1.5.1...v1.5.2) (2018-05-06)
+
+
+### Bug Fixes
+
+* Remove error when adding new widgets with no responsiveOptions ([275b1ca](https://github.com/swiety85/angular2gridster/commit/275b1ca)), closes [#246](https://github.com/swiety85/angular2gridster/issues/246)
+
+
+
 <a name="1.5.1"></a>
 ## [1.5.1](https://github.com/swiety85/angular2gridster/compare/v1.5.0...v1.5.1) (2018-04-16)
 
