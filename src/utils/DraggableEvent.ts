@@ -7,7 +7,9 @@ export class DraggableEvent {
 
     pageY: number;
 
-    target: EventTarget;
+    target: any;
+
+    type: string;
 
 
     private touchEvent: TouchEvent;
@@ -60,6 +62,7 @@ export class DraggableEvent {
         this.clientY = event.clientY;
         this.pageX = event.pageX;
         this.pageY = event.pageY;
+        this.type = event.type;
     }
 
     private setDataFromTouchEvent(event: TouchEvent): void {
@@ -70,6 +73,7 @@ export class DraggableEvent {
         this.clientY = touch.clientY;
         this.pageX = touch.pageX;
         this.pageY = touch.pageY;
+        this.type = event.type;
 
     }
 }
