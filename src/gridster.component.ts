@@ -1,6 +1,6 @@
 import {
     Component, OnInit, AfterContentInit, OnDestroy, ElementRef, ViewChild, NgZone,
-    Input, Output, EventEmitter, ChangeDetectionStrategy, HostBinding
+    Input, Output, EventEmitter, ChangeDetectionStrategy, HostBinding, ViewEncapsulation
 } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -31,14 +31,14 @@ import { GridsterOptions } from './GridsterOptions';
       </div>
     </div>`,
     styles: [`
-    :host {
+    gridster {
         position: relative;
         display: block;
         left: 0;
         width: 100%;
     }
 
-    :host.gridster--dragging {
+    gridster.gridster--dragging {
         -moz-user-select: none;
         -khtml-user-select: none;
         -webkit-user-select: none;
@@ -46,7 +46,7 @@ import { GridsterOptions } from './GridsterOptions';
         user-select: none;
     }
 
-    .gridster-container {
+    gridster .gridster-container {
         position: relative;
         width: 100%;
         list-style: none;
@@ -54,32 +54,39 @@ import { GridsterOptions } from './GridsterOptions';
         transition: width 0.2s, height 0.2s;
     }
 
-    .position-highlight {
+    gridster .position-highlight {
         display: block;
         position: absolute;
         z-index: 1;
     }
     `],
     providers: [GridsterService],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None
 })
 export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
     @Input() options: IGridsterOptions;
     @Output() optionsChange = new EventEmitter<any>();
     @Output() ready = new EventEmitter<any>();
     @Output() reflow = new EventEmitter<any>();
+    @Output() prototypeDrop = new EventEmitter<{item: GridListItem}>();
+    @Output() prototypeEnter = new EventEmitter<{item: GridListItem}>();
+    @Output() prototypeOut = new EventEmitter<{item: GridListItem}>();
     @Input() draggableOptions: IGridsterDraggableOptions;
-    @ViewChild('positionHighlight') $positionHighlight;
+    @Input() parent: GridsterComponent;
 
+    @ViewChild('positionHighlight') $positionHighlight;
     @HostBinding('class.gridster--dragging') isDragging = false;
     @HostBinding('class.gridster--resizing') isResizing = false;
-    @HostBinding('class.gridster--ready') isReady = false;
 
+    @HostBinding('class.gridster--ready') isReady = false;
     gridster: GridsterService;
     $element: HTMLElement;
 
 
     gridsterOptions: GridsterOptions;
+    isPrototypeEntered = false;
+    private isDisabled = false;
     private subscription = new Subscription();
 
     constructor(private zone: NgZone,
@@ -238,6 +245,20 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         this.gridster.reflow();
     }
 
+    disable(item) {
+        const itemIdx = this.gridster.items.indexOf(item.itemComponent);
+
+        this.isDisabled = true;
+        if (itemIdx >= 0) {
+            delete this.gridster.items[this.gridster.items.indexOf(item.itemComponent)];
+        }
+        this.gridster.onDragOut(item);
+    }
+
+    enable() {
+        this.isDisabled = false;
+    }
+
     private getScrollPositionFromParents(element: Element, data = { scrollTop: 0, scrollLeft: 0 })
         : { scrollTop: number, scrollLeft: number } {
 
@@ -258,8 +279,6 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
      * Connect gridster prototype item to gridster dragging hooks (onStart, onDrag, onStop).
      */
     private connectGridsterPrototype() {
-        let isEntered = false;
-
         this.gridsterPrototype.observeDropOut(this.gridster)
             .subscribe();
 
@@ -269,40 +288,71 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         const dragObservable = this.gridsterPrototype.observeDragOver(this.gridster);
 
         dragObservable.dragOver
+            .filter(() => !this.isDisabled)
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
-                if (!isEntered) {
+                if (!this.isPrototypeEntered) {
                     return;
                 }
                 this.gridster.onDrag(prototype.item);
             });
 
         dragObservable.dragEnter
+            .filter(() => !this.isDisabled)
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
-                isEntered = true;
+                this.isPrototypeEntered = true;
 
-                this.gridster.items.push(prototype.item);
+                if (this.gridster.items.indexOf(prototype.item) < 0) {
+                    this.gridster.items.push(prototype.item);
+                }
                 this.gridster.onStart(prototype.item);
+                if (this.parent) {
+                    this.parent.disable(prototype.item);
+                }
+                this.prototypeEnter.emit({item: prototype.item});
             });
 
         dragObservable.dragOut
+            .filter(() => !this.isDisabled)
             .subscribe((prototype: GridsterItemPrototypeDirective) => {
-                if (!isEntered) {
+                if (!this.isPrototypeEntered) {
                     return;
                 }
                 this.gridster.onDragOut(prototype.item);
-                isEntered = false;
+                this.isPrototypeEntered = false;
+
+                this.prototypeOut.emit({item: prototype.item});
+
+                if (this.parent) {
+                    this.parent.enable();
+
+                    this.parent.isPrototypeEntered = true;
+                    if (this.parent.gridster.items.indexOf(prototype.item) < 0) {
+                        this.parent.gridster.items.push(prototype.item);
+                    }
+                    this.parent.gridster.onStart(prototype.item);
+                    // timeout is needed to be sure that "enter" event is fired after "out"
+                    setTimeout(() => {
+                        this.parent.prototypeEnter.emit({item: prototype.item});
+                        prototype.onEnter(this.parent.gridster);
+                    });
+                }
             });
 
         dropOverObservable
+            .filter(() => !this.isDisabled)
             .subscribe((data) => {
-                if (!isEntered) {
+                if (!this.isPrototypeEntered) {
                     return;
                 }
-                this.gridster.onStop(data.item.item);
 
+                this.gridster.onStop(data.item.item);
                 this.gridster.removeItem(data.item.item);
 
-                isEntered = false;
+                this.isPrototypeEntered = false;
+                if (this.parent) {
+                    this.parent.enable();
+                }
+                this.prototypeDrop.emit({item: data.item.item});
             });
 
         dropOverObservable.connect();

@@ -1,6 +1,6 @@
-import { Component, OnInit, ElementRef, Inject, Host, Input, Output, ViewChild,
-    EventEmitter, SimpleChanges, OnChanges, OnDestroy, HostBinding, HostListener,
-    ChangeDetectionStrategy, AfterViewInit, NgZone } from '@angular/core';
+import { Component, OnInit, ElementRef, Inject, Host, Input, Output,
+    EventEmitter, SimpleChanges, OnChanges, OnDestroy, HostBinding,
+    ChangeDetectionStrategy, AfterViewInit, NgZone, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { GridsterService } from '../gridster.service';
@@ -27,7 +27,7 @@ import {utils} from '../utils/utils';
       <div class="gridster-item-resizable-handler handle-nw"></div>
     </div>`,
     styles: [`
-    :host {
+    gridster-item {
         display: block;
         position: absolute;
         top: 0;
@@ -37,32 +37,33 @@ import {utils} from '../utils/utils';
         transition: none;
     }
 
-    :host-context(.gridster--ready) {
+    .gridster--ready gridster-item {
         transition: all 200ms ease;
         transition-property: left, top;
     }
 
-    :host-context(.gridster--ready.css-transform)  {
+    .gridster--ready.css-transform gridster-item  {
         transition-property: transform;
     }
 
-    :host-context(.gridster--ready).is-dragging, :host-context(.gridster--ready).is-resizing {
+    .gridster--ready gridster-item.is-dragging,
+    .gridster--ready gridster-item.is-resizing {
         -webkit-transition: none;
         transition: none;
         z-index: 9999;
     }
 
-    :host.no-transition {
+    gridster-item.no-transition {
         -webkit-transition: none;
         transition: none;
     }
-    .gridster-item-resizable-handler {
+    gridster-item .gridster-item-resizable-handler {
         position: absolute;
         z-index: 2;
         display: none;
     }
 
-    .gridster-item-resizable-handler.handle-n {
+    gridster-item .gridster-item-resizable-handler.handle-n {
       cursor: n-resize;
       height: 10px;
       right: 0;
@@ -70,7 +71,7 @@ import {utils} from '../utils/utils';
       left: 0;
     }
 
-    .gridster-item-resizable-handler.handle-e {
+    gridster-item .gridster-item-resizable-handler.handle-e {
       cursor: e-resize;
       width: 10px;
       bottom: 0;
@@ -78,7 +79,7 @@ import {utils} from '../utils/utils';
       top: 0;
     }
 
-    .gridster-item-resizable-handler.handle-s {
+    gridster-item .gridster-item-resizable-handler.handle-s {
       cursor: s-resize;
       height: 10px;
       right: 0;
@@ -86,7 +87,7 @@ import {utils} from '../utils/utils';
       left: 0;
     }
 
-    .gridster-item-resizable-handler.handle-w {
+    gridster-item .gridster-item-resizable-handler.handle-w {
       cursor: w-resize;
       width: 10px;
       left: 0;
@@ -94,7 +95,7 @@ import {utils} from '../utils/utils';
       bottom: 0;
     }
 
-    .gridster-item-resizable-handler.handle-ne {
+    gridster-item .gridster-item-resizable-handler.handle-ne {
       cursor: ne-resize;
       width: 10px;
       height: 10px;
@@ -102,7 +103,7 @@ import {utils} from '../utils/utils';
       top: 0;
     }
 
-    .gridster-item-resizable-handler.handle-nw {
+    gridster-item .gridster-item-resizable-handler.handle-nw {
       cursor: nw-resize;
       width: 10px;
       height: 10px;
@@ -110,7 +111,7 @@ import {utils} from '../utils/utils';
       top: 0;
     }
 
-    .gridster-item-resizable-handler.handle-se {
+    gridster-item .gridster-item-resizable-handler.handle-se {
       cursor: se-resize;
       width: 0;
       height: 0;
@@ -121,7 +122,7 @@ import {utils} from '../utils/utils';
       border-color: transparent;
     }
 
-    .gridster-item-resizable-handler.handle-sw {
+    gridster-item .gridster-item-resizable-handler.handle-sw {
       cursor: sw-resize;
       width: 10px;
       height: 10px;
@@ -129,11 +130,12 @@ import {utils} from '../utils/utils';
       bottom: 0;
     }
 
-    :host(:hover) .gridster-item-resizable-handler.handle-se {
+    gridster-item:hover .gridster-item-resizable-handler.handle-se {
       border-color: transparent transparent #ccc
     }
     `],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None
 })
 export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     @Input() x: number;
@@ -241,7 +243,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     constructor(private zone: NgZone,
                 private gridsterPrototypeService: GridsterPrototypeService,
                 @Inject(ElementRef) elementRef: ElementRef,
-                @Host() gridster: GridsterService) {
+                @Inject(GridsterService) gridster: GridsterService) {
 
         this.gridster = gridster;
         this.elementRef = elementRef;
@@ -335,10 +337,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
     ngOnDestroy() {
         this.gridster.removeItem(this.item);
-        this.gridster.gridList.pullItemsToLeft();
-        this.gridster.render();
-
-        this.gridster.updateCachedItems();
+        this.gridster.itemRemoveSubject.next(this.item);
 
         this.subscriptions.forEach((sub: Subscription) => {
             sub.unsubscribe();
@@ -356,8 +355,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     }
 
     setPositionsOnItem() {
-        if (!this.item.hasPositions(null)) {
-            this.setPositionsForGrid(this.gridster.gridsterOptions.basicOptions);
+        if (!this.item.hasPositions(this.gridster.options.breakpoint)) {
+            this.setPositionsForGrid(this.gridster.options);
         }
 
         this.gridster.gridsterOptions.responsiveOptions
@@ -371,7 +370,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         }
 
         this.zone.runOutsideAngular(() => {
-            [].forEach.call(this.$element.querySelectorAll('.gridster-item-resizable-handler'), (handler) => {
+            this.getResizeHandlers().forEach((handler) => {
                 const direction = this.getResizeDirection(handler);
 
                 if (this.hasResizableHandle(direction)) {
@@ -498,6 +497,13 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.dragSubscriptions = [];
     }
 
+    private getResizeHandlers(): HTMLElement[]  {
+        return [].filter.call(this.$element.children[0].children, (el) => {
+
+            return el.classList.contains('gridster-item-resizable-handler');
+        });
+    }
+
     private getDraggableOptions() {
         return { scrollDirection: this.gridster.options.direction, ...this.gridster.draggableOptions };
     }
@@ -524,7 +530,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         return isItemResizable && (!resizeHandles || (resizeHandles && !!resizeHandles[direction]));
     }
 
-    private setPositionsForGrid(options) {
+    private setPositionsForGrid(options: IGridsterOptions) {
         let x, y;
 
         const position = this.findPosition(options);

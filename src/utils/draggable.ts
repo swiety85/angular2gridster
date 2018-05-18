@@ -65,7 +65,9 @@ export class Draggable {
             .map(md => new DraggableEvent(md))
             .filter((event: DraggableEvent) => this.isDragingByHandler(event))
             .do(e => {
-                e.pauseEvent();
+                if (e.type !== 'touchstart') {
+                    e.pauseEvent();
+                }
                 if (document.activeElement) {
                     (<any>document.activeElement).blur();
                 }

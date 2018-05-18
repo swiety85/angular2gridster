@@ -2,6 +2,66 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.5.3"></a>
+## [1.5.3](https://github.com/swiety85/angular2gridster/compare/v1.5.2...v1.5.3) (2018-05-18)
+
+
+### Bug Fixes
+
+* Make click event to be triggered on touch in drag handler ([e8a6578](https://github.com/swiety85/angular2gridster/commit/e8a6578))
+
+
+
+<a name="1.5.2"></a>
+## [1.5.2](https://github.com/swiety85/angular2gridster/compare/v1.5.1...v1.5.2) (2018-05-06)
+
+
+### Bug Fixes
+
+* Remove error when adding new widgets with no responsiveOptions ([275b1ca](https://github.com/swiety85/angular2gridster/commit/275b1ca)), closes [#246](https://github.com/swiety85/angular2gridster/issues/246)
+
+
+
+<a name="1.5.1"></a>
+## [1.5.1](https://github.com/swiety85/angular2gridster/compare/v1.5.0...v1.5.1) (2018-04-16)
+
+
+### Bug Fixes
+
+* Allow wrapping gridster-item component with other components ([e6a5b3f](https://github.com/swiety85/angular2gridster/commit/e6a5b3f))
+
+
+
+<a name="1.5.0"></a>
+# [1.5.0](https://github.com/swiety85/angular2gridster/compare/v1.4.0...v1.5.0) (2018-04-15)
+
+
+### Bug Fixes
+
+* **drag:** Fix error on prototype drag start ([90ade55](https://github.com/swiety85/angular2gridster/commit/90ade55))
+* Enabling scrolling in demo dashboard ([80326f8](https://github.com/swiety85/angular2gridster/commit/80326f8))
+* prevent changing bindings in gridster items on gridster destroy ([982cc53](https://github.com/swiety85/angular2gridster/commit/982cc53))
+* **drag:** Remove restriction about dragging items down/right ([3e596c5](https://github.com/swiety85/angular2gridster/commit/3e596c5)), closes [#228](https://github.com/swiety85/angular2gridster/issues/228)
+
+
+### Features
+
+* **api:** extend "change" event object to have isNew and oldValues ([4e5d541](https://github.com/swiety85/angular2gridster/commit/4e5d541)), closes [#191](https://github.com/swiety85/angular2gridster/issues/191)
+* **config:** Add option lines.always to always show grid lines ([07c1512](https://github.com/swiety85/angular2gridster/commit/07c1512)), closes [#227](https://github.com/swiety85/angular2gridster/issues/227)
+
+
+
+<a name="1.4.0"></a>
+# [1.4.0](https://github.com/swiety85/angular2gridster/compare/v1.3.4...v1.4.0) (2018-04-13)
+
+
+### Features
+
+* **css:** use ViewEncapsultation.None in all components ([06cfa7b](https://github.com/swiety85/angular2gridster/commit/06cfa7b))
+* **drag:** Allow gridster inside gridster ([1fc10d6](https://github.com/swiety85/angular2gridster/commit/1fc10d6))
+
+
+
 <a name="1.3.4"></a>
 ## [1.3.4](https://github.com/swiety85/angular2gridster/compare/v1.3.3...v1.3.4) (2018-03-26)
 

@@ -241,26 +241,38 @@ export class GridList {
 
         return this.items.map((item: GridListItem) => {
             const changes = [];
+            const oldValues: {x?: number, y?: number, w?: number, h?: number} = {};
             const initItem = initialItems.find(initItm => initItm.$element === item.$element);
 
             if (!initItem) {
                 return {item, changes: ['x', 'y', 'w', 'h'], isNew: true};
             }
 
-            if (item.getValueX(breakpoint) !== initItem.getValueX(breakpoint)) {
+            const oldX = initItem.getValueX(breakpoint);
+            if (item.getValueX(breakpoint) !== oldX) {
                 changes.push('x');
+                if (oldX) {
+                    oldValues.x = oldX;
+                }
             }
-            if (item.getValueY(breakpoint) !== initItem.getValueY(breakpoint)) {
+
+            const oldY = initItem.getValueY(breakpoint);
+            if (item.getValueY(breakpoint) !== oldY) {
                 changes.push('y');
+                if (oldY) {
+                    oldValues.y = oldY;
+                }
             }
             if (item.getValueW(breakpoint) !== initItem.getValueW(breakpoint)) {
                 changes.push('w');
+                oldValues.w = initItem.w;
             }
             if (item.getValueH(breakpoint) !== initItem.getValueH(breakpoint)) {
                 changes.push('h');
+                oldValues.h = initItem.h;
             }
 
-            return {item, changes, isNew: false};
+            return {item, oldValues, changes, isNew: false};
         })
             .filter((itemChange: { item: GridListItem, changes: Array<string> }) => {
                 return itemChange.changes.length;
@@ -430,14 +442,6 @@ export class GridList {
             itm.setValueH(cachedItem.h, options.breakpoint);
             itm.autoSize = cachedItem.autoSize;
         });
-    }
-
-    findDefaultPosition(width: number, height: number) {
-
-        if (this.options.direction === 'horizontal') {
-            return this.findDefaultPositionHorizontal(width, height);
-        }
-        return this.findDefaultPositionVertical(width, height);
     }
 
     deleteItemPositionFromGrid(item: GridListItem) {
