@@ -76,11 +76,11 @@ export class GridsterService {
         return item;
     }
 
-    init(options: IGridsterOptions = {}, draggableOptions: IGridsterDraggableOptions = {}, gridsterComponent: GridsterComponent) {
+    init(gridsterComponent: GridsterComponent) {
 
         this.gridsterComponent = gridsterComponent;
 
-        this.draggableOptions = draggableOptions;
+        this.draggableOptions = gridsterComponent.draggableOptions;
 
         this.gridsterOptions = gridsterComponent.gridsterOptions;
     }
@@ -126,10 +126,15 @@ export class GridsterService {
     }
 
     fixItemsPositions() {
-        this.gridList.fixItemsPositions(this.gridsterOptions.basicOptions);
-        this.gridsterOptions.responsiveOptions.forEach((options: IGridsterOptions) => {
-            this.gridList.fixItemsPositions(options);
-        });
+        if (this.options.responsiveSizes) {
+            this.gridList.fixItemsPositions(this.options);
+        } else {
+            this.gridList.fixItemsPositions(this.gridsterOptions.basicOptions);
+            this.gridsterOptions.responsiveOptions.forEach((options: IGridsterOptions) => {
+                this.gridList.fixItemsPositions(options);
+            });
+        }
+
         this.updateCachedItems();
     }
 

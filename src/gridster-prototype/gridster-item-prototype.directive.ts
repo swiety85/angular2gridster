@@ -65,14 +65,19 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
 
     containerRectange: ClientRect;
 
+    private dragContextGridster: GridsterService;
     private parentRect: ClientRect;
     private parentOffset: {left: number, top: number};
 
     private subscribtions: Array<Subscription> = [];
 
     // must be set to true because of item dragAndDrop configuration
-    get dragAndDrop() {
+    get dragAndDrop(): boolean {
         return true;
+    }
+
+    get gridster(): GridsterService {
+        return this.dragContextGridster;
     }
 
     constructor(private zone: NgZone,
@@ -102,7 +107,7 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
         });
     }
 
-    public onDrop (gridster: GridsterService): void {
+    onDrop (gridster: GridsterService): void {
         if (!this.config.helper) {
             this.$element.parentNode.removeChild(this.$element);
         }
@@ -113,33 +118,37 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
         });
     }
 
-    public onCancel (): void {
+    onCancel (): void {
         this.cancel.emit({item: this.item});
     }
 
-    public onEnter (gridster: GridsterService): void {
+    onEnter (gridster: GridsterService): void {
         this.enter.emit({
             item: this.item,
             gridster: gridster
         });
     }
 
-    public onOver (gridster: GridsterService): void {}
+    onOver (gridster: GridsterService): void {}
 
-    public onOut (gridster: GridsterService): void {
+    onOut (gridster: GridsterService): void {
         this.out.emit({
             item: this.item,
             gridster: gridster
         });
     }
 
-    public getPositionToGridster(gridster: GridsterService) {
+    getPositionToGridster(gridster: GridsterService) {
         const relativeContainerCoords = this.getContainerCoordsToGridster(gridster);
 
         return {
             y: this.positionY - relativeContainerCoords.top,
             x: this.positionX - relativeContainerCoords.left
         };
+    }
+
+    setDragContextGridster(gridster: GridsterService) {
+        this.dragContextGridster = gridster;
     }
 
     private getContainerCoordsToGridster(gridster: GridsterService): {top: number, left: number} {
