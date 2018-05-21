@@ -121,7 +121,7 @@ If you use `responsiveOptions`, then item coords will be assigned to different b
 
 (widths in px are only example and works for `responsiveOptions in example above).
 
-If you set `responsiveSizes: true`, then item sizes will be assigned to different breakpoint attributes:
+If you set `responsiveSizes: true`, item size can be different for different breakpoints. In this case size will be binded to following attributes:
 
 - till `sm` (480px), it uses `w` and `h` attributes
 - `sm` (480px - 768px), it uses `wSm` and `hSm` attributes
