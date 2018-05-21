@@ -199,7 +199,6 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     @Input() options: any = {};
 
     autoSize: boolean;
-    gridsterOptions: {};
 
     @HostBinding('class.is-dragging') isDragging = false;
     @HostBinding('class.is-resizing') isResizing = false;
@@ -259,7 +258,6 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
     ngOnInit() {
         this.options = Object.assign(this.defaultOptions, this.options);
-        this.gridsterOptions = this.gridsterPrototypeService.getGridsterOptions();
 
         this.w = this.w || this.options.defaultWidth;
         this.h = this.h || this.options.defaultHeight;

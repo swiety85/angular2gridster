@@ -490,7 +490,7 @@ export class GridList {
         const itemData = options.direction === 'horizontal' ? {
             x: item.getValueY(options.breakpoint),
             y: item.getValueX(options.breakpoint),
-            w: item.getValueW(options.breakpoint),
+            w: item.getValueH(options.breakpoint),
             h: Math.min(item.getValueW(this.options.breakpoint), options.lanes)
         } : {
             x: item.getValueX(options.breakpoint),

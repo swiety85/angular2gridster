@@ -332,8 +332,13 @@ export class GridListItem {
     }
 
     private getWProperty(breakpoint?: string) {
+        if (this.itemPrototype) {
+            return this.itemPrototype[GridListItem.W_PROPERTY_MAP[breakpoint]] ?
+                GridListItem.W_PROPERTY_MAP[breakpoint] : 'w';
+        }
+
         const item = this.getItem();
-        const responsiveSizes = item.gridsterOptions && item.gridsterOptions.responsiveSizes;
+        const responsiveSizes = item.gridster && item.gridster.options.responsiveSizes;
 
         if (breakpoint && responsiveSizes) {
             return GridListItem.W_PROPERTY_MAP[breakpoint];
@@ -343,8 +348,13 @@ export class GridListItem {
     }
 
     private getHProperty(breakpoint?: string) {
+        if (this.itemPrototype) {
+            return this.itemPrototype[GridListItem.H_PROPERTY_MAP[breakpoint]] ?
+                GridListItem.H_PROPERTY_MAP[breakpoint] : 'w';
+        }
+
         const item = this.getItem();
-        const responsiveSizes = item.gridsterOptions && item.gridsterOptions.responsiveSizes;
+        const responsiveSizes = item.gridster && item.gridster.options.responsiveSizes;
 
         if (breakpoint && responsiveSizes) {
             return GridListItem.H_PROPERTY_MAP[breakpoint];

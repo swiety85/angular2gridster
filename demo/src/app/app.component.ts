@@ -105,29 +105,32 @@ export class AppComponent implements OnInit {
     widgetsCopy = [];
     widgets: Array<any> = [
         {
-            x: 0, y: 0, w: 1, h: 2,
+            x: 0, y: 0,
+            w: 1, h: 2,
             wSm: 1, hSm: 1,
             wMd: 1, hMd: 2,
-            wLg: 2, hLg: 3,
+            wLg: 1, hLg: 1,
             wXl: 2, hXl: 2,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 1'
         },
         {
-            x: 1, y: 0, w: 3, h: 1,
-            wSm: 1, hSm: 1,
-            wMd: 3, hMd: 1,
-            wLg: 2, hLg: 1,
-            wXl: 2, hXl: 2,
+            x: 1, y: 0,
+            w: 1, h: 2,
+            wSm: 2, hSm: 1,
+            wMd: 2, hMd: 1,
+            wLg: 3, hLg: 1,
+            wXl: 3, hXl: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 2'
         },
         {
-            x: 1, y: 1, w: 2, h: 1,
-            wSm: 1, hSm: 1,
-            wMd: 1, hMd: 1,
+            x: 1, y: 1,
+            w: 2, h: 1,
+            wSm: 1, hSm: 2,
+            wMd: 1, hMd: 2,
             wLg: 2, hLg: 1,
             wXl: 3, hXl: 1,
             dragAndDrop: true,
@@ -135,21 +138,22 @@ export class AppComponent implements OnInit {
             title: 'Basic form inputs 3'
         },
         {
-            x: 3, y: 1, w: 1, h: 2,
-            wSm: 1, hSm: 1,
+            x: 3, y: 1,
+            w: 1, h: 2,
+            wSm: 1, hSm: 2,
             wMd: 1, hMd: 2,
-            wLg: 2, hLg: 2,
-            wXl: 3, hXl: 2,
+            wLg: 3, hLg: 1,
+            wXl: 3, hXl: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 4'
         },
         {
             w: 1, h: 2,
-            wSm: 1, hSm: 1,
+            wSm: 1, hSm: 2,
             wMd: 1, hMd: 2,
-            wLg: 2, hLg: 2,
-            wXl: 3, hXl: 2,
+            wLg: 3, hLg: 1,
+            wXl: 3, hXl: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs x'
@@ -158,6 +162,10 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         this.widgetsCopy = this.widgets.map(widget => ({...widget}));
+    }
+
+    test() {
+        console.log('xoxoxo');
     }
 
     onReflow(event) {
