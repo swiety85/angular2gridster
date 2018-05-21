@@ -296,7 +296,7 @@ export class AppComponent implements OnInit {
     }
 
     itemChange($event: any, gridster) {
-        // console.log('item change', $event);
+        console.log('item change', $event);
     }
 
     resetWidgets() {
