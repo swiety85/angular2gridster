@@ -164,10 +164,6 @@ export class AppComponent implements OnInit {
         this.widgetsCopy = this.widgets.map(widget => ({...widget}));
     }
 
-    test() {
-        console.log('xoxoxo');
-    }
-
     onReflow(event) {
         console.log('onReflow', event);
     }
@@ -236,7 +232,7 @@ export class AppComponent implements OnInit {
         widget[AppComponent.X_PROPERTY_MAP[breakpoint] || 'x'] = item.x;
         widget[AppComponent.Y_PROPERTY_MAP[breakpoint] || 'y'] = item.y;
 
-        for (let rwdProp of ['wSm', 'hSm', 'wMd', 'hMd', 'wLg', 'hLg', 'wXl', 'hXl']) {
+        for (const rwdProp of ['wSm', 'hSm', 'wMd', 'hMd', 'wLg', 'hLg', 'wXl', 'hXl']) {
             if (event.item.itemPrototype.hasOwnProperty(rwdProp)) {
                 widget[rwdProp] = event.item.itemPrototype[rwdProp];
             }
