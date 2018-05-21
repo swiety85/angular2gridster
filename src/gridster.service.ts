@@ -76,11 +76,11 @@ export class GridsterService {
         return item;
     }
 
-    init(options: IGridsterOptions = {}, draggableOptions: IGridsterDraggableOptions = {}, gridsterComponent: GridsterComponent) {
+    init(gridsterComponent: GridsterComponent) {
 
         this.gridsterComponent = gridsterComponent;
 
-        this.draggableOptions = draggableOptions;
+        this.draggableOptions = gridsterComponent.draggableOptions;
 
         this.gridsterOptions = gridsterComponent.gridsterOptions;
     }
@@ -90,7 +90,7 @@ export class GridsterService {
 
         // Used to highlight a position an element will land on upon drop
         if (this.$positionHighlight) {
-            this.$positionHighlight.style.display = 'none';
+            this.removePositionHighlight();
         }
 
         this.initGridList();
@@ -126,10 +126,15 @@ export class GridsterService {
     }
 
     fixItemsPositions() {
-        this.gridList.fixItemsPositions(this.gridsterOptions.basicOptions);
-        this.gridsterOptions.responsiveOptions.forEach((options: IGridsterOptions) => {
-            this.gridList.fixItemsPositions(options);
-        });
+        if (this.options.responsiveSizes) {
+            this.gridList.fixItemsPositions(this.options);
+        } else {
+            this.gridList.fixItemsPositions(this.gridsterOptions.basicOptions);
+            this.gridsterOptions.responsiveOptions.forEach((options: IGridsterOptions) => {
+                this.gridList.fixItemsPositions(options);
+            });
+        }
+
         this.updateCachedItems();
     }
 
@@ -176,7 +181,6 @@ export class GridsterService {
 
             // Visually update item positions and highlight shape
             this.applyPositionToItems(true);
-            // this.refreshLines();
             this.highlightPositionForItem(item);
         }
     }
@@ -525,7 +529,7 @@ export class GridsterService {
             newPosition[1] !== this.previousDragPosition[1]);
     }
 
-    private highlightPositionForItem(item: GridListItem) {
+    private highlightPositionForItem(item) {
         const size = item.calculateSize(this);
         const position = item.calculatePosition(this);
 
@@ -566,12 +570,11 @@ export class GridsterService {
                 if (itemChange.changes.indexOf('y') >= 0) {
                     itemChange.item.triggerChangeY(breakpoint);
                 }
-                // size change should be called only once (not for each breakpoint)
-                if (!breakpoint && itemChange.changes.indexOf('w') >= 0) {
-                    itemChange.item.itemComponent.wChange.emit(itemChange.item.w);
+                if (itemChange.changes.indexOf('w') >= 0) {
+                    itemChange.item.triggerChangeW(breakpoint);
                 }
-                if (!breakpoint && itemChange.changes.indexOf('h') >= 0) {
-                    itemChange.item.itemComponent.hChange.emit(itemChange.item.h);
+                if (itemChange.changes.indexOf('h') >= 0) {
+                    itemChange.item.triggerChangeH(breakpoint);
                 }
                 // should be called only once (not for each breakpoint)
                 itemChange.item.itemComponent.change.emit({

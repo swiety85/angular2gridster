@@ -117,7 +117,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
             .subscribe();
         this.subscription.add(changeSub);
 
-        this.gridster.init(this.gridster.options, this.draggableOptions, this);
+        this.gridster.init(this);
 
         const resizeSub = Observable.fromEvent(window, 'resize')
             .debounceTime(this.gridster.options.responsiveDebounce || 0)
@@ -304,6 +304,8 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
                     this.gridster.items.push(prototype.item);
                 }
                 this.gridster.onStart(prototype.item);
+                prototype.setDragContextGridster(this.gridster);
+
                 if (this.parent) {
                     this.parent.disable(prototype.item);
                 }
@@ -329,6 +331,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
                         this.parent.gridster.items.push(prototype.item);
                     }
                     this.parent.gridster.onStart(prototype.item);
+                    prototype.setDragContextGridster(this.parent.gridster);
                     // timeout is needed to be sure that "enter" event is fired after "out"
                     setTimeout(() => {
                         this.parent.prototypeEnter.emit({item: prototype.item});

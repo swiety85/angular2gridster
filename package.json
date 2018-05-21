@@ -5,6 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "install-demo": "npm install --prefix ./demo",
+    "link-demo": "ln -s $PWD/src/ $PWD/demo/src/app/gridster",
     "serve-demo": "npm start --prefix ./demo",
     "start": "npm start --prefix ./demo",
     "lint": "tslint src/**/*.ts && npm run lint --prefix ./demo",

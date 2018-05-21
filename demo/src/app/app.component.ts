@@ -24,6 +24,20 @@ export class AppComponent implements OnInit {
         xl: 'yXl'
     };
 
+    static W_PROPERTY_MAP: any = {
+        sm: 'wSm',
+        md: 'wMd',
+        lg: 'wLg',
+        xl: 'wXl'
+    };
+
+    static H_PROPERTY_MAP: any = {
+        sm: 'hSm',
+        md: 'hMd',
+        lg: 'hLg',
+        xl: 'hXl'
+    };
+
     @ViewChild(GridsterComponent) gridster: GridsterComponent;
     itemOptions = {
         maxWidth: 3,
@@ -51,6 +65,7 @@ export class AppComponent implements OnInit {
         useCSSTransforms: true,
         responsiveView: true, // turn on adopting items sizes on window resize and enable responsiveOptions
         responsiveDebounce: 500, // window resize debounce time
+        responsiveSizes: true,
         // List of different gridster configurations for different breakpoints.
         // Each breakpoint is defined by name stored in "breakpoint" property. There is fixed set of breakpoints
         // available to use with default minWidth assign to each.
@@ -92,30 +107,53 @@ export class AppComponent implements OnInit {
         {
             x: 0, y: 0,
             w: 1, h: 2,
+            wSm: 1, hSm: 1,
+            wMd: 1, hMd: 2,
+            wLg: 1, hLg: 1,
+            wXl: 2, hXl: 2,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 1'
         },
         {
-            x: 1, y: 0, w: 3, h: 1,
+            x: 1, y: 0,
+            w: 1, h: 2,
+            wSm: 2, hSm: 1,
+            wMd: 2, hMd: 1,
+            wLg: 3, hLg: 1,
+            wXl: 3, hXl: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 2'
         },
         {
-            x: 1, y: 1, w: 2, h: 1,
+            x: 1, y: 1,
+            w: 2, h: 1,
+            wSm: 1, hSm: 2,
+            wMd: 1, hMd: 2,
+            wLg: 2, hLg: 1,
+            wXl: 3, hXl: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 3'
         },
         {
-            x: 3, y: 1, w: 1, h: 2,
+            x: 3, y: 1,
+            w: 1, h: 2,
+            wSm: 1, hSm: 2,
+            wMd: 1, hMd: 2,
+            wLg: 3, hLg: 1,
+            wXl: 3, hXl: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 4'
         },
         {
             w: 1, h: 2,
+            wSm: 1, hSm: 2,
+            wMd: 1, hMd: 2,
+            wLg: 3, hLg: 1,
+            wXl: 3, hXl: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs x'
@@ -184,14 +222,21 @@ export class AppComponent implements OnInit {
         const item = event.item;
         const breakpoint = gridster.options.breakpoint;
         const widget = {
-            w: item.w, h: item.h,
             dragAndDrop: true,
             resizable: true,
             title: 'New widget'
         };
 
-        widget[AppComponent.X_PROPERTY_MAP[breakpoint]] = item.x;
-        widget[AppComponent.Y_PROPERTY_MAP[breakpoint]] = item.y;
+        widget[AppComponent.W_PROPERTY_MAP[breakpoint] || 'w'] = item.w;
+        widget[AppComponent.H_PROPERTY_MAP[breakpoint] || 'h'] = item.h;
+        widget[AppComponent.X_PROPERTY_MAP[breakpoint] || 'x'] = item.x;
+        widget[AppComponent.Y_PROPERTY_MAP[breakpoint] || 'y'] = item.y;
+
+        for (const rwdProp of ['wSm', 'hSm', 'wMd', 'hMd', 'wLg', 'hLg', 'wXl', 'hXl']) {
+            if (event.item.itemPrototype.hasOwnProperty(rwdProp)) {
+                widget[rwdProp] = event.item.itemPrototype[rwdProp];
+            }
+        }
 
         this.widgets.push(widget);
 

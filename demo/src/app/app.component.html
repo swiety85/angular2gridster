@@ -47,7 +47,12 @@
         Max item size: {{itemOptions.maxWidth}} x {{itemOptions.maxHeight}}
     </div>
     <div class="widgetbar">
-        <div gridsterItemPrototype [config]="{helper: true}" [w]="1" [h]="1"
+        <div gridsterItemPrototype [config]="{helper: true}"
+             [w]="1" [h]="1"
+             [wSm]="1" [hSm]="1"
+             [wMd]="2" [hMd]="1"
+             [wLg]="2" [hLg]="2"
+             [wXl]="3" [hXl]="2"
              (drop)="addWidgetFromDrag(gridster, $event)"
              (enter)="over($event)"
              (out)="out($event)"
@@ -61,7 +66,8 @@
             </div>
         </div>
 
-        <div gridsterItemPrototype [config]="{helper: true}" [w]="1" [h]="2"
+        <div gridsterItemPrototype [config]="{helper: true}"
+             [w]="2" [h]="2"
              (drop)="addWidgetFromDrag(gridster, $event)"
              (enter)="over($event)"
              (out)="out($event)"
@@ -75,7 +81,8 @@
             </div>
         </div>
 
-        <div gridsterItemPrototype [config]="{helper: false}" [w]="2" [h]="1"
+        <div gridsterItemPrototype [config]="{helper: false}"
+             [w]="2" [h]="1"
              (drop)="addWidgetFromDrag(gridster, $event)"
              (enter)="over($event)"
              (out)="out($event)"
@@ -104,6 +111,10 @@
                        [(xLg)]="widget.xLg" [(yLg)]="widget.yLg"
                        [(xXl)]="widget.xXl" [(yXl)]="widget.yXl"
                        [(w)]="widget.w" [(h)]="widget.h"
+                       [(wSm)]="widget.wSm" [(hSm)]="widget.hSm"
+                       [(wMd)]="widget.wMd" [(hMd)]="widget.hMd"
+                       [(wLg)]="widget.wLg" [(hLg)]="widget.hLg"
+                       [(wXl)]="widget.wXl" [(hXl)]="widget.hXl"
                        (change)="itemChange($event, gridster1)">
 
             <div class="panel-heading">
@@ -111,7 +122,10 @@
             </div>
 
             <div class="panel-body">
-                <app-test></app-test>
+                <p>
+                  Position: {{itemComp?.item?.x}} x {{itemComp?.item?.y}}<br>
+                  Size: {{itemComp?.item?.w}} x {{itemComp?.item?.h}}<br>
+                </p>
                 <p>
                     <label>
                         <input type="checkbox" [(ngModel)]="widget.dragAndDrop" value="true"> Draggable
@@ -127,10 +141,8 @@
                 <p>
                     <button (click)="remove($event, indx,gridster1)">remove</button>
                 </p>
-                <p>
-                    Position: {{itemComp?.item?.x}} x {{itemComp?.item?.y}}<br>
-                    Size: {{widget.w}} x {{widget.h}}
-                </p>
+                <app-test></app-test>
+
                 <pre>{{ widget | json }}</pre>
 
             </div>

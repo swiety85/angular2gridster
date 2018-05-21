@@ -78,6 +78,7 @@ gridsterOptions = {
   dragAndDrop: false, // possible to change items position by drag n drop
   resizable: false, // possible to resize items by drag n drop by item edge/corner
   useCSSTransforms: true, // Uses CSS3 translate() instead of position top/left - significant performance boost.
+  responsiveSizes: true, // allow to set different item sizes for different breakpoints
   // ResponsiveOptions can overwrite default configuration with any option available for specific breakpoint.
   responsiveOptions: [
         {
@@ -110,7 +111,7 @@ gridsterOptions = {
 
 **Warning**
 
-If you use `responsiveOptions`, then coords should be assigned to specific breakpoint attributes:
+If you use `responsiveOptions`, then item coords will be assigned to different breakpoint attributes:
 
 - till `sm` (480px), it uses `x` and `y` attributes
 - `sm` (480px - 768px), it uses `xSm` and `ySm` attributes
@@ -119,6 +120,14 @@ If you use `responsiveOptions`, then coords should be assigned to specific break
 - from `xl` (1800px), it uses `xXl` and `yXl` attributes
 
 (widths in px are only example and works for `responsiveOptions in example above).
+
+If you set `responsiveSizes: true`, then item sizes will be assigned to different breakpoint attributes:
+
+- till `sm` (480px), it uses `w` and `h` attributes
+- `sm` (480px - 768px), it uses `wSm` and `hSm` attributes
+- `md` (768px - 1250px), it uses `wMd` and `hMd` attributes
+- `lg` (1250px - 1800px), it uses `wLg` and `hLg` attributes
+- from `xl` (1800px), it uses `wXl` and `hXl` attributes
 
 ## Demo
 

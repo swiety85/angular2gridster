@@ -263,11 +263,11 @@ export class GridList {
                     oldValues.y = oldY;
                 }
             }
-            if (item.w !== initItem.w) {
+            if (item.getValueW(breakpoint) !== initItem.getValueW(breakpoint)) {
                 changes.push('w');
                 oldValues.w = initItem.w;
             }
-            if (item.h !== initItem.h) {
+            if (item.getValueH(breakpoint) !== initItem.getValueH(breakpoint)) {
                 changes.push('h');
                 oldValues.h = initItem.h;
             }
@@ -438,8 +438,8 @@ export class GridList {
 
             itm.setValueX(cachedItem.x, options.breakpoint);
             itm.setValueY(cachedItem.y, options.breakpoint);
-            itm.w = cachedItem.w;
-            itm.h = cachedItem.h;
+            itm.setValueW(cachedItem.w, options.breakpoint);
+            itm.setValueH(cachedItem.h, options.breakpoint);
             itm.autoSize = cachedItem.autoSize;
         });
     }
@@ -490,13 +490,13 @@ export class GridList {
         const itemData = options.direction === 'horizontal' ? {
             x: item.getValueY(options.breakpoint),
             y: item.getValueX(options.breakpoint),
-            w: item.h,
-            h: Math.min(item.w, options.lanes)
+            w: item.getValueH(options.breakpoint),
+            h: Math.min(item.getValueW(this.options.breakpoint), options.lanes)
         } : {
             x: item.getValueX(options.breakpoint),
             y: item.getValueY(options.breakpoint),
-            w: Math.min(item.w, options.lanes),
-            h: item.h
+            w: Math.min(item.getValueW(this.options.breakpoint), options.lanes),
+            h: item.getValueH(options.breakpoint)
         };
 
         return typeof itemData.x === 'number' &&

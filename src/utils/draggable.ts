@@ -8,6 +8,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/skip';
+import 'rxjs/add/operator/scan';
 
 import { DraggableEvent } from './DraggableEvent';
 import { utils } from './utils';
@@ -24,7 +25,7 @@ export class Draggable {
     private cancelAnimationFrame: Function;
     private mousemove: Observable<{} | Event> = Observable.merge(
         Observable.fromEvent(document, 'mousemove'),
-        Observable.fromEvent(document, 'touchmove', {passive: true})
+        Observable.fromEvent(document, 'touchmove', {passive: false})
     ).share();
     private mouseup: Observable<{} | Event> = Observable.merge(
         Observable.fromEvent(document, 'mouseup'),
@@ -65,7 +66,7 @@ export class Draggable {
             .map(md => new DraggableEvent(md))
             .filter((event: DraggableEvent) => this.isDragingByHandler(event))
             .do(e => {
-                if (e.type !== 'touchstart') {
+                if (!e.isTouchEvent()) {
                     e.pauseEvent();
                 }
                 if (document.activeElement) {
@@ -87,10 +88,17 @@ export class Draggable {
 
     private createDragMoveObservable(dragStart: Observable<DraggableEvent>): Observable<DraggableEvent> {
         return dragStart
-            .switchMap(() => {
+            .do((event) => {
+                this.addTouchActionNone(event.target);
+            })
+            .switchMap((startEvent) => {
                 return this.mousemove
                     .skip(1)
                     .map(mm => new DraggableEvent(mm))
+                    .do((event) => {
+                        event.pauseEvent();
+                        startEvent.pauseEvent();
+                    })
                     .takeUntil(this.mouseup);
             })
             .filter(val => !!val)
@@ -107,7 +115,8 @@ export class Draggable {
                 return this.mouseup.take(1);
             })
             .map(e => new DraggableEvent(e))
-            .do(() => {
+            .do((e) => {
+                this.removeTouchActionNone(e.target);
                 this.autoScrollingInterval.forEach(raf => this.cancelAnimationFrame(raf));
             });
     }
@@ -270,6 +279,14 @@ export class Draggable {
         if (this.isTouchDevice() && this.isIEorEdge()) {
             (<HTMLElement>element).style['touch-action'] = 'none';
         }
+    }
+
+    private removeTouchActionNone(element: Element) {
+        (<HTMLElement>element).style['touch-action'] = '';
+    }
+
+    private addTouchActionNone(element) {
+        (<HTMLElement>element).style['touch-action'] = 'none';
     }
 
     private isTouchDevice() {
