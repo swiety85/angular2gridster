@@ -8,11 +8,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Features
 
-* responsive gridster-items, gridster-item-prototype. GridsterOptions new flag: responsiveSizes ([871f886](https://github.com/swiety85/angular2gridster/commit/871f886))
-* **config:** Provide support for different item width/height for different breakpoints ([6f95dd3](https://github.com/swiety85/angular2gridster/commit/6f95dd3)), closes [#98](https://github.com/swiety85/angular2gridster/issues/98)
-* **config:** Provide support for different item width/height for different breakpoints ([09815b9](https://github.com/swiety85/angular2gridster/commit/09815b9)), closes [#98](https://github.com/swiety85/angular2gridster/issues/98)
-* **config:** Provide support for different item width/height for different breakpoints ([06421b5](https://github.com/swiety85/angular2gridster/commit/06421b5)), closes [#98](https://github.com/swiety85/angular2gridster/issues/98)
-* **config:** Provide support for different item width/height for different breakpoints ([b0b7888](https://github.com/swiety85/angular2gridster/commit/b0b7888)), closes [#98](https://github.com/swiety85/angular2gridster/issues/98)
+* **config:** Provide support for different item width/height for different breakpoints ([871f886](https://github.com/swiety85/angular2gridster/commit/871f886), [6f95dd3](https://github.com/swiety85/angular2gridster/commit/6f95dd3), [09815b9](https://github.com/swiety85/angular2gridster/commit/09815b9), [06421b5](https://github.com/swiety85/angular2gridster/commit/06421b5), [b0b7888](https://github.com/swiety85/angular2gridster/commit/b0b7888)), closes [#98](https://github.com/swiety85/angular2gridster/issues/98)
 
 
 
