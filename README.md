@@ -28,7 +28,7 @@ import { GridsterModule } from 'angular2gridster';
   ],
   imports: [
     ...
-    GridsterModule
+    GridsterModule.forRoot() // .forRoot() is required since version v4+
   ],
   providers: [],
   bootstrap: [AppComponent]
