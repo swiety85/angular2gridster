@@ -2,16 +2,6 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-<a name="3.7.0"></a>
-# [3.7.0](https://github.com/swiety85/angular2gridster/compare/v1.6.0...v3.7.0) (2018-05-26)
-
-
-### Features
-
-* allow drag item prototypes to different gridster components in different modules ([7a5abd1](https://github.com/swiety85/angular2gridster/commit/7a5abd1)), closes [#208](https://github.com/swiety85/angular2gridster/issues/208)
-
-
-
 <a name="1.6.0"></a>
 # [1.6.0](https://github.com/swiety85/angular2gridster/compare/v1.5.3...v1.6.0) (2018-05-21)
 
