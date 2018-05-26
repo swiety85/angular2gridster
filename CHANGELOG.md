@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.0.0"></a>
+# [4.0.0](https://github.com/swiety85/angular2gridster/compare/v1.6.1...v4.0.0) (2018-05-26)
+
+### Features
+
+* allow drag item prototypes to different gridster components in different modules
+BREAKING CHANGES: requeires .forRoot() in module import
+
+
+
 <a name="1.6.0"></a>
 # [1.6.0](https://github.com/swiety85/angular2gridster/compare/v1.5.3...v1.6.0) (2018-05-21)
 

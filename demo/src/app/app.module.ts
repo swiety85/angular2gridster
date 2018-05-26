@@ -17,7 +17,7 @@ import { TestComponent } from './test/test.component';
         BrowserModule,
         FormsModule,
         HttpModule,
-        GridsterModule
+        GridsterModule.forRoot()
     ],
     providers: [],
     bootstrap: [AppComponent]
