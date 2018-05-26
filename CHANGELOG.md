@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file. See [standa
 <a name="4.0.0"></a>
 # [4.0.0](https://github.com/swiety85/angular2gridster/compare/v1.6.1...v4.0.0) (2018-05-26)
 
+### Features
+
+* allow drag item prototypes to different gridster components in different modules
+BREAKING CHANGES: requeires .forRoot() in module import
+
 
 
 <a name="1.6.0"></a>
