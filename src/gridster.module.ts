@@ -19,10 +19,14 @@ import { GridsterPrototypeService } from './gridster-prototype/gridster-prototyp
         GridsterComponent,
         GridsterItemComponent,
         GridsterItemPrototypeDirective
-    ],
-    providers: [
-        GridsterPrototypeService
     ]
 })
-export class GridsterModule { }
+export class GridsterModule {
+    static forRoot() {
+        return {
+            ngModule: GridsterModule,
+            providers: [ GridsterPrototypeService ]
+        };
+    }
+}
 
