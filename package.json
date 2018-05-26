@@ -1,6 +1,6 @@
 {
   "name": "angular2gridster",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "license": "MIT",
   "main": "./dist/index.js",
   "scripts": {
@@ -11,9 +11,9 @@
     "lint": "tslint src/**/*.ts && npm run lint --prefix ./demo",
     "test": "karma start",
     "build": "echo 'Building...' && ./node_modules/.bin/ngc -p tsconfig.json",
-    "release-major": "standard-version -- -r major",
-    "release-minor": "standard-version -- -r minor",
-    "release-fix": "standard-version -- -r patch",
+    "release-major": "standard-version -r major",
+    "release-minor": "standard-version -r minor",
+    "release-fix": "standard-version -r patch",
     "prepublishOnly": "npm run build"
   },
   "repository": {
