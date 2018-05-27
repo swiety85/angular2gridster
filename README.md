@@ -59,14 +59,14 @@ System.config({
 ## Example usage
 
 ```html
-<gridster [options]="gridsterOptions" [draggableOptions]="{ handlerClass: 'panel-heading' }">
+<ngx-gridster [options]="gridsterOptions" [draggableOptions]="{ handlerClass: 'panel-heading' }">
 
-  <gridster-item *ngFor="let widget of widgets" 
+  <ngx-gridster-item *ngFor="let widget of widgets" 
                  [(x)]="widget.x" [(y)]="widget.y" [(w)]="widget.w" [(h)]="widget.h">
       <!--some content-->
-  </gridster-item>
+  </ngx-gridster-item>
 
-</gridster>
+</ngx-gridster>
 ```
 
 ```js
@@ -131,46 +131,27 @@ If you set `responsiveSizes: true`, item size can be different for different bre
 
 ## Demo
 
-Clone or download this repository. Demo folder is dedicated nester project build on Angular CLI. To run:
+Clone or download this repository and just run:
 
-Create symlink from library `src` directory to `demo/src/app/gridster` use absolute path for that:
-
-linux, macos:
-```shell
-cd angular2gridster
-ln -s $PWD/src/ $PWD/demo/src/app/gridster
-```
-
-After that, linked directory should appear
-```
-angular2gridster
-├─ demo
-│  └─ src
-│     └─ app
-│        └─ gridster //symlink
-└─ src
-```
-
-Lunch demo app:
-
-```shell
-    npm run install-demo
-    npm run serve-demo
+```js
+npm i
+npm start
 ```
 
 Go to: http://localhost:4200/
 
 ## Compilation problems
 If somebody will have compilation problems please add an issue (if not yet created). I will try to fix it as soon as possible.
-Angular compiler has still some issues opened that can be a problem to you this module in your project. If so please,
-as a temporary solution copy files from /src folder to dedicated folder in your project.
+Angular compiler has still some issues opened and it is changing frequently.
+
+As a temporary solution copy files from `/projects/angular2gridster/src/lib` folder to dedicated folder in your project.
 
 ## Issues
 
 If the current behavior is a bug or you can illustrate your feature request better with an example, 
 please provide the steps to reproduce and if possible a minimal demo of the problem via plnkr (http://plnkr.co/edit/4pGyURZVVrL6MONXc8A0?p=preview).
 The project is in development so don't hesitate to writte any questions or suggestion on issue list.
-I look forward to get response from you.
+I look forward to get a response from you.
 
 ## Origin
 
