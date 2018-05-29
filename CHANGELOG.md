@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.0.0-rc.0"></a>
+# [6.0.0-rc.0](https://github.com/swiety85/angular2gridster/compare/v5.0.0...v6.0.0-rc.0) (2018-05-29)
+
+
+### fear
+
+* **build:** compatibility with Angular 6 ([ceb74e3](https://github.com/swiety85/angular2gridster/commit/ceb74e3))
+
+
+### BREAKING CHANGES
+
+* **build:** New bundles works only with Angular 6. New selector names with ngx prefix
+
+
+
 <a name="5.0.0"></a>
 # [5.0.0](https://github.com/swiety85/angular2gridster/compare/v4.0.0...v5.0.0) (2018-05-26)
 
