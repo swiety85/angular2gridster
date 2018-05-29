@@ -5,13 +5,16 @@ All notable changes to this project will be documented in this file. See [standa
 <a name="6.0.0-rc.1"></a>
 # [6.0.0-rc.1](https://github.com/swiety85/angular2gridster/compare/v7.0.0-rc.0...v6.0.0-rc.1) (2018-05-29)
 
+### Bug Fixes
+
+* fix build bundle
 
 
 <a name="6.0.0-rc.0"></a>
 # [6.0.0-rc.0](https://github.com/swiety85/angular2gridster/compare/v5.0.0...v6.0.0-rc.0) (2018-05-29)
 
 
-### fear
+### Features
 
 * **build:** compatibility with Angular 6 ([ceb74e3](https://github.com/swiety85/angular2gridster/commit/ceb74e3))
 
