@@ -69,6 +69,19 @@ System.config({
 </ngx-gridster>
 ```
 
+For version before 6.0.0:
+```html
+<gridster [options]="gridsterOptions" [draggableOptions]="{ handlerClass: 'panel-heading' }">
+
+  <gridster-item *ngFor="let widget of widgets" 
+                 [(x)]="widget.x" [(y)]="widget.y" [(w)]="widget.w" [(h)]="widget.h">
+      <!--some content-->
+  </gridster-item>
+
+</gridster>
+```
+
+
 ```js
 widgets: Array<any> = [...];
 gridsterOptions = {
