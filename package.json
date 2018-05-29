@@ -1,6 +1,6 @@
 {
   "name": "angular2gridster",
-  "version": "6.0.0-rc.0",
+  "version": "6.0.0-rc.1",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "release-rc": "standard-version -r major --prerelease rc",
+    "release-rc": "standard-version --prerelease rc",
     "release-major": "standard-version -r major",
     "release-minor": "standard-version -r minor",
     "release-fix": "standard-version -r patch",
