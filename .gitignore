@@ -1,71 +1,39 @@
-/dist
-node_modules
-/examples
-/index.html
-/demos/**/dist
-old-RC4/demos/tmp
-old-RC4/demos/**/dist
-old-RC4/**/typings
-/typings
-/out/chrome
-aot
-/demos/basic_2.4
-/demos/basic-latest
-**/.vscode
-.idea
-.awcache
+# See http://help.github.com/ignore-files/ for more about ignoring files.
 
-
-
-
-
-
-
-
-
-
-
-#demo
 # compiled output
-demo/dist
-demo/tmp
-demo/out-tsc
-
-#symlink library
-demo/src/app/gridster
+/dist
+/tmp
+/out-tsc
 
 # dependencies
-demo/node_modules
+/node_modules
 
 # IDEs and editors
-demo/.idea
-demo/.project
-demo/.classpath
-demo/.c9/
-demo/*.launch
-demo/.settings/
-demo/*.sublime-workspace
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
 # IDE - VSCode
-demo/.vscode/*
-!demo/.vscode/settings.json
-!demo/.vscode/tasks.json
-!demo/.vscode/launch.json
-!demo/.vscode/extensions.json
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
 # misc
-demo/.sass-cache
-demo/connect.lock
-demo/coverage/*
-demo/libpeerconnection.log
-demo/npm-debug.log
-demo/testem.log
-demo/typings
-
-# e2e
-demo/e2e/*.js
-demo/e2e/*.map
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
 
 # System Files
-demo/.DS_Store
-demo/Thumbs.db
+.DS_Store
+Thumbs.db
