@@ -1,6 +1,6 @@
 {
   "name": "angular2gridster",
-  "version": "7.0.0-rc.0",
+  "version": "6.0.0-rc.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -13,7 +13,7 @@
     "release-major": "standard-version -r major",
     "release-minor": "standard-version -r minor",
     "release-fix": "standard-version -r patch",
-    "publish": "cd ./dist/angular2gridster && npm publish",
+    "publish": "npm publish --prefix ./dist/angular2gridster",
     "prepublishOnly": "npm run build"
   },
   "repository": {
