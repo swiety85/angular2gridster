@@ -12,6 +12,13 @@ More comprehensive documentation is available in [Wiki](https://github.com/swiet
 
 Development progress can be tracked in [Milestones](https://github.com/swiety85/angular2gridster/milestones) and in [Project board](https://github.com/swiety85/angular2gridster/projects/1).
 
+## Versions:
+* Version **6.x** works with **Angular 6.x**.
+* Version **5.x** works with **Angular 5.x**.
+* Version **4.x** works with **Angular 4.x**.
+
+Versions **1.x** and **0.x** works only with **Angular 4.x**, but the newest states you can find in **v4.x**.
+
 ## Installation
 ```shell
 npm install angular2gridster
