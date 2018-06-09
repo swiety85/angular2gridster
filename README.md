@@ -169,7 +169,9 @@ As a temporary solution copy files from `/projects/angular2gridster/src/lib` fol
 ## Issues
 
 If the current behavior is a bug or you can illustrate your feature request better with an example, 
-please provide the steps to reproduce and if possible a minimal demo of the problem via plnkr (http://plnkr.co/edit/4pGyURZVVrL6MONXc8A0?p=preview).
+please provide the steps to reproduce and if possible a minimal demo of the problem via CodeSandbox:
+[![Edit Angular2gridster demo](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/w77q2rqll).
+
 The project is in development so don't hesitate to writte any questions or suggestion on issue list.
 I look forward to get a response from you.
 
