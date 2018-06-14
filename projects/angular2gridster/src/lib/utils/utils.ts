@@ -1,5 +1,7 @@
+import { Observable } from 'rxjs';
+import { pairwise, filter } from 'rxjs/operators';
 
-import {DraggableEvent} from './DraggableEvent';
+import { DraggableEvent } from './DraggableEvent';
 
 export const utils = {
     setCssElementPosition: function ($element: HTMLElement, position: {x: number, y: number}) {
@@ -74,6 +76,19 @@ export const utils = {
             event.pageX < elRect.right &&
             event.pageY > elRect.top &&
             event.pageY < elRect.bottom;
+    },
+    isOverElement({draggEl, event, overEl, tolerance = 'pointer'}): boolean {
+        switch (tolerance) {
+            case 'fit':
+                return this.isElementFitContainer(draggEl, overEl);
+            case 'intersect':
+                return this.isElementIntersectContainer(draggEl, overEl);
+            case 'touch':
+                return this.isElementTouchContainer(draggEl, overEl);
+            case 'pointer':
+            default:
+                return this.isCursorAboveElement(event, overEl);
+        }
     },
     getElementOuterHeight: function ($element: HTMLElement) {
         const styleObj = window.getComputedStyle($element);

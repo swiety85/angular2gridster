@@ -191,15 +191,6 @@ export class GridsterPrototypeService {
             return this.isOverGridster(item, parentItem, event, options);
         }
 
-        switch (options.tolerance) {
-            case 'fit':
-                return utils.isElementFitContainer(el, gridsterEl);
-            case 'intersect':
-                return utils.isElementIntersectContainer(el, gridsterEl);
-            case 'touch':
-                return utils.isElementTouchContainer(el, gridsterEl);
-            default:
-                return utils.isCursorAboveElement(event, gridsterEl);
-        }
+        utils.isOverElement({draggEl: el, event, overEl: gridsterEl, tolerance: options.tolerance});
     }
 }

@@ -97,9 +97,9 @@
       </div>
   </div>
 </div>
-<div class="main-content">
+<div class="main-content" style="flex-direction: row;">
 
-  <ngx-gridster [options]="gridsterOptions" [draggableOptions]="gridsterDraggableOptions" (reflow)="onReflow($event)"
+  <ngx-gridster id="gridster1" style="width: 50%;" [options]="gridsterOptions" [draggableOptions]="gridsterDraggableOptions" (reflow)="onReflow($event)"
             (optionsChange)="optionsChange($event)" #gridster1 class="dashboard">
 
       <ngx-gridster-item *ngFor="let widget of widgets; let indx = index" #itemComp
@@ -149,4 +149,54 @@
       </ngx-gridster-item>
 
   </ngx-gridster>
+  <ngx-gridster id="gridster2" style="width: 50%;" [options]="gridsterOptions" [draggableOptions]="gridsterDraggableOptions" (reflow)="onReflow($event)"
+  (optionsChange)="optionsChange($event)" #gridster1 class="dashboard">
+
+<ngx-gridster-item *ngFor="let widget of widgets2; let indx = index" #itemComp
+           [options]="itemOptions"
+           [dragAndDrop]="widget.dragAndDrop" [resizable]="widget.resizable"
+           [(x)]="widget.x" [(y)]="widget.y"
+           [(xSm)]="widget.xSm" [(ySm)]="widget.ySm"
+           [(xMd)]="widget.xMd" [(yMd)]="widget.yMd"
+           [(xLg)]="widget.xLg" [(yLg)]="widget.yLg"
+           [(xXl)]="widget.xXl" [(yXl)]="widget.yXl"
+           [(w)]="widget.w" [(h)]="widget.h"
+           [(wSm)]="widget.wSm" [(hSm)]="widget.hSm"
+           [(wMd)]="widget.wMd" [(hMd)]="widget.hMd"
+           [(wLg)]="widget.wLg" [(hLg)]="widget.hLg"
+           [(wXl)]="widget.wXl" [(hXl)]="widget.hXl"
+           (change)="itemChange($event, gridster1)">
+
+<div class="panel-heading">
+    <h5 class="panel-title">{{ widget.title }}</h5>
+</div>
+
+<div class="panel-body">
+    <p>
+      Position: {{itemComp?.item?.x}} x {{itemComp?.item?.y}}<br>
+      Size: {{itemComp?.item?.w}} x {{itemComp?.item?.h}}<br>
+    </p>
+    <p>
+        <label>
+            <input type="checkbox" [(ngModel)]="widget.dragAndDrop" value="true"> Draggable
+        </label>
+        <label>
+            <input type="checkbox" [(ngModel)]="widget.resizable" value="true"> Resizable
+        </label>
+        <button (click)="setWidth(widget, widget.w+1, $event, gridster1)">width +</button>
+        <button (click)="setWidth(widget, widget.w-1, $event, gridster1)">width -</button>
+        <button (click)="setHeight(widget, widget.h+1, $event, gridster1)">height +</button>
+        <button (click)="setHeight(widget, widget.h-1, $event, gridster1)">height -</button>
+    </p>
+    <p>
+        <button (click)="remove($event, indx,gridster1)">remove</button>
+    </p>
+
+    <pre>{{ widget | json }}</pre>
+
+</div>
+
+</ngx-gridster-item>
+
+</ngx-gridster>
 </div>

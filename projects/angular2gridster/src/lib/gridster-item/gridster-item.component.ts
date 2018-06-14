@@ -301,6 +301,32 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             return;
         }
 
+        ['w', ...Object.keys(GridListItem.W_PROPERTY_MAP).map(breakpoint => GridListItem.W_PROPERTY_MAP[breakpoint])]
+            .filter(propName => changes[propName] && !changes[propName].isFirstChange())
+            .forEach((propName: string) => {
+                if (changes[propName].currentValue > this.options.maxWidth) {
+                    this[propName] = this.options.maxWidth;
+                    setTimeout(() => this[propName + 'Change'].emit(this[propName]));
+                }
+                this.gridster.render();
+            });
+
+        ['h', ...Object.keys(GridListItem.H_PROPERTY_MAP).map(breakpoint => GridListItem.H_PROPERTY_MAP[breakpoint])]
+            .filter(propName => changes[propName] && !changes[propName].isFirstChange())
+            .forEach((propName: string) => {
+                if (changes[propName].currentValue > this.options.maxHeight) {
+                    this[propName] = this.options.maxHeight;
+                    setTimeout(() => this[propName + 'Change'].emit(this[propName]));
+                }
+                this.gridster.render();
+            });
+
+        ['x', 'y',
+        ...Object.keys(GridListItem.X_PROPERTY_MAP).map(breakpoint => GridListItem.X_PROPERTY_MAP[breakpoint]),
+        ...Object.keys(GridListItem.Y_PROPERTY_MAP).map(breakpoint => GridListItem.Y_PROPERTY_MAP[breakpoint])]
+            .filter(propName => changes[propName] && !changes[propName].isFirstChange())
+            .forEach((propName: string) => this.gridster.render());
+
         if (changes['dragAndDrop'] && !changes['dragAndDrop'].isFirstChange()) {
             if (changes['dragAndDrop'].currentValue && this.gridster.options.dragAndDrop) {
                 this.enableDragDrop();
@@ -472,6 +498,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                     this.updateElemenetPosition();
 
                     this.gridster.onDrag(this.item);
+                    this.gridster.itemDrag.next({event, item: this.item});
                 });
 
             const dragStopSub = draggable.dragStop

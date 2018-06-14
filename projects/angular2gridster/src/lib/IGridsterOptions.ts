@@ -4,7 +4,6 @@ export interface IGridsterOptions {
     widthHeightRatio?: number;
     heightToFontSizeRatio?: number;
     dragAndDrop?: boolean;
-    itemSelector?: string;
     resizable?: boolean;
     resizeHandles?: {
         s?: boolean,
@@ -16,6 +15,7 @@ export interface IGridsterOptions {
         sw?: boolean,
         nw?: boolean
     };
+    connectWith?: string;
     shrink?: boolean;
     floating?: boolean;
     responsiveView?: boolean;

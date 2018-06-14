@@ -12,6 +12,7 @@ export class GridsterOptions {
     responsiveSizes: boolean;
     dragAndDrop: boolean;
     resizable: boolean;
+    connectWith: string;
     shrink: boolean;
     minWidth: number;
     useCSSTransforms: boolean;

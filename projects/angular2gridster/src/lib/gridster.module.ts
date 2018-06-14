@@ -5,6 +5,7 @@ import { GridsterComponent } from './gridster.component';
 import { GridsterItemComponent } from './gridster-item/gridster-item.component';
 import { GridsterItemPrototypeDirective } from './gridster-prototype/gridster-item-prototype.directive';
 import { GridsterPrototypeService } from './gridster-prototype/gridster-prototype.service';
+import { GridsterListService } from './gridsterList.service';
 
 @NgModule({
     imports: [
@@ -25,7 +26,7 @@ export class GridsterModule {
     static forRoot() {
         return {
             ngModule: GridsterModule,
-            providers: [ GridsterPrototypeService ]
+            providers: [ GridsterPrototypeService, GridsterListService ]
         };
     }
 }

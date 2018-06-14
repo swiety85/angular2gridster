@@ -8,6 +8,7 @@ import { IGridsterDraggableOptions } from './IGridsterDraggableOptions';
 import { GridListItem } from './gridList/GridListItem';
 import { GridsterComponent } from './gridster.component';
 import { GridsterOptions } from './GridsterOptions';
+import { DraggableEvent } from './utils/DraggableEvent';
 
 @Injectable()
 export class GridsterService {
@@ -39,6 +40,8 @@ export class GridsterService {
     public cellHeight: number;
 
     public itemRemoveSubject: Subject<GridListItem> = new Subject();
+
+    public itemDrag: Subject<{event: DraggableEvent, item: GridListItem}> = new Subject();
 
     private _fontSize: number;
 
