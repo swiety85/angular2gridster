@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.0.1"></a>
+# [6.0.1](https://github.com/swiety85/angular2gridster/compare/v6.0.0-rc.1...v6.0.1) (2018-06-18)
+
+### Bug Fixes
+
+* fix: position and size binding on outside change
+Optimize amount of render calls
+
+
+
 <a name="6.0.0-rc.1"></a>
 # [6.0.0-rc.1](https://github.com/swiety85/angular2gridster/compare/v7.0.0-rc.0...v6.0.0-rc.1) (2018-05-29)
 
