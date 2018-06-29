@@ -301,6 +301,34 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             return;
         }
 
+        let rerender = false;
+
+        ['w', ...Object.keys(GridListItem.W_PROPERTY_MAP).map(breakpoint => GridListItem.W_PROPERTY_MAP[breakpoint])]
+        .filter(propName => changes[propName] && !changes[propName].isFirstChange())
+        .forEach((propName: string) => {
+            if (changes[propName].currentValue > this.options.maxWidth) {
+                this[propName] = this.options.maxWidth;
+                setTimeout(() => this[propName + 'Change'].emit(this[propName]));
+            }
+            rerender = true;
+        });
+
+        ['h', ...Object.keys(GridListItem.H_PROPERTY_MAP).map(breakpoint => GridListItem.H_PROPERTY_MAP[breakpoint])]
+            .filter(propName => changes[propName] && !changes[propName].isFirstChange())
+            .forEach((propName: string) => {
+                if (changes[propName].currentValue > this.options.maxHeight) {
+                    this[propName] = this.options.maxHeight;
+                    setTimeout(() => this[propName + 'Change'].emit(this[propName]));
+                }
+                rerender = true;
+            });
+
+        ['x', 'y',
+        ...Object.keys(GridListItem.X_PROPERTY_MAP).map(breakpoint => GridListItem.X_PROPERTY_MAP[breakpoint]),
+        ...Object.keys(GridListItem.Y_PROPERTY_MAP).map(breakpoint => GridListItem.Y_PROPERTY_MAP[breakpoint])]
+            .filter(propName => changes[propName] && !changes[propName].isFirstChange())
+            .forEach((propName: string) => rerender = true);
+
         if (changes['dragAndDrop'] && !changes['dragAndDrop'].isFirstChange()) {
             if (changes['dragAndDrop'].currentValue && this.gridster.options.dragAndDrop) {
                 this.enableDragDrop();
@@ -315,21 +343,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                 this.disableResizable();
             }
         }
-        if (changes['w'] && !changes['w'].isFirstChange()) {
-            if (changes['w'].currentValue > this.options.maxWidth) {
-                this.w = this.options.maxWidth;
-                setTimeout(() => {
-                    this.wChange.emit(this.w);
-                });
-            }
-        }
-        if (changes['h'] && !changes['h'].isFirstChange()) {
-            if (changes['h'].currentValue > this.options.maxHeight) {
-                this.h = this.options.maxHeight;
-                setTimeout(() => {
-                    this.hChange.emit(this.h);
-                });
-            }
+        if (rerender && this.gridster.gridsterComponent.isReady) {
+            this.gridster.debounceRenderSubject.next();
         }
     }
 
@@ -478,7 +493,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                 .subscribe(() => {
                     this.zone.run(() => {
                         this.gridster.onStop(this.item);
-                        this.gridster.render();
+                        this.gridster.debounceRenderSubject.next();
                         this.isDragging = false;
                         this.onEnd('drag');
                     });
