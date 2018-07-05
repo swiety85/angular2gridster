@@ -163,13 +163,8 @@ In CMD run `MKLINK /D .\src\app\angular2gridster D:\your\absolute\path\to\angula
 
 Then run the following:
 ```shell
-    cd angular2gridster
     npm install
-    cd demo
-    npm install
-    cd ..
-    npm run install-demo
-    npm run serve-demo
+    ng serve
 ```
 
 Go to: http://localhost:4200/
