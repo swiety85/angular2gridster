@@ -200,8 +200,8 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
     @Input() options: any = {};
 
-    @Input() variableHeight: boolean = false;
-    @Input() variableHeightContainToRow: boolean = false;
+    @Input() variableHeight = false;
+    @Input() variableHeightContainToRow = false;
 
     @ViewChild('contentWrapper') contentWrapper: ElementRef;
 
