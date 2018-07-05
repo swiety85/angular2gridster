@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { GridsterComponent, IGridsterOptions, IGridsterDraggableOptions } from 'angular2gridster';
+import { GridsterComponent } from './angular2gridster/gridster.component';
+import { IGridsterOptions } from './angular2gridster/IGridsterOptions';
+import { IGridsterDraggableOptions } from './angular2gridster/IGridsterDraggableOptions';
 
 @Component({
     selector: 'demo-root',
@@ -104,15 +106,11 @@ export class AppComponent implements OnInit {
     widgets: Array<any> = [
         {
             x: 0, y: 0,
-<<<<<<< HEAD:demo/src/app/app.component.ts
-            w: 1, h: 1,
-=======
             w: 1, h: 2,
             wSm: 1, hSm: 1,
             wMd: 1, hMd: 2,
             wLg: 1, hLg: 1,
             wXl: 2, hXl: 2,
->>>>>>> master:src/app/app.component.ts
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 1',
