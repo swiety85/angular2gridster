@@ -1,29 +1,25 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es5",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "removeComments": true,
-    "sourceMap": true,
-    "declaration": true,
-    "outDir": "dist",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "lib": [
-      "es2015",
+      "es2017",
       "dom"
-    ]
-  },
-  "angularCompilerOptions": {
-    "genDir": "aot",
-    "skipMetadataEmit": false
-  },
-  "compileOnSave": false,
-  "buildOnSave": false,
-  "files": [
-    "src/index.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+    ],
+    "paths": {
+      "angular2gridster": [
+        "dist/angular2gridster"
+      ]
+    }
+  }
 }
