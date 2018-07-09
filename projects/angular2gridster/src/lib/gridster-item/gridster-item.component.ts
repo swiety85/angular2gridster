@@ -15,7 +15,7 @@ import {utils} from '../utils/utils';
 
 @Component({
     selector: 'ngx-gridster-item',
-    template: `<div class="gridster-item-inner">
+    template: `<div class="gridster-item-inner" [ngStyle]="{position: variableHeight ? 'relative' : 'absolute'}">
       <span #contentWrapper class="gridster-content-wrapper">
         <ng-content></ng-content>
       </span>
@@ -201,7 +201,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     @Input() options: any = {};
 
     @Input() variableHeight = false;
-    @Input() variableHeightContainToRow = false;
+    @Input() variableHeightStretchRows = false;
 
     @ViewChild('contentWrapper') contentWrapper: ElementRef;
 
@@ -303,17 +303,17 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         }
 
         if (this.variableHeight) {
-            if (this.variableHeightContainToRow) {
-                let readySubscription = this.gridster.gridsterComponent.ready.subscribe(() => {
+            if (this.variableHeightStretchRows) {
+                const readySubscription = this.gridster.gridsterComponent.ready.subscribe(() => {
                     this.gridster.gridList.resizeItem(this.item, { w: this.w, h: 1 });
                     readySubscription.unsubscribe();
                 });
                 let lastOffsetHeight: number;
-                let adjusting = false;
-                let observer = new MutationObserver((mutations) => {
-                    let offsetHeight = this.contentWrapper.nativeElement.offsetHeight;
+                const observer = new MutationObserver((mutations) => {
+                    console.log('mutation observed');
+                    const offsetHeight = this.contentWrapper.nativeElement.offsetHeight;
                     if (offsetHeight !== lastOffsetHeight) {
-                        for (let item of this.gridster.items) {
+                        for (const item of this.gridster.items) {
                             item.applySize();
                             item.applyPosition();
                         }
@@ -321,12 +321,14 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                     lastOffsetHeight = offsetHeight;
                 });
                 observer.observe(this.$element, { childList: true, subtree: true, attributes: true });
+                console.log('attaching mutation observer');
+                console.log(this.$element);
             } else {
                 let lastH: number;
                 let lastOffsetHeight: number;
-                let observer = new MutationObserver((mutations) => {
-                    let h = this.item.h;
-                    let offsetHeight = this.contentWrapper.nativeElement.offsetHeight;
+                const observer = new MutationObserver((mutations) => {
+                    const h = this.item.h;
+                    const offsetHeight = this.contentWrapper.nativeElement.offsetHeight;
                     if (h !== lastH) {
                         this.gridster.gridList.resizeItem(this.item, { w: this.w, h: this.h });
                         this.gridster.applyPositionToItems();

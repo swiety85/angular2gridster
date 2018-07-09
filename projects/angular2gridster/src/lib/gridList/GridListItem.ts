@@ -80,13 +80,7 @@ export class GridListItem {
     }
 
     get h () {
-        if (this.variableHeight && this.variableHeightContainToRow) {
-            return 1;
-        } else if (!this.variableHeight) {
-            const item = this.getItem();
-            const breakpoint = item.gridster ? item.gridster.options.breakpoint : null;
-            return this.getValueH(breakpoint);
-        } else {
+        if (this.variableHeight && !this.variableHeightStretchRows) {
             if (this.itemComponent.gridster.gridList) {
                 const rowHeights = this.itemComponent.gridster.getRowHeights();
                 let offsetHeight = this.itemComponent.contentWrapper.nativeElement.offsetHeight;
@@ -101,6 +95,10 @@ export class GridListItem {
             } else {
                 return 1;
             }
+        } else {
+            const item = this.getItem();
+            const breakpoint = item.gridster ? item.gridster.options.breakpoint : null;
+            return this.getValueH(breakpoint);
         }
     }
     set h (value: number) {
@@ -149,8 +147,8 @@ export class GridListItem {
         return this.getItem().variableHeight;
     }
 
-    get variableHeightContainToRow(): boolean {
-        return this.getItem().variableHeightContainToRow;
+    get variableHeightStretchRows(): boolean {
+        return this.getItem().variableHeightStretchRows;
     }
 
     constructor () {}
@@ -334,10 +332,16 @@ export class GridListItem {
         }
         gridster = gridster || this.itemComponent.gridster;
 
+        console.log('calculating size for ' + this.x + ', ' + this.y);
+
         let rowHeights, rowTops;
         if (gridster.gridList) {
             rowHeights = gridster.getRowHeights();
             rowTops = gridster.getRowTops(rowHeights);
+            console.log('row heights');
+            console.log(rowHeights);
+            console.log('row tops');
+            console.log(rowTops);
         }
 
         let width = this.w;
@@ -352,8 +356,11 @@ export class GridListItem {
 
         let pixelHeight;
         if (this.variableHeight) {
-            pixelHeight = this.itemComponent.contentWrapper.nativeElement.offsetHeight;
+            const baseHeight = Math.max(this.itemComponent.contentWrapper.nativeElement.offsetheight || 0, this.$element.firstChild.offsetHeight || 0);
+            console.log('variable height, using offset height of ' + baseHeight);
+            pixelHeight = baseHeight;
         } else {
+            console.log('not variable height');
             if (rowHeights) {
                 pixelHeight = 0;
                 for (let i = this.y; i < this.y + height; i++) {
@@ -363,6 +370,8 @@ export class GridListItem {
                 pixelHeight = height * gridster.cellHeight;
             }
         }
+
+        console.log(pixelHeight);
 
         return {
             width: width * gridster.cellWidth,

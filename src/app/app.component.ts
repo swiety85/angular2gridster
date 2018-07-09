@@ -114,7 +114,7 @@ export class AppComponent implements OnInit {
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 1',
-            variableHeight: true,
+            variableHeight: false,
             contents: []
         },
         {
@@ -127,7 +127,7 @@ export class AppComponent implements OnInit {
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 2',
-            variableHeight: true,
+            variableHeight: false,
             contents: []
         },
         {
@@ -141,7 +141,7 @@ export class AppComponent implements OnInit {
             resizable: true,
             title: 'Basic form inputs 3',
             variableHeight: true,
-            variableHeightContainToRow: true,
+            variableHeightStretchRows: true,
             contents: []
         },
         {

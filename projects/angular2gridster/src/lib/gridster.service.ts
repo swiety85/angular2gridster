@@ -318,20 +318,27 @@ export class GridsterService {
 
         } else if (this.gridList.grid.length) {
             const increaseHeightWith = (increaseGridsterSize) ? this.maxItemHeight : 0;
-            child.style.height = ((this.gridList.grid.length + increaseHeightWith) * this.cellHeight) + 'px';
+            // todo: fix me
+            const rowHeights = this.getRowHeights();
+            const rowTops = this.getRowTops(rowHeights);
+            child.style.height = (rowTops[rowTops.length - 1] + rowHeights[rowHeights.length - 1]) + 'px';
             child.style.width = '';
         }
     }
 
     getRowHeights(): number[] {
-        let result = [];
+        const result = [];
         for (let row = 0; row < this.gridList.grid.length; row++) {
             result.push(0);
             for (let column = 0; column < this.gridList.grid[row].length; column++) {
-                let item = this.gridList.grid[row][column];
+                const item = this.gridList.grid[row][column];
                 if (item) {
-                    let height = item.itemComponent.contentWrapper.nativeElement.offsetHeight;
-                    if (item.variableHeight && item.variableHeightContainToRow && height > result[row]) {
+                    const contentHeight = item.itemComponent.contentWrapper.nativeElement.offsetheight || 0;
+                    const childHeight = item.$element.firstChild.offsetHeight || 0;
+                    const baseHeight = Math.max(contentHeight, childHeight);
+                    const height = baseHeight / item.h;
+                    if (item.variableHeight && item.variableHeightStretchRows && height > result[row]) {
+                        console.log('row ' + row + ' has variable height, using value ' + baseHeight + ' from ' + item.x + ', ' + item.y);
                         result[row] = height;
                     }
                 }
