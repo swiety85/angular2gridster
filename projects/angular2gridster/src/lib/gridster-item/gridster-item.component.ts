@@ -320,9 +320,9 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                     }
                     lastOffsetHeight = offsetHeight;
                 });
-                observer.observe(this.$element, { childList: true, subtree: true, attributes: true });
+                observer.observe(this.contentWrapper.nativeElement, { childList: true, subtree: true, attributes: true });
                 console.log('attaching mutation observer');
-                console.log(this.$element);
+                console.log(this.contentWrapper.nativeElement);
             } else {
                 let lastH: number;
                 let lastOffsetHeight: number;

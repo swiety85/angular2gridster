@@ -321,7 +321,8 @@ export class GridsterService {
             // todo: fix me
             const rowHeights = this.getRowHeights();
             const rowTops = this.getRowTops(rowHeights);
-            child.style.height = (rowTops[rowTops.length - 1] + rowHeights[rowHeights.length - 1]) + 'px';
+            const height = rowTops[rowTops.length - 1] + rowHeights[rowHeights.length - 1];
+            child.style.height = height + 'px';
             child.style.width = '';
         }
     }
@@ -338,7 +339,6 @@ export class GridsterService {
                     const baseHeight = Math.max(contentHeight, childHeight);
                     const height = baseHeight / item.h;
                     if (item.variableHeight && item.variableHeightStretchRows && height > result[row]) {
-                        console.log('row ' + row + ' has variable height, using value ' + baseHeight + ' from ' + item.x + ', ' + item.y);
                         result[row] = height;
                     }
                 }
@@ -351,9 +351,9 @@ export class GridsterService {
     }
 
     getRowTops(rowHeights: number[]): number[] {
-        let result = [];
+        const result = [];
         let lastHeight = 0;
-        for (let rowHeight of rowHeights) {
+        for (const rowHeight of rowHeights) {
             result.push(lastHeight);
             lastHeight += rowHeight;
         }

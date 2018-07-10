@@ -1,8 +1,16 @@
+html {
+  overflow: unset;
+}
+
+body {
+  overflow: scroll;
+}
+
 app-root {
   position: absolute;
   height: 100%;
   width: 100%;
-  overflow: hidden;
+  /* overflow: hidden; */
   display: flex;
   flex-direction: column;
 }
@@ -111,10 +119,10 @@ h1 {
 
 .position-highlight .inner {
   position: absolute;
-  top: 5px;
-  bottom: 5px;
-  left: 5px;
-  right: 5px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 
   background-color: #768294;
   border: 1px solid transparent;
@@ -128,10 +136,10 @@ h1 {
   position: absolute;
   background: #fff;
   border: 1px solid transparent;
-  top: 5px;
-  bottom: 5px;
-  left: 5px;
-  right: 5px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   -webkit-transition: background 3s;
   transition: background 3s;
   border-radius: 3px;
