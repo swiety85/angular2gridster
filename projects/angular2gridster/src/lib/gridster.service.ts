@@ -334,10 +334,7 @@ export class GridsterService {
             for (let column = 0; column < this.gridList.grid[row].length; column++) {
                 const item = this.gridList.grid[row][column];
                 if (item) {
-                    const contentHeight = item.itemComponent.contentWrapper.nativeElement.offsetheight || 0;
-                    const childHeight = item.$element.firstChild.offsetHeight || 0;
-                    const baseHeight = Math.max(contentHeight, childHeight);
-                    const height = baseHeight / item.h;
+                    const height = item.contentHeight / item.h;
                     if (item.variableHeight && item.variableHeightStretchRows && height > result[row]) {
                         result[row] = height;
                     }

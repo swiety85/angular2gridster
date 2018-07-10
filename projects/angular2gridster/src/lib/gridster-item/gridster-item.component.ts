@@ -310,8 +310,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                 });
                 let lastOffsetHeight: number;
                 const observer = new MutationObserver((mutations) => {
-                    console.log('mutation observed');
-                    const offsetHeight = this.contentWrapper.nativeElement.offsetHeight;
+                    const offsetHeight = this.item.contentHeight;
                     if (offsetHeight !== lastOffsetHeight) {
                         for (const item of this.gridster.items) {
                             item.applySize();
@@ -320,9 +319,12 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                     }
                     lastOffsetHeight = offsetHeight;
                 });
-                observer.observe(this.contentWrapper.nativeElement, { childList: true, subtree: true, attributes: true });
-                console.log('attaching mutation observer');
-                console.log(this.contentWrapper.nativeElement);
+                observer.observe(this.contentWrapper.nativeElement, {
+                    childList: true,
+                    subtree: true,
+                    attributes: true,
+                    characterData: true
+                });
             } else {
                 let lastH: number;
                 let lastOffsetHeight: number;

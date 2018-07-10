@@ -151,6 +151,12 @@ export class GridListItem {
         return this.getItem().variableHeightStretchRows;
     }
 
+    get contentHeight(): number {
+        const contentHeight = this.itemComponent.contentWrapper.nativeElement.offsetheight || 0;
+        const childHeight = this.$element.firstChild.offsetHeight || 0;
+        return Math.max(contentHeight, childHeight);
+    }
+
     constructor () {}
 
     public setFromGridsterItem (item: GridsterItemComponent): GridListItem {
@@ -336,8 +342,6 @@ export class GridListItem {
         if (gridster.gridList) {
             rowHeights = gridster.getRowHeights();
             rowTops = gridster.getRowTops(rowHeights);
-            console.log('row heights');
-            console.log(rowHeights);
         }
 
         let width = this.w;
