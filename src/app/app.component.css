@@ -2,10 +2,6 @@ html {
   overflow: unset;
 }
 
-body {
-  overflow: scroll;
-}
-
 app-root {
   position: absolute;
   height: 100%;

@@ -18,6 +18,7 @@ import { GridsterOptions } from './GridsterOptions';
 @Component({
     selector: 'ngx-gridster',
     template: `<div class="gridster-container">
+      <canvas class="gridster-background-grid" #backgroundGrid></canvas>
       <ng-content></ng-content>
       <div class="position-highlight" style="display:none;" #positionHighlight>
         <div class="inner"></div>
@@ -52,6 +53,13 @@ import { GridsterOptions } from './GridsterOptions';
         position: absolute;
         z-index: 1;
     }
+
+    ngx-gridster .gridster-background-grid {
+        z-index: 0;
+        position: relative;
+        width: 100%;
+        height: 100%
+    }
     `],
     providers: [GridsterService],
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -69,6 +77,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
     @Input() parent: GridsterComponent;
 
     @ViewChild('positionHighlight') $positionHighlight;
+    @ViewChild('backgroundGrid') $backgroundGrid;
     @HostBinding('class.gridster--dragging') isDragging = false;
     @HostBinding('class.gridster--resizing') isResizing = false;
 
