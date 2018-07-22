@@ -1,60 +1,60 @@
 {
-  "name": "angular2gridster",
-  "version": "5.0.3",
-  "license": "MIT",
-  "main": "./dist/index.js",
-  "scripts": {
-    "install-demo": "npm install --prefix ./demo",
-    "link-demo": "ln -s $PWD/src/ $PWD/demo/src/app/gridster",
-    "serve-demo": "npm start --prefix ./demo",
-    "start": "npm start --prefix ./demo",
-    "lint": "tslint src/**/*.ts && npm run lint --prefix ./demo",
-    "test": "karma start",
-    "build": "echo 'Building...' && ./node_modules/.bin/ngc -p tsconfig.json",
-    "release-major": "standard-version -r major",
-    "release-minor": "standard-version -r minor",
-    "release-fix": "standard-version -r patch",
-    "prepublishOnly": "npm run build"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/swiety85/angular2gridster.git"
-  },
-  "author": {
-    "name": "Damian Wajdlich",
-    "email": "swiety85@gmail.com"
-  },
-  "keywords": [
-    "gridster",
-    "grid",
-    "angular",
-    "angular2",
-    "dashboard",
-    "ngx",
-    "drag&drop",
-    "widgets"
-  ],
-  "bugs": {
-    "url": "https://github.com/swiety85/angular2gridster/issues"
-  },
-  "homepage": "https://github.com/swiety85/angular2gridster#readme",
-  "typings": "./dist/index.d.ts",
-  "devDependencies": {
-    "@angular/cli": "~1.7.4",
-    "@angular/common": "^5.2.11",
-    "@angular/compiler": "^5.2.11",
-    "@angular/compiler-cli": "^5.2.11",
-    "@angular/core": "^5.2.11",
-    "@angular/language-service": "^5.2.11",
-    "@types/node": "~6.0.60",
-    "codelyzer": "^4.3.0",
-    "reflect-metadata": "^0.1.3",
-    "rxjs": "^5.5.5",
-    "standard-version": "^4.2.0",
-    "ts-loader": "4.3.0",
-    "ts-node": "6.0.2",
-    "tslint": "5.7.0",
-    "typescript": "2.6.x",
-    "zone.js": "~0.8.12"
-  }
+    "name": "angular2gridster",
+    "version": "5.0.3",
+    "license": "MIT",
+    "main": "./dist/src/index.js",
+    "scripts": {
+        "install-demo": "npm install --prefix ./demo",
+        "link-demo": "ln -s $PWD/src/ $PWD/demo/src/app/gridster",
+        "serve-demo": "npm start --prefix ./demo",
+        "start": "npm start --prefix ./demo",
+        "lint": "tslint src/**/*.ts && npm run lint --prefix ./demo",
+        "test": "karma start",
+        "build": "echo 'Building...' && ./node_modules/.bin/ngc -p tsconfig.json",
+        "release-major": "standard-version -r major",
+        "release-minor": "standard-version -r minor",
+        "release-fix": "standard-version -r patch",
+        "prepublishOnly": "npm run build"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/swiety85/angular2gridster.git"
+    },
+    "author": {
+        "name": "Damian Wajdlich",
+        "email": "swiety85@gmail.com"
+    },
+    "keywords": [
+        "gridster",
+        "grid",
+        "angular",
+        "angular2",
+        "dashboard",
+        "ngx",
+        "drag&drop",
+        "widgets"
+    ],
+    "bugs": {
+        "url": "https://github.com/swiety85/angular2gridster/issues"
+    },
+    "homepage": "https://github.com/swiety85/angular2gridster#readme",
+    "typings": "./dist/index.d.ts",
+    "devDependencies": {
+        "@angular/cli": "~1.7.4",
+        "@angular/common": "^5.2.11",
+        "@angular/compiler": "^5.2.11",
+        "@angular/compiler-cli": "^5.2.11",
+        "@angular/core": "^5.2.11",
+        "@angular/language-service": "^5.2.11",
+        "@types/node": "~6.0.60",
+        "codelyzer": "^4.3.0",
+        "reflect-metadata": "^0.1.3",
+        "rxjs": "^5.5.5",
+        "standard-version": "^4.2.0",
+        "ts-loader": "4.3.0",
+        "ts-node": "6.0.2",
+        "tslint": "5.7.0",
+        "typescript": "2.6.x",
+        "zone.js": "~0.8.12"
+    }
 }
