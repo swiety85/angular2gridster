@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="5.0.4"></a>
+## [5.0.4](https://github.com/swiety85/angular2gridster/compare/v5.0.3...v5.0.4) (2018-07-22)
+
+
+### Bug Fixes
+
+* v5.x bundle ([35fc470](https://github.com/swiety85/angular2gridster/commit/35fc470))
+
+
+
 <a name="5.0.3"></a>
 ## [5.0.3](https://github.com/swiety85/angular2gridster/compare/v5.0.2...v5.0.3) (2018-07-22)
 
