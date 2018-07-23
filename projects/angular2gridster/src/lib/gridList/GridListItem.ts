@@ -343,8 +343,6 @@ export class GridListItem {
             pixelHeight = height * gridster.cellHeight;
         }
 
-        console.log('pixel height of x/y' + this.x + ', ' + this.y + ' w/h ' + this.w + ', ' + this.h + ' ' + pixelHeight);
-
         return {
             width: width * gridster.cellWidth,
             height: pixelHeight

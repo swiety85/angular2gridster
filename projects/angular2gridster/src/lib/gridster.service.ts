@@ -183,6 +183,7 @@ export class GridsterService {
             // Visually update item positions and highlight shape
             this.applyPositionToItems(true);
             this.highlightPositionForItem(item);
+            this.refreshLines();
         }
     }
 
@@ -370,8 +371,6 @@ export class GridsterService {
 
         canvasContext.clearRect(0, 0, canvas.width, canvas.height);
 
-        console.log('canvas height ' + canvas.height);
-
         if (this.options.lines && this.options.lines.visible &&
             (this.gridsterComponent.isDragging || this.gridsterComponent.isResizing || this.options.lines.always)) {
             const linesColor = this.options.lines.color || '#d8d8d8';
@@ -392,7 +391,6 @@ export class GridsterService {
             for (let i = 0; i < rowTops.length; i++) {
                 canvasContext.moveTo(0, rowTops[i]);
                 canvasContext.lineTo(canvas.width, rowTops[i]);
-                console.log('drawing line at ' + rowTops[i]);
             }
             // draw column lines
             for (let i = 0; i < this.options.lanes; i++) {
