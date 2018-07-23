@@ -201,7 +201,6 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     @Input() options: any = {};
 
     @Input() variableHeight = false;
-    @Input() variableHeightStretchRows = false;
 
     @ViewChild('contentWrapper') contentWrapper: ElementRef;
 
@@ -303,46 +302,27 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         }
 
         if (this.variableHeight) {
-            if (this.variableHeightStretchRows) {
-                const readySubscription = this.gridster.gridsterComponent.ready.subscribe(() => {
-                    this.gridster.gridList.resizeItem(this.item, { w: this.w, h: 1 });
-                    readySubscription.unsubscribe();
-                });
-                let lastOffsetHeight: number;
-                const observer = new MutationObserver((mutations) => {
-                    const offsetHeight = this.item.contentHeight;
-                    if (offsetHeight !== lastOffsetHeight) {
-                        for (const item of this.gridster.items) {
-                            item.applySize();
-                            item.applyPosition();
-                        }
+            const readySubscription = this.gridster.gridsterComponent.ready.subscribe(() => {
+                this.gridster.gridList.resizeItem(this.item, { w: this.w, h: 1 });
+                readySubscription.unsubscribe();
+            });
+            let lastOffsetHeight: number;
+            const observer = new MutationObserver((mutations) => {
+                const offsetHeight = this.item.contentHeight;
+                if (offsetHeight !== lastOffsetHeight) {
+                    for (const item of this.gridster.items) {
+                        item.applySize();
+                        item.applyPosition();
                     }
-                    lastOffsetHeight = offsetHeight;
-                });
-                observer.observe(this.contentWrapper.nativeElement, {
-                    childList: true,
-                    subtree: true,
-                    attributes: true,
-                    characterData: true
-                });
-            } else {
-                let lastH: number;
-                let lastOffsetHeight: number;
-                const observer = new MutationObserver((mutations) => {
-                    const h = this.item.h;
-                    const offsetHeight = this.contentWrapper.nativeElement.offsetHeight;
-                    if (h !== lastH) {
-                        this.gridster.gridList.resizeItem(this.item, { w: this.w, h: this.h });
-                        this.gridster.applyPositionToItems();
-                        lastH = h;
-                    }
-                    if (offsetHeight !== lastOffsetHeight) {
-                        this.item.applySize();
-                        lastOffsetHeight = offsetHeight;
-                    }
-                });
-                observer.observe(this.$element, { childList: true, subtree: true, attributes: true });
-            }
+                }
+                lastOffsetHeight = offsetHeight;
+            });
+            observer.observe(this.contentWrapper.nativeElement, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                characterData: true
+            });
         }
     }
 

@@ -80,26 +80,9 @@ export class GridListItem {
     }
 
     get h () {
-        if (this.variableHeight && !this.variableHeightStretchRows) {
-            if (this.itemComponent.gridster.gridList) {
-                const rowHeights = this.itemComponent.gridster.getRowHeights();
-                let offsetHeight = this.itemComponent.contentWrapper.nativeElement.offsetHeight;
-                let h = 0;
-                let row = this.y;
-                while (offsetHeight > 0) {
-                    offsetHeight -= rowHeights[row];
-                    h++;
-                    row++;
-                }
-                return h;
-            } else {
-                return 1;
-            }
-        } else {
-            const item = this.getItem();
-            const breakpoint = item.gridster ? item.gridster.options.breakpoint : null;
-            return this.getValueH(breakpoint);
-        }
+        const item = this.getItem();
+        const breakpoint = item.gridster ? item.gridster.options.breakpoint : null;
+        return this.getValueH(breakpoint);
     }
     set h (value: number) {
         const item = this.getItem();
@@ -145,10 +128,6 @@ export class GridListItem {
 
     get variableHeight(): boolean {
         return this.getItem().variableHeight;
-    }
-
-    get variableHeightStretchRows(): boolean {
-        return this.getItem().variableHeightStretchRows;
     }
 
     get contentHeight(): number {

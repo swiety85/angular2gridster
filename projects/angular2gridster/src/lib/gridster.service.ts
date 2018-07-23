@@ -340,7 +340,7 @@ export class GridsterService {
                 const item = this.gridList.grid[row][column];
                 if (item) {
                     const height = item.contentHeight / item.h;
-                    if (item.variableHeight && item.variableHeightStretchRows && height > result[row]) {
+                    if (item.variableHeight && height > result[row]) {
                         result[row] = height;
                     }
                 }

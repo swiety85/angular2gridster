@@ -141,7 +141,6 @@ export class AppComponent implements OnInit {
             resizable: true,
             title: 'Basic form inputs 3',
             variableHeight: true,
-            variableHeightStretchRows: true,
             contents: []
         },
         {
