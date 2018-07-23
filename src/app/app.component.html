@@ -147,6 +147,9 @@
                 <p *ngIf="widget.contents">
                     <button (click)="widget.contents.push('more content')">add content</button>
                 </p>
+                <p *ngIf="widget.contents">
+                    <button (click)="widget.contents.splice(0, 1)">remove content</button>
+                </p>
   
                 <pre>{{ widget | json }}</pre>
   
