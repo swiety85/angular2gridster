@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, Inject, Host, Input, Output,
     EventEmitter, SimpleChanges, OnChanges, OnDestroy, HostBinding,
-    ChangeDetectionStrategy, AfterViewInit, NgZone, ViewEncapsulation } from '@angular/core';
+    ChangeDetectionStrategy, AfterViewInit, NgZone, ViewEncapsulation, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { GridsterService } from '../gridster.service';
@@ -15,8 +15,10 @@ import {utils} from '../utils/utils';
 
 @Component({
     selector: 'ngx-gridster-item',
-    template: `<div class="gridster-item-inner">
-      <ng-content></ng-content>
+    template: `<div class="gridster-item-inner" [ngStyle]="{position: variableHeight ? 'relative' : 'absolute'}">
+      <span #contentWrapper class="gridster-content-wrapper">
+        <ng-content></ng-content>
+      </span>
       <div class="gridster-item-resizable-handler handle-s"></div>
       <div class="gridster-item-resizable-handler handle-e"></div>
       <div class="gridster-item-resizable-handler handle-n"></div>
@@ -198,6 +200,10 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
 
     @Input() options: any = {};
 
+    @Input() variableHeight = false;
+
+    @ViewChild('contentWrapper') contentWrapper: ElementRef;
+
     autoSize: boolean;
 
     @HostBinding('class.is-dragging') isDragging = false;
@@ -293,6 +299,30 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
     ngAfterViewInit() {
         if (this.gridster.options.resizable && this.item.resizable) {
             this.enableResizable();
+        }
+
+        if (this.variableHeight) {
+            const readySubscription = this.gridster.gridsterComponent.ready.subscribe(() => {
+                this.gridster.gridList.resizeItem(this.item, { w: this.w, h: 1 });
+                readySubscription.unsubscribe();
+            });
+            let lastOffsetHeight: number;
+            const observer = new MutationObserver((mutations) => {
+                const offsetHeight = this.item.contentHeight;
+                if (offsetHeight !== lastOffsetHeight) {
+                    for (const item of this.gridster.items) {
+                        item.applySize();
+                        item.applyPosition();
+                    }
+                }
+                lastOffsetHeight = offsetHeight;
+            });
+            observer.observe(this.contentWrapper.nativeElement, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                characterData: true
+            });
         }
     }
 

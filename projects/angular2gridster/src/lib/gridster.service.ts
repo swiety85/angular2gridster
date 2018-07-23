@@ -182,7 +182,9 @@ export class GridsterService {
 
             // Visually update item positions and highlight shape
             this.applyPositionToItems(true);
+            this.applySizeToItems();
             this.highlightPositionForItem(item);
+            this.refreshLines();
         }
     }
 
@@ -318,13 +320,57 @@ export class GridsterService {
 
         } else if (this.gridList.grid.length) {
             const increaseHeightWith = (increaseGridsterSize) ? this.maxItemHeight : 0;
-            child.style.height = ((this.gridList.grid.length + increaseHeightWith) * this.cellHeight) + 'px';
+            // todo: fix me
+            const rowHeights = this.getRowHeights();
+            const rowTops = this.getRowTops(rowHeights);
+            const height = rowTops[rowTops.length - 1] + rowHeights[rowHeights.length - 1];
+            const previousHeight = child.style.height;
+            child.style.height = height + 'px';
             child.style.width = '';
+
+            if (previousHeight !== child.style.height) {
+                this.refreshLines();
+            }
         }
     }
 
+    getRowHeights(): number[] {
+        const result = [];
+        for (let row = 0; row < this.gridList.grid.length; row++) {
+            result.push(0);
+            for (let column = 0; column < this.gridList.grid[row].length; column++) {
+                const item = this.gridList.grid[row][column];
+                if (item) {
+                    const height = item.contentHeight / item.h;
+                    if (item.variableHeight && height > result[row]) {
+                        result[row] = height;
+                    }
+                }
+            }
+            if (result[row] === 0) {
+                result[row] = this.cellHeight;
+            }
+        }
+        return result;
+    }
+
+    getRowTops(rowHeights: number[]): number[] {
+        const result = [];
+        let lastHeight = 0;
+        for (const rowHeight of rowHeights) {
+            result.push(lastHeight);
+            lastHeight += rowHeight;
+        }
+        return result;
+    }
+
     refreshLines() {
-        const gridsterContainer = <HTMLElement>this.gridsterComponent.$element.firstChild;
+        const canvas = <HTMLCanvasElement>this.gridsterComponent.$backgroundGrid.nativeElement;
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+        const canvasContext = canvas.getContext('2d');
+
+        canvasContext.clearRect(0, 0, canvas.width, canvas.height);
 
         if (this.options.lines && this.options.lines.visible &&
             (this.gridsterComponent.isDragging || this.gridsterComponent.isResizing || this.options.lines.always)) {
@@ -333,16 +379,27 @@ export class GridsterService {
             const linesWidth = this.options.lines.width || 1;
             const bgPosition = linesWidth / 2;
 
-            gridsterContainer.style.backgroundSize = `${this.cellWidth}px ${this.cellHeight}px`;
-            gridsterContainer.style.backgroundPosition = `-${bgPosition}px -${bgPosition}px`;
-            gridsterContainer.style.backgroundImage = `
-                linear-gradient(to right, ${linesColor} ${linesWidth}px, ${linesBgColor} ${linesWidth}px),
-                linear-gradient(to bottom, ${linesColor} ${linesWidth}px, ${linesBgColor} ${linesWidth}px)
-            `;
-        } else {
-            gridsterContainer.style.backgroundSize = '';
-            gridsterContainer.style.backgroundPosition = '';
-            gridsterContainer.style.backgroundImage = '';
+            canvasContext.fillStyle = linesBgColor;
+            canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+
+            canvasContext.strokeStyle = linesColor;
+            canvasContext.lineWidth = linesWidth;
+
+            canvasContext.beginPath();
+            // draw row lines
+            const rowHeights = this.getRowHeights();
+            const rowTops = this.getRowTops(rowHeights);
+            for (let i = 0; i < rowTops.length; i++) {
+                canvasContext.moveTo(0, rowTops[i]);
+                canvasContext.lineTo(canvas.width, rowTops[i]);
+            }
+            // draw column lines
+            for (let i = 0; i < this.options.lanes; i++) {
+                canvasContext.moveTo(i * this.cellWidth, 0);
+                canvasContext.lineTo(i * this.cellWidth, canvas.height);
+            }
+            canvasContext.stroke();
+            canvasContext.closePath();
         }
     }
 

@@ -35,6 +35,9 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
     @Input() hLg: number;
     @Input() hXl: number;
 
+    @Input() variableHeight: boolean = false;
+    @Input() variableHeightContainToRow: boolean = false;
+
     positionX: number;
     positionY: number;
 

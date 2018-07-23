@@ -33,6 +33,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+src/app/angular2gridster
 
 # System Files
 .DS_Store

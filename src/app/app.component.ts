@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { GridsterComponent, IGridsterOptions, IGridsterDraggableOptions } from 'angular2gridster';
+import { GridsterComponent } from './angular2gridster/gridster.component';
+import { IGridsterOptions } from './angular2gridster/IGridsterOptions';
+import { IGridsterDraggableOptions } from './angular2gridster/IGridsterDraggableOptions';
 
 @Component({
     selector: 'demo-root',
@@ -111,7 +113,9 @@ export class AppComponent implements OnInit {
             wXl: 2, hXl: 2,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 1'
+            title: 'Basic form inputs 1',
+            variableHeight: false,
+            contents: []
         },
         {
             x: 1, y: 0,
@@ -122,7 +126,9 @@ export class AppComponent implements OnInit {
             wXl: 3, hXl: 1,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 2'
+            title: 'Basic form inputs 2',
+            variableHeight: false,
+            contents: []
         },
         {
             x: 1, y: 1,
@@ -133,7 +139,9 @@ export class AppComponent implements OnInit {
             wXl: 3, hXl: 1,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 3'
+            title: 'Basic form inputs 3',
+            variableHeight: true,
+            contents: []
         },
         {
             x: 3, y: 1,
@@ -144,7 +152,8 @@ export class AppComponent implements OnInit {
             wXl: 3, hXl: 1,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 4'
+            title: 'Basic form inputs 4',
+            contents: []
         },
         {
             w: 1, h: 2,
@@ -154,7 +163,8 @@ export class AppComponent implements OnInit {
             wXl: 3, hXl: 1,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs x'
+            title: 'Basic form inputs x',
+            contents: []
         }
     ];
 

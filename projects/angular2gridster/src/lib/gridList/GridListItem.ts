@@ -82,7 +82,6 @@ export class GridListItem {
     get h () {
         const item = this.getItem();
         const breakpoint = item.gridster ? item.gridster.options.breakpoint : null;
-
         return this.getValueH(breakpoint);
     }
     set h (value: number) {
@@ -126,6 +125,18 @@ export class GridListItem {
 
         return item.positionY;
     }
+
+    get variableHeight(): boolean {
+        return this.getItem().variableHeight;
+    }
+
+    get contentHeight(): number {
+        const contentHeight = this.itemComponent.contentWrapper.nativeElement.offsetheight || 0;
+        const childHeight = this.$element.firstChild.offsetHeight || 0;
+        return Math.max(contentHeight, childHeight);
+    }
+
+    constructor () {}
 
     public setFromGridsterItem (item: GridsterItemComponent): GridListItem {
         if (this.isItemSet()) {
@@ -278,9 +289,18 @@ export class GridListItem {
         }
         gridster = gridster || this.itemComponent.gridster;
 
+        let top;
+        if (gridster.gridList) {
+            const rowHeights = gridster.getRowHeights();
+            const rowTops = gridster.getRowTops(rowHeights);
+            top = rowTops[this.y];
+        } else {
+            top = this.y * gridster.cellHeight;
+        }
+
         return {
             left: this.x * gridster.cellWidth,
-            top: this.y * gridster.cellHeight
+            top: top
         };
     }
 
@@ -297,8 +317,14 @@ export class GridListItem {
         }
         gridster = gridster || this.itemComponent.gridster;
 
-        let width = this.getValueW(gridster.options.breakpoint);
-        let height = this.getValueH(gridster.options.breakpoint);
+        let rowHeights, rowTops;
+        if (gridster.gridList) {
+            rowHeights = gridster.getRowHeights();
+            rowTops = gridster.getRowTops(rowHeights);
+        }
+
+        let width = this.w;
+        let height = this.h;
 
         if (gridster.options.direction === 'vertical') {
             width = Math.min(width, gridster.options.lanes);
@@ -307,9 +333,19 @@ export class GridListItem {
             height = Math.min(height, gridster.options.lanes);
         }
 
+        let pixelHeight;
+        if (rowHeights) {
+            pixelHeight = 0;
+            for (let i = this.y; i < this.y + height; i++) {
+                pixelHeight += rowHeights[i];
+            }
+        } else {
+            pixelHeight = height * gridster.cellHeight;
+        }
+
         return {
             width: width * gridster.cellWidth,
-            height: height * gridster.cellHeight
+            height: pixelHeight
         };
     }
 

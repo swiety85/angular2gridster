@@ -1,4 +1,4 @@
-import { GridsterModule } from 'angular2gridster';
+import { GridsterModule } from './angular2gridster/gridster.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
