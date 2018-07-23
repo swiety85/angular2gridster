@@ -182,6 +182,7 @@ export class GridsterService {
 
             // Visually update item positions and highlight shape
             this.applyPositionToItems(true);
+            this.applySizeToItems();
             this.highlightPositionForItem(item);
             this.refreshLines();
         }
