@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="5.0.5"></a>
+## [5.0.5](https://github.com/swiety85/angular2gridster/compare/v5.0.4...v5.0.5) (2018-07-29)
+
+
+### Bug Fixes
+
+* change event - oldValues empty when value = 0, fix: set default draggableOptions to empty object ([6bf757d](https://github.com/swiety85/angular2gridster/commit/6bf757d)), closes [#273](https://github.com/swiety85/angular2gridster/issues/273) [#264](https://github.com/swiety85/angular2gridster/issues/264)
+
+
+
 <a name="5.0.4"></a>
 ## [5.0.4](https://github.com/swiety85/angular2gridster/compare/v5.0.3...v5.0.4) (2018-07-22)
 
