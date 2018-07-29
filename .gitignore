@@ -11,6 +11,7 @@ old-RC4/**/typings
 aot
 /demos/basic_2.4
 /demos/basic-latest
+/demo/node_modules
 **/.vscode
 .idea
 .awcache
