@@ -1,5 +1,9 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { GridsterComponent, IGridsterOptions, IGridsterDraggableOptions } from 'angular2gridster';
+import {
+    GridsterComponent,
+    IGridsterOptions,
+    IGridsterDraggableOptions
+} from 'angular2gridster';
 
 @Component({
     selector: 'demo-root',
@@ -44,7 +48,7 @@ export class AppComponent implements OnInit {
     gridsterOptions: IGridsterOptions = {
         // core configuration is default one - for smallest view. It has hidden minWidth: 0.
         lanes: 2, // amount of lanes (cells) in the grid
-        direction: 'vertical', // floating top - vertical, left - horizontal
+        direction: 'none', // floating top - vertical, left - horizontal
         floating: true,
         dragAndDrop: true, // enable/disable drag and drop for all items in grid
         resizable: true, // enable/disable resizing by drag and drop for all items in grid
@@ -103,55 +107,103 @@ export class AppComponent implements OnInit {
     widgetsCopy = [];
     widgets: Array<any> = [
         {
-            x: 0, y: 0,
-            w: 1, h: 2,
-            wSm: 1, hSm: 1,
-            wMd: 1, hMd: 2,
-            wLg: 1, hLg: 1,
-            wXl: 2, hXl: 2,
+            x: 0,
+            y: 0,
+            w: 1,
+            h: 2,
+            wSm: 1,
+            hSm: 1,
+            wMd: 1,
+            hMd: 2,
+            wLg: 1,
+            hLg: 1,
+            wXl: 2,
+            hXl: 2,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 1'
+            title: 'Basic form inputs 1',
+            widgets: [
+                {
+                    x: 1,
+                    y: 0,
+                    w: 1,
+                    h: 2,
+                    wSm: 2,
+                    hSm: 1,
+                    wMd: 2,
+                    hMd: 1,
+                    wLg: 3,
+                    hLg: 1,
+                    wXl: 3,
+                    hXl: 1,
+                    dragAndDrop: true,
+                    resizable: true,
+                    title: 'Basic form inputs 2'
+                }
+            ]
         },
         {
-            x: 1, y: 0,
-            w: 1, h: 2,
-            wSm: 2, hSm: 1,
-            wMd: 2, hMd: 1,
-            wLg: 3, hLg: 1,
-            wXl: 3, hXl: 1,
+            x: 1,
+            y: 0,
+            w: 1,
+            h: 2,
+            wSm: 2,
+            hSm: 1,
+            wMd: 2,
+            hMd: 1,
+            wLg: 3,
+            hLg: 1,
+            wXl: 3,
+            hXl: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 2'
         },
         {
-            x: 1, y: 1,
-            w: 2, h: 1,
-            wSm: 1, hSm: 2,
-            wMd: 1, hMd: 2,
-            wLg: 2, hLg: 1,
-            wXl: 3, hXl: 1,
+            x: 1,
+            y: 1,
+            w: 2,
+            h: 1,
+            wSm: 1,
+            hSm: 2,
+            wMd: 1,
+            hMd: 2,
+            wLg: 2,
+            hLg: 1,
+            wXl: 3,
+            hXl: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 3'
         },
         {
-            x: 3, y: 1,
-            w: 1, h: 2,
-            wSm: 1, hSm: 2,
-            wMd: 1, hMd: 2,
-            wLg: 3, hLg: 1,
-            wXl: 3, hXl: 1,
+            x: 3,
+            y: 1,
+            w: 1,
+            h: 2,
+            wSm: 1,
+            hSm: 2,
+            wMd: 1,
+            hMd: 2,
+            wLg: 3,
+            hLg: 1,
+            wXl: 3,
+            hXl: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 4'
         },
         {
-            w: 1, h: 2,
-            wSm: 1, hSm: 2,
-            wMd: 1, hMd: 2,
-            wLg: 3, hLg: 1,
-            wXl: 3, hXl: 1,
+            w: 1,
+            h: 2,
+            wSm: 1,
+            hSm: 2,
+            wMd: 1,
+            hMd: 2,
+            wLg: 3,
+            hLg: 1,
+            wXl: 3,
+            hXl: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs x'
@@ -159,7 +211,7 @@ export class AppComponent implements OnInit {
     ];
 
     ngOnInit() {
-        this.widgetsCopy = this.widgets.map(widget => ({...widget}));
+        this.widgetsCopy = this.widgets.map(widget => ({ ...widget }));
     }
 
     onReflow(event) {
@@ -167,8 +219,7 @@ export class AppComponent implements OnInit {
     }
 
     removeLine(gridster: GridsterComponent) {
-        gridster.setOption('lanes', --this.gridsterOptions.lanes)
-            .reload();
+        gridster.setOption('lanes', --this.gridsterOptions.lanes).reload();
     }
 
     getTitle() {
@@ -176,8 +227,7 @@ export class AppComponent implements OnInit {
     }
 
     addLine(gridster: GridsterComponent) {
-        gridster.setOption('lanes', ++this.gridsterOptions.lanes)
-            .reload();
+        gridster.setOption('lanes', ++this.gridsterOptions.lanes).reload();
     }
 
     setWidth(widget: any, size: number, e: MouseEvent, gridster) {
@@ -230,7 +280,16 @@ export class AppComponent implements OnInit {
         widget[AppComponent.X_PROPERTY_MAP[breakpoint] || 'x'] = item.x;
         widget[AppComponent.Y_PROPERTY_MAP[breakpoint] || 'y'] = item.y;
 
-        for (const rwdProp of ['wSm', 'hSm', 'wMd', 'hMd', 'wLg', 'hLg', 'wXl', 'hXl']) {
+        for (const rwdProp of [
+            'wSm',
+            'hSm',
+            'wMd',
+            'hMd',
+            'wLg',
+            'hLg',
+            'wXl',
+            'hXl'
+        ]) {
             if (event.item.itemPrototype.hasOwnProperty(rwdProp)) {
                 widget[rwdProp] = event.item.itemPrototype[rwdProp];
             }
@@ -244,14 +303,26 @@ export class AppComponent implements OnInit {
     over(event) {
         const size = event.item.calculateSize(event.gridster);
 
-        event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.width = size.width + 'px';
-        event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.height = size.height + 'px';
+        event.item.itemPrototype.$element.querySelector(
+            '.gridster-item-inner'
+        ).style.width =
+            size.width + 'px';
+        event.item.itemPrototype.$element.querySelector(
+            '.gridster-item-inner'
+        ).style.height =
+            size.height + 'px';
         event.item.itemPrototype.$element.classList.add('is-over');
     }
 
     out(event) {
-        event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.width = '';
-        event.item.itemPrototype.$element.querySelector('.gridster-item-inner').style.height = '';
+        event.item.itemPrototype.$element.querySelector(
+            '.gridster-item-inner'
+        ).style.width =
+            '';
+        event.item.itemPrototype.$element.querySelector(
+            '.gridster-item-inner'
+        ).style.height =
+            '';
         event.item.itemPrototype.$element.classList.remove('is-over');
     }
 
@@ -260,25 +331,30 @@ export class AppComponent implements OnInit {
             title: 'Basic form inputs X',
             dragAndDrop: true,
             resizable: true,
-            content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
-            'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
-            'commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla ' +
-            'pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est ' +
-            'laborum.'
+            content:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
+                'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
+                'commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla ' +
+                'pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est ' +
+                'laborum.'
         });
     }
 
     addWidget(gridster: GridsterComponent) {
         this.widgets.push({
-            x: 4, y: 0, w: 1, h: 1,
+            x: 4,
+            y: 0,
+            w: 1,
+            h: 1,
             dragAndDrop: true,
             resizable: true,
             title: 'Basic form inputs 5',
-            content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
-            'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
-            'commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla ' +
-            'pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est ' +
-            'laborum.'
+            content:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et ' +
+                'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
+                'commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla ' +
+                'pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est ' +
+                'laborum.'
         });
         console.log('widget push', this.widgets[this.widgets.length - 1]);
     }
@@ -298,6 +374,6 @@ export class AppComponent implements OnInit {
     }
 
     resetWidgets() {
-        this.widgets = this.widgetsCopy.map(widget => ({...widget}));
+        this.widgets = this.widgetsCopy.map(widget => ({ ...widget }));
     }
 }
