@@ -157,7 +157,8 @@ export class AppComponent implements OnInit {
             hXl: 1,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 2'
+            title: 'Basic form inputs 2',
+            widgets: []
         },
         {
             x: 1,
@@ -174,7 +175,8 @@ export class AppComponent implements OnInit {
             hXl: 1,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 3'
+            title: 'Basic form inputs 3',
+            widgets: []
         },
         {
             x: 3,
@@ -191,7 +193,8 @@ export class AppComponent implements OnInit {
             hXl: 1,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 4'
+            title: 'Basic form inputs 4',
+            widgets: []
         },
         {
             w: 1,
@@ -206,7 +209,8 @@ export class AppComponent implements OnInit {
             hXl: 1,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs x'
+            title: 'Basic form inputs x',
+            widgets: []
         }
     ];
 
@@ -266,7 +270,11 @@ export class AppComponent implements OnInit {
         this.widgets[3].x = 0;
     }
 
-    addWidgetFromDrag(gridster: GridsterComponent, event: any) {
+    addWidgetFromDrag(
+        gridster: GridsterComponent,
+        event: any,
+        widgetList: any[]
+    ) {
         const item = event.item;
         const breakpoint = gridster.options.breakpoint;
         const widget = {
@@ -295,7 +303,7 @@ export class AppComponent implements OnInit {
             }
         }
 
-        this.widgets.push(widget);
+        widgetList.push(widget);
 
         console.log('add widget from drag to:', gridster);
     }

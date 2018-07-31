@@ -43,8 +43,7 @@
     </div>
     <div class="widgetbar">
         <div ngxGridsterItemPrototype [config]="{helper: true}" [w]="1" [h]="1" [wSm]="1" [hSm]="1" [wMd]="2" [hMd]="1" [wLg]="2"
-            [hLg]="2" [wXl]="3" [hXl]="2" (drop)="addWidgetFromDrag(gridster, $event)" (enter)="over($event)" (out)="out($event)"
-            class="gridster-item-prototype">
+            [hLg]="2" [wXl]="3" [hXl]="2" (enter)="over($event)" (out)="out($event)" class="gridster-item-prototype">
             Drag me (clone)
             <br> 1x1
             <div _ngcontent-uoe-1="" class="gridster-item-inner" style="width: 0;height: 0;">
@@ -54,8 +53,7 @@
             </div>
         </div>
 
-        <div ngxGridsterItemPrototype [config]="{helper: true}" [w]="2" [h]="2" (drop)="addWidgetFromDrag(gridster, $event)" (enter)="over($event)"
-            (out)="out($event)" class="gridster-item-prototype">
+        <div ngxGridsterItemPrototype [config]="{helper: true}" [w]="2" [h]="2" (enter)="over($event)" (out)="out($event)" class="gridster-item-prototype">
             Drag me (clone)
             <br> 1x2
             <div _ngcontent-uoe-1="" class="gridster-item-inner" style="width: 0;height: 0;">
@@ -65,8 +63,7 @@
             </div>
         </div>
 
-        <div ngxGridsterItemPrototype [config]="{helper: false}" [w]="2" [h]="1" (drop)="addWidgetFromDrag(gridster, $event)" (enter)="over($event)"
-            (out)="out($event)" class="gridster-item-prototype">
+        <div ngxGridsterItemPrototype [config]="{helper: false}" [w]="2" [h]="1" (enter)="over($event)" (out)="out($event)" class="gridster-item-prototype">
             Drag me
             <br> 2x1
             <div _ngcontent-uoe-1="" class="gridster-item-inner" style="width: 0;height: 0;">
@@ -86,7 +83,7 @@
             [resizable]="widget.resizable" [(x)]="widget.x" [(y)]="widget.y" [(xSm)]="widget.xSm" [(ySm)]="widget.ySm" [(xMd)]="widget.xMd"
             [(yMd)]="widget.yMd" [(xLg)]="widget.xLg" [(yLg)]="widget.yLg" [(xXl)]="widget.xXl" [(yXl)]="widget.yXl" [(w)]="widget.w"
             [(h)]="widget.h" [(wSm)]="widget.wSm" [(hSm)]="widget.hSm" [(wMd)]="widget.wMd" [(hMd)]="widget.hMd" [(wLg)]="widget.wLg"
-            [(hLg)]="widget.hLg" [(wXl)]="widget.wXl" [(hXl)]="widget.hXl" (change)="itemChange($event, gridster1)">
+            [(hLg)]="widget.hLg" [(wXl)]="widget.wXl" [(hXl)]="widget.hXl" (change)="itemChange($event, gridster1)" (prototypeDrop)="addWidgetFromDrag(gridster1, $event, widgets)">
 
             <div class="panel-heading">
                 <h5 class="panel-title">{{ widget.title }}</h5>
@@ -94,7 +91,7 @@
 
             <div class="panel-body">
                 <ngx-gridster [parent]="gridster1" [options]="gridsterOptions" [draggableOptions]="gridsterDraggableOptions" (reflow)="onReflow($event)"
-                    (optionsChange)="optionsChange($event)" #gridster2 class="dashboard">
+                    (optionsChange)="optionsChange($event)" #gridster2 class="dashboard" (prototypeDrop)="addWidgetFromDrag(gridster2, $event, widget.widgets)">
 
                     <ngx-gridster-item *ngFor="let widget of widget.widgets; let indx = index" #itemComp [options]="itemOptions" [dragAndDrop]="widget.dragAndDrop"
                         [resizable]="widget.resizable" [(x)]="widget.x" [(y)]="widget.y" [(xSm)]="widget.xSm" [(ySm)]="widget.ySm"
