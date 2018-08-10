@@ -177,7 +177,7 @@ export class GridListItem {
         });
     }
 
-    public copyForBreakpoint(breakpoint?) {
+    public copyForBreakpoint(breakpoint?: string) {
         const itemCopy = new GridListItem();
 
         return itemCopy.setFromObjectLiteral({
@@ -192,83 +192,83 @@ export class GridListItem {
         });
     }
 
-    public getValueX(breakpoint?) {
+    public getValueX(breakpoint?: string) {
         const item = this.getItem();
 
         return item[this.getXProperty(breakpoint)];
     }
 
-    public getValueY(breakpoint?) {
+    public getValueY(breakpoint?: string) {
         const item = this.getItem();
 
         return item[this.getYProperty(breakpoint)];
     }
 
-    public getValueW(breakpoint?) {
+    public getValueW(breakpoint?: string) {
         const item = this.getItem();
 
         return item[this.getWProperty(breakpoint)] || 1;
     }
 
-    public getValueH(breakpoint?) {
+    public getValueH(breakpoint?: string) {
         const item = this.getItem();
 
         return item[this.getHProperty(breakpoint)] || 1;
     }
 
-    public setValueX(value: number, breakpoint?) {
+    public setValueX(value: number, breakpoint?: string) {
         const item = this.getItem();
 
         item[this.getXProperty(breakpoint)] = value;
     }
 
-    public setValueY(value: number, breakpoint?) {
+    public setValueY(value: number, breakpoint?: string) {
         const item = this.getItem();
 
         item[this.getYProperty(breakpoint)] = value;
     }
 
-    public setValueW(value: number, breakpoint?) {
+    public setValueW(value: number, breakpoint?: string) {
         const item = this.getItem();
 
         item[this.getWProperty(breakpoint)] = value;
     }
 
-    public setValueH(value: number, breakpoint?) {
+    public setValueH(value: number, breakpoint?: string) {
         const item = this.getItem();
 
         item[this.getHProperty(breakpoint)] = value;
     }
 
-    public triggerChangeX(breakpoint?) {
+    public triggerChangeX(breakpoint?: string) {
         const item = this.itemComponent;
         if (item) {
-            item[this.getXProperty(breakpoint) + 'Change'].emit(this.getValueX(breakpoint));
+            (<any>item)[this.getXProperty(breakpoint) + 'Change'].emit(this.getValueX(breakpoint));
         }
     }
 
-    public triggerChangeY(breakpoint?) {
+    public triggerChangeY(breakpoint?: string) {
         const item = this.itemComponent;
         if (item) {
-            item[this.getYProperty(breakpoint) + 'Change'].emit(this.getValueY(breakpoint));
+            (<any>item)[this.getYProperty(breakpoint) + 'Change'].emit(this.getValueY(breakpoint));
         }
     }
 
-    public triggerChangeW(breakpoint?) {
+    public triggerChangeW(breakpoint?: string) {
         const item = this.itemComponent;
         if (item) {
-            item[this.getWProperty(breakpoint) + 'Change'].emit(this.getValueW(breakpoint));
+            (<any>item)[this.getWProperty(breakpoint) + 'Change'].emit(this.getValueW(breakpoint));
         }
     }
 
-    public triggerChangeH(breakpoint?) {
+    public triggerChangeH(breakpoint?: string) {
         const item = this.itemComponent;
         if (item) {
-            item[this.getHProperty(breakpoint) + 'Change'].emit(this.getValueH(breakpoint));
+            (<any>item)[this.getHProperty(breakpoint) + 'Change'].emit(this.getValueH(breakpoint));
         }
     }
 
-    public hasPositions(breakpoint?) {
+    public hasPositions(breakpoint?: string) {
         const x = this.getValueX(breakpoint);
         const y = this.getValueY(breakpoint);
 
@@ -369,7 +369,7 @@ export class GridListItem {
 
     private getWProperty(breakpoint?: string) {
         if (this.itemPrototype) {
-            return this.itemPrototype[GridListItem.W_PROPERTY_MAP[breakpoint]] ?
+            return (<any>this.itemPrototype)[GridListItem.W_PROPERTY_MAP[breakpoint]] ?
                 GridListItem.W_PROPERTY_MAP[breakpoint] : 'w';
         }
 
@@ -385,7 +385,7 @@ export class GridListItem {
 
     private getHProperty(breakpoint?: string) {
         if (this.itemPrototype) {
-            return this.itemPrototype[GridListItem.H_PROPERTY_MAP[breakpoint]] ?
+            return (<any>this.itemPrototype)[GridListItem.H_PROPERTY_MAP[breakpoint]] ?
                 GridListItem.H_PROPERTY_MAP[breakpoint] : 'w';
         }
 

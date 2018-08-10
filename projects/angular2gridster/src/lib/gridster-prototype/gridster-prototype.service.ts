@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject, merge } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil, switchMap, map, scan, filter, share, tap } from 'rxjs/operators';
 
 import { GridsterService } from '../gridster.service';
@@ -22,10 +22,10 @@ export class GridsterPrototypeService {
 
     observeDropOver (gridster: GridsterService) {
         return this.dragStopSubject.pipe(
-            filter((data) => {
+            filter((data: any) => {
                 const gridsterEl = gridster.gridsterComponent.$element;
                 const isOverNestedGridster = [].slice.call(gridsterEl.querySelectorAll('gridster'))
-                    .reduce((isOverGridster, nestedGridsterEl) => {
+                    .reduce((isOverGridster: boolean, nestedGridsterEl: HTMLElement) => {
                         return isOverGridster ||
                             this.isOverGridster(data.item, nestedGridsterEl, data.event, gridster.options);
                     }, false);
@@ -36,7 +36,7 @@ export class GridsterPrototypeService {
 
                 return this.isOverGridster(data.item, gridsterEl, data.event, gridster.options);
             }),
-            tap((data) => {
+            tap((data: any) => {
                 // TODO: what we should provide as a param?
                 // prototype.drop.emit({item: prototype.item});
                 data.item.onDrop(gridster);
@@ -46,12 +46,12 @@ export class GridsterPrototypeService {
 
     observeDropOut (gridster: GridsterService) {
         return this.dragStopSubject.pipe(
-            filter((data) => {
+            filter((data: any) => {
                 const gridsterEl = gridster.gridsterComponent.$element;
 
                 return !this.isOverGridster(data.item, gridsterEl, data.event, gridster.options);
             }),
-            tap((data) => {
+            tap((data: any) => {
                 // TODO: what we should provide as a param?
                 data.item.onCancel();
             })
@@ -64,7 +64,7 @@ export class GridsterPrototypeService {
         dragOut: Observable<GridsterItemPrototypeDirective>
     } {
         const over = this.dragSubject.pipe(
-            map((data) => {
+            map((data: any) => {
                 const gridsterEl = gridster.gridsterComponent.$element;
 
                 return {
@@ -77,7 +77,7 @@ export class GridsterPrototypeService {
         );
 
         const drop = this.dragStopSubject.pipe(
-            map((data) => {
+            map((data: any) => {
                 const gridsterEl = gridster.gridsterComponent.$element;
 
                 return {
@@ -89,7 +89,7 @@ export class GridsterPrototypeService {
             })
         );
 
-        const dragExt = merge(
+        const dragExt = Observable.merge(
                 // dragStartSubject is connected in case when item prototype is placed above gridster
                 // and drag enter is not fired
                 this.dragStartSubject.pipe(map(() => ({ item: null, isOver: false, isDrop: false }))),
@@ -140,14 +140,14 @@ export class GridsterPrototypeService {
     /**
      * Creates observable that is fired on dragging over gridster container.
      */
-    private createDragOverObservable (
+    public createDragOverObservable (
         dragIsOver: Observable<{item: GridsterItemPrototypeDirective, isOver: boolean}>,
         gridster: GridsterService
     ) {
         return dragIsOver.pipe(
             filter((data: any) => data.isOver && !data.isEnter && !data.isOut),
             map((data: any): GridsterItemPrototypeDirective => data.item),
-            tap((item) => item.onOver(gridster))
+            tap((item: GridsterItemPrototypeDirective) => item.onOver(gridster))
         );
     }
     /**
@@ -160,7 +160,7 @@ export class GridsterPrototypeService {
         return dragIsOver.pipe(
             filter((data: any) => data.isEnter),
             map((data: any): GridsterItemPrototypeDirective => data.item),
-            tap((item) => item.onEnter(gridster))
+            tap((item: GridsterItemPrototypeDirective) => item.onEnter(gridster))
         );
     }
     /**
@@ -174,7 +174,7 @@ export class GridsterPrototypeService {
         return dragIsOver.pipe(
             filter((data: any) => data.isOut),
             map((data: any): GridsterItemPrototypeDirective => data.item),
-            tap((item) => item.onOut(gridster))
+            tap((item: GridsterItemPrototypeDirective) => item.onOut(gridster))
         );
     }
 
@@ -182,7 +182,7 @@ export class GridsterPrototypeService {
      * Checks whether "element" position fits inside "containerEl" position.
      * It checks if "element" is totally covered by "containerEl" area.
      */
-    private isOverGridster(item: GridsterItemPrototypeDirective, gridsterEl: HTMLElement, event, options): boolean {
+    private isOverGridster(item: GridsterItemPrototypeDirective, gridsterEl: HTMLElement, event: any, options: any): boolean {
         const el = item.$element;
         const parentItem = <HTMLElement>gridsterEl.parentElement &&
             <HTMLElement>gridsterEl.parentElement.closest('gridster-item');

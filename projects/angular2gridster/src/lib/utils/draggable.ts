@@ -1,4 +1,4 @@
-import { Observable, fromEvent, merge, pipe } from 'rxjs';
+import { Observable } from 'rxjs';
 import { share, map, filter, tap, switchMap, takeUntil, take, skip } from 'rxjs/operators';
 
 import { DraggableEvent } from './DraggableEvent';
@@ -14,30 +14,30 @@ export class Draggable {
     // A simple requestAnimationFrame polyfill
     private requestAnimationFrame: Function;
     private cancelAnimationFrame: Function;
-    private mousemove: Observable<{} | Event> = merge(
-        fromEvent(document, 'mousemove'),
-        fromEvent(document, 'touchmove', {passive: false})
+    private mousemove: Observable<{} | Event> = Observable.merge(
+        Observable.fromEvent(document, 'mousemove'),
+        Observable.fromEvent(document, 'touchmove', {passive: false})
     ).pipe(share());
-    private mouseup: Observable<{} | Event> = merge(
-        fromEvent(document, 'mouseup'),
-        fromEvent(document, 'touchend'),
-        fromEvent(document, 'touchcancel')
+    private mouseup: Observable<{} | Event> = Observable.merge(
+        Observable.fromEvent(document, 'mouseup'),
+        Observable.fromEvent(document, 'touchend'),
+        Observable.fromEvent(document, 'touchcancel')
     ).pipe(share());
     private mousedown: Observable<{} | Event>;
     private config = {
-        handlerClass: null,
+        handlerClass: <any>null,
         scroll: true,
         scrollEdge: 36,
-        scrollDirection: null
+        scrollDirection: <any>null
     };
     // reference to auto scrolling listeners
-    private autoScrollingInterval = [];
+    private autoScrollingInterval: Function[] = [];
 
     constructor(element: Element, config = {}) {
         this.element = element;
-        this.mousedown = merge(
-            fromEvent(element, 'mousedown'),
-            fromEvent(element, 'touchstart')
+        this.mousedown = Observable.merge(
+            Observable.fromEvent(element, 'mousedown'),
+            Observable.fromEvent(element, 'touchstart')
         ).pipe(share());
 
         this.config = { ...this.config, ...config };
@@ -48,15 +48,15 @@ export class Draggable {
 
         this.fixProblemWithDnDForIE(element);
 
-        this.requestAnimationFrame = window.requestAnimationFrame || (callback => setTimeout(callback, 1000 / 60));
-        this.cancelAnimationFrame = window.cancelAnimationFrame || (cafID => clearTimeout(cafID));
+        this.requestAnimationFrame = window.requestAnimationFrame || ((callback: FrameRequestCallback) => setTimeout(callback, 1000 / 60));
+        this.cancelAnimationFrame = window.cancelAnimationFrame || ((cafID: number) => clearTimeout(cafID));
     }
 
     private createDragStartObservable(): Observable<DraggableEvent> {
         return this.mousedown.pipe(
             map(md => new DraggableEvent(md)),
             filter((event: DraggableEvent) => this.isDragingByHandler(event)),
-            tap(e => {
+            tap((e: DraggableEvent) => {
                 if (!e.isTouchEvent()) {
                     e.pauseEvent();
                 }
@@ -80,14 +80,14 @@ export class Draggable {
 
     private createDragMoveObservable(dragStart: Observable<DraggableEvent>): Observable<DraggableEvent> {
         return dragStart.pipe(
-            tap((event) => {
+            tap((event: DraggableEvent) => {
                 this.addTouchActionNone(event.target);
             }),
-            switchMap((startEvent) => {
+            switchMap((startEvent: DraggableEvent) => {
                 return this.mousemove.pipe(
                     skip(1),
                     map(mm => new DraggableEvent(mm)),
-                    tap((event) => {
+                    tap((event: DraggableEvent) => {
                         event.pauseEvent();
                         startEvent.pauseEvent();
                     }),
@@ -109,7 +109,7 @@ export class Draggable {
                 return this.mouseup.pipe(take(1));
             }),
             map(e => new DraggableEvent(e)),
-            tap((e) => {
+            tap((e: DraggableEvent) => {
                 this.removeTouchActionNone(e.target);
                 this.autoScrollingInterval.forEach(raf => this.cancelAnimationFrame(raf));
             })
@@ -158,7 +158,7 @@ export class Draggable {
         }
     }
 
-    private startScrollForWindow(event) {
+    private startScrollForWindow(event: DraggableEvent) {
 
         if (!this.config.scrollDirection || this.config.scrollDirection === 'vertical') {
             this.startScrollVerticallyForWindow(event);
@@ -191,7 +191,7 @@ export class Draggable {
         }
     }
 
-    private getScrollContainer(node): HTMLElement {
+    private getScrollContainer(node: any): HTMLElement {
         const nodeOuterHeight = utils.getElementOuterHeight(node);
 
         if (node.scrollHeight > Math.ceil(nodeOuterHeight)) {
@@ -205,7 +205,7 @@ export class Draggable {
         return null;
     }
 
-    private startAutoScrolling(node, amount, direction) {
+    private startAutoScrolling(node: any, amount: number, direction: any) {
         this.autoScrollingInterval.push(this.requestAnimationFrame(function() {
             this.startAutoScrolling(node, amount, direction);
         }.bind(this)));
@@ -213,7 +213,7 @@ export class Draggable {
         return node[direction] += (amount * 0.25);
     }
 
-    private getOffset (el) {
+    private getOffset(el: HTMLElement) {
         const rect = el.getBoundingClientRect();
         return {
             left: rect.left + this.getScroll('scrollLeft', 'pageXOffset'),
@@ -221,7 +221,7 @@ export class Draggable {
         };
     }
 
-    private getScroll (scrollProp, offsetProp) {
+    private getScroll(scrollProp: keyof HTMLElement, offsetProp: keyof Window) {
         if (typeof window[offsetProp] !== 'undefined') {
             return window[offsetProp];
         }
@@ -259,7 +259,7 @@ export class Draggable {
         return false;
     }
 
-    private pauseEvent(e: Event): void {
+    public pauseEvent(e: Event): void {
         if (e.stopPropagation) {
             e.stopPropagation();
         }
@@ -272,16 +272,16 @@ export class Draggable {
 
     private fixProblemWithDnDForIE(element: Element) {
         if (this.isTouchDevice() && this.isIEorEdge()) {
-            (<HTMLElement>element).style['touch-action'] = 'none';
+            (<any>(<HTMLElement>element).style)['touch-action'] = 'none';
         }
     }
 
     private removeTouchActionNone(element: Element) {
-        (<HTMLElement>element).style['touch-action'] = '';
+        (<any>(<HTMLElement>element).style)['touch-action'] = '';
     }
 
-    private addTouchActionNone(element) {
-        (<HTMLElement>element).style['touch-action'] = 'none';
+    private addTouchActionNone(element: Element) {
+        (<any>(<HTMLElement>element).style)['touch-action'] = 'none';
     }
 
     private isTouchDevice() {

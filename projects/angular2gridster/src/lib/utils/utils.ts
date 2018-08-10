@@ -18,21 +18,21 @@ export const utils = {
         const translate = `translate(${left}px,${top}px)`;
 
         $element.style['transform'] = translate;
-        $element.style['WebkitTransform'] = translate;
-        $element.style['MozTransform'] = translate;
-        $element.style['msTransform'] = translate;
-        $element.style['OTransform'] = translate;
+        (<any>$element.style)['WebkitTransform'] = translate;
+        (<any>$element.style)['MozTransform'] = translate;
+        (<any>$element.style)['msTransform'] = translate;
+        (<any>$element.style)['OTransform'] = translate;
     },
     resetTransform: function ($element: HTMLElement) {
         $element.style['transform'] = '';
-        $element.style['WebkitTransform'] = '';
-        $element.style['MozTransform'] = '';
-        $element.style['msTransform'] = '';
-        $element.style['OTransform'] = '';
+        (<any>$element.style)['WebkitTransform'] = '';
+        (<any>$element.style)['MozTransform'] = '';
+        (<any>$element.style)['msTransform'] = '';
+        (<any>$element.style)['OTransform'] = '';
     },
     clearSelection: () => {
-        if (document['selection']) {
-            document['selection'].empty();
+        if ((<any>document)['selection']) {
+            (<any>document)['selection'].empty();
         } else if (window.getSelection) {
             window.getSelection().removeAllRanges();
         }
@@ -67,7 +67,7 @@ export const utils = {
             elRect.left < containerRect.right &&
             elRect.top < containerRect.bottom;
     },
-    isCursorAboveElement: function (event: DraggableEvent, element): boolean {
+    isCursorAboveElement: function (event: DraggableEvent, element: HTMLElement): boolean {
         const elRect = element.getBoundingClientRect();
 
         return event.pageX > elRect.left &&
@@ -83,7 +83,7 @@ export const utils = {
             parseFloat(styleObj.getPropertyValue('padding-top')) +
             parseFloat(styleObj.getPropertyValue('padding-bottom'));
     },
-    getRelativeCoordinates: (element, parentElement): {top: number, left: number} => {
+    getRelativeCoordinates: (element: HTMLElement, parentElement: HTMLElement): {top: number, left: number} => {
         const parentElementRect = parentElement.getBoundingClientRect();
         const elementRect = element.getBoundingClientRect();
 

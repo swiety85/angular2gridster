@@ -2,7 +2,7 @@ import {
     Component, OnInit, AfterContentInit, OnDestroy, ElementRef, ViewChild, NgZone,
     Input, Output, EventEmitter, ChangeDetectionStrategy, HostBinding, ViewEncapsulation
 } from '@angular/core';
-import { Observable, Subscription, fromEvent, ConnectableObservable } from 'rxjs';
+import { Observable, Subscription, ConnectableObservable } from 'rxjs';
 import { debounceTime, filter, publish } from 'rxjs/operators';
 
 import { utils } from './utils/utils';
@@ -66,28 +66,27 @@ import { GridsterOptions } from './GridsterOptions';
     encapsulation: ViewEncapsulation.None
 })
 export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
-    @Input() options: IGridsterOptions;
-    @Output() optionsChange = new EventEmitter<any>();
-    @Output() ready = new EventEmitter<any>();
-    @Output() reflow = new EventEmitter<any>();
-    @Output() prototypeDrop = new EventEmitter<{item: GridListItem}>();
-    @Output() prototypeEnter = new EventEmitter<{item: GridListItem}>();
-    @Output() prototypeOut = new EventEmitter<{item: GridListItem}>();
-    @Input() draggableOptions: IGridsterDraggableOptions;
-    @Input() parent: GridsterComponent;
+    @Input() public options: IGridsterOptions;
+    @Output() public optionsChange = new EventEmitter<any>();
+    @Output() public ready = new EventEmitter<any>();
+    @Output() public reflow = new EventEmitter<any>();
+    @Output() public prototypeDrop = new EventEmitter<{item: GridListItem}>();
+    @Output() public prototypeEnter = new EventEmitter<{item: GridListItem}>();
+    @Output() public prototypeOut = new EventEmitter<{item: GridListItem}>();
+    @Input() public draggableOptions: IGridsterDraggableOptions;
+    @Input() public parent: GridsterComponent;
 
-    @ViewChild('positionHighlight') $positionHighlight;
-    @ViewChild('backgroundGrid') $backgroundGrid;
-    @HostBinding('class.gridster--dragging') isDragging = false;
-    @HostBinding('class.gridster--resizing') isResizing = false;
+    @ViewChild('positionHighlight') public $positionHighlight: any;
+    @ViewChild('backgroundGrid') public $backgroundGrid: any;
+    @HostBinding('class.gridster--dragging') public isDragging = false;
+    @HostBinding('class.gridster--resizing') public isResizing = false;
 
-    @HostBinding('class.gridster--ready') isReady = false;
-    gridster: GridsterService;
-    $element: HTMLElement;
+    @HostBinding('class.gridster--ready') public isReady = false;
+    public gridster: GridsterService;
+    public $element: HTMLElement;
 
-
-    gridsterOptions: GridsterOptions;
-    isPrototypeEntered = false;
+    public gridsterOptions: GridsterOptions;
+    public isPrototypeEntered = false;
     private isDisabled = false;
     private subscription = new Subscription();
 
@@ -119,7 +118,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         this.gridster.init(this);
 
         this.subscription.add(
-            fromEvent(window, 'resize').pipe(
+            Observable.fromEvent(window, 'resize').pipe(
                 debounceTime(this.gridster.options.responsiveDebounce || 0),
                 filter(() => this.gridster.options.responsiveView)
             ).subscribe(() => this.reload())
@@ -127,7 +126,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
 
         this.zone.runOutsideAngular(() => {
             this.subscription.add(
-                fromEvent(document, 'scroll', { passive: true }).subscribe(() => this.updateGridsterElementData())
+                Observable.fromEvent(document, 'scroll', { passive: true }).subscribe(() => this.updateGridsterElementData())
             );
         });
     }
@@ -152,7 +151,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
      * @param any value
      * @return GridsterComponent
      */
-    setOption(name: string, value: any) {
+    setOption(name: keyof IGridsterOptions, value: any) {
         if (name === 'dragAndDrop') {
             if (value) {
                 this.enableDraggable();
@@ -242,7 +241,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         this.gridster.reflow();
     }
 
-    disable(item) {
+    disable(item: any) {
         const itemIdx = this.gridster.items.indexOf(item.itemComponent);
 
         this.isDisabled = true;
@@ -330,7 +329,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
             }
         });
 
-        dropOverObservable.pipe(filter(() => !this.isDisabled)).subscribe((data) => {
+        dropOverObservable.pipe(filter(() => !this.isDisabled)).subscribe((data: any) => {
             if (!this.isPrototypeEntered) {
                 return;
             }
