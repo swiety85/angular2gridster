@@ -14,7 +14,7 @@ import {utils} from '../utils/utils';
 
 @Component({
     selector: 'ngx-gridster-item',
-    template: `<div class="gridster-item-inner" [ngStyle]="{position: variableHeight ? 'relative' : 'absolute'}">
+    template: `<div class="gridster-item-inner" [ngStyle]="{position: variableHeight ? 'relative' : ''}">
       <span #contentWrapper class="gridster-content-wrapper">
         <ng-content></ng-content>
       </span>
