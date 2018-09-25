@@ -36,66 +36,82 @@ export class GridListItem {
     itemPrototype: GridsterItemPrototypeDirective;
     itemObject: any;
 
-    get $element () {
+    get $element() {
         return this.getItem().$element;
     }
 
-    get x () {
+    get x() {
         const item = this.getItem();
-        const breakpoint = item.gridster ? item.gridster.options.breakpoint : null;
+        const breakpoint = item.gridster
+            ? item.gridster.options.breakpoint
+            : null;
 
         return this.getValueX(breakpoint);
     }
-    set x (value: number) {
+    set x(value: number) {
         const item = this.getItem();
-        const breakpoint = item.gridster ? item.gridster.options.breakpoint : null;
+        const breakpoint = item.gridster
+            ? item.gridster.options.breakpoint
+            : null;
 
         this.setValueX(value, breakpoint);
     }
 
-    get y () {
+    get y() {
         const item = this.getItem();
-        const breakpoint = item.gridster ? item.gridster.options.breakpoint : null;
+        const breakpoint = item.gridster
+            ? item.gridster.options.breakpoint
+            : null;
 
         return this.getValueY(breakpoint);
     }
-    set y (value: number) {
+    set y(value: number) {
         const item = this.getItem();
-        const breakpoint = item.gridster ? item.gridster.options.breakpoint : null;
+        const breakpoint = item.gridster
+            ? item.gridster.options.breakpoint
+            : null;
 
         this.setValueY(value, breakpoint);
     }
 
-    get w () {
+    get w() {
         const item = this.getItem();
-        const breakpoint = item.gridster ? item.gridster.options.breakpoint : null;
+        const breakpoint = item.gridster
+            ? item.gridster.options.breakpoint
+            : null;
 
         return this.getValueW(breakpoint);
     }
-    set w (value: number) {
+    set w(value: number) {
         const item = this.getItem();
-        const breakpoint = item.gridster ? item.gridster.options.breakpoint : null;
+        const breakpoint = item.gridster
+            ? item.gridster.options.breakpoint
+            : null;
 
         this.setValueW(value, breakpoint);
     }
 
-    get h () {
+    get h() {
         const item = this.getItem();
-        const breakpoint = item.gridster ? item.gridster.options.breakpoint : null;
+        const breakpoint = item.gridster
+            ? item.gridster.options.breakpoint
+            : null;
 
         return this.getValueH(breakpoint);
     }
-    set h (value: number) {
+    set h(value: number) {
         const item = this.getItem();
-        const breakpoint = item.gridster ? item.gridster.options.breakpoint : null;
+        const breakpoint = item.gridster
+            ? item.gridster.options.breakpoint
+            : null;
 
         this.setValueH(value, breakpoint);
     }
 
-    get autoSize () {
+    get autoSize() {
         return this.getItem().autoSize;
     }
-    set autoSize (value: boolean) {
+    set autoSize(value: boolean) {
         this.getItem().autoSize = value;
     }
 
@@ -127,7 +143,7 @@ export class GridListItem {
         return item.positionY;
     }
 
-    public setFromGridsterItem (item: GridsterItemComponent): GridListItem {
+    public setFromGridsterItem(item: GridsterItemComponent): GridListItem {
         if (this.isItemSet()) {
             throw new Error('GridListItem is already set.');
         }
@@ -135,7 +151,9 @@ export class GridListItem {
         return this;
     }
 
-    public setFromGridsterItemPrototype (item: GridsterItemPrototypeDirective): GridListItem {
+    public setFromGridsterItemPrototype(
+        item: GridsterItemPrototypeDirective
+    ): GridListItem {
         if (this.isItemSet()) {
             throw new Error('GridListItem is already set.');
         }
@@ -143,7 +161,7 @@ export class GridListItem {
         return this;
     }
 
-    public setFromObjectLiteral (item: Object): GridListItem {
+    public setFromObjectLiteral(item: Object): GridListItem {
         if (this.isItemSet()) {
             throw new Error('GridListItem is already set.');
         }
@@ -232,28 +250,36 @@ export class GridListItem {
     public triggerChangeX(breakpoint?) {
         const item = this.itemComponent;
         if (item) {
-            item[this.getXProperty(breakpoint) + 'Change'].emit(this.getValueX(breakpoint));
+            item[this.getXProperty(breakpoint) + 'Change'].emit(
+                this.getValueX(breakpoint)
+            );
         }
     }
 
     public triggerChangeY(breakpoint?) {
         const item = this.itemComponent;
         if (item) {
-            item[this.getYProperty(breakpoint) + 'Change'].emit(this.getValueY(breakpoint));
+            item[this.getYProperty(breakpoint) + 'Change'].emit(
+                this.getValueY(breakpoint)
+            );
         }
     }
 
     public triggerChangeW(breakpoint?) {
         const item = this.itemComponent;
         if (item) {
-            item[this.getWProperty(breakpoint) + 'Change'].emit(this.getValueW(breakpoint));
+            item[this.getWProperty(breakpoint) + 'Change'].emit(
+                this.getValueW(breakpoint)
+            );
         }
     }
 
     public triggerChangeH(breakpoint?) {
         const item = this.itemComponent;
         if (item) {
-            item[this.getHProperty(breakpoint) + 'Change'].emit(this.getValueH(breakpoint));
+            item[this.getHProperty(breakpoint) + 'Change'].emit(
+                this.getValueH(breakpoint)
+            );
         }
     }
 
@@ -272,9 +298,11 @@ export class GridListItem {
         this.itemComponent.updateElemenetPosition();
     }
 
-    public calculatePosition(gridster?: GridsterService): {left: number, top: number} {
+    public calculatePosition(
+        gridster?: GridsterService
+    ): { left: number; top: number } {
         if (!gridster && !this.itemComponent) {
-            return {left: 0, top: 0};
+            return { left: 0, top: 0 };
         }
         gridster = gridster || this.itemComponent.gridster;
 
@@ -291,9 +319,11 @@ export class GridListItem {
         this.$element.style.height = size.height + 'px';
     }
 
-    public calculateSize(gridster?: GridsterService): {width: number, height: number} {
+    public calculateSize(
+        gridster?: GridsterService
+    ): { width: number; height: number } {
         if (!gridster && !this.itemComponent) {
-            return {width: 0, height: 0};
+            return { width: 0, height: 0 };
         }
         gridster = gridster || this.itemComponent.gridster;
 
@@ -314,7 +344,6 @@ export class GridListItem {
     }
 
     private getXProperty(breakpoint?: string) {
-
         if (breakpoint && this.itemComponent) {
             return GridListItem.X_PROPERTY_MAP[breakpoint];
         } else {
@@ -323,7 +352,6 @@ export class GridListItem {
     }
 
     private getYProperty(breakpoint?: string) {
-
         if (breakpoint && this.itemComponent) {
             return GridListItem.Y_PROPERTY_MAP[breakpoint];
         } else {
@@ -333,12 +361,14 @@ export class GridListItem {
 
     private getWProperty(breakpoint?: string) {
         if (this.itemPrototype) {
-            return this.itemPrototype[GridListItem.W_PROPERTY_MAP[breakpoint]] ?
-                GridListItem.W_PROPERTY_MAP[breakpoint] : 'w';
+            return this.itemPrototype[GridListItem.W_PROPERTY_MAP[breakpoint]]
+                ? GridListItem.W_PROPERTY_MAP[breakpoint]
+                : 'w';
         }
 
         const item = this.getItem();
-        const responsiveSizes = item.gridster && item.gridster.options.responsiveSizes;
+        const responsiveSizes =
+            item.gridster && item.gridster.options.responsiveSizes;
 
         if (breakpoint && responsiveSizes) {
             return GridListItem.W_PROPERTY_MAP[breakpoint];
@@ -349,12 +379,14 @@ export class GridListItem {
 
     private getHProperty(breakpoint?: string) {
         if (this.itemPrototype) {
-            return this.itemPrototype[GridListItem.H_PROPERTY_MAP[breakpoint]] ?
-                GridListItem.H_PROPERTY_MAP[breakpoint] : 'w';
+            return this.itemPrototype[GridListItem.H_PROPERTY_MAP[breakpoint]]
+                ? GridListItem.H_PROPERTY_MAP[breakpoint]
+                : 'w';
         }
 
         const item = this.getItem();
-        const responsiveSizes = item.gridster && item.gridster.options.responsiveSizes;
+        const responsiveSizes =
+            item.gridster && item.gridster.options.responsiveSizes;
 
         if (breakpoint && responsiveSizes) {
             return GridListItem.H_PROPERTY_MAP[breakpoint];
@@ -364,7 +396,8 @@ export class GridListItem {
     }
 
     private getItem(): any {
-        const item = this.itemComponent || this.itemPrototype || this.itemObject;
+        const item =
+            this.itemComponent || this.itemPrototype || this.itemObject;
 
         if (!item) {
             throw new Error('GridListItem is not set.');

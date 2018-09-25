@@ -2,7 +2,7 @@
   "name": "angular2gridster",
   "version": "5.0.5",
   "license": "MIT",
-  "main": "./dist/src/index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "install-demo": "npm install --prefix ./demo",
     "link-demo": "ln -s $PWD/src/ $PWD/demo/src/app/gridster",
@@ -10,7 +10,7 @@
     "start": "npm start --prefix ./demo",
     "lint": "tslint src/**/*.ts && npm run lint --prefix ./demo",
     "test": "karma start",
-    "build": "echo 'Building...' && ./node_modules/.bin/ngc -p tsconfig.json",
+    "build": "echo 'Building...' && ngc -p tsconfig-lib.json",
     "release-major": "standard-version -r major",
     "release-minor": "standard-version -r minor",
     "release-fix": "standard-version -r patch",
