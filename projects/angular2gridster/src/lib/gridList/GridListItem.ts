@@ -350,7 +350,7 @@ export class GridListItem {
     private getHProperty(breakpoint?: string) {
         if (this.itemPrototype) {
             return this.itemPrototype[GridListItem.H_PROPERTY_MAP[breakpoint]] ?
-                GridListItem.H_PROPERTY_MAP[breakpoint] : 'w';
+                GridListItem.H_PROPERTY_MAP[breakpoint] : 'h';
         }
 
         const item = this.getItem();
