@@ -25,7 +25,7 @@ export class Draggable {
     private cancelAnimationFrame: Function;
     private mousemove: Observable<{} | Event> = Observable.merge(
         Observable.fromEvent(document, 'mousemove'),
-        Observable.fromEvent(document, 'touchmove', {passive: false})
+        Observable.fromEvent(document, 'touchmove', { passive: false })
     ).share();
     private mouseup: Observable<{} | Event> = Observable.merge(
         Observable.fromEvent(document, 'mouseup'),
@@ -57,8 +57,11 @@ export class Draggable {
 
         this.fixProblemWithDnDForIE(element);
 
-        this.requestAnimationFrame = window.requestAnimationFrame || (callback => setTimeout(callback, 1000 / 60));
-        this.cancelAnimationFrame = window.cancelAnimationFrame || (cafID => clearTimeout(cafID));
+        this.requestAnimationFrame =
+            window.requestAnimationFrame ||
+            (callback => setTimeout(callback, 1000 / 60));
+        this.cancelAnimationFrame =
+            window.cancelAnimationFrame || (cafID => clearTimeout(cafID));
     }
 
     private createDragStartObservable(): Observable<DraggableEvent> {
@@ -76,26 +79,29 @@ export class Draggable {
                 utils.clearSelection();
             })
             .switchMap((startEvent: DraggableEvent) => {
-
                 return this.mousemove
                     .map(mm => new DraggableEvent(mm))
-                    .filter((moveEvent: DraggableEvent) => this.inRange(startEvent, moveEvent, 5))
+                    .filter((moveEvent: DraggableEvent) =>
+                        this.inRange(startEvent, moveEvent, 5)
+                    )
                     .map(() => startEvent)
                     .takeUntil(this.mouseup)
                     .take(1);
             });
     }
 
-    private createDragMoveObservable(dragStart: Observable<DraggableEvent>): Observable<DraggableEvent> {
+    private createDragMoveObservable(
+        dragStart: Observable<DraggableEvent>
+    ): Observable<DraggableEvent> {
         return dragStart
-            .do((event) => {
+            .do(event => {
                 this.addTouchActionNone(event.target);
             })
-            .switchMap((startEvent) => {
+            .switchMap(startEvent => {
                 return this.mousemove
                     .skip(1)
                     .map(mm => new DraggableEvent(mm))
-                    .do((event) => {
+                    .do(event => {
                         event.pauseEvent();
                         startEvent.pauseEvent();
                     })
@@ -109,21 +115,27 @@ export class Draggable {
             });
     }
 
-    private createDragStopObservable(dragStart: Observable<DraggableEvent>): Observable<any> {
+    private createDragStopObservable(
+        dragStart: Observable<DraggableEvent>
+    ): Observable<any> {
         return dragStart
             .switchMap(() => {
                 return this.mouseup.take(1);
             })
             .map(e => new DraggableEvent(e))
-            .do((e) => {
+            .do(e => {
                 this.removeTouchActionNone(e.target);
-                this.autoScrollingInterval.forEach(raf => this.cancelAnimationFrame(raf));
+                this.autoScrollingInterval.forEach(raf =>
+                    this.cancelAnimationFrame(raf)
+                );
             });
     }
 
     private startScroll(item: Element, event: DraggableEvent) {
         const scrollContainer = this.getScrollContainer(item);
-        this.autoScrollingInterval.forEach(raf => this.cancelAnimationFrame(raf));
+        this.autoScrollingInterval.forEach(raf =>
+            this.cancelAnimationFrame(raf)
+        );
 
         if (scrollContainer) {
             this.startScrollForContainer(event, scrollContainer);
@@ -132,67 +144,142 @@ export class Draggable {
         }
     }
 
-    private startScrollForContainer(event: DraggableEvent, scrollContainer: HTMLElement): void {
-
-        if (!this.config.scrollDirection || this.config.scrollDirection === 'vertical') {
+    private startScrollForContainer(
+        event: DraggableEvent,
+        scrollContainer: HTMLElement
+    ): void {
+        if (
+            !this.config.scrollDirection ||
+            this.config.scrollDirection === 'vertical'
+        ) {
             this.startScrollVerticallyForContainer(event, scrollContainer);
         }
 
-        if (!this.config.scrollDirection || this.config.scrollDirection === 'horizontal') {
+        if (
+            !this.config.scrollDirection ||
+            this.config.scrollDirection === 'horizontal'
+        ) {
             this.startScrollHorizontallyForContainer(event, scrollContainer);
         }
     }
 
-    private startScrollVerticallyForContainer(event: DraggableEvent, scrollContainer: HTMLElement): void {
-        if (event.pageY - this.getOffset(scrollContainer).top < this.config.scrollEdge) {
-            this.startAutoScrolling(scrollContainer, -Draggable.SCROLL_SPEED, 'scrollTop');
-        } else if ((this.getOffset(scrollContainer).top + scrollContainer.getBoundingClientRect().height) -
-            event.pageY < this.config.scrollEdge) {
-
-            this.startAutoScrolling(scrollContainer, Draggable.SCROLL_SPEED, 'scrollTop');
+    private startScrollVerticallyForContainer(
+        event: DraggableEvent,
+        scrollContainer: HTMLElement
+    ): void {
+        if (
+            event.pageY - this.getOffset(scrollContainer).top <
+            this.config.scrollEdge
+        ) {
+            this.startAutoScrolling(
+                scrollContainer,
+                -Draggable.SCROLL_SPEED,
+                'scrollTop'
+            );
+        } else if (
+            this.getOffset(scrollContainer).top +
+                scrollContainer.getBoundingClientRect().height -
+                event.pageY <
+            this.config.scrollEdge
+        ) {
+            this.startAutoScrolling(
+                scrollContainer,
+                Draggable.SCROLL_SPEED,
+                'scrollTop'
+            );
         }
     }
 
-    private startScrollHorizontallyForContainer(event: DraggableEvent, scrollContainer: HTMLElement): void {
-        if (event.pageX - scrollContainer.getBoundingClientRect().left < this.config.scrollEdge) {
-            this.startAutoScrolling(scrollContainer, -Draggable.SCROLL_SPEED, 'scrollLeft');
-        } else if ((this.getOffset(scrollContainer).left + scrollContainer.getBoundingClientRect().width) -
-            event.pageX < this.config.scrollEdge) {
-
-            this.startAutoScrolling(scrollContainer, Draggable.SCROLL_SPEED, 'scrollLeft');
+    private startScrollHorizontallyForContainer(
+        event: DraggableEvent,
+        scrollContainer: HTMLElement
+    ): void {
+        if (
+            event.pageX - scrollContainer.getBoundingClientRect().left <
+            this.config.scrollEdge
+        ) {
+            this.startAutoScrolling(
+                scrollContainer,
+                -Draggable.SCROLL_SPEED,
+                'scrollLeft'
+            );
+        } else if (
+            this.getOffset(scrollContainer).left +
+                scrollContainer.getBoundingClientRect().width -
+                event.pageX <
+            this.config.scrollEdge
+        ) {
+            this.startAutoScrolling(
+                scrollContainer,
+                Draggable.SCROLL_SPEED,
+                'scrollLeft'
+            );
         }
     }
 
     private startScrollForWindow(event) {
-
-        if (!this.config.scrollDirection || this.config.scrollDirection === 'vertical') {
+        if (
+            !this.config.scrollDirection ||
+            this.config.scrollDirection === 'vertical'
+        ) {
             this.startScrollVerticallyForWindow(event);
         }
 
-        if (!this.config.scrollDirection || this.config.scrollDirection === 'horizontal') {
+        if (
+            !this.config.scrollDirection ||
+            this.config.scrollDirection === 'horizontal'
+        ) {
             this.startScrollHorizontallyForWindow(event);
         }
     }
 
     private startScrollVerticallyForWindow(event: DraggableEvent): void {
-        const scrollingElement = document.scrollingElement || document.documentElement || document.body;
+        const scrollingElement =
+            document.scrollingElement ||
+            document.documentElement ||
+            document.body;
 
         // NOTE: Using `window.pageYOffset` here because IE doesn't have `window.scrollY`.
-        if ((event.pageY - window.pageYOffset) < this.config.scrollEdge) {
-            this.startAutoScrolling(scrollingElement, -Draggable.SCROLL_SPEED, 'scrollTop');
-        } else if ((window.innerHeight - (event.pageY - window.pageYOffset)) < this.config.scrollEdge) {
-            this.startAutoScrolling(scrollingElement, Draggable.SCROLL_SPEED, 'scrollTop');
+        if (event.pageY - window.pageYOffset < this.config.scrollEdge) {
+            this.startAutoScrolling(
+                scrollingElement,
+                -Draggable.SCROLL_SPEED,
+                'scrollTop'
+            );
+        } else if (
+            window.innerHeight - (event.pageY - window.pageYOffset) <
+            this.config.scrollEdge
+        ) {
+            this.startAutoScrolling(
+                scrollingElement,
+                Draggable.SCROLL_SPEED,
+                'scrollTop'
+            );
         }
     }
 
     private startScrollHorizontallyForWindow(event: DraggableEvent): void {
-        const scrollingElement = document.scrollingElement || document.documentElement || document.body;
+        const scrollingElement =
+            document.scrollingElement ||
+            document.documentElement ||
+            document.body;
 
         // NOTE: Using `window.pageXOffset` here because IE doesn't have `window.scrollX`.
-        if ((event.pageX - window.pageXOffset) < this.config.scrollEdge) {
-            this.startAutoScrolling(scrollingElement, -Draggable.SCROLL_SPEED, 'scrollLeft');
-        } else if ((window.innerWidth - (event.pageX - window.pageXOffset)) < this.config.scrollEdge) {
-            this.startAutoScrolling(scrollingElement, Draggable.SCROLL_SPEED, 'scrollLeft');
+        if (event.pageX - window.pageXOffset < this.config.scrollEdge) {
+            this.startAutoScrolling(
+                scrollingElement,
+                -Draggable.SCROLL_SPEED,
+                'scrollLeft'
+            );
+        } else if (
+            window.innerWidth - (event.pageX - window.pageXOffset) <
+            this.config.scrollEdge
+        ) {
+            this.startAutoScrolling(
+                scrollingElement,
+                Draggable.SCROLL_SPEED,
+                'scrollLeft'
+            );
         }
     }
 
@@ -203,7 +290,7 @@ export class Draggable {
             return node;
         }
 
-        if (!(new RegExp('(body|html)', 'i')).test(node.parentNode.tagName)) {
+        if (!new RegExp('(body|html)', 'i').test(node.parentNode.tagName)) {
             return this.getScrollContainer(node.parentNode);
         }
 
@@ -211,14 +298,18 @@ export class Draggable {
     }
 
     private startAutoScrolling(node, amount, direction) {
-        this.autoScrollingInterval.push(this.requestAnimationFrame(function() {
-            this.startAutoScrolling(node, amount, direction);
-        }.bind(this)));
+        this.autoScrollingInterval.push(
+            this.requestAnimationFrame(
+                function() {
+                    this.startAutoScrolling(node, amount, direction);
+                }.bind(this)
+            )
+        );
 
-        return node[direction] += (amount * 0.25);
+        return (node[direction] += amount * 0.25);
     }
 
-    private getOffset (el) {
+    private getOffset(el) {
         const rect = el.getBoundingClientRect();
         return {
             left: rect.left + this.getScroll('scrollLeft', 'pageXOffset'),
@@ -226,7 +317,7 @@ export class Draggable {
         };
     }
 
-    private getScroll (scrollProp, offsetProp) {
+    private getScroll(scrollProp, offsetProp) {
         if (typeof window[offsetProp] !== 'undefined') {
             return window[offsetProp];
         }
@@ -241,17 +332,31 @@ export class Draggable {
             return false;
         }
 
-        return !this.config.handlerClass ||
-            (this.config.handlerClass && this.hasElementWithClass(this.config.handlerClass, event.target));
+        return (
+            !this.config.handlerClass ||
+            (this.config.handlerClass &&
+                this.hasElementWithClass(
+                    this.config.handlerClass,
+                    event.target
+                ))
+        );
     }
 
     private isValidDragHandler(targetEl: any): boolean {
-        return ['input', 'textarea'].indexOf(targetEl.tagName.toLowerCase()) === -1;
+        return (
+            ['input', 'textarea'].indexOf(targetEl.tagName.toLowerCase()) === -1
+        );
     }
 
-    private inRange(startEvent: DraggableEvent, moveEvent: DraggableEvent, range: number): boolean {
-        return Math.abs(moveEvent.clientX - startEvent.clientX) > range ||
-            Math.abs(moveEvent.clientY - startEvent.clientY) > range;
+    private inRange(
+        startEvent: DraggableEvent,
+        moveEvent: DraggableEvent,
+        range: number
+    ): boolean {
+        return (
+            Math.abs(moveEvent.clientX - startEvent.clientX) > range ||
+            Math.abs(moveEvent.clientY - startEvent.clientY) > range
+        );
     }
 
     private hasElementWithClass(className: string, target: any): boolean {
@@ -290,8 +395,9 @@ export class Draggable {
     }
 
     private isTouchDevice() {
-        return 'ontouchstart' in window  // works on most browsers
-            || navigator.maxTouchPoints; // works on IE10/11 and Surface
+        return (
+            'ontouchstart' in window || navigator.maxTouchPoints // works on most browsers
+        ); // works on IE10/11 and Surface
     }
 
     private isIEorEdge() {
