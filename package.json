@@ -1,6 +1,6 @@
 {
     "name": "angular2gridster",
-    "version": "6.0.2",
+    "version": "6.0.3",
     "license": "MIT",
     "scripts": {
         "ng": "ng",
@@ -13,8 +13,15 @@
         "release-major": "standard-version -r major",
         "release-minor": "standard-version -r minor",
         "release-fix": "standard-version -r patch",
+        "release-dry": "standard-version  --dry-run -r patch",
         "release-lib": "npm run build && cp -rf ./README.md ./dist/angular2gridster && cd ./dist/angular2gridster && npm version",
         "prepublishOnly": "npm run build"
+    },
+    "standard-version": {
+        "skip": {
+            "commit": true,
+            "tag": true
+        }
     },
     "repository": {
         "type": "git",

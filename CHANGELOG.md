@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.0.3"></a>
+
+## [6.0.3](https://github.com/swiety85/angular2gridster/compare/v6.0.2...v6.0.3) (2018-10-08)
+
+### Bug Fixes
+
+-   Expose private exports in bundle ([e50b070](https://github.com/swiety85/angular2gridster/commit/e50b070)), closes [#299](https://github.com/swiety85/angular2gridster/issues/299)
+-   Prevent error while dragging widget outside browser window
+-   Fix getHProperty function. Fixes #283
+
 <a name="6.0.2"></a>
 
 # [6.0.2](https://github.com/swiety85/angular2gridster/compare/v6.0.1...v6.0.2) (2018-07-29)
