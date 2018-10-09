@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.0.4"></a>
+## [6.0.4](https://github.com/swiety85/angular2gridster/compare/v6.0.3...v6.0.4) (2018-10-09)
+
+
+### Bug Fixes
+
+* fix element.style is undefined error ([7baa71c](https://github.com/swiety85/angular2gridster/commit/7baa71c)), closes [#298](https://github.com/swiety85/angular2gridster/issues/298)
+
+
+
 <a name="6.0.3"></a>
 
 ## [6.0.3](https://github.com/swiety85/angular2gridster/compare/v6.0.2...v6.0.3) (2018-10-08)
