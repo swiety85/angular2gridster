@@ -303,16 +303,22 @@ export class Draggable {
     }
 
     private fixProblemWithDnDForIE(element: Element) {
-        if (this.isTouchDevice() && this.isIEorEdge()) {
+        if (this.isTouchDevice() && this.isIEorEdge() && (<HTMLElement>element).style) {
             (<HTMLElement>element).style['touch-action'] = 'none';
         }
     }
 
     private removeTouchActionNone(element: Element) {
+        if (!(<HTMLElement>element).style) {
+            return;
+        }
         (<HTMLElement>element).style['touch-action'] = '';
     }
 
     private addTouchActionNone(element) {
+        if (!(<HTMLElement>element).style) {
+            return;
+        }
         (<HTMLElement>element).style['touch-action'] = 'none';
     }
 
