@@ -15,7 +15,8 @@
         "release-fix": "standard-version -r patch",
         "release-dry": "standard-version  --dry-run -r patch",
         "release-lib": "npm run build && cp -rf ./README.md ./dist/angular2gridster && cd ./dist/angular2gridster && npm version",
-        "prepublishOnly": "npm run build"
+        "prepublishOnly": "npm run build",
+        "update-demo": "npm run build && ng build --prod --base-href /angular2gridster/ && gh-pages -d dist/gridster-demo"
     },
     "standard-version": {
         "skip": {
@@ -70,6 +71,7 @@
         "@types/jasminewd2": "~2.0.3",
         "@types/node": "~8.9.4",
         "codelyzer": "~4.2.1",
+        "gh-pages": "^2.0.1",
         "ng-packagr": "^3.0.3",
         "standard-version": "^4.4.0",
         "ts-node": "~5.0.1",
