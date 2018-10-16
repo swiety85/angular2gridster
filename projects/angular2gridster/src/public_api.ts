@@ -9,3 +9,5 @@ export * from './lib/gridster-prototype/gridster-item-prototype.directive';
 export * from './lib/IGridsterOptions';
 export * from './lib/IGridsterDraggableOptions';
 export * from './lib/GridsterOptions';
+export * from './lib/gridster-prototype/gridster-prototype.service';
+export * from './lib/gridster.service';

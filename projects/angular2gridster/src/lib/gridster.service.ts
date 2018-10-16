@@ -31,6 +31,8 @@ export class GridsterService {
 
     gridsterComponent: GridsterComponent;
 
+    debounceRenderSubject = new Subject();
+
     public $positionHighlight: HTMLElement;
 
     public maxItemWidth: number;
@@ -60,6 +62,8 @@ export class GridsterService {
             this.render();
             this.updateCachedItems();
         });
+
+        this.debounceRenderSubject.pipe(debounceTime(0)).subscribe(() => this.render());
     }
 
     isInitialized(): boolean {
@@ -195,7 +199,7 @@ export class GridsterService {
         this.gridsterComponent.isResizing = false;
 
         this.gridList.pullItemsToLeft(item);
-        this.render();
+        this.debounceRenderSubject.next();
 
         this.fixItemsPositions();
     }
