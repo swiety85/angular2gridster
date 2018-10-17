@@ -6,14 +6,14 @@ export interface IGridsterOptions {
     dragAndDrop?: boolean;
     resizable?: boolean;
     resizeHandles?: {
-        s?: boolean,
-        e?: boolean,
-        n?: boolean,
-        w?: boolean,
-        se?: boolean,
-        ne?: boolean,
-        sw?: boolean,
-        nw?: boolean
+        s?: boolean;
+        e?: boolean;
+        n?: boolean;
+        w?: boolean;
+        se?: boolean;
+        ne?: boolean;
+        sw?: boolean;
+        nw?: boolean;
     };
     connectWith?: string;
     shrink?: boolean;
@@ -22,11 +22,11 @@ export interface IGridsterOptions {
     responsiveDebounce?: number;
     responsiveSizes?: boolean;
     lines?: {
-        visible?: boolean,
-        color?: string,
+        visible?: boolean;
+        color?: string;
         backgroundColor?: string;
-        width?: number,
-        always?: boolean
+        width?: number;
+        always?: boolean;
     };
     breakpoint?: string;
     minWidth?: number;

@@ -1,5 +1,4 @@
 import { DraggableEvent } from './utils/DraggableEvent';
-import { element } from 'protractor';
 import {
     Component,
     OnInit,
