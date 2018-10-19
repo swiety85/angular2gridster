@@ -1,5 +1,5 @@
 
-import {DraggableEvent} from './DraggableEvent';
+import { DraggableEvent } from './DraggableEvent';
 
 export const utils = {
     setCssElementPosition: function ($element: HTMLElement, position: {x: number, y: number}) {

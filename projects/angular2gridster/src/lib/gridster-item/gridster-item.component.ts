@@ -7,11 +7,11 @@ import { GridsterService } from '../gridster.service';
 import { GridsterPrototypeService } from '../gridster-prototype/gridster-prototype.service';
 
 import { GridListItem } from '../gridList/GridListItem';
-import {DraggableEvent} from '../utils/DraggableEvent';
-import {Draggable} from '../utils/draggable';
-import {IGridsterOptions} from '../IGridsterOptions';
-import {GridList} from '../gridList/gridList';
-import {utils} from '../utils/utils';
+import { DraggableEvent } from '../utils/DraggableEvent';
+import { Draggable } from '../utils/draggable';
+import { IGridsterOptions } from '../IGridsterOptions';
+import { GridList } from '../gridList/gridList';
+import { utils } from '../utils/utils';
 
 @Component({
     selector: 'ngx-gridster-item',

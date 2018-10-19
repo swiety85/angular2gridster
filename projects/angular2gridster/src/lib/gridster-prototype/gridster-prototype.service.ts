@@ -5,7 +5,7 @@ import { takeUntil, switchMap, map, scan, filter, share, tap } from 'rxjs/operat
 import { GridsterService } from '../gridster.service';
 import { GridsterItemPrototypeDirective } from './gridster-item-prototype.directive';
 import { utils } from '../utils/utils';
-import {DraggableEvent} from '../utils/DraggableEvent';
+import { DraggableEvent } from '../utils/DraggableEvent';
 
 @Injectable()
 export class GridsterPrototypeService {
