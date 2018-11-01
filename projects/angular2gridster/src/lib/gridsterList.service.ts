@@ -1,5 +1,4 @@
 import { GridsterComponent } from './gridster.component';
-import { GridsterService } from './gridster.service';
 import { Injectable } from '@angular/core';
 
 @Injectable()

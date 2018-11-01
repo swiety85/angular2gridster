@@ -83,9 +83,7 @@ export class GridList {
             for (j = 0; j < widthOfGrid; j++) {
                 output += ' ';
                 item = this.grid[j][i];
-                output += item
-                    ? this.padNumber(this.items.indexOf(item), '0')
-                    : '--';
+                output += item ? this.padNumber(this.items.indexOf(item), '0') : '--';
             }
         }
         output += '\n';
@@ -181,21 +179,14 @@ export class GridList {
         const newCol = this.grid.length;
         let newRow = 0;
 
-        if (
-            fixedRow !== undefined &&
-            this.itemFitsAtPosition(item, [newCol, fixedRow])
-        ) {
+        if (fixedRow !== undefined && this.itemFitsAtPosition(item, [newCol, fixedRow])) {
             newRow = fixedRow;
         }
 
         return [newCol, newRow];
     }
 
-    moveAndResize(
-        item: GridListItem,
-        newPosition: Array<number>,
-        size: { w: number; h: number }
-    ) {
+    moveAndResize(item: GridListItem, newPosition: Array<number>, size: { w: number; h: number }) {
         const position = this.getItemPosition({
             x: newPosition[0],
             y: newPosition[1],
@@ -265,9 +256,7 @@ export class GridList {
                     w?: number;
                     h?: number;
                 } = {};
-                const initItem = initialItems.find(
-                    initItm => initItm.$element === item.$element
-                );
+                const initItem = initialItems.find(initItm => initItm.$element === item.$element);
 
                 if (!initItem) {
                     return { item, changes: ['x', 'y', 'w', 'h'], isNew: true };
@@ -288,31 +277,20 @@ export class GridList {
                         oldValues.y = oldY;
                     }
                 }
-                if (
-                    item.getValueW(breakpoint) !==
-                    initItem.getValueW(breakpoint)
-                ) {
+                if (item.getValueW(breakpoint) !== initItem.getValueW(breakpoint)) {
                     changes.push('w');
                     oldValues.w = initItem.w;
                 }
-                if (
-                    item.getValueH(breakpoint) !==
-                    initItem.getValueH(breakpoint)
-                ) {
+                if (item.getValueH(breakpoint) !== initItem.getValueH(breakpoint)) {
                     changes.push('h');
                     oldValues.h = initItem.h;
                 }
 
                 return { item, oldValues, changes, isNew: false };
             })
-            .filter(
-                (itemChange: {
-                    item: GridListItem;
-                    changes: Array<string>;
-                }) => {
-                    return itemChange.changes.length;
-                }
-            );
+            .filter((itemChange: { item: GridListItem; changes: Array<string> }) => {
+                return itemChange.changes.length;
+            });
     }
 
     resolveCollisions(item: GridListItem) {
@@ -361,10 +339,7 @@ export class GridList {
         // Start the grid with the fixed item as the first positioned item
         if (fixedItem) {
             const fixedPosition = this.getItemPosition(fixedItem);
-            this.updateItemPosition(fixedItem, [
-                fixedPosition.x,
-                fixedPosition.y
-            ]);
+            this.updateItemPosition(fixedItem, [fixedPosition.x, fixedPosition.y]);
         }
 
         this.items
@@ -373,10 +348,7 @@ export class GridList {
             })
             .forEach((item: GridListItem) => {
                 const fixedPosition = this.getItemPosition(item);
-                this.updateItemPosition(item, [
-                    fixedPosition.x,
-                    fixedPosition.y
-                ]);
+                this.updateItemPosition(item, [fixedPosition.x, fixedPosition.y]);
             });
 
         for (let i = 0; i < this.items.length; i++) {
@@ -395,11 +367,7 @@ export class GridList {
             }
 
             const x = this.findLeftMostPositionForItem(item),
-                newPosition = this.findPositionForItem(
-                    item,
-                    { x: x, y: 0 },
-                    position.y
-                );
+                newPosition = this.findPositionForItem(item, { x: x, y: 0 }, position.y);
 
             this.updateItemPosition(item, newPosition);
         }
@@ -433,21 +401,14 @@ export class GridList {
         return false;
     }
 
-    checkItemAboveEmptyArea(
-        item: GridListItem,
-        newPosition: { x: number; y: number }
-    ) {
+    checkItemAboveEmptyArea(item: GridListItem, newPosition: { x: number; y: number }) {
         let itemData = {
             x: newPosition.x,
             y: newPosition.y,
             w: item.w,
             h: item.h
         };
-        if (
-            !item.itemPrototype &&
-            item.x === newPosition.x &&
-            item.y === newPosition.y
-        ) {
+        if (!item.itemPrototype && item.x === newPosition.x && item.y === newPosition.y) {
             return true;
         }
 
@@ -472,15 +433,11 @@ export class GridList {
         // items with x, y that fits gird with size of options.lanes
         const validItems = this.items
             .filter((item: GridListItem) => item.itemComponent)
-            .filter((item: GridListItem) =>
-                this.isItemValidForGrid(item, options)
-            );
+            .filter((item: GridListItem) => this.isItemValidForGrid(item, options));
         // items that x, y must be generated
         const invalidItems = this.items
             .filter((item: GridListItem) => item.itemComponent)
-            .filter(
-                (item: GridListItem) => !this.isItemValidForGrid(item, options)
-            );
+            .filter((item: GridListItem) => !this.isItemValidForGrid(item, options));
 
         const gridList = new GridList([], options);
 
@@ -570,18 +527,12 @@ export class GridList {
                       x: item.getValueY(options.breakpoint),
                       y: item.getValueX(options.breakpoint),
                       w: item.getValueH(options.breakpoint),
-                      h: Math.min(
-                          item.getValueW(this.options.breakpoint),
-                          options.lanes
-                      )
+                      h: Math.min(item.getValueW(this.options.breakpoint), options.lanes)
                   }
                 : {
                       x: item.getValueX(options.breakpoint),
                       y: item.getValueY(options.breakpoint),
-                      w: Math.min(
-                          item.getValueW(this.options.breakpoint),
-                          options.lanes
-                      ),
+                      w: Math.min(item.getValueW(this.options.breakpoint), options.lanes),
                       h: item.getValueH(options.breakpoint)
                   };
 
@@ -598,12 +549,7 @@ export class GridList {
             let rowIdx = 0;
             while (rowIdx < col.length - height + 1) {
                 if (
-                    !this.checkItemsInArea(
-                        colIdx,
-                        colIdx + width - 1,
-                        rowIdx,
-                        rowIdx + height - 1
-                    )
+                    !this.checkItemsInArea(colIdx, colIdx + width - 1, rowIdx, rowIdx + height - 1)
                 ) {
                     return [colIdx, rowIdx];
                 }
@@ -619,12 +565,7 @@ export class GridList {
             let colIdx = 0;
             while (colIdx < row.length - width + 1) {
                 if (
-                    !this.checkItemsInArea(
-                        rowIdx,
-                        rowIdx + height - 1,
-                        colIdx,
-                        colIdx + width - 1
-                    )
+                    !this.checkItemsInArea(rowIdx, rowIdx + height - 1, colIdx, colIdx + width - 1)
                 ) {
                     return [colIdx, rowIdx];
                 }
@@ -643,11 +584,7 @@ export class GridList {
     ) {
         for (let i = rowStart; i <= rowEnd; i++) {
             for (let j = colStart; j <= colEnd; j++) {
-                if (
-                    this.grid[i] &&
-                    this.grid[i][j] &&
-                    (item ? this.grid[i][j] !== item : true)
-                ) {
+                if (this.grid[i] && this.grid[i][j] && (item ? this.grid[i][j] !== item : true)) {
                     return true;
                 }
             }
@@ -726,10 +663,7 @@ export class GridList {
         }
 
         // Make sure the item isn't larger than the entire grid
-        if (
-            newPosition[1] + Math.min(position.h, this.options.lanes) >
-            this.options.lanes
-        ) {
+        if (newPosition[1] + Math.min(position.h, this.options.lanes) > this.options.lanes) {
             return false;
         }
 
@@ -816,10 +750,7 @@ export class GridList {
     private getItemsCollidingWithItem(item: GridListItem): number[] {
         const collidingItems = [];
         for (let i = 0; i < this.items.length; i++) {
-            if (
-                item !== this.items[i] &&
-                this.itemsAreColliding(item, this.items[i])
-            ) {
+            if (item !== this.items[i] && this.itemsAreColliding(item, this.items[i])) {
                 collidingItems.push(i);
             }
         }
@@ -877,30 +808,18 @@ export class GridList {
             // 4. to its right side
             const position = this.getItemPosition(item);
 
-            leftOfItem = [
-                position.x - collidingPosition.w,
-                collidingPosition.y
-            ];
+            leftOfItem = [position.x - collidingPosition.w, collidingPosition.y];
             rightOfItem = [position.x + position.w, collidingPosition.y];
-            aboveOfItem = [
-                collidingPosition.x,
-                position.y - collidingPosition.h
-            ];
+            aboveOfItem = [collidingPosition.x, position.y - collidingPosition.h];
             belowOfItem = [collidingPosition.x, position.y + position.h];
 
             if (_gridList.itemFitsAtPosition(collidingItem, leftOfItem)) {
                 _gridList.updateItemPosition(collidingItem, leftOfItem);
-            } else if (
-                _gridList.itemFitsAtPosition(collidingItem, aboveOfItem)
-            ) {
+            } else if (_gridList.itemFitsAtPosition(collidingItem, aboveOfItem)) {
                 _gridList.updateItemPosition(collidingItem, aboveOfItem);
-            } else if (
-                _gridList.itemFitsAtPosition(collidingItem, belowOfItem)
-            ) {
+            } else if (_gridList.itemFitsAtPosition(collidingItem, belowOfItem)) {
                 _gridList.updateItemPosition(collidingItem, belowOfItem);
-            } else if (
-                _gridList.itemFitsAtPosition(collidingItem, rightOfItem)
-            ) {
+            } else if (_gridList.itemFitsAtPosition(collidingItem, rightOfItem)) {
                 _gridList.updateItemPosition(collidingItem, rightOfItem);
             } else {
                 // Collisions failed, we must use the pullItemsToLeft method to arrange

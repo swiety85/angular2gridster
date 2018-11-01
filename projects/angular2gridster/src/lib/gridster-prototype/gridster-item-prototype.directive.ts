@@ -1,5 +1,13 @@
-import { Directive, ElementRef, Input, Output, HostBinding, EventEmitter, OnInit, OnDestroy,
-    NgZone} from '@angular/core';
+import {
+    Directive,
+    ElementRef,
+    Input,
+    Output,
+    EventEmitter,
+    OnInit,
+    OnDestroy,
+    NgZone
+} from '@angular/core';
 import { Observable, Subscription, fromEvent } from 'rxjs';
 
 import { GridsterPrototypeService } from './gridster-prototype.service';
@@ -13,27 +21,44 @@ import { utils } from '../utils/utils';
     selector: '[ngxGridsterItemPrototype]'
 })
 export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
-    @Output() drop = new EventEmitter();
-    @Output() start = new EventEmitter();
-    @Output() cancel = new EventEmitter();
-    @Output() enter = new EventEmitter();
-    @Output() out = new EventEmitter();
+    @Output()
+    drop = new EventEmitter();
+    @Output()
+    start = new EventEmitter();
+    @Output()
+    cancel = new EventEmitter();
+    @Output()
+    enter = new EventEmitter();
+    @Output()
+    out = new EventEmitter();
 
-    @Input() data: any;
-    @Input() config: any = {};
+    @Input()
+    data: any;
+    @Input()
+    config: any = {};
 
     public x = 0;
     public y = 0;
-    @Input() w: number;
-    @Input() wSm: number;
-    @Input() wMd: number;
-    @Input() wLg: number;
-    @Input() wXl: number;
-    @Input() h: number;
-    @Input() hSm: number;
-    @Input() hMd: number;
-    @Input() hLg: number;
-    @Input() hXl: number;
+    @Input()
+    w: number;
+    @Input()
+    wSm: number;
+    @Input()
+    wMd: number;
+    @Input()
+    wLg: number;
+    @Input()
+    wXl: number;
+    @Input()
+    h: number;
+    @Input()
+    hSm: number;
+    @Input()
+    hMd: number;
+    @Input()
+    hLg: number;
+    @Input()
+    hXl: number;
 
     positionX: number;
     positionY: number;
@@ -60,7 +85,7 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
 
     private dragContextGridster: GridsterService;
     private parentRect: ClientRect;
-    private parentOffset: {left: number, top: number};
+    private parentOffset: { left: number; top: number };
 
     private subscribtions: Array<Subscription> = [];
 
@@ -73,11 +98,12 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
         return this.dragContextGridster;
     }
 
-    constructor(private zone: NgZone,
-                private elementRef: ElementRef,
-                private gridsterPrototype: GridsterPrototypeService) {
-
-        this.item = (new GridListItem()).setFromGridsterItemPrototype(this);
+    constructor(
+        private zone: NgZone,
+        private elementRef: ElementRef,
+        private gridsterPrototype: GridsterPrototypeService
+    ) {
+        this.item = new GridListItem(null).setFromGridsterItemPrototype(this);
     }
 
     ngOnInit() {
@@ -100,7 +126,7 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
         });
     }
 
-    onDrop (gridster: GridsterService): void {
+    onDrop(gridster: GridsterService): void {
         if (!this.config.helper) {
             this.$element.parentNode.removeChild(this.$element);
         }
@@ -111,20 +137,20 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
         });
     }
 
-    onCancel (): void {
-        this.cancel.emit({item: this.item});
+    onCancel(): void {
+        this.cancel.emit({ item: this.item });
     }
 
-    onEnter (gridster: GridsterService): void {
+    onEnter(gridster: GridsterService): void {
         this.enter.emit({
             item: this.item,
             gridster: gridster
         });
     }
 
-    onOver (gridster: GridsterService): void {}
+    onOver(gridster: GridsterService): void {}
 
-    onOut (gridster: GridsterService): void {
+    onOut(gridster: GridsterService): void {
         this.out.emit({
             item: this.item,
             gridster: gridster
@@ -144,7 +170,7 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
         this.dragContextGridster = gridster;
     }
 
-    private getContainerCoordsToGridster(gridster: GridsterService): {top: number, left: number} {
+    private getContainerCoordsToGridster(gridster: GridsterService): { top: number; left: number } {
         return {
             left: gridster.gridsterRect.left - this.parentRect.left,
             top: gridster.gridsterRect.top - this.parentRect.top
@@ -155,48 +181,48 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
         let cursorToElementPosition;
         const draggable = new Draggable(this.elementRef.nativeElement);
 
-        const dragStartSub = draggable.dragStart
-            .subscribe((event: DraggableEvent) => {
-                this.zone.run(() => {
-                    this.$element = this.provideDragElement();
-                    this.containerRectange = this.$element.parentElement.getBoundingClientRect();
-                    this.updateParentElementData();
-                    this.onStart(event);
+        const dragStartSub = draggable.dragStart.subscribe((event: DraggableEvent) => {
+            this.zone.run(() => {
+                this.$element = this.provideDragElement();
+                this.containerRectange = this.$element.parentElement.getBoundingClientRect();
+                this.updateParentElementData();
+                this.onStart(event);
 
-                    cursorToElementPosition = event.getRelativeCoordinates(this.$element);
-                });
+                cursorToElementPosition = event.getRelativeCoordinates(this.$element);
+            });
+        });
+
+        const dragSub = draggable.dragMove.subscribe((event: DraggableEvent) => {
+            this.setElementPosition(this.$element, {
+                x: event.clientX - cursorToElementPosition.x - this.parentRect.left,
+                y: event.clientY - cursorToElementPosition.y - this.parentRect.top
             });
 
-        const dragSub = draggable.dragMove
-            .subscribe((event: DraggableEvent) => {
+            this.onDrag(event);
+        });
 
-                this.setElementPosition(this.$element, {
-                    x: event.clientX - cursorToElementPosition.x  - this.parentRect.left,
-                    y: event.clientY - cursorToElementPosition.y  - this.parentRect.top
-                });
-
-                this.onDrag(event);
+        const dragStopSub = draggable.dragStop.subscribe((event: DraggableEvent) => {
+            this.zone.run(() => {
+                this.onStop(event);
+                this.$element = null;
             });
+        });
 
-        const dragStopSub = draggable.dragStop
-            .subscribe((event: DraggableEvent) => {
-                this.zone.run(() => {
-                    this.onStop(event);
-                    this.$element = null;
-                });
-            });
+        const scrollSub = fromEvent(document, 'scroll').subscribe(() => {
+            if (this.$element) {
+                this.updateParentElementData();
+            }
+        });
 
-        const scrollSub = fromEvent(document, 'scroll')
-            .subscribe(() => {
-                if (this.$element) {
-                    this.updateParentElementData();
-                }
-            });
-
-        this.subscribtions = this.subscribtions.concat([dragStartSub, dragSub, dragStopSub, scrollSub]);
+        this.subscribtions = this.subscribtions.concat([
+            dragStartSub,
+            dragSub,
+            dragStopSub,
+            scrollSub
+        ]);
     }
 
-    private setElementPosition(element: HTMLElement, position: {x: number, y: number}) {
+    private setElementPosition(element: HTMLElement, position: { x: number; y: number }) {
         this.positionX = position.x;
         this.positionY = position.y;
         utils.setCssElementPosition(element, position);
@@ -210,7 +236,7 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
         };
     }
 
-    private onStart (event: DraggableEvent): void {
+    private onStart(event: DraggableEvent): void {
         this.isDragging = true;
 
         this.$element.style.pointerEvents = 'none';
@@ -218,14 +244,14 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
 
         this.gridsterPrototype.dragItemStart(this, event);
 
-        this.start.emit({item: this.item});
+        this.start.emit({ item: this.item });
     }
 
-    private onDrag (event: DraggableEvent): void {
+    private onDrag(event: DraggableEvent): void {
         this.gridsterPrototype.updatePrototypePosition(this, event);
     }
 
-    private onStop (event: DraggableEvent): void {
+    private onStop(event: DraggableEvent): void {
         this.gridsterPrototype.dragItemStop(this, event);
 
         this.isDragging = false;
@@ -238,11 +264,11 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
         }
     }
 
-    private provideDragElement (): HTMLElement {
+    private provideDragElement(): HTMLElement {
         let dragElement = this.elementRef.nativeElement;
 
         if (this.config.helper) {
-            dragElement = <any>(dragElement).cloneNode(true);
+            dragElement = <any>dragElement.cloneNode(true);
 
             document.body.appendChild(this.fixStylesForBodyHelper(dragElement));
         } else {
@@ -272,7 +298,7 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
      * When element is cloned and append to body it should have position absolute and coords set by original
      * relative prototype element position.
      */
-    private fixStylesForBodyHelper (el: HTMLElement) {
+    private fixStylesForBodyHelper(el: HTMLElement) {
         const bodyRect = document.body.getBoundingClientRect();
         const rect = this.elementRef.nativeElement.getBoundingClientRect();
 
@@ -284,5 +310,4 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
 
         return el;
     }
-
 }

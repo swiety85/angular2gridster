@@ -23,7 +23,8 @@ import {
     switchMap,
     takeUntil,
     tap,
-    map
+    map,
+    concatMap
 } from 'rxjs/operators';
 
 import { utils } from './utils/utils';
@@ -99,6 +100,8 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
     draggableOptions: IGridsterDraggableOptions = {};
     @Input()
     parent: GridsterComponent;
+    @Output()
+    itemDrop = new EventEmitter<{ item: GridListItem }>();
 
     @ViewChild('positionHighlight')
     $positionHighlight;
@@ -114,7 +117,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
 
     gridsterOptions: GridsterOptions;
     isPrototypeEntered = false;
-    private isDisabled = false;
+    isDisabled = false;
     private subscription = new Subscription();
 
     constructor(
@@ -280,18 +283,24 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         this.gridster.reflow();
     }
 
-    disable(item) {
-        const itemIdx = this.gridster.items.indexOf(item.itemComponent);
+    disable(item: GridListItem): void {
+        const itemIdx = this.gridster.items.indexOf(item);
 
         this.isDisabled = true;
+
         if (itemIdx >= 0) {
-            delete this.gridster.items[this.gridster.items.indexOf(item.itemComponent)];
+            this.gridster.items.splice(itemIdx, 1);
         }
         this.gridster.onDragOut(item);
+        this.gridster.removePositionHighlight();
     }
 
-    enable() {
+    enable(item?: GridListItem): void {
         this.isDisabled = false;
+
+        if (item) {
+            this.gridster.items.push(item);
+        }
     }
 
     isOverGridster(el: HTMLElement, event, options, gridsterEl?: HTMLElement): boolean {
@@ -335,18 +344,20 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
             return;
         }
 
-        const gridsterElements = this.gridsterList
+        this.gridsterList
             .getGridstersBySelector(this.options.connectWith)
-            .filter(gridster => gridster !== this);
-
-        gridsterElements.forEach(gridster => this.connectWithGridster(gridster));
+            .filter(gridster => gridster !== this)
+            .forEach(gridster => this.connectWithGridster(gridster));
     }
 
     private connectWithGridster(gridster: GridsterComponent): void {
         const dragEnter$ = this.createGridsterDragEnterObservable(gridster);
         const dragOut$ = this.createGridsterDragOutObservable(gridster);
         const dragOver$ = dragEnter$.pipe(
-            switchMap(() => gridster.gridster.itemDrag.pipe(takeUntil(dragOut$)))
+            concatMap(() => gridster.gridster.itemDrag.pipe(takeUntil(dragOut$)))
+        );
+        const dropOver$ = dragEnter$.pipe(
+            concatMap(() => gridster.gridster.itemDrop.pipe(takeUntil(dragOut$)))
         );
 
         this.subscription.add(
@@ -369,8 +380,19 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         this.subscription.add(
             dragOut$.subscribe(data => {
                 this.gridster.onDragOut(data.item);
-                gridster.disable(data.item);
+                gridster.enable(data.item);
+                gridster.gridster.onStart(data.item);
                 console.log('drag out');
+            })
+        );
+
+        this.subscription.add(
+            dropOver$.subscribe(data => {
+                data.item.itemComponent.gridster = this.gridster;
+                this.gridster.onStop(data.item);
+                this.itemDrop.emit({ item: data.item });
+                this.gridster.reflow();
+                console.log('drop over', data);
             })
         );
     }

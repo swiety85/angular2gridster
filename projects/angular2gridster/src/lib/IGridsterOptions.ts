@@ -35,4 +35,5 @@ export interface IGridsterOptions {
     cellWidth?: number;
     tolerance?: string;
     responsiveOptions?: Array<IGridsterOptions>;
+    appendToBody?: boolean;
 }

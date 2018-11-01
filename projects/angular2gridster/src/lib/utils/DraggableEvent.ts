@@ -11,17 +11,16 @@ export class DraggableEvent {
 
     type: string;
 
-
     private touchEvent: TouchEvent;
 
     private mouseEvent: MouseEvent;
 
     constructor(event: any) {
         if (event.touches) {
-            this.touchEvent = (<TouchEvent>event);
+            this.touchEvent = <TouchEvent>event;
             this.setDataFromTouchEvent(this.touchEvent);
         } else {
-            this.mouseEvent = (<MouseEvent>event);
+            this.mouseEvent = <MouseEvent>event;
             this.setDataFromMouseEvent(this.mouseEvent);
         }
     }
@@ -44,15 +43,17 @@ export class DraggableEvent {
         return false;
     }
 
-    getRelativeCoordinates(container: HTMLElement): {x: number, y: number} {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft;
+    getRelativeCoordinates(container: HTMLElement): { x: number; y: number } {
+        const scrollTop =
+            window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        const scrollLeft =
+            window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft;
 
         const rect = container.getBoundingClientRect();
 
         return {
             x: this.pageX - rect.left - scrollLeft,
-            y: this.pageY - rect.top - scrollTop,
+            y: this.pageY - rect.top - scrollTop
         };
     }
 
@@ -74,6 +75,5 @@ export class DraggableEvent {
         this.pageX = touch.pageX;
         this.pageY = touch.pageY;
         this.type = event.type;
-
     }
 }

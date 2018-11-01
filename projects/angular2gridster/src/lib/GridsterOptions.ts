@@ -28,7 +28,8 @@ export class GridsterOptions {
         resizable: false,
         useCSSTransforms: false,
         floating: true,
-        tolerance: 'pointer'
+        tolerance: 'pointer',
+        appendToBody: false
     };
 
     change: Observable<IGridsterOptions>;
@@ -49,12 +50,12 @@ export class GridsterOptions {
         this.responsiveOptions = this.extendResponsiveOptions(config.responsiveOptions || []);
 
         this.change = merge(
-                of(this.getOptionsByWidth(document.documentElement.clientWidth)),
-                fromEvent(window, 'resize').pipe(
-                    debounceTime(config.responsiveDebounce || 0),
-                    map((event: Event) => this.getOptionsByWidth(document.documentElement.clientWidth))
-                )
-            ).pipe(distinctUntilChanged(null, (options: any) => options.minWidth));
+            of(this.getOptionsByWidth(document.documentElement.clientWidth)),
+            fromEvent(window, 'resize').pipe(
+                debounceTime(config.responsiveDebounce || 0),
+                map((event: Event) => this.getOptionsByWidth(document.documentElement.clientWidth))
+            )
+        ).pipe(distinctUntilChanged(null, (options: any) => options.minWidth));
     }
 
     getOptionsByWidth(width: number): IGridsterOptions {
@@ -71,17 +72,29 @@ export class GridsterOptions {
         return options;
     }
 
-    private extendResponsiveOptions(responsiveOptions: Array<IGridsterOptions>): Array<IGridsterOptions> {
-        return responsiveOptions
-            // responsive options are valid only with "breakpoint" property
-            .filter(options => options.breakpoint)
-            // set default minWidth if not given
-            .map((options) => {
-                return Object.assign({
-                    minWidth: this.breakpointsMap[options.breakpoint] || 0
-                }, options);
-            })
-            .sort((curr, next) => curr.minWidth - next.minWidth)
-            .map((options) => <IGridsterOptions>Object.assign({}, this.defaults, this.basicOptions, options));
+    private extendResponsiveOptions(
+        responsiveOptions: Array<IGridsterOptions>
+    ): Array<IGridsterOptions> {
+        return (
+            responsiveOptions
+                // responsive options are valid only with "breakpoint" property
+                .filter(options => options.breakpoint)
+                // set default minWidth if not given
+                .map(options => {
+                    return Object.assign(
+                        {
+                            minWidth: this.breakpointsMap[options.breakpoint] || 0
+                        },
+                        options
+                    );
+                })
+                .sort((curr, next) => curr.minWidth - next.minWidth)
+                .map(
+                    options =>
+                        <IGridsterOptions>(
+                            Object.assign({}, this.defaults, this.basicOptions, options)
+                        )
+                )
+        );
     }
 }
