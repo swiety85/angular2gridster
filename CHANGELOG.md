@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="7.0.0"></a>
+# [7.0.0](https://github.com/swiety85/angular2gridster/compare/v6.0.4...v7.0.0) (2018-11-04)
+
+
+### Features
+
+* Angular 7 support ([38a1be7](https://github.com/swiety85/angular2gridster/commit/38a1be7))
+
+
+
 <a name="6.0.4"></a>
 ## [6.0.4](https://github.com/swiety85/angular2gridster/compare/v6.0.3...v6.0.4) (2018-10-09)
 

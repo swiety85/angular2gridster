@@ -1,78 +1,78 @@
 {
-    "name": "angular2gridster",
-    "version": "6.0.4",
-    "license": "MIT",
-    "scripts": {
-        "ng": "ng",
-        "start": "ng serve",
-        "build": "ng build angular2gridster --prod",
-        "test": "ng test",
-        "lint": "ng lint",
-        "e2e": "ng e2e",
-        "release-rc": "standard-version --prerelease rc",
-        "release-major": "standard-version -r major",
-        "release-minor": "standard-version -r minor",
-        "release-fix": "standard-version -r patch",
-        "release-dry": "standard-version  --dry-run -r patch",
-        "publish-lib": "npm run build && node ./updatePackageJson.js && cp -rf ./README.md ./dist/angular2gridster && cd ./dist/angular2gridster && npm publish",
-        "update-demo": "npm run build && ng build --prod --base-href /angular2gridster/ && gh-pages -d dist/gridster-demo"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+ssh://git@github.com/swiety85/angular2gridster.git"
-    },
-    "author": {
-        "name": "Damian Wajdlich",
-        "email": "swiety85@gmail.com"
-    },
-    "keywords": [
-        "gridster",
-        "grid",
-        "gridLayout",
-        "angular",
-        "angular2",
-        "dashboard",
-        "ngx",
-        "drag&drop",
-        "widgets"
-    ],
-    "bugs": {
-        "url": "https://github.com/swiety85/angular2gridster/issues"
-    },
-    "homepage": "https://github.com/swiety85/angular2gridster#readme",
-    "dependencies": {
-        "@angular/common": "^7.0.2",
-        "@angular/core": "^7.0.2",
-        "@angular/compiler": "^7.0.2",
-        "@angular/animations": "^7.0.2",
-        "@angular/forms": "^7.0.2",
-        "@angular/http": "^7.0.2",
-        "@angular/platform-browser": "^7.0.2",
-        "@angular/platform-browser-dynamic": "^7.0.2",
-        "@angular/router": "^7.0.2",
-        "core-js": "^2.5.4",
-        "rxjs": "^6.3.3",
-        "zone.js": "^0.8.26"
-    },
-    "devDependencies": {
-        "@angular-devkit/build-angular": "~0.10.3",
-        "@angular-devkit/build-ng-packagr": "~0.10.3",
-        "@angular/cli": "~7.0.3",
-        "@angular/compiler-cli": "^7.0.2",
-        "@angular/language-service": "^7.0.2",
-        "@types/jasmine": "~2.8.9",
-        "@types/jasminewd2": "~2.0.5",
-        "@types/node": "~10.12.2",
-        "codelyzer": "~4.5.0",
-        "edit-json-file": "^1.1.0",
-        "gh-pages": "^2.0.1",
-        "ng-packagr": "^4.4.0",
-        "standard-version": "^4.4.0",
-        "ts-node": "~7.0.1",
-        "tsickle": "0.33.1",
-        "tslib": "^1.9.3",
-        "tslint": "~5.11.0",
-        "typescript": "~3.1.5"
-    },
-    "peerDependencies": {}
+  "name": "angular2gridster",
+  "version": "7.0.0",
+  "license": "MIT",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build angular2gridster --prod",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e",
+    "release-rc": "standard-version --prerelease rc",
+    "release-major": "standard-version -r major",
+    "release-minor": "standard-version -r minor",
+    "release-fix": "standard-version -r patch",
+    "release-dry": "standard-version  --dry-run -r patch",
+    "publish-lib": "npm run build && node ./updatePackageJson.js && cp -rf ./README.md ./dist/angular2gridster && cd ./dist/angular2gridster && npm publish",
+    "update-demo": "npm run build && ng build --prod --base-href /angular2gridster/ && gh-pages -d dist/gridster-demo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/swiety85/angular2gridster.git"
+  },
+  "author": {
+    "name": "Damian Wajdlich",
+    "email": "swiety85@gmail.com"
+  },
+  "keywords": [
+    "gridster",
+    "grid",
+    "gridLayout",
+    "angular",
+    "angular2",
+    "dashboard",
+    "ngx",
+    "drag&drop",
+    "widgets"
+  ],
+  "bugs": {
+    "url": "https://github.com/swiety85/angular2gridster/issues"
+  },
+  "homepage": "https://github.com/swiety85/angular2gridster#readme",
+  "dependencies": {
+    "@angular/common": "^7.0.2",
+    "@angular/core": "^7.0.2",
+    "@angular/compiler": "^7.0.2",
+    "@angular/animations": "^7.0.2",
+    "@angular/forms": "^7.0.2",
+    "@angular/http": "^7.0.2",
+    "@angular/platform-browser": "^7.0.2",
+    "@angular/platform-browser-dynamic": "^7.0.2",
+    "@angular/router": "^7.0.2",
+    "core-js": "^2.5.4",
+    "rxjs": "^6.3.3",
+    "zone.js": "^0.8.26"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "~0.10.3",
+    "@angular-devkit/build-ng-packagr": "~0.10.3",
+    "@angular/cli": "~7.0.3",
+    "@angular/compiler-cli": "^7.0.2",
+    "@angular/language-service": "^7.0.2",
+    "@types/jasmine": "~2.8.9",
+    "@types/jasminewd2": "~2.0.5",
+    "@types/node": "~10.12.2",
+    "codelyzer": "~4.5.0",
+    "edit-json-file": "^1.1.0",
+    "gh-pages": "^2.0.1",
+    "ng-packagr": "^4.4.0",
+    "standard-version": "^4.4.0",
+    "ts-node": "~7.0.1",
+    "tsickle": "0.33.1",
+    "tslib": "^1.9.3",
+    "tslint": "~5.11.0",
+    "typescript": "~3.1.5"
+  },
+  "peerDependencies": {}
 }
