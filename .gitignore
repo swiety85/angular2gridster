@@ -7,6 +7,7 @@
 
 # dependencies
 /node_modules
+/demo/node_modules
 
 # IDEs and editors
 /.idea
@@ -37,3 +38,4 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+demo/src/app/gridster
