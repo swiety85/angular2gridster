@@ -15,6 +15,7 @@ Development progress can be tracked in [Milestones](https://github.com/swiety85/
 
 ## Versions:
 
+-   Version **7.x** works with **Angular 7.x**.
 -   Version **6.x** works with **Angular 6.x**.
 -   Version **5.x** works with **Angular 5.x**.
 -   Version **4.x** works with **Angular 4.x**.
@@ -59,13 +60,13 @@ System.config({
     map: {
         // ...
         rxjs: 'node_modules/rxjs',
-        angular2gridster: 'node_modules/angular2gridster'
+        angular2gridster: 'node_modules/angular2gridster',
     },
     packages: {
         // ...
-        rxjs: { defaultExtension: 'js' },
-        angular2gridster: { main: 'dist/index.js', defaultExtension: 'js' }
-    }
+        rxjs: {defaultExtension: 'js'},
+        angular2gridster: {main: 'dist/index.js', defaultExtension: 'js'},
+    },
 });
 ```
 
@@ -73,12 +74,15 @@ System.config({
 
 ```html
 <ngx-gridster [options]="gridsterOptions" [draggableOptions]="{ handlerClass: 'panel-heading' }">
-
-  <ngx-gridster-item *ngFor="let widget of widgets"
-                 [(x)]="widget.x" [(y)]="widget.y" [(w)]="widget.w" [(h)]="widget.h">
-      <!--some content-->
-  </ngx-gridster-item>
-
+    <ngx-gridster-item
+        *ngFor="let widget of widgets"
+        [(x)]="widget.x"
+        [(y)]="widget.y"
+        [(w)]="widget.w"
+        [(h)]="widget.h"
+    >
+        <!-- some content -->
+    </ngx-gridster-item>
 </ngx-gridster>
 ```
 
@@ -86,12 +90,15 @@ For version before 6.0.0:
 
 ```html
 <gridster [options]="gridsterOptions" [draggableOptions]="{ handlerClass: 'panel-heading' }">
-
-  <gridster-item *ngFor="let widget of widgets"
-                 [(x)]="widget.x" [(y)]="widget.y" [(w)]="widget.w" [(h)]="widget.h">
-      <!--some content-->
-  </gridster-item>
-
+    <gridster-item
+        *ngFor="let widget of widgets"
+        [(x)]="widget.x"
+        [(y)]="widget.y"
+        [(w)]="widget.w"
+        [(h)]="widget.h"
+    >
+        <!-- some content -->
+    </gridster-item>
 </gridster>
 ```
 
