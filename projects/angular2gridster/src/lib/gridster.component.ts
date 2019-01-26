@@ -1,4 +1,4 @@
-import { DraggableEvent } from './utils/DraggableEvent';
+import {DraggableEvent} from './utils/DraggableEvent';
 import {
     Component,
     OnInit,
@@ -12,9 +12,9 @@ import {
     EventEmitter,
     ChangeDetectionStrategy,
     HostBinding,
-    ViewEncapsulation
+    ViewEncapsulation,
 } from '@angular/core';
-import { Observable, Subscription, fromEvent, ConnectableObservable } from 'rxjs';
+import {Observable, Subscription, fromEvent, ConnectableObservable} from 'rxjs';
 import {
     debounceTime,
     filter,
@@ -24,27 +24,29 @@ import {
     takeUntil,
     tap,
     map,
-    concatMap
+    concatMap,
 } from 'rxjs/operators';
 
-import { utils } from './utils/utils';
-import { GridsterService } from './gridster.service';
-import { IGridsterOptions } from './IGridsterOptions';
-import { IGridsterDraggableOptions } from './IGridsterDraggableOptions';
-import { GridsterPrototypeService } from './gridster-prototype/gridster-prototype.service';
-import { GridsterItemPrototypeDirective } from './gridster-prototype/gridster-item-prototype.directive';
-import { GridListItem } from './gridList/GridListItem';
-import { GridsterOptions } from './GridsterOptions';
-import { GridsterListService } from './gridsterList.service';
+import {utils} from './utils/utils';
+import {GridsterService} from './gridster.service';
+import {IGridsterOptions} from './IGridsterOptions';
+import {IGridsterDraggableOptions} from './IGridsterDraggableOptions';
+import {GridsterPrototypeService} from './gridster-prototype/gridster-prototype.service';
+import {GridsterItemPrototypeDirective} from './gridster-prototype/gridster-item-prototype.directive';
+import {GridListItem} from './gridList/GridListItem';
+import {GridsterOptions} from './GridsterOptions';
+import {GridsterListService} from './gridsterList.service';
 
 @Component({
     selector: 'ngx-gridster',
-    template: `<div class="gridster-container">
-      <ng-content></ng-content>
-      <div class="position-highlight" style="display:none;" #positionHighlight>
-        <div class="inner"></div>
-      </div>
-    </div>`,
+    template: `
+        <div class="gridster-container">
+            <ng-content></ng-content>
+            <div class="position-highlight" style="display:none;" #positionHighlight>
+                <div class="inner"></div>
+            </div>
+        </div>
+    `,
     styles: [
         `
             ngx-gridster {
@@ -75,11 +77,11 @@ import { GridsterListService } from './gridsterList.service';
                 position: absolute;
                 z-index: 1;
             }
-        `
+        `,
     ],
     providers: [GridsterService],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
 })
 export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
     @Input()
@@ -91,17 +93,17 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
     @Output()
     reflow = new EventEmitter<any>();
     @Output()
-    prototypeDrop = new EventEmitter<{ item: GridListItem }>();
+    prototypeDrop = new EventEmitter<{item: GridListItem}>();
     @Output()
-    prototypeEnter = new EventEmitter<{ item: GridListItem }>();
+    prototypeEnter = new EventEmitter<{item: GridListItem}>();
     @Output()
-    prototypeOut = new EventEmitter<{ item: GridListItem }>();
+    prototypeOut = new EventEmitter<{item: GridListItem}>();
     @Input()
     draggableOptions: IGridsterDraggableOptions = {};
     @Input()
     parent: GridsterComponent;
     @Output()
-    itemDrop = new EventEmitter<{ item: GridListItem }>();
+    itemDrop = new EventEmitter<{item: GridListItem}>();
 
     @ViewChild('positionHighlight')
     $positionHighlight;
@@ -161,7 +163,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
 
         this.zone.runOutsideAngular(() => {
             this.subscription.add(
-                fromEvent(document, 'scroll', { passive: true }).subscribe(() =>
+                fromEvent(document, 'scroll', {passive: true}).subscribe(() =>
                     this.updateGridsterElementData()
                 )
             );
@@ -242,7 +244,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         this.gridster.reflow();
         this.reflow.emit({
             isInit: isInit,
-            gridsterComponent: this
+            gridsterComponent: this,
         });
     }
 
@@ -269,7 +271,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
                 return {
                     item,
                     contentHeight: contentRect.bottom - scrollElRect.top,
-                    scrollElDistance
+                    scrollElDistance,
                 };
             })
             // calculate required height in lanes amount and update item "h"
@@ -318,14 +320,14 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
             draggEl: el,
             event,
             overEl: gridsterEl,
-            tolerance: options.tolerance
+            tolerance: options.tolerance,
         });
     }
 
     private getScrollPositionFromParents(
         el: Element,
-        data = { scrollTop: 0, scrollLeft: 0 }
-    ): { scrollTop: number; scrollLeft: number } {
+        data = {scrollTop: 0, scrollLeft: 0}
+    ): {scrollTop: number; scrollLeft: number} {
         if (el.parentElement && el.parentElement !== document.body) {
             data.scrollTop += el.parentElement.scrollTop;
             data.scrollLeft += el.parentElement.scrollLeft;
@@ -335,7 +337,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
 
         return {
             scrollTop: data.scrollTop,
-            scrollLeft: data.scrollLeft
+            scrollLeft: data.scrollLeft,
         };
     }
 
@@ -351,6 +353,11 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
     }
 
     private connectWithGridster(gridster: GridsterComponent): void {
+        setTimeout(() => {
+            console.log('left', this.gridster.gridList.toString());
+            console.log('right', gridster.gridster.gridList.toString());
+        }, 1000);
+
         const dragEnter$ = this.createGridsterDragEnterObservable(gridster);
         const dragOut$ = this.createGridsterDragOutObservable(gridster);
         const dragOver$ = dragEnter$.pipe(
@@ -390,16 +397,18 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
             dropOver$.subscribe(data => {
                 data.item.itemComponent.gridster = this.gridster;
                 this.gridster.onStop(data.item);
-                this.itemDrop.emit({ item: data.item });
+                this.itemDrop.emit({item: data.item});
                 this.gridster.reflow();
-                console.log('drop over', data);
+                console.log('left', this.gridster.gridList.toString());
+                console.log('right', gridster.gridster.gridList.toString());
+                // console.log('drop over', data);
             })
         );
     }
 
     private createGridsterDragEnterObservable(
         gridster: GridsterComponent
-    ): Observable<{ event: DraggableEvent; item: GridListItem }> {
+    ): Observable<{event: DraggableEvent; item: GridListItem}> {
         return gridster.gridster.itemDrag.pipe(
             pairwise(),
             filter(([data1, data2]) => {
@@ -424,7 +433,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
 
     private createGridsterDragOutObservable(
         gridster: GridsterComponent
-    ): Observable<{ event: DraggableEvent; item: GridListItem }> {
+    ): Observable<{event: DraggableEvent; item: GridListItem}> {
         return gridster.gridster.itemDrag.pipe(
             pairwise(),
             filter(([data1, data2]) => {
@@ -482,7 +491,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
                 if (this.parent) {
                     this.parent.disable(prototype.item);
                 }
-                this.prototypeEnter.emit({ item: prototype.item });
+                this.prototypeEnter.emit({item: prototype.item});
             });
 
         dragObservable.dragOut
@@ -494,7 +503,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
                 this.gridster.onDragOut(prototype.item);
                 this.isPrototypeEntered = false;
 
-                this.prototypeOut.emit({ item: prototype.item });
+                this.prototypeOut.emit({item: prototype.item});
 
                 if (this.parent) {
                     this.parent.enable();
@@ -508,7 +517,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
                     // timeout is needed to be sure that "enter" event is fired after "out"
                     setTimeout(() => {
                         this.parent.prototypeEnter.emit({
-                            item: prototype.item
+                            item: prototype.item,
                         });
                         prototype.onEnter(this.parent.gridster);
                     });
@@ -527,7 +536,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
             if (this.parent) {
                 this.parent.enable();
             }
-            this.prototypeDrop.emit({ item: data.item.item });
+            this.prototypeDrop.emit({item: data.item.item});
         });
 
         dropOverObservable.connect();

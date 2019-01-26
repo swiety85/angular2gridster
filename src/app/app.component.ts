@@ -1,46 +1,46 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { GridsterComponent, IGridsterOptions, IGridsterDraggableOptions } from 'angular2gridster';
+import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {GridsterComponent, IGridsterOptions, IGridsterDraggableOptions} from 'angular2gridster';
 
 @Component({
     selector: 'demo-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent implements OnInit {
     static X_PROPERTY_MAP: any = {
         sm: 'xSm',
         md: 'xMd',
         lg: 'xLg',
-        xl: 'xXl'
+        xl: 'xXl',
     };
 
     static Y_PROPERTY_MAP: any = {
         sm: 'ySm',
         md: 'yMd',
         lg: 'yLg',
-        xl: 'yXl'
+        xl: 'yXl',
     };
 
     static W_PROPERTY_MAP: any = {
         sm: 'wSm',
         md: 'wMd',
         lg: 'wLg',
-        xl: 'wXl'
+        xl: 'wXl',
     };
 
     static H_PROPERTY_MAP: any = {
         sm: 'hSm',
         md: 'hMd',
         lg: 'hLg',
-        xl: 'hXl'
+        xl: 'hXl',
     };
 
     @ViewChild(GridsterComponent)
     gridster: GridsterComponent;
     itemOptions = {
         maxWidth: 3,
-        maxHeight: 4
+        maxHeight: 4,
     };
     gridsterOptions: IGridsterOptions = {
         appendToBody: true,
@@ -53,13 +53,13 @@ export class AppComponent implements OnInit {
         resizeHandles: {
             s: true,
             e: true,
-            se: true
+            se: true,
         },
         widthHeightRatio: 1, // proportion between item width and height
         lines: {
             visible: true,
             color: '#afafaf',
-            width: 2
+            width: 2,
         },
         shrink: true,
         useCSSTransforms: false,
@@ -80,27 +80,27 @@ export class AppComponent implements OnInit {
             {
                 breakpoint: 'sm',
                 // minWidth: 480,
-                lanes: 3
+                lanes: 3,
             },
             {
                 breakpoint: 'md',
                 minWidth: 768,
-                lanes: 4
+                lanes: 4,
             },
             {
                 breakpoint: 'lg',
                 minWidth: 1250,
-                lanes: 6
+                lanes: 6,
             },
             {
                 breakpoint: 'xl',
                 minWidth: 1800,
-                lanes: 8
-            }
-        ]
+                lanes: 8,
+            },
+        ],
     };
     gridsterDraggableOptions: IGridsterDraggableOptions = {
-        handlerClass: 'panel-heading'
+        handlerClass: 'panel-heading',
     };
     title = 'Angular2Gridster';
     widgetsCopy = [];
@@ -120,7 +120,7 @@ export class AppComponent implements OnInit {
             hXl: 2,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 1'
+            title: 'Basic form inputs 1',
         },
         {
             x: 1,
@@ -137,7 +137,7 @@ export class AppComponent implements OnInit {
             hXl: 1,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 2'
+            title: 'Basic form inputs 2',
         },
         {
             x: 1,
@@ -154,7 +154,7 @@ export class AppComponent implements OnInit {
             hXl: 1,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 3'
+            title: 'Basic form inputs 3',
         },
         {
             x: 3,
@@ -171,7 +171,7 @@ export class AppComponent implements OnInit {
             hXl: 1,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 4'
+            title: 'Basic form inputs 4',
         },
         {
             w: 1,
@@ -186,8 +186,8 @@ export class AppComponent implements OnInit {
             hXl: 1,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs x'
-        }
+            title: 'Basic form inputs x',
+        },
     ];
     widgets2: Array<any> = [
         {
@@ -205,7 +205,7 @@ export class AppComponent implements OnInit {
             hXl: 2,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 1'
+            title: 'Basic form inputs 1',
         },
         {
             x: 1,
@@ -222,7 +222,7 @@ export class AppComponent implements OnInit {
             hXl: 1,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 2'
+            title: 'Basic form inputs 2',
         },
         {
             x: 1,
@@ -239,7 +239,7 @@ export class AppComponent implements OnInit {
             hXl: 1,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 3'
+            title: 'Basic form inputs 3',
         },
         {
             x: 3,
@@ -256,7 +256,7 @@ export class AppComponent implements OnInit {
             hXl: 1,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs 4'
+            title: 'Basic form inputs 4',
         },
         {
             w: 1,
@@ -271,12 +271,12 @@ export class AppComponent implements OnInit {
             hXl: 1,
             dragAndDrop: true,
             resizable: true,
-            title: 'Basic form inputs x'
-        }
+            title: 'Basic form inputs x',
+        },
     ];
 
     ngOnInit() {
-        this.widgetsCopy = this.widgets.map(widget => ({ ...widget }));
+        this.widgetsCopy = this.widgets.map(widget => ({...widget}));
     }
 
     onReflow(event) {
@@ -337,7 +337,7 @@ export class AppComponent implements OnInit {
         const widget = {
             dragAndDrop: true,
             resizable: true,
-            title: 'New widget'
+            title: 'New widget',
         };
 
         widget[AppComponent.W_PROPERTY_MAP[breakpoint] || 'w'] = item.w;
@@ -351,7 +351,7 @@ export class AppComponent implements OnInit {
             }
         }
 
-        this.widgets.push(widget);
+        this.widgets2.push(widget);
 
         console.log('add widget from drag to:', gridster);
     }
@@ -382,7 +382,7 @@ export class AppComponent implements OnInit {
                 'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
                 'commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla ' +
                 'pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est ' +
-                'laborum.'
+                'laborum.',
         });
     }
 
@@ -400,7 +400,7 @@ export class AppComponent implements OnInit {
                 'dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
                 'commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla ' +
                 'pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est ' +
-                'laborum.'
+                'laborum.',
         });
         console.log('widget push', this.widgets[this.widgets.length - 1]);
     }
@@ -420,7 +420,7 @@ export class AppComponent implements OnInit {
     }
 
     resetWidgets() {
-        this.widgets = this.widgetsCopy.map(widget => ({ ...widget }));
+        this.widgets = this.widgetsCopy.map(widget => ({...widget}));
     }
 
     itemDrop($event) {
