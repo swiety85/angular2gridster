@@ -18,7 +18,7 @@
         ],
         "paths": {
             "angular2gridster": [
-                "projects/angular2gridster/src/public_api.ts"
+                "dist/angular2gridster"
             ]
         }
     }

@@ -3,7 +3,12 @@
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "module": "es2015",
-    "types": []
+    "types": [],
+    "paths": {
+        "angular2gridster": [
+            "projects/angular2gridster/src/public_api.ts"
+        ]
+    }
   },
   "exclude": [
     "src/test.ts",
