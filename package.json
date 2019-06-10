@@ -50,7 +50,9 @@
     "@angular/router": "^8.0.0",
     "core-js": "^2.5.4",
     "rxjs": "^6.3.3",
-    "zone.js": "~0.9.1"
+    "zone.js": "~0.9.1",
+    "js-yaml": ">=3.13.1",
+    "lodash": ">=4.17.11"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.800.0",
