@@ -5,10 +5,6 @@ All notable changes to this project will be documented in this file. See [standa
 ### [8.0.1](https://github.com/swiety85/angular2gridster/compare/v8.0.0...v8.0.1) (2019-06-10)
 
 
-
-## [8.0.1](https://github.com/swiety85/angular2gridster/compare/v7.0.2...v8.0.1) (2019-06-10)
-
-
 ### Features
 
 * Upgrade to Angular8 ([2bcc03f](https://github.com/swiety85/angular2gridster/commit/2bcc03f))
