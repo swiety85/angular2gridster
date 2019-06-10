@@ -1,6 +1,6 @@
 {
   "name": "angular2gridster",
-  "version": "7.0.2",
+  "version": "8.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
