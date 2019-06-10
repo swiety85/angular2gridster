@@ -85,7 +85,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
     @Input() draggableOptions: IGridsterDraggableOptions = {};
     @Input() parent: GridsterComponent;
 
-    @ViewChild('positionHighlight') $positionHighlight;
+    @ViewChild('positionHighlight', { static: true }) $positionHighlight;
     @HostBinding('class.gridster--dragging') isDragging = false;
     @HostBinding('class.gridster--resizing') isResizing = false;
 

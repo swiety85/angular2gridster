@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
         xl: 'hXl'
     };
 
-    @ViewChild(GridsterComponent) gridster: GridsterComponent;
+    @ViewChild(GridsterComponent, { static: true }) gridster: GridsterComponent;
     itemOptions = {
         maxWidth: 3,
         maxHeight: 4
