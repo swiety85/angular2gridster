@@ -2,7 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [8.0.0](https://github.com/swiety85/angular2gridster/compare/v7.0.2...v8.0.0) (2019-06-10)
+### [8.0.1](https://github.com/swiety85/angular2gridster/compare/v8.0.0...v8.0.1) (2019-06-10)
+
+
+
+## [8.0.1](https://github.com/swiety85/angular2gridster/compare/v7.0.2...v8.0.1) (2019-06-10)
 
 
 ### Features
