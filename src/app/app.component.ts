@@ -64,6 +64,7 @@ export class AppComponent implements OnInit {
         responsiveView: true, // turn on adopting items sizes on window resize and enable responsiveOptions
         responsiveDebounce: 500, // window resize debounce time
         responsiveSizes: true,
+        responsiveToParent: true,
         // List of different gridster configurations for different breakpoints.
         // Each breakpoint is defined by name stored in "breakpoint" property. There is fixed set of breakpoints
         // available to use with default minWidth assign to each.
@@ -183,10 +184,13 @@ export class AppComponent implements OnInit {
     setWidth(widget: any, size: number, e: MouseEvent, gridster) {
         e.stopPropagation();
         e.preventDefault();
-        if (size < 1) {
-            size = 1;
+
+        const breakpoint = gridster.options.breakpoint;
+        let newWidth = widget[AppComponent.W_PROPERTY_MAP[breakpoint] || 'w'] + size;
+        if (newWidth < 1) {
+            newWidth = 1;
         }
-        widget.w = size;
+        widget[AppComponent.W_PROPERTY_MAP[breakpoint] || 'w'] = newWidth;
 
         gridster.reload();
 
@@ -196,10 +200,13 @@ export class AppComponent implements OnInit {
     setHeight(widget: any, size: number, e: MouseEvent, gridster) {
         e.stopPropagation();
         e.preventDefault();
-        if (size < 1) {
-            size = 1;
+
+        const breakpoint = gridster.options.breakpoint;
+        let newHeight = widget[AppComponent.H_PROPERTY_MAP[breakpoint] || 'h'] + size;
+        if (newHeight < 1) {
+            newHeight = 1;
         }
-        widget.h = size;
+        widget[AppComponent.H_PROPERTY_MAP[breakpoint] || 'h'] = newHeight;
 
         gridster.reload();
 

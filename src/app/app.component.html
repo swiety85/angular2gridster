@@ -133,10 +133,10 @@
                   <label>
                       <input type="checkbox" [(ngModel)]="widget.resizable" value="true"> Resizable
                   </label>
-                  <button (click)="setWidth(widget, widget.w+1, $event, gridster1)">width +</button>
-                  <button (click)="setWidth(widget, widget.w-1, $event, gridster1)">width -</button>
-                  <button (click)="setHeight(widget, widget.h+1, $event, gridster1)">height +</button>
-                  <button (click)="setHeight(widget, widget.h-1, $event, gridster1)">height -</button>
+                  <button (click)="setWidth(widget, 1, $event, gridster1)">width +</button>
+                  <button (click)="setWidth(widget, -1, $event, gridster1)">width -</button>
+                  <button (click)="setHeight(widget, 1, $event, gridster1)">height +</button>
+                  <button (click)="setHeight(widget, -1, $event, gridster1)">height -</button>
               </p>
               <p>
                   <button (click)="remove($event, indx,gridster1)">remove</button>
