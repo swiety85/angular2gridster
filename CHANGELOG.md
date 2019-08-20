@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [8.1.0](https://github.com/swiety85/angular2gridster/compare/v8.0.1...v8.1.0) (2019-08-20)
+
+
+### Bug Fixes
+
+* **demo:** Fix resize widget by buttons in demo ([3aab09c](https://github.com/swiety85/angular2gridster/commit/3aab09c))
+
+
+### Features
+
+* **config:** add Gridster responsiveToParent option ([35ca28c](https://github.com/swiety85/angular2gridster/commit/35ca28c)), closes [#201](https://github.com/swiety85/angular2gridster/issues/201) [#333](https://github.com/swiety85/angular2gridster/issues/333)
+
+
+
 ### [8.0.1](https://github.com/swiety85/angular2gridster/compare/v8.0.0...v8.0.1) (2019-06-10)
 
 
