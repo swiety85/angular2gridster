@@ -21,6 +21,7 @@ export interface IGridsterOptions {
     responsiveView?: boolean;
     responsiveDebounce?: number;
     responsiveSizes?: boolean;
+    responsiveToParent?: boolean;
     lines?: {
         visible?: boolean,
         color?: string,
