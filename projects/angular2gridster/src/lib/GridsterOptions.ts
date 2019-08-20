@@ -10,6 +10,7 @@ export class GridsterOptions {
     heightToFontSizeRatio: number;
     responsiveView: boolean;
     responsiveSizes: boolean;
+    responsiveToParent: boolean;
     dragAndDrop: boolean;
     resizable: boolean;
     shrink: boolean;
@@ -23,6 +24,7 @@ export class GridsterOptions {
         shrink: false,
         responsiveView: true,
         responsiveSizes: false,
+        responsiveToParent: false,
         dragAndDrop: true,
         resizable: false,
         useCSSTransforms: false,
@@ -42,16 +44,17 @@ export class GridsterOptions {
         xl: 1200 // Extra large
     };
 
-    constructor(config: IGridsterOptions) {
-        this.basicOptions = config;
+    constructor(config: IGridsterOptions, gridsterElement: HTMLElement) {
+        const responsiveContainer = config.responsiveToParent ? gridsterElement : window;
 
+        this.basicOptions = config;
         this.responsiveOptions = this.extendResponsiveOptions(config.responsiveOptions || []);
 
         this.change = merge(
-                of(this.getOptionsByWidth(document.documentElement.clientWidth)),
+                of(this.getOptionsByWidth(this.getElementWidth(responsiveContainer))),
                 fromEvent(window, 'resize').pipe(
                     debounceTime(config.responsiveDebounce || 0),
-                    map((event: Event) => this.getOptionsByWidth(document.documentElement.clientWidth))
+                    map((event: Event) => this.getOptionsByWidth(this.getElementWidth(responsiveContainer)))
                 )
             ).pipe(distinctUntilChanged(null, (options: any) => options.minWidth));
     }
@@ -82,5 +85,13 @@ export class GridsterOptions {
             })
             .sort((curr, next) => curr.minWidth - next.minWidth)
             .map((options) => <IGridsterOptions>Object.assign({}, this.defaults, this.basicOptions, options));
+    }
+
+    private getElementWidth($element: any) {
+        if ($element === window) {
+            return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        }
+
+        return $element.clientWidth;
     }
 }
