@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [8.1.1](https://github.com/swiety85/angular2gridster/compare/v8.1.0...v8.1.1) (2019-10-10)
+
+
+### Bug Fixes
+
+* Fix lodash Vulnerable version ([7e25199](https://github.com/swiety85/angular2gridster/commit/7e25199))
+* **drag:** Remove rounding in clalculating cell sizes and item positions ([536cd41](https://github.com/swiety85/angular2gridster/commit/536cd41)), closes [#346](https://github.com/swiety85/angular2gridster/issues/346) [#334](https://github.com/swiety85/angular2gridster/issues/334)
+
+
+
 ## [8.1.0](https://github.com/swiety85/angular2gridster/compare/v8.0.1...v8.1.0) (2019-08-20)
 
 
