@@ -424,13 +424,13 @@ export class GridsterService {
     private calculateCellWidth() {
         const gridsterWidth = parseFloat(window.getComputedStyle(this.gridsterComponent.$element).width);
 
-        return Math.floor(gridsterWidth / this.options.lanes);
+        return gridsterWidth / this.options.lanes;
     }
 
     private calculateCellHeight() {
         const gridsterHeight = parseFloat(window.getComputedStyle(this.gridsterComponent.$element).height);
 
-        return Math.floor(gridsterHeight / this.options.lanes);
+        return gridsterHeight / this.options.lanes;
     }
 
     private applySizeToItems() {
@@ -456,8 +456,8 @@ export class GridsterService {
             height: parseInt(item.$element.style.height, 10) - 1
         };
 
-        let colSize = Math.round(itemSize.width / this.cellWidth);
-        let rowSize = Math.round(itemSize.height / this.cellHeight);
+        let colSize = itemSize.width / this.cellWidth;
+        let rowSize = itemSize.height / this.cellHeight;
 
         // Keep item minimum 1
         colSize = Math.max(colSize, 1);
