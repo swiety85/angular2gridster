@@ -456,8 +456,8 @@ export class GridsterService {
             height: parseInt(item.$element.style.height, 10) - 1
         };
 
-        let colSize = itemSize.width / this.cellWidth;
-        let rowSize = itemSize.height / this.cellHeight;
+        let colSize = Math.round(itemSize.width / this.cellWidth);
+        let rowSize = Math.round(itemSize.height / this.cellHeight);
 
         // Keep item minimum 1
         colSize = Math.max(colSize, 1);
