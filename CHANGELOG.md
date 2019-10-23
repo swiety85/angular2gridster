@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [8.1.2](https://github.com/swiety85/angular2gridster/compare/v8.1.1...v8.1.2) (2019-10-23)
+
+
+### Bug Fixes
+
+* Use rounding again for cell size ([9962aa0](https://github.com/swiety85/angular2gridster/commit/9962aa0)), closes [#347](https://github.com/swiety85/angular2gridster/issues/347)
+
+
+
 ### [8.1.1](https://github.com/swiety85/angular2gridster/compare/v8.1.0...v8.1.1) (2019-10-10)
 
 
