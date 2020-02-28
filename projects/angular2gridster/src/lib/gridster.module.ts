@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { GridsterComponent } from './gridster.component';
@@ -22,11 +22,11 @@ import { GridsterPrototypeService } from './gridster-prototype/gridster-prototyp
     ]
 })
 export class GridsterModule {
-    static forRoot() {
-        return {
-            ngModule: GridsterModule,
-            providers: [ GridsterPrototypeService ]
-        };
-    }
+    static forRoot(): ModuleWithProviders<GridsterModule> {
+    return {
+        ngModule: GridsterModule,
+        providers: [GridsterPrototypeService]
+    };
+}
 }
 
