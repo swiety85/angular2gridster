@@ -121,7 +121,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
                 if (this.gridster.gridList) {
                     this.gridster.gridList.options = options;
                 }
-                this.optionsChange.emit(options);
+                setTimeout(() => this.optionsChange.emit(options));
             })
         );
 
