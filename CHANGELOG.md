@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0](https://github.com/swiety85/angular2gridster/compare/v8.1.2...v11.0.0) (2021-03-21)
+
+
+### Bug Fixes
+
+* Fix security issues ([6f02e08](https://github.com/swiety85/angular2gridster/commit/6f02e08))
+* import style according to angular style guide ([a4004a5](https://github.com/swiety85/angular2gridster/commit/a4004a5))
+
+
+
 ## [10.0.0](https://github.com/swiety85/angular2gridster/compare/v8.1.2...v10.0.0) (2021-03-21)
 
 
