@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [12.0.0](https://github.com/swiety85/angular2gridster/compare/v11.0.0...v12.0.0) (2021-06-26)
+
+
+### Features
+
+* **upgrade:** Upgrade to Angular 12 ([57e28c4](https://github.com/swiety85/angular2gridster/commit/57e28c4))
+
+
+
 ## [11.0.0](https://github.com/swiety85/angular2gridster/compare/v8.1.2...v11.0.0) (2021-03-21)
 
 
