@@ -15,6 +15,7 @@ Development progress can be tracked in [Milestones](https://github.com/swiety85/
 
 ## Versions:
 
+-   Version **12.x** works with **Angular 12.x**.
 -   Version **11.x** works with **Angular 11.x**.
 -   Version **10.x** works with **Angular 10.x**.
 -   Version **9.x** works with **Angular 9.x**.
