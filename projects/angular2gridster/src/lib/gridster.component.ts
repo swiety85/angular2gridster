@@ -294,7 +294,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         element: Element,
         data = { scrollTop: 0, scrollLeft: 0 }
     ): { scrollTop: number; scrollLeft: number } {
-        if (element.parentElement && element.parentElement !== document.body) {
+        if (element.parentElement) {
             data.scrollTop += element.parentElement.scrollTop;
             data.scrollLeft += element.parentElement.scrollLeft;
 
