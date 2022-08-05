@@ -269,7 +269,7 @@ export class GridListItem {
 
         this.itemComponent.positionX = position.left;
         this.itemComponent.positionY = position.top;
-        this.itemComponent.updateElemenetPosition();
+        this.itemComponent.updateElementPosition();
     }
 
     public calculatePosition(gridster?: GridsterService): {left: number, top: number} {

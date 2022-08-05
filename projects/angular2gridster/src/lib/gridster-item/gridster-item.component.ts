@@ -359,7 +359,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         this.disableResizable();
     }
 
-    updateElemenetPosition() {
+    updateElementPosition() {
         if (this.gridster.options.useCSSTransforms) {
             utils.setTransform(this.$element, {x: this._positionX, y: this._positionY});
         } else {
@@ -484,7 +484,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                         this.gridster.gridsterRect.top);
                     this.positionX = (event.clientX - cursorToElementPosition.x -
                         this.gridster.gridsterRect.left);
-                    this.updateElemenetPosition();
+                    this.updateElementPosition();
 
                     this.gridster.onDrag(this.item);
                 });
@@ -658,6 +658,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             this.setMaxHeight('n', config);
         } else {
             this.positionY = config.position.y;
+            this.updateElementPosition();
             this.$element.style.height = height + 'px';
         }
     }
@@ -672,7 +673,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
             this.setMaxWidth('w', config);
         } else {
             this.positionX = config.position.x;
-            this.updateElemenetPosition();
+            this.updateElementPosition();
             this.$element.style.width = width + 'px';
         }
     }
@@ -716,7 +717,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         if (direction === 'w') {
             this.$element.style.width = (config.startData.minW * this.gridster.cellWidth) + 'px';
             this.positionX = config.startData.maxX * this.gridster.cellWidth;
-            this.updateElemenetPosition();
+            this.updateElementPosition();
         } else {
             this.$element.style.width = (config.startData.minW * this.gridster.cellWidth) + 'px';
         }
@@ -737,7 +738,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         if (direction === 'w') {
             this.$element.style.width = (config.startData.maxW * this.gridster.cellWidth) + 'px';
             this.positionX = config.startData.minX * this.gridster.cellWidth;
-            this.updateElemenetPosition();
+            this.updateElementPosition();
         } else {
             this.$element.style.width = (config.startData.maxW * this.gridster.cellWidth) + 'px';
         }
