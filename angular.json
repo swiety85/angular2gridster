@@ -137,5 +137,7 @@
       }
     }
   },
-  "defaultProject": "gridster-demo"
+  "cli": {
+    "analytics": false
+  }
 }
