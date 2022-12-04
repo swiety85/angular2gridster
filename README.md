@@ -30,7 +30,7 @@ npm install @hyperviewhq/angular2gridster
 ```
 
 Once installed you need to import our module:
-The example imports in AppModule, but it could also be imported in any other module - depends where you want to use it.
+The example imports in AppModule, but it could also be imported in any other module - depends on where you want to use it.
 
 ### Additional steps for System.js
 
@@ -134,9 +134,9 @@ If you use `responsiveOptions`, then item coords will be assigned to different b
 -   `lg` (1250px - 1800px), it uses `xLg` and `yLg` attributes
 -   from `xl` (1800px), it uses `xXl` and `yXl` attributes
 
-(widths in px are only example and works for `responsiveOptions in example above).
+(widths in px are only example and works for `responsiveOptions in the example above).
 
-If you set `responsiveSizes: true`, item size can be different for different breakpoints. In this case size will be binded to following attributes:
+If you set `responsiveSizes: true`, item size can be different for different breakpoints. In this case, size will be bound to following attributes:
 
 -   till `sm` (480px), it uses `w` and `h` attributes
 -   `sm` (480px - 768px), it uses `wSm` and `hSm` attributes
