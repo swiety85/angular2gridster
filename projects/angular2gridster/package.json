@@ -1,14 +1,14 @@
 {
     "name": "@hyperviewhq/angular2gridster",
     "peerDependencies": {
-        "@angular/common": "^14.2.0",
-        "@angular/core": "^14.2.0"
+        "@angular/common": "^15.1.3",
+        "@angular/core": "^15.1.3"
     },
     "dependencies": {
-        "tslib": "^2.3.0"
+        "tslib": "^2.3.1"
     },
     "keywords": [
-        "Angular 14",
+        "Angular 15",
         "Angular",
         "angular2gridster"
     ]

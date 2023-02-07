@@ -16,7 +16,9 @@
             "outputPath": "dist/gridster-demo",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
@@ -79,7 +81,9 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
@@ -121,9 +125,9 @@
           },
           "configurations": {
             "production": {
-              "project": "projects/angular2gridster/ng-package.prod.json"
-            ,              "tsConfig": "projects/angular2gridster/tsconfig.lib.prod.json"
-}
+              "project": "projects/angular2gridster/ng-package.prod.json",
+              "tsConfig": "projects/angular2gridster/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -139,5 +143,13 @@
   },
   "cli": {
     "analytics": false
+  },
+  "schematics": {
+    "@angular-eslint/schematics:application": {
+      "setParserOptionsProject": true
+    },
+    "@angular-eslint/schematics:library": {
+      "setParserOptionsProject": true
+    }
   }
 }
