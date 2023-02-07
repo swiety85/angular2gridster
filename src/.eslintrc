@@ -340,7 +340,7 @@
 		"@typescript-eslint/no-unnecessary-type-arguments": "error",
 		"@typescript-eslint/promise-function-async": "error",
 		"@typescript-eslint/prefer-readonly": "error",
-		"@typescript-eslint/prefer-nullish-coalescing": "error",
+		"@typescript-eslint/prefer-nullish-coalescing": "warn",
 		"@typescript-eslint/non-nullable-type-assertion-style": "error",
 		"@typescript-eslint/no-non-null-asserted-nullish-coalescing": "error",
 		"@typescript-eslint/no-meaningless-void-operator": "error",
