@@ -196,7 +196,7 @@ export class GridsterService {
         this.gridsterComponent.isResizing = false;
 
         this.gridList.pullItemsToLeft(item);
-        this.debounceRenderSubject.next();
+        this.debounceRenderSubject.next(null);
 
         this.fixItemsPositions();
     }

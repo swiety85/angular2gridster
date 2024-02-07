@@ -9,7 +9,8 @@
     "declaration": false,
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "target": "es2015",
+    "target": "ES2022",
+    "strictNullChecks": false,
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -21,6 +22,7 @@
       "angular2gridster": [
         "dist/angular2gridster"
       ]
-    }
+    },
+    "useDefineForClassFields": false
   }
 }
