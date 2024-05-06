@@ -1,4 +1,4 @@
-# angular2gridster
+# angular2gridster (DEPRECIATED)
 
 [![npm version](https://badge.fury.io/js/angular2gridster.svg)](https://badge.fury.io/js/angular2gridster)
 
