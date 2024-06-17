@@ -9,6 +9,7 @@ Angular implementation of the well-known Gridster (no jQuery, no external librar
 
 ## Versions:
 
+- Version **18.x** works with **Angular 18.x**.
 - Version **17.x** works with **Angular 17.x**.
 - Version **16.x** works with **Angular 16.x**.
 - Version **15.x** works with **Angular 15.x**.
