@@ -344,7 +344,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
         }
 
         if (rerender && this.gridster.gridsterComponent.isReady) {
-            this.gridster.debounceRenderSubject.next();
+            this.gridster.debounceRenderSubject.next(null);
         }
     }
 
@@ -493,7 +493,7 @@ export class GridsterItemComponent implements OnInit, OnChanges, AfterViewInit, 
                 .subscribe(() => {
                     this.zone.run(() => {
                         this.gridster.onStop(this.item);
-                        this.gridster.debounceRenderSubject.next();
+                        this.gridster.debounceRenderSubject.next(null);
                         this.isDragging = false;
                         this.onEnd('drag');
                     });
