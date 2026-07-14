@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, Output, HostBinding, EventEmitter, OnInit, OnDestroy,
+import { Directive, ElementRef, Input, Output, EventEmitter, OnInit, OnDestroy,
     NgZone} from '@angular/core';
 import { Observable, Subscription, fromEvent } from 'rxjs';
 
@@ -9,8 +9,14 @@ import { DraggableEvent } from '../utils/DraggableEvent';
 import { Draggable } from '../utils/draggable';
 import { utils } from '../utils/utils';
 
+export type GridsterItemPrototypeDirectiveKey = {
+    [K in keyof GridsterItemPrototypeDirective]:
+        GridsterItemPrototypeDirective[K] extends number ? K : never;
+}[keyof GridsterItemPrototypeDirective];
+
 @Directive({
-    selector: '[ngxGridsterItemPrototype]'
+    selector: '[ngxGridsterItemPrototype]',
+    standalone: false
 })
 export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
     @Output() drop = new EventEmitter();
@@ -60,9 +66,9 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
 
     private dragContextGridster: GridsterService;
     private parentRect: ClientRect;
-    private parentOffset: {left: number, top: number};
+    parentOffset: {left: number, top: number};
 
-    private subscribtions: Array<Subscription> = [];
+    private subscribtions: Subscription[] = [];
 
     // must be set to true because of item dragAndDrop configuration
     get dragAndDrop(): boolean {
@@ -122,7 +128,9 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
         });
     }
 
-    onOver (gridster: GridsterService): void {}
+    onOver (_: GridsterService): void {
+        // Intentionally left empty.
+    }
 
     onOut (gridster: GridsterService): void {
         this.out.emit({
@@ -152,7 +160,10 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
     }
 
     private enableDragDrop() {
-        let cursorToElementPosition;
+        let cursorToElementPosition: {
+            x: number;
+            y: number;
+        };
         const draggable = new Draggable(this.elementRef.nativeElement);
 
         const dragStartSub = draggable.dragStart
@@ -242,7 +253,7 @@ export class GridsterItemPrototypeDirective implements OnInit, OnDestroy {
         let dragElement = this.elementRef.nativeElement;
 
         if (this.config.helper) {
-            dragElement = <any>(dragElement).cloneNode(true);
+            dragElement = (dragElement).cloneNode(true) as any;
 
             document.body.appendChild(this.fixStylesForBodyHelper(dragElement));
         } else {

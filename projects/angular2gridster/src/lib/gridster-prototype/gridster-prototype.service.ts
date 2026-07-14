@@ -18,8 +18,6 @@ export class GridsterPrototypeService {
 
     private dragStopSubject = new Subject<any>();
 
-    constructor() {}
-
     observeDropOver (gridster: GridsterService) {
         return this.dragStopSubject.pipe(
             filter((data) => {
@@ -92,7 +90,7 @@ export class GridsterPrototypeService {
         const dragExt = merge(
                 // dragStartSubject is connected in case when item prototype is placed above gridster
                 // and drag enter is not fired
-                this.dragStartSubject.pipe(map(() => ({ item: null, isOver: false, isDrop: false }))),
+                this.dragStartSubject.pipe(map(() => ({ item: null as any, isOver: false, isDrop: false }))),
                 over,
                 drop
             ).pipe(
@@ -182,10 +180,10 @@ export class GridsterPrototypeService {
      * Checks whether "element" position fits inside "containerEl" position.
      * It checks if "element" is totally covered by "containerEl" area.
      */
-    private isOverGridster(item: GridsterItemPrototypeDirective, gridsterEl: HTMLElement, event, options): boolean {
+    private isOverGridster(item: GridsterItemPrototypeDirective, gridsterEl: HTMLElement, event: any, options: any): boolean {
         const el = item.$element;
-        const parentItem = <HTMLElement>gridsterEl.parentElement &&
-            <HTMLElement>gridsterEl.parentElement.closest('gridster-item');
+        const parentItem = gridsterEl.parentElement as HTMLElement &&
+            gridsterEl.parentElement.closest('gridster-item') as HTMLElement;
 
         if (parentItem) {
             return this.isOverGridster(item, parentItem, event, options);

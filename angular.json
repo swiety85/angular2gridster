@@ -11,12 +11,15 @@
       "schematics": {},
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/gridster-demo",
+            "outputPath": {
+              "base": "dist/gridster-demo"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
@@ -26,12 +29,11 @@
               "src/styles.css"
             ],
             "scripts": [],
-            "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "browser": "src/main.ts"
           },
           "configurations": {
             "production": {
@@ -51,9 +53,7 @@
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
+              "extractLicenses": true
             }
           },
           "defaultConfiguration": ""
@@ -61,25 +61,27 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "gridster-demo:build"
+            "buildTarget": "gridster-demo:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "gridster-demo:build:production"
+              "buildTarget": "gridster-demo:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "gridster-demo:build"
+            "buildTarget": "gridster-demo:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
@@ -114,16 +116,16 @@
       "prefix": "ngx",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "tsConfig": "projects/angular2gridster/tsconfig.lib.json",
             "project": "projects/angular2gridster/ng-package.json"
           },
           "configurations": {
             "production": {
-              "project": "projects/angular2gridster/ng-package.prod.json"
-            ,              "tsConfig": "projects/angular2gridster/tsconfig.lib.prod.json"
-}
+              "project": "projects/angular2gridster/ng-package.prod.json",
+              "tsConfig": "projects/angular2gridster/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -133,9 +135,53 @@
             "tsConfig": "projects/angular2gridster/tsconfig.spec.json",
             "karmaConfig": "projects/angular2gridster/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/angular2gridster/**/*.ts",
+              "projects/angular2gridster/**/*.html"
+            ],
+            "eslintConfig": "projects/angular2gridster/eslint.config.js"
+          }
         }
       }
     }
   },
-  "defaultProject": "gridster-demo"
+  "cli": {
+    "analytics": false
+  },
+  "schematics": {
+    "@angular-eslint/schematics:application": {
+      "setParserOptionsProject": true
+    },
+    "@angular-eslint/schematics:library": {
+      "setParserOptionsProject": true
+    },
+    "@schematics/angular:component": {
+      "type": "component"
+    },
+    "@schematics/angular:directive": {
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
+    }
+  }
 }

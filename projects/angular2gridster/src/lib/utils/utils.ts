@@ -17,22 +17,16 @@ export const utils = {
         // Replace unitless items with px
         const translate = `translate(${left}px,${top}px)`;
 
-        $element.style['transform'] = translate;
-        $element.style['WebkitTransform'] = translate;
-        $element.style['MozTransform'] = translate;
-        $element.style['msTransform'] = translate;
-        $element.style['OTransform'] = translate;
+        $element.style.transform = translate;
+        $element.style.webkitTransform = translate;
     },
     resetTransform: function ($element: HTMLElement) {
-        $element.style['transform'] = '';
-        $element.style['WebkitTransform'] = '';
-        $element.style['MozTransform'] = '';
-        $element.style['msTransform'] = '';
-        $element.style['OTransform'] = '';
+        $element.style.transform = '';
+        $element.style.webkitTransform = '';
     },
     clearSelection: () => {
-        if (document['selection']) {
-            document['selection'].empty();
+        if (document.getSelection) {
+            document.getSelection().empty();
         } else if (window.getSelection) {
             window.getSelection().removeAllRanges();
         }
@@ -67,7 +61,7 @@ export const utils = {
             elRect.left < containerRect.right &&
             elRect.top < containerRect.bottom;
     },
-    isCursorAboveElement: function (event: DraggableEvent, element): boolean {
+    isCursorAboveElement: function (event: DraggableEvent, element: HTMLElement): boolean {
         const elRect = element.getBoundingClientRect();
 
         return event.pageX > elRect.left &&
@@ -83,7 +77,7 @@ export const utils = {
             parseFloat(styleObj.getPropertyValue('padding-top')) +
             parseFloat(styleObj.getPropertyValue('padding-bottom'));
     },
-    getRelativeCoordinates: (element, parentElement): {top: number, left: number} => {
+    getRelativeCoordinates: (element: HTMLElement, parentElement: HTMLElement): {top: number, left: number} => {
         const parentElementRect = parentElement.getBoundingClientRect();
         const elementRect = element.getBoundingClientRect();
 
@@ -92,27 +86,27 @@ export const utils = {
             left: elementRect.left - parentElementRect.left
         };
     },
-    getScrollableContainer(node) {
+    getScrollableContainer(node: HTMLElement) {
         const regex = /(auto|scroll)/;
-        const parents = (_node, ps) => {
+        const parents = (_node: any, ps: any) => {
             if (_node.parentNode === null) {
                 return ps;
             }
             return parents(_node.parentNode, ps.concat([_node]));
         };
 
-        const style = (_node, prop) => {
+        const style = (_node: Element, prop: string) => {
             return getComputedStyle(_node, null).getPropertyValue(prop);
         };
-        const overflow = _node => {
+        const overflow = (_node: Element) => {
             return (
                 style(_node, 'overflow') + style(_node, 'overflow-y') + style(_node, 'overflow-x')
             );
         };
-        const scroll = _node => regex.test(overflow(_node));
+        const scroll = (_node: Element) => regex.test(overflow(_node));
 
-        /* eslint-disable consistent-return */
-        const scrollParent = _node => {
+         
+        const scrollParent = (_node: Element) => {
             if (!(_node instanceof HTMLElement || _node instanceof SVGElement)) {
                 return;
             }

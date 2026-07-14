@@ -1,4 +1,4 @@
-import { Observable, fromEvent, merge, pipe } from 'rxjs';
+import { Observable, fromEvent, merge } from 'rxjs';
 import { share, map, filter, tap, switchMap, takeUntil, take, skip } from 'rxjs/operators';
 
 import { DraggableEvent } from './DraggableEvent';
@@ -14,24 +14,24 @@ export class Draggable {
     // A simple requestAnimationFrame polyfill
     private requestAnimationFrame: Function;
     private cancelAnimationFrame: Function;
-    private mousemove: Observable<{} | Event> = merge(
+    private mousemove: Observable<object | Event> = merge(
         fromEvent(document, 'mousemove'),
         fromEvent(document, 'touchmove', { passive: false })
     ).pipe(share());
-    private mouseup: Observable<{} | Event> = merge(
+    private mouseup: Observable<object | Event> = merge(
         fromEvent(document, 'mouseup'),
         fromEvent(document, 'touchend'),
         fromEvent(document, 'touchcancel')
     ).pipe(share());
-    private mousedown: Observable<{} | Event>;
+    private mousedown: Observable<object | Event>;
     private config = {
-        handlerClass: null,
+        handlerClass: null as string,
         scroll: true,
         scrollEdge: 36,
-        scrollDirection: null
+        scrollDirection: null as string
     };
     // reference to auto scrolling listeners
-    private autoScrollingInterval = [];
+    private autoScrollingInterval: any[] = [];
 
     constructor(element: Element, config = {}) {
         this.element = element;
@@ -49,8 +49,8 @@ export class Draggable {
         this.fixProblemWithDnDForIE(element);
 
         this.requestAnimationFrame =
-            window.requestAnimationFrame || (callback => setTimeout(callback, 1000 / 60));
-        this.cancelAnimationFrame = window.cancelAnimationFrame || (cafID => clearTimeout(cafID));
+            window.requestAnimationFrame || ((callback: TimerHandler) => setTimeout(callback, 1000 / 60));
+        this.cancelAnimationFrame = window.cancelAnimationFrame || ((cafID: number) => clearTimeout(cafID));
     }
 
     private createDragStartObservable(): Observable<DraggableEvent> {
@@ -62,7 +62,7 @@ export class Draggable {
                     e.pauseEvent();
                 }
                 if (document.activeElement) {
-                    (<any>document.activeElement).blur();
+                    (document.activeElement as any).blur();
                 }
                 // prevents rendering performance issues while dragging item with selection inside
                 utils.clearSelection();
@@ -174,7 +174,7 @@ export class Draggable {
         }
     }
 
-    private startScrollForWindow(event) {
+    private startScrollForWindow(event: DraggableEvent) {
         if (!this.config.scrollDirection || this.config.scrollDirection === 'vertical') {
             this.startScrollVerticallyForWindow(event);
         }
@@ -214,7 +214,7 @@ export class Draggable {
         }
     }
 
-    private getScrollContainer(node): HTMLElement {
+    private getScrollContainer(node: any): HTMLElement {
         const nodeOuterHeight = utils.getElementOuterHeight(node);
 
         if (node.scrollHeight > Math.ceil(nodeOuterHeight)) {
@@ -228,19 +228,17 @@ export class Draggable {
         return null;
     }
 
-    private startAutoScrolling(node, amount, direction) {
+    private startAutoScrolling(node: any, amount: number, direction: string) {
         this.autoScrollingInterval.push(
-            this.requestAnimationFrame(
-                function() {
-                    this.startAutoScrolling(node, amount, direction);
-                }.bind(this)
-            )
+            this.requestAnimationFrame(() =>  {
+                this.startAutoScrolling(node, amount, direction);
+            })
         );
 
         return (node[direction] += amount * 0.25);
     }
 
-    private getOffset(el) {
+    private getOffset(el: HTMLElement) {
         const rect = el.getBoundingClientRect();
         return {
             left: rect.left + this.getScroll('scrollLeft', 'pageXOffset'),
@@ -248,7 +246,7 @@ export class Draggable {
         };
     }
 
-    private getScroll(scrollProp, offsetProp) {
+    private getScroll(scrollProp: 'scrollLeft' | 'scrollTop', offsetProp: 'pageXOffset' | 'pageYOffset') {
         if (typeof window[offsetProp] !== 'undefined') {
             return window[offsetProp];
         }
@@ -303,23 +301,23 @@ export class Draggable {
     }
 
     private fixProblemWithDnDForIE(element: Element) {
-        if (this.isTouchDevice() && this.isIEorEdge() && (<HTMLElement>element).style) {
-            (<HTMLElement>element).style['touch-action'] = 'none';
+        if (this.isTouchDevice() && this.isIEorEdge() && (element as HTMLElement).style) {
+            (element as HTMLElement).style.touchAction = 'none';
         }
     }
 
     private removeTouchActionNone(element: Element) {
-        if (!(<HTMLElement>element).style) {
+        if (!(element as HTMLElement).style) {
             return;
         }
-        (<HTMLElement>element).style['touch-action'] = '';
+        (element as HTMLElement).style.touchAction = '';
     }
 
-    private addTouchActionNone(element) {
-        if (!(<HTMLElement>element).style) {
+    private addTouchActionNone(element: Element) {
+        if (!(element as HTMLElement).style) {
             return;
         }
-        (<HTMLElement>element).style['touch-action'] = 'none';
+        (element as HTMLElement).style.touchAction = 'none';
     }
 
     private isTouchDevice() {

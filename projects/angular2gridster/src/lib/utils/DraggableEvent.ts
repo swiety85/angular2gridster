@@ -18,10 +18,10 @@ export class DraggableEvent {
 
     constructor(event: any) {
         if (event.touches) {
-            this.touchEvent = (<TouchEvent>event);
+            this.touchEvent = (event as TouchEvent);
             this.setDataFromTouchEvent(this.touchEvent);
         } else {
-            this.mouseEvent = (<MouseEvent>event);
+            this.mouseEvent = (event as MouseEvent);
             this.setDataFromMouseEvent(this.mouseEvent);
         }
     }

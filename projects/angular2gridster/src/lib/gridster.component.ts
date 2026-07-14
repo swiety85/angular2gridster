@@ -14,7 +14,6 @@ import {
     ViewEncapsulation
 } from '@angular/core';
 import {
-    Observable,
     Subscription,
     fromEvent,
     ConnectableObservable
@@ -23,7 +22,7 @@ import { debounceTime, filter, publish } from 'rxjs/operators';
 
 import { utils } from './utils/utils';
 import { GridsterService } from './gridster.service';
-import { IGridsterOptions } from './IGridsterOptions';
+import { GridsterOptionsKey, IGridsterOptions } from './IGridsterOptions';
 import { IGridsterDraggableOptions } from './IGridsterDraggableOptions';
 import { GridsterPrototypeService } from './gridster-prototype/gridster-prototype.service';
 import { GridsterItemPrototypeDirective } from './gridster-prototype/gridster-item-prototype.directive';
@@ -72,7 +71,8 @@ import { GridsterOptions } from './GridsterOptions';
     ],
     providers: [GridsterService],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
     @Input() options: IGridsterOptions;
@@ -85,7 +85,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
     @Input() draggableOptions: IGridsterDraggableOptions = {};
     @Input() parent: GridsterComponent;
 
-    @ViewChild('positionHighlight', { static: true }) $positionHighlight;
+    @ViewChild('positionHighlight', { static: true }) $positionHighlight: any;
     @HostBinding('class.gridster--dragging') isDragging = false;
     @HostBinding('class.gridster--resizing') isResizing = false;
 
@@ -205,7 +205,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
         if (name === 'responsiveView') {
             this.gridster.options.responsiveView = !!value;
         }
-        this.gridster.gridList.setOption(name, value);
+        this.gridster.gridList.setOption(name as GridsterOptionsKey, value);
 
         return this;
     }
@@ -240,7 +240,7 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
     }
 
     adjustItemsHeightToContent(
-        scrollableItemElementSelector: string = '.gridster-item-inner'
+        scrollableItemElementSelector = '.gridster-item-inner'
     ) {
         this.gridster.items
             // convert each item to object with information about content height and scroll height
@@ -264,17 +264,15 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
             })
             // calculate required height in lanes amount and update item "h"
             .forEach(data => {
-                data.item.h = Math.ceil(<any>(
-                    (data.contentHeight /
-                        (this.gridster.cellHeight - data.scrollElDistance.top))
-                ));
+                data.item.h = Math.ceil((data.contentHeight /
+                        (this.gridster.cellHeight - data.scrollElDistance.top) as any));
             });
 
         this.gridster.fixItemsPositions();
         this.gridster.reflow();
     }
 
-    disable(item) {
+    disable(item: any) {
         const itemIdx = this.gridster.items.indexOf(item.itemComponent);
 
         this.isDisabled = true;
@@ -316,11 +314,9 @@ export class GridsterComponent implements OnInit, AfterContentInit, OnDestroy {
     private connectGridsterPrototype() {
         this.gridsterPrototype.observeDropOut(this.gridster).subscribe();
 
-        const dropOverObservable = <ConnectableObservable<any>>(
-            this.gridsterPrototype
+        const dropOverObservable = this.gridsterPrototype
                 .observeDropOver(this.gridster)
-                .pipe(publish())
-        );
+                .pipe(publish()) as ConnectableObservable<any>;
 
         const dragObservable = this.gridsterPrototype.observeDragOver(
             this.gridster

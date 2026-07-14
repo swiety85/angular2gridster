@@ -1,4 +1,4 @@
-import { Observable, of, fromEvent, pipe, merge } from 'rxjs';
+import { Observable, of, fromEvent, merge } from 'rxjs';
 import { debounceTime, map, distinctUntilChanged } from 'rxjs/operators';
 
 import { IGridsterOptions } from './IGridsterOptions';
@@ -34,10 +34,10 @@ export class GridsterOptions {
 
     change: Observable<IGridsterOptions>;
 
-    responsiveOptions: Array<IGridsterOptions> = [];
+    responsiveOptions: IGridsterOptions[] = [];
     basicOptions: IGridsterOptions;
 
-    breakpointsMap = {
+    breakpointsMap: Record<string, number> = {
         sm: 576, // Small devices
         md: 768, // Medium devices
         lg: 992, // Large devices
@@ -54,7 +54,7 @@ export class GridsterOptions {
                 of(this.getOptionsByWidth(this.getElementWidth(responsiveContainer))),
                 fromEvent(window, 'resize').pipe(
                     debounceTime(config.responsiveDebounce || 0),
-                    map((event: Event) => this.getOptionsByWidth(this.getElementWidth(responsiveContainer)))
+                    map(() => this.getOptionsByWidth(this.getElementWidth(responsiveContainer)))
                 )
             ).pipe(distinctUntilChanged(null, (options: any) => options.minWidth));
     }
@@ -73,7 +73,7 @@ export class GridsterOptions {
         return options;
     }
 
-    private extendResponsiveOptions(responsiveOptions: Array<IGridsterOptions>): Array<IGridsterOptions> {
+    private extendResponsiveOptions(responsiveOptions: IGridsterOptions[]): IGridsterOptions[] {
         return responsiveOptions
             // responsive options are valid only with "breakpoint" property
             .filter(options => options.breakpoint)
@@ -84,7 +84,7 @@ export class GridsterOptions {
                 }, options);
             })
             .sort((curr, next) => curr.minWidth - next.minWidth)
-            .map((options) => <IGridsterOptions>Object.assign({}, this.defaults, this.basicOptions, options));
+            .map((options) => (Object.assign({}, this.defaults, this.basicOptions, options) as IGridsterOptions));
     }
 
     private getElementWidth($element: any) {

@@ -1,9 +1,9 @@
-import { GridsterItemComponent } from '../gridster-item/gridster-item.component';
-import { GridsterItemPrototypeDirective } from '../gridster-prototype/gridster-item-prototype.directive';
+import { GridsterItemComponent, GridsterItemComponentKey } from '../gridster-item/gridster-item.component';
+import { GridsterItemPrototypeDirective, GridsterItemPrototypeDirectiveKey } from '../gridster-prototype/gridster-item-prototype.directive';
 import { GridsterService } from '../gridster.service';
 
 export class GridListItem {
-    static BREAKPOINTS: Array<string> = ['sm', 'md', 'lg', 'xl'];
+    static BREAKPOINTS: string[] = ['sm', 'md', 'lg', 'xl'];
     static X_PROPERTY_MAP: any = {
         sm: 'xSm',
         md: 'xMd',
@@ -143,7 +143,7 @@ export class GridListItem {
         return this;
     }
 
-    public setFromObjectLiteral (item: Object): GridListItem {
+    public setFromObjectLiteral (item: object): GridListItem {
         if (this.isItemSet()) {
             throw new Error('GridListItem is already set.');
         }
@@ -166,7 +166,7 @@ export class GridListItem {
         });
     }
 
-    public copyForBreakpoint(breakpoint?) {
+    public copyForBreakpoint(breakpoint?: string) {
         const itemCopy = new GridListItem();
 
         return itemCopy.setFromObjectLiteral({
@@ -181,83 +181,87 @@ export class GridListItem {
         });
     }
 
-    public getValueX(breakpoint?) {
+    public getValueX(breakpoint?: string) {
         const item = this.getItem();
 
         return item[this.getXProperty(breakpoint)];
     }
 
-    public getValueY(breakpoint?) {
+    public getValueY(breakpoint?: string) {
         const item = this.getItem();
 
         return item[this.getYProperty(breakpoint)];
     }
 
-    public getValueW(breakpoint?) {
+    public getValueW(breakpoint?: string) {
         const item = this.getItem();
 
         return item[this.getWProperty(breakpoint)] || 1;
     }
 
-    public getValueH(breakpoint?) {
+    public getValueH(breakpoint?: string) {
         const item = this.getItem();
 
         return item[this.getHProperty(breakpoint)] || 1;
     }
 
-    public setValueX(value: number, breakpoint?) {
+    public setValueX(value: number, breakpoint?: string) {
         const item = this.getItem();
 
         item[this.getXProperty(breakpoint)] = value;
     }
 
-    public setValueY(value: number, breakpoint?) {
+    public setValueY(value: number, breakpoint?: string) {
         const item = this.getItem();
 
         item[this.getYProperty(breakpoint)] = value;
     }
 
-    public setValueW(value: number, breakpoint?) {
+    public setValueW(value: number, breakpoint?: string) {
         const item = this.getItem();
 
         item[this.getWProperty(breakpoint)] = value;
     }
 
-    public setValueH(value: number, breakpoint?) {
+    public setValueH(value: number, breakpoint?: string) {
         const item = this.getItem();
 
         item[this.getHProperty(breakpoint)] = value;
     }
 
-    public triggerChangeX(breakpoint?) {
+    public triggerChangeX(breakpoint?: string) {
         const item = this.itemComponent;
         if (item) {
-            item[this.getXProperty(breakpoint) + 'Change'].emit(this.getValueX(breakpoint));
+            const key = this.getXProperty(breakpoint) + 'Change' as GridsterItemComponentKey;
+            item[key].emit(this.getValueX(breakpoint));
         }
     }
 
-    public triggerChangeY(breakpoint?) {
+    public triggerChangeY(breakpoint?: string) {
         const item = this.itemComponent;
         if (item) {
-            item[this.getYProperty(breakpoint) + 'Change'].emit(this.getValueY(breakpoint));
+            const key = this.getYProperty(breakpoint) + 'Change' as GridsterItemComponentKey;
+            item[key].emit(this.getValueY(breakpoint));
         }
     }
 
-    public triggerChangeW(breakpoint?) {
+    public triggerChangeW(breakpoint?: string) {
         const item = this.itemComponent;
         if (item) {
-            item[this.getWProperty(breakpoint) + 'Change'].emit(this.getValueW(breakpoint));
+            const key = this.getWProperty(breakpoint) + 'Change' as GridsterItemComponentKey;
+            item[key].emit(this.getValueW(breakpoint));
         }
     }
 
-    public triggerChangeH(breakpoint?) {
+    public triggerChangeH(breakpoint?: string) {
         const item = this.itemComponent;
         if (item) {
-            item[this.getHProperty(breakpoint) + 'Change'].emit(this.getValueH(breakpoint));
+            const key = this.getHProperty(breakpoint) + 'Change' as GridsterItemComponentKey;
+            item[key].emit(this.getValueH(breakpoint));
         }
     }
 
-    public hasPositions(breakpoint?) {
+    public hasPositions(breakpoint?: string) {
         const x = this.getValueX(breakpoint);
         const y = this.getValueY(breakpoint);
 
@@ -333,7 +337,8 @@ export class GridListItem {
 
     private getWProperty(breakpoint?: string) {
         if (this.itemPrototype) {
-            return this.itemPrototype[GridListItem.W_PROPERTY_MAP[breakpoint]] ?
+            const key = GridListItem.W_PROPERTY_MAP[breakpoint] as GridsterItemPrototypeDirectiveKey;
+            return this.itemPrototype[key] ?
                 GridListItem.W_PROPERTY_MAP[breakpoint] : 'w';
         }
 
@@ -349,7 +354,9 @@ export class GridListItem {
 
     private getHProperty(breakpoint?: string) {
         if (this.itemPrototype) {
-            return this.itemPrototype[GridListItem.H_PROPERTY_MAP[breakpoint]] ?
+            const key = GridListItem.H_PROPERTY_MAP[breakpoint] as GridsterItemPrototypeDirectiveKey;
+
+            return this.itemPrototype[key] ?
                 GridListItem.H_PROPERTY_MAP[breakpoint] : 'h';
         }
 

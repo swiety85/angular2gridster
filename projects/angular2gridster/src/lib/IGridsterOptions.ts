@@ -6,16 +6,7 @@ export interface IGridsterOptions {
     dragAndDrop?: boolean;
     itemSelector?: string;
     resizable?: boolean;
-    resizeHandles?: {
-        s?: boolean,
-        e?: boolean,
-        n?: boolean,
-        w?: boolean,
-        se?: boolean,
-        ne?: boolean,
-        sw?: boolean,
-        nw?: boolean
-    };
+    resizeHandles?: IResizeHandles;
     shrink?: boolean;
     floating?: boolean;
     responsiveView?: boolean;
@@ -35,5 +26,26 @@ export interface IGridsterOptions {
     cellHeight?: number;
     cellWidth?: number;
     tolerance?: string;
-    responsiveOptions?: Array<IGridsterOptions>;
+    responsiveOptions?: IGridsterOptions[];
 }
+
+export interface IResizeHandles {
+    s?: boolean,
+    e?: boolean,
+    n?: boolean,
+    w?: boolean,
+    se?: boolean,
+    ne?: boolean,
+    sw?: boolean,
+    nw?: boolean
+}
+
+export type ResizeHandlesKey = {
+	[K in keyof IResizeHandles]:
+		IResizeHandles[K] extends number ? K : never;
+}[keyof IResizeHandles];
+
+export type GridsterOptionsKey = {
+	[K in keyof IGridsterOptions]:
+		IGridsterOptions[K] extends number ? K : never;
+}[keyof IGridsterOptions];
